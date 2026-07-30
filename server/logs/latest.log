@@ -1,0 +1,1376 @@
+[23:29:23] [ServerMain/INFO]: [bootstrap] Running Java 21 (Java HotSpot(TM) 64-Bit Server VM 21.0.4+8-LTS-274; Oracle Corporation null) on Windows 11 10.0 (amd64)
+[23:29:23] [ServerMain/INFO]: [bootstrap] Loading Paper 1.21.1-133-ver/1.21.1@3cb8529 (2025-03-28T16:14:36Z) for Minecraft 1.21.1
+[23:29:30] [ServerMain/INFO]: [PluginInitializerManager] Initializing plugins...
+[23:29:31] [Paper Plugin Remapper Thread - 1/INFO]: [PluginRemapper] Remapping plugin 'plugins\RpgCraft-1.0.jar'...
+[23:29:32] [Paper Plugin Remapper Thread - 1/INFO]: [PluginRemapper] Done remapping plugin 'plugins\RpgCraft-1.0.jar' in 623ms.
+[23:29:32] [ServerMain/INFO]: [PluginInitializerManager] Initialized 5 plugins
+[23:29:32] [ServerMain/INFO]: [PluginInitializerManager] Bukkit plugins (5):
+ - BetonQuest (2.2.1), Citizens (2.0.35-SNAPSHOT (build 3598)), ProtocolLib (5.4.0), RpgCraft (1.0), SkinsRestorer (15.12.0)
+[23:29:39] [ServerMain/INFO]: Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[23:29:43] [ServerMain/INFO]: Loaded 1290 recipes
+[23:29:43] [ServerMain/INFO]: Loaded 1399 advancements
+[23:29:43] [Server thread/INFO]: Starting minecraft server version 1.21.1
+[23:29:43] [Server thread/INFO]: Loading properties
+[23:29:43] [Server thread/INFO]: This server is running Paper version 1.21.1-133-ver/1.21.1@3cb8529 (2025-03-28T16:14:36Z) (Implementing API version 1.21.1-R0.1-SNAPSHOT)
+[23:29:44] [Server thread/INFO]: [spark] This server bundles the spark profiler. For more information please visit https://docs.papermc.io/paper/profiling
+[23:29:44] [Server thread/INFO]: Server Ping Player Sample Count: 12
+[23:29:45] [Server thread/INFO]: Using 4 threads for Netty based IO
+[23:29:45] [Server thread/INFO]: [ChunkTaskScheduler] Chunk system is using 1 I/O threads, 3 worker threads, and population gen parallelism of 3 threads
+[23:29:46] [Server thread/INFO]: Default game type: SURVIVAL
+[23:29:46] [Server thread/INFO]: Generating keypair
+[23:29:46] [Server thread/INFO]: Starting Minecraft server on *:25565
+[23:29:46] [Server thread/INFO]: Using default channel type
+[23:29:46] [Server thread/INFO]: Paper: Using Java compression from Velocity.
+[23:29:46] [Server thread/INFO]: Paper: Using Java cipher from Velocity.
+[23:29:46] [Server thread/INFO]: [ProtocolLib] Loading server plugin ProtocolLib v5.4.0
+[23:29:47] [Server thread/INFO]: [Citizens] Loading server plugin Citizens v2.0.35-SNAPSHOT (build 3598)
+[23:29:47] [Server thread/INFO]: [BetonQuest] Loading server plugin BetonQuest v2.2.1
+[23:29:47] [Server thread/INFO]: [SkinsRestorer] Loading server plugin SkinsRestorer v15.12.0
+[23:29:47] [Server thread/INFO]: [RpgCraft] Loading server plugin RpgCraft v1.0
+[23:29:47] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
+[23:29:47] [Server thread/INFO]: [ProtocolLib] Enabling ProtocolLib v5.4.0
+[23:29:47] [Server thread/INFO]: [SkinsRestorer] Enabling SkinsRestorer v15.12.0
+[23:29:49] [Server thread/INFO]: [SkinsRestorer] Running on Minecraft 1.21.1.
+[23:29:50] [Server thread/INFO]: [SkinsRestorer] Using paper join listener!
+[23:29:50] [Server thread/INFO]: Preparing level "world"
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer] ----------------------------------------------
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     +==================+
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     |   SkinsRestorer  |
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     |------------------|
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     |  Standalone Mode |
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     +==================+
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer] ----------------------------------------------
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     Version: 15.12.0
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     Commit: 2903414
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer]     This is the latest version!
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer] ----------------------------------------------
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer] Do you have issues? Read our troubleshooting guide: https://skinsrestorer.net/docs/troubleshooting
+[23:29:50] [Folia Async Scheduler Thread #1/INFO]: [SkinsRestorer] Want to support SkinsRestorer or receive priority support? Become a supporter: https://skinsrestorer.net/pricing
+[23:29:50] [Server thread/INFO]: Preparing start region for dimension minecraft:overworld
+[23:29:51] [Server thread/INFO]: Time elapsed: 538 ms
+[23:29:51] [Server thread/INFO]: Preparing start region for dimension minecraft:the_nether
+[23:29:51] [Server thread/INFO]: Time elapsed: 144 ms
+[23:29:51] [Server thread/INFO]: Preparing start region for dimension minecraft:the_end
+[23:29:52] [Server thread/INFO]: Time elapsed: 580 ms
+[23:29:52] [Server thread/INFO]: [Citizens] Enabling Citizens v2.0.35-SNAPSHOT (build 3598)
+[23:29:52] [Server thread/INFO]: [Citizens] Loading external libraries
+[23:29:52] [Server thread/INFO]: [Citizens] La langue du système détectée est: [[fr]]. Si vous le souhaitez, vous pouvez contribuer à la traduction de Citizens sur notre Discord! https://discord.gg/Q6pZGSR
+[23:29:52] [Server thread/INFO]: [Citizens] Using mojmapped server, avoiding server package checks
+[23:29:52] [Server thread/INFO]: [Citizens] Loaded 0 templates.
+[23:29:52] [Server thread/INFO]: [BetonQuest] Enabling BetonQuest v2.2.1
+[23:29:52] [Server thread/INFO]: [BetonQuest] Running on JRE 21.0.4 (build 8, optional LTS-274, pre-release info N/A) by Oracle Corporation
+[23:29:53] [Server thread/INFO]: [BetonQuest] Using SQLite for storing data!
+[23:29:54] [Server thread/INFO]: [BetonQuest] Hooking into ProtocolLib
+[23:29:54] [Server thread/INFO]: [BetonQuest] Hooking into Citizens
+[23:29:54] [Server thread/INFO]: [BetonQuest] BetonQuest successfully enabled!
+[23:29:54] [Server thread/INFO]: [RpgCraft] Enabling RpgCraft v1.0
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1: vortex_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 2: beenest_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 3: verdant_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 4: command_block_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 5: poisonous_potato_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 6: soul_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 7: hungriest_horror_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 8: wither_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 9: verdant_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 10: wolf_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 11: full_metal_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 12: renegade_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 13: scarlet_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 14: royal_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 15: space_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 16: hero_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 17: romeo_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 18: droid_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 19: sprint_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 20: staff_bermundes_hermit
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 21: sprint_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 22: sprint_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 23: sprint_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 24: tim_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 25: star_shield_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 26: beenest_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 27: living_vines_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 28: wolf_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 29: emerald_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 30: dragonsbane_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 31: sprint_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 32: sprint_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 33: royal_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 34: mana_thirst_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 35: staff_night
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 36: mana_thirst_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 37: royal_dragon
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 38: proud_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 39: mana_thirst_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 40: mana_thirst_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 41: plate_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 42: mana_thirst_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 43: mana_thirst_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 44: droid_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 45: robot_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 46: potion_health_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 47: golden_apple_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 48: potion_health_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 49: stalwart_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 50: skelly_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 51: potion_health_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 52: potion_health_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 53: spellbook_braised
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 54: potion_health_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 55: potion_health_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 56: journey_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 57: netherwalker_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 58: highland_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 59: spooky_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 60: redstone_riot_mask
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 61: ill_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 62: droid_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 63: guard_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 64: adamantium_impervium_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 65: emerald_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 66: spooky_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 67: heavy_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 68: troubadour_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 69: champion_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 70: dragonsbane_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 71: vortex_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 72: glow_squid_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 73: black_spot_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 74: scarlet_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 75: dragonslayer_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 76: redstone_riot_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 77: squid_elaetra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 78: romeo_s_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 79: fireforged_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 80: journey_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 81: whirlwind_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 82: red_rascal_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 83: whirlwind_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 84: whirlwind_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 85: whirlwind_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 86: droid_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 87: spooky_gourdian_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 88: prismarine_parting
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 89: phantom_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 90: cauldron_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 91: magnus_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 92: scarecrow_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 93: crucuble_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 94: scarecrow_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 95: fireball_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 96: portal_buster_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 97: ore_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 98: souldancer_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 99: whirlwind_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 100: fireball_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 101: whirlwind_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 102: fireball_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 103: fireball_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 104: titan_s_shroud_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 105: fireball_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 106: fireball_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 107: cauldron_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 108: petra_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 109: staff_goblin_witch
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 110: soul_knife
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 111: bard_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 112: soul_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 113: grim_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 114: turtle_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 115: cyklopps_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 116: verdant_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 117: ar_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 118: spleef_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 119: living_vines_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 120: dragonslayer_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 121: champion_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 122: infinity_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 123: adamantium_impervium_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 124: plate_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 125: trial_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 126: infinity_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 127: shadow_walker_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 128: tim_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 129: portal_buster_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 130: snow_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 131: ar_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 132: vortex_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 133: potion_rage_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 134: shogun_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 135: potion_rage_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 136: potion_rage_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 137: potion_rage_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 138: potion_rage_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 139: magnus_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 140: heavy_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 141: magnus_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 142: potion_rage_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 143: splendid_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 144: souldancer_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 145: xara_s_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 146: swordbreaker_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 147: beenest_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 148: beenest_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 149: spooky_gourdian_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 150: swordbreaker_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 151: snow_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 152: mega_x_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 153: staff_golden_crook
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 154: dragon_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 155: scarlet_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 156: petra_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 157: infinity_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 158: ender_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 159: golden_apple_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 160: phantom_ranger_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 161: romeo_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 162: lava_warrior_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 163: battle_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 164: drowned_king_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 165: beehive_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 166: piglin_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 167: glow_squid_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 168: guard_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 169: dragonsbane_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 170: fred_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 171: highland_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 172: highland_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 173: hungry_horror_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 174: shadow_walker_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 175: dragon_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 176: nameless_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 177: necromancer_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 178: star_shield_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 179: sweet_tooth_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 180: blastbreaker_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 181: creed_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 182: poisonous_potato_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 183: droid_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 184: potion_energy_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 185: robot_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 186: potion_energy_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 187: ellegaard_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 188: blastbreaker_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 189: bard_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 190: potion_energy_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 191: spooky_gourdian_tunic
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 192: netherwalker_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 193: drowned_king_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 194: potion_energy_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 195: potion_energy_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 196: potion_energy_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 197: scarlet_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 198: pama_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 199: staff_basic_wooden
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 200: dragon_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 201: ember_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 202: skelly_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 203: soul_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 204: ice_trap_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 205: scarlet_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 206: ice_trap_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 207: ice_trap_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 208: ice_trap_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 209: ice_trap_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 210: holy_bomb_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 211: ice_trap_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 212: root_rot_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 213: wolf_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 214: redstone_riot_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 215: netherwalker_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 216: romeo_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 217: xara_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 218: holy_bomb_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 219: holy_bomb_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 220: climber_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 221: holy_bomb_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 222: pama_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 223: holy_bomb_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 224: holy_bomb_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 225: ruby_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 226: necromancer_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 227: wolf_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 228: poisonous_potato_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 229: ember_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 230: gabriel_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 231: frost_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 232: golden_apple_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 233: stealth_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 234: ender_dragon_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 235: stealth_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 236: stealth_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 237: shaman_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 238: vortex_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 239: soren_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 240: adamantium_impervium_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 241: stealth_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 242: fred_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 243: soul_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 244: stealth_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 245: sakura_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 246: stealth_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 247: xara_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 248: entertainer_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 249: swordbreaker_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 250: journey_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 251: spellbook_hellow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 252: snow_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 253: hero_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 254: staff_holy_celtic
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 255: shulker_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 256: proud_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 257: hungriest_horror_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 258: shadow_walker_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 259: climber_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 260: redstone_riot_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 261: space_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 262: axebreaker_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 263: dragonslayer_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 264: magnus_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 265: swordbreaker_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 266: dragonsbane_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 267: phantom_ranger_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 268: star_shield_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 269: dark_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 270: frost_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 271: star_shield_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 272: verdant_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 273: adamantium_impervium_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 274: splendid_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 275: cauldron_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 276: living_vines_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 277: command_block_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 278: souldancer_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 279: ocelot_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 280: dragonsbane_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 281: xara_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 282: ellegaard_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 283: mega_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 284: goat_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 285: mystery_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 286: swordbreaker_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 287: necromancer_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 288: fred_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 289: ellegaard_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 290: petra_s_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 291: scarlet_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 292: phantom_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 293: rgb_ranger_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 294: spider_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 295: glow_squid_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 296: evocation_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 297: portal_buster_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 298: gabriel_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 299: ninja_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 300: mega_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 301: golden_apple_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 302: dark_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 303: teleportation_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 304: turtle_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 305: shulker_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 306: proud_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 307: opulent_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 308: piglin_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 309: golden_goliath_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 310: escape_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 311: escape_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 312: phantom_ranger_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 313: escape_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 314: lava_infused_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 315: escape_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 316: shulker_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 317: escape_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 318: escape_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 319: tower_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 320: petra_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 321: mystery_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 322: explosive_shot_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 323: explosive_shot_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 324: creed_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 325: hero_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 326: glow_squid_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 327: ember_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 328: explosive_shot_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 329: explosive_shot_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 330: explosive_shot_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 331: explosive_shot_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 332: swordbreaker_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 333: tower_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 334: ember_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 335: goat_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 336: spider_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 337: drowned_king_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 338: vortex_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 339: prismarine_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 340: gabriel_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 341: journey_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 342: robot_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 343: redstone_riot_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 344: golden_apple_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 345: heavy_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 346: drowned_king_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 347: journey_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 348: robot_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 349: ghostly_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 350: spleef_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 351: dragonsbane_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 352: strider_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 353: necromancer_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 354: golden_apple_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 355: ellegaard_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 356: dragonsbane_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 357: cauldron_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 358: dragonsbane_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 359: shadow_word_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 360: shadow_word_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 361: shadow_word_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 362: xara_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 363: shadow_word_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 364: shadow_word_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 365: vortex_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 366: prismarine_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 367: ninja_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 368: golden_goliath_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 369: shadow_word_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 370: royal_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 371: necromancer_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 372: vortex_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 373: redstonia_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 374: drowned_king_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 375: combat_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 376: command_block_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 377: vemi_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 378: petra_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 379: sweet_tooth_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 380: star_shield_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 381: troubadour_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 382: troubadour_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 383: hungry_horror_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 384: drowned_king_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 385: spooky_gourdian_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 386: xara_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 387: phantom_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 388: droid_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 389: guard_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 390: mega_x_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 391: potion_mana_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 392: grim_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 393: royal_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 394: potion_mana_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 395: potion_mana_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 396: potion_mana_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 397: potion_mana_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 398: potion_mana_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 399: infinity_mask
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 400: fox_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 401: thief_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 402: poisonous_potato_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 403: evocation_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 404: ocelot_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 405: cloaked_skull_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 406: spelunker_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 407: highland_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 408: evocation_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 409: battle_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 410: spider_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 411: lava_infused_blade
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 412: emerald_escapade
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 413: golden_goliath_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 414: crucuble_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 415: star_shield_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 416: space_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 417: sweet_tooth_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 418: grim_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 419: battle_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 420: boom_town_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 421: frost_scythe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 422: swordbreaker_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 423: phantom_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 424: soul_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 425: ender_dragon_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 426: ender_defender_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 427: climber_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 428: rgb_ranger_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 429: souldancer_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 430: sakura_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 431: fireforged_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 432: axebreaker_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 433: magnus_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 434: fox_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 435: dragon_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 436: crucuble_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 437: gabriel_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 438: command_block_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 439: ellegaard_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 440: adamantium_impervium_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 441: root_rot_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 442: combat_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 443: fred_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 444: cyklopps_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 445: combat_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 446: proud_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 447: thief_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 448: fred_s_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 449: ivor_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 450: poisonous_potato_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 451: golden_goliath_glaive
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 452: red_rascal_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 453: ill_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 454: squid_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 455: romeo_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 456: adamantium_impervium_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 457: battle_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 458: romeo_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 459: teleportation_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 460: romeo_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 461: axebreaker_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 462: teleportation_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 463: spider_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 464: verdant_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 465: spooky_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 466: troubadour_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 467: petra_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 468: golden_goliath_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 469: spooky_gourdian_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 470: creed_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 471: poisonous_potato_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 472: sweet_tooth_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 473: staff_olwen
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 474: teleport_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 475: dragon_breath_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 476: teleport_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 477: dragon_breath_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 478: teleport_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 479: dragon_breath_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 480: dragon_breath_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 481: dragonsbane_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 482: redstone_riot_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 483: ender_defender_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 484: ender_dragon_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 485: phantom_ranger_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 486: fred_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 487: royal_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 488: ninja_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 489: teleport_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 490: space_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 491: teleport_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 492: teleport_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 493: teleportation_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 494: nameless_blade
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 495: battle_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 496: cauldron_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 497: soul_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 498: lava_infused_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 499: trial_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 500: fireforged_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 501: portal_buster_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 502: sakura_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 503: star_shield_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 504: command_block_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 505: emerald_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 506: magnus_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 507: grim_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 508: verdant_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 509: nameless_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 510: droid_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 511: cyklopps_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 512: heavy_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 513: tim_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 514: knee_breaker_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 515: shulker_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 516: knee_breaker_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 517: cyklopps_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 518: knee_breaker_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 519: knee_breaker_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 520: knee_breaker_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 521: vortex_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 522: knee_breaker_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 523: magnus_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 524: phantom_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 525: ellegaard_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 526: dragon_breath_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 527: dragon_breath_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 528: prismarine_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 529: heavy_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 530: command_block_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 531: droid_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 532: xara_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 533: poisonous_potato_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 534: prismarine_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 535: dragonmaster_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 536: splendid_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 537: emerald_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 538: spider_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 539: prismarine_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 540: command_block_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 541: highland_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 542: beenest_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 543: coldblood_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 544: coldblood_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 545: dragonmaster_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 546: coldblood_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 547: lava_warrior_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 548: coldblood_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 549: coldblood_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 550: coldblood_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 551: combat_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 552: squid_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 553: frost_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 554: soren_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 555: romeo_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 556: golden_apple_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 557: pama_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 558: opulent_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 559: prismarine_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 560: xara_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 561: heavy_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 562: mega_x_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 563: snow_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 564: gabriel_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 565: journey_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 566: blastbreaker_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 567: ender_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 568: staff_sagrada_winged
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 569: claw_lightning
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 570: wither_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 571: necromancer_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 572: proud_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 573: beenest_stinger
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 574: ember_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 575: tim_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 576: ender_defender_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 577: vemi_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 578: renegade_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 579: ellegaard_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 580: dark_katana
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 581: dragonmaster_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 582: dragonmaster_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 583: sprout_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 584: full_metal_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 585: redstone_riot_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 586: unstable_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 587: teleportation_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 588: souldancer_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 589: hero_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 590: robot_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 591: ill_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 592: poisonous_potato_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 593: fred_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 594: entertainer_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 595: hungriest_horror_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 596: cloaked_skull_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 597: plate_knuckle
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 598: sakura_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 599: redstone_riot_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 600: ender_defender_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 601: hero_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 602: unstable_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 603: trial_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 604: bard_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 605: dragonslayer_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 606: ender_dragon_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 607: dragonmaster_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 608: beehive_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 609: heavy_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 610: swordbreaker_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 611: goat_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 612: ender_dragon_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 613: ruby_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 614: ar_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 615: sakura_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 616: strider_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 617: splendid_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 618: entertainer_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 619: soren_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 620: droid_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 621: hungriest_horror_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 622: netherwalker_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 623: golden_goliath_ballista
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 624: cloaked_skull_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 625: necromancer_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 626: crucuble_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 627: command_block_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 628: creed_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 629: hero_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 630: spelunker_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 631: battle_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 632: magnus_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 633: pama_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 634: beenest_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 635: black_spot_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 636: petra_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 637: highland_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 638: blastbreaker_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 639: hungry_horror_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 640: stalwart_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 641: ender_dragon
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 642: romeo_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 643: shaman_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 644: rgb_ranger_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 645: stalwart_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 646: ninja_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 647: combat_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 648: tim_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 649: blastbreaker_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 650: ivor_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 651: hungriest_horror_spear
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 652: lava_warrior_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 653: turtle_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 654: golden_goliath_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 655: ender_defender_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 656: ar_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 657: crucuble_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 658: dragonslayer_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 659: combat_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 660: dragonslayer_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 661: dragonslayer_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 662: ender_dragon_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 663: ill_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 664: renegade_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 665: battle_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 666: fox_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 667: wither_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 668: axebreaker_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 669: tim_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 670: vemi_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 671: tim_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 672: skelly_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 673: golden_goliath_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 674: ore_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 675: journey_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 676: tim_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 677: dragon_skin_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 678: evocation_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 679: dragonslayer_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 680: squid_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 681: splendid_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 682: fred_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 683: squid_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 684: ellegaard_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 685: frost_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 686: redstone_riot_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 687: piglin_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 688: tim_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 689: shogun_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 690: boom_town_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 691: vemi_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 692: star_shield_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 693: dragon_skin_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 694: dragon_skin_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 695: dragonmaster_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 696: dragon_skin_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 697: command_block_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 698: dragon_skin_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 699: dragon_skin_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 700: heavy_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 701: unstable_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 702: strider_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 703: claw_fire
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 704: xara_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 705: poisonous_potato_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 706: sprout_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 707: axebreaker_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 708: evocation_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 709: prismarine_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 710: gabriel_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 711: souldancer_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 712: skelly_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 713: golden_goliath_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 714: redstone_riot_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 715: renegade_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 716: cyklopps_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 717: dragonmaster_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 718: magnus_s_drill
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 719: prismarine_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 720: nameless_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 721: unstable_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 722: romeo_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 723: gabriel_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 724: prismarine_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 725: dark_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 726: red_rascal_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 727: strider_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 728: stalwart_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 729: full_metal_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 730: journey_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 731: mega_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 732: fred_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 733: sakura_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 734: opulent_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 735: entertainer_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 736: hungry_horror_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 737: ivor_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 738: nameless_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 739: golden_goliath_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 740: fred_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 741: spooky_gourdian_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 742: prismarine_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 743: frost_slayer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 744: lava_warrior_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 745: ender_defender_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 746: ocelot_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 747: command_block_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 748: spelunker_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 749: ellegaard_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 750: snow_blade
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 751: scarlet_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 752: shogun_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 753: ender_destructor
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 754: redstonia_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 755: titan_s_shroud_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 756: infinity_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 757: dragonslayer_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 758: fred_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 759: dragonslayer_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 760: ruby_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 761: ill_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 762: sakura_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 763: shaman_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 764: command_block_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 765: teleportation_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 766: heavy_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 767: fox_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 768: tower_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 769: boom_town_stick
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 770: ill_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 771: robot_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 772: ill_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 773: boom_town_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 774: guard_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 775: frost_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 776: sprout_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 777: ivor_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 778: dark_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 779: golden_apple_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 780: ender_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 781: ivor_s_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 782: unstable_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 783: redstonia_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 784: mega_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 785: soul_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 786: rgb_ranger_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 787: thief_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 788: ender_defender_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 789: spelunker_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 790: unstable_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 791: mega_x_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 792: lava_warrior_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 793: scarecrow_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 794: space_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 795: ivor_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 796: dragonmaster_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 797: adamantium_impervium_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 798: mystery_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 799: magnus_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 800: trial_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 801: spooky_gourdian_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 802: portal_buster_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 803: redstonia_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 804: tower_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 805: vortex_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 806: verdant_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 807: droid_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 808: golden_goliath_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 809: journey_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 810: infinity_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 811: space_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 812: robot_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 813: ore_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 814: splendid_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 815: space_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 816: infinity_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 817: ender_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 818: spleef_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 819: space_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 820: metamorph_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 821: evocation_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 822: metamorph_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 823: metamorph_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 824: piglin_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 825: lava_warrior_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 826: shogun_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 827: drowned_king_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 828: ruby_rendezvous
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 829: star_shield_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 830: metamorph_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 831: red_rascal_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 832: metamorph_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 833: cyklopps_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 834: prismarine_gauntlet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 835: metamorph_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 836: hunt_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 837: hunt_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 838: hunt_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 839: cyklopps_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 840: beehive_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 841: hunt_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 842: hunt_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 843: heavy_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 844: hunt_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 845: journey_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 846: shaman_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 847: teleportation_hat
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 848: gabriel_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 849: ellegaard_s_drill
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 850: ellegaard_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 851: evocation_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 852: staff_unholy_wisdom
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 853: black_spot_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 854: space_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 855: bard_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 856: space_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 857: poisonous_potato_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 858: boom_town_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 859: ore_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 860: cloaked_skull_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 861: dragonmaster_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 862: nameless_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 863: xara_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 864: vortex_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 865: soul_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 866: staff_divine
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 867: unstable_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 868: necromancer_blade
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 869: adamantium_impervium_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 870: thief_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 871: xara_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 872: creed_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 873: magnus_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 874: ember_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 875: tim_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 876: golden_apple_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 877: portal_buster_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 878: turtle_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 879: flame_nova_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 880: flame_nova_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 881: scarlet_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 882: flame_nova_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 883: flame_nova_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 884: flame_nova_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 885: golden_goliath_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 886: flame_nova_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 887: drowned_king_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 888: fred_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 889: snow_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 890: holy_land_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 891: holy_land_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 892: holy_land_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 893: holy_land_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 894: ivor_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 895: teleportation_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 896: holy_land_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 897: romeo_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 898: holy_land_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 899: dragonmaster_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 900: lava_infused_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 901: ender_defender_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 902: battle_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 903: leap_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 904: leap_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 905: ender_defender_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 906: leap_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 907: leap_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 908: nameless_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 909: dragonmaster_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 910: leap_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 911: redstone_riot_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 912: leap_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 913: root_rot_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 914: cauldron_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 915: ellegaard_s_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 916: dragonslayer_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 917: robot_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 918: robot_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 919: infinity_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 920: golden_goliath_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 921: mystery_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 922: spleef_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 923: staff_lich
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 924: beenest_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 925: champion_s_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 926: hungry_horror_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 927: petra_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 928: living_vines_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 929: champion_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 930: teleportation_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 931: robot_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 932: nameless_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 933: soul_scythe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 934: pet_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 935: ellegaard_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 936: splendid_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 937: pet_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 938: pet_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 939: sakura_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 940: pet_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 941: climber_s_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 942: phantom_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 943: pet_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 944: pet_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 945: black_spot_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 946: sakura_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 947: tower_glaive
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 948: journey_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 949: xara_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 950: plate_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 951: ivor_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 952: goat_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 953: space_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 954: droid_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 955: ender_dragon_microshot
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 956: scarecrow_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 957: hungry_horror_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 958: fireforged_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 959: gabriel_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 960: ender_dragon_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 961: nameless_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 962: souldancer_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 963: necromancer_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 964: mystery_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 965: staff_northgate_guardian
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 966: petra_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 967: space_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 968: wither_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 969: spellbook_blades_of_war
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 970: beehive_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 971: full_metal_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 972: root_rot_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 973: ghostly_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 974: ghostly_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 975: vortex_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 976: dragonsbane_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 977: heavy_sword
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 978: holy_shield_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 979: ender_dragon_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 980: ocelot_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 981: holy_shield_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 982: scarlet_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 983: holy_shield_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 984: holy_shield_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 985: adamantium_impervium_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 986: holy_shield_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 987: red_rascal_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 988: holy_shield_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 989: spooky_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 990: robot_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 991: petra_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 992: romeo_s_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 993: redstonia_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 994: dark_dragon
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 995: poisonous_potato_glasses
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 996: soul_hood
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 997: soren_s_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 998: royal_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 999: infinity_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1000: infinity_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1001: ember_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1002: dragonslayer_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1003: ghostly_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1004: titan_s_shroud_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1005: dragonmaster_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1006: ender_dragon_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1007: sprout_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1008: lava_infused_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1009: magnus_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1010: spellbook_majestica
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1011: deadly_magnet_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1012: deadly_magnet_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1013: deadly_magnet_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1014: ivor_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1015: deadly_magnet_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1016: deadly_magnet_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1017: deadly_magnet_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1018: infinity_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1019: opulent_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1020: royal_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1021: unstable_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1022: titan_s_shroud_boots
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1023: ruby_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1024: vortex_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1025: shadow_walker_leggings
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1026: strike_back_2
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1027: strike_back_1
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1028: tower_shield
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1029: strike_back_6
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1030: ender_defender_helmet
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1031: strike_back_5
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1032: plate_chestplate
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1033: strike_back_4
+[23:29:54] [Server thread/INFO]: [RpgCraft] item 1034: strike_back_3
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: hero_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: squid_elaetra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: crucuble_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: cyklopps_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: dragonslayer_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: proud_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: splendid_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: mystery_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: phantom_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: teleportation_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: drowned_king_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: necromancer_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: evocation_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: verdant_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: soul_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: nameless_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: unstable_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: magnus_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: ill_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: ellegaard_s_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: spooky_gourdian_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: battle_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: dragonmaster_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: souldancer_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: ember_elytra
+[23:29:54] [Server thread/INFO]: [RpgCraft] elytra: ender_dragon_wings
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: highland_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: romeo_s_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: prismarine_parting
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: xara_s_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: spooky_gourdian_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: lava_warrior_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: emerald_escapade
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: ender_dragon_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: combat_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: fred_s_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: golden_goliath_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: poisonous_potato_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: blastbreaker_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: beenest_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: boom_town_stick
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: space_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: portal_buster_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: journey_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: ruby_rendezvous
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: heavy_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: cauldron_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: royal_mace
+[23:29:54] [Server thread/INFO]: [RpgCraft] mace: vortex_hamaxe_hammer
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: beenest_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: command_block_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: magnus_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: infinity_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: adamantium_impervium_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: star_shield_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: cauldron_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: scarlet_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: robot_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: golden_apple_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: dragonsbane_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: swordbreaker_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: tim_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: prismarine_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: romeo_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: journey_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: ellegaard_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: poisonous_potato_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: fred_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: sakura_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: heavy_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: highland_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: dragonslayer_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: redstone_riot_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: dragonmaster_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: gabriel_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: golden_goliath_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: lava_warrior_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: space_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: vortex_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: ender_defender_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: xara_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: ivor_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: droid_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: petra_s_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: space_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] axe: vortex_hamaxe_axe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: tim_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: dragonsbane_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: adamantium_impervium_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: poisonous_potato_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: xara_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: sakura_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: redstone_riot_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: golden_apple_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: heavy_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: robot_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: command_block_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: droid_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: space_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: ellegaard_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: prismarine_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: ender_defender_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: dragonslayer_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: star_shield_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: magnus_s_drill
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: journey_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: ivor_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: fred_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: scarlet_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: vortex_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: gabriel_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: ellegaard_s_drill
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: magnus_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: golden_goliath_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: romeo_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: dragonmaster_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: infinity_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] pickaxe: petra_s_pickaxe
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: journey_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: vortex_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: golden_apple_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: droid_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: poisonous_potato_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: fred_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: dragonsbane_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: golden_goliath_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: star_shield_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: magnus_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: petra_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: redstone_riot_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: xara_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: dragonmaster_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: tim_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: command_block_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: prismarine_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: romeo_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: gabriel_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: sakura_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: heavy_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: infinity_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: ellegaard_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: ender_defender_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: dragonslayer_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: space_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: scarlet_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: adamantium_impervium_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: robot_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] shovel: ivor_s_shovel
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: golden_apple_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: vortex_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: infinity_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: scarlet_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: command_block_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: gabriel_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: prismarine_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: star_shield_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: sakura_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: adamantium_impervium_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: romeo_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: dragonsbane_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: heavy_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: dragonmaster_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: xara_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: redstone_riot_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: petra_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: tim_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: journey_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: dragonslayer_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: poisonous_potato_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: ellegaard_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: fred_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: robot_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: ender_defender_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: ivor_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: magnus_s_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: droid_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: space_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] hoe: golden_goliath_hoe
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: droid_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: swordbreaker_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: frost_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: petra_s_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: spider_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: command_block_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: teleportation_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: battle_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: phantom_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: prismarine_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: snow_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: soul_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: robot_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: hungry_horror_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] bow: ender_dragon_bow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: soul_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: royal_dragon
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: dragonslayer_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: beenest_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: dragonsbane_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: fred_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: xara_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: ender_defender_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: heavy_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: dragonmaster_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: golden_goliath_ballista
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: ender_dragon
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: romeo_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: unstable_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: ender_destructor
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: teleportation_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: ellegaard_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: ender_dragon_microshot
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: dark_dragon
+[23:29:54] [Server thread/INFO]: [RpgCraft] crossbow: magnus_s_crossbow
+[23:29:54] [Server thread/INFO]: [RpgCraft] RpgCraft ON
+[23:29:55] [Server thread/INFO]: [spark] Starting background profiler...
+[23:29:55] [Server thread/INFO]: [spark] The async-profiler engine is not supported for your os/arch (windows11/amd64), so the built-in Java engine will be used instead.
+[23:29:55] [Server thread/INFO]: Done preparing level "world" (5.233s)
+[23:29:55] [Server thread/INFO]: Running delayed init tasks
+[23:29:55] [Server thread/INFO]: [BetonQuest] Enabled compatibility for ProtocolLib, Citizens!
+[23:29:55] [Craft Scheduler Thread - 1 - BetonQuest/WARN]: [BetonQuest] Could not fetch version updates. Probably the host is currently not available: nexus.betonquest.org
+[23:29:55] [Server thread/INFO]: [BetonQuest] There are 0 conditions, 0 events, 0 objectives and 0 conversations loaded from 0 packages.
+[23:29:55] [Server thread/INFO]: [BetonQuest] §aReloaded 0§a menus
+[23:29:56] [Server thread/INFO]: [Citizens] Chargement de 4 NPCs.
+[23:29:56] [Server thread/INFO]: Done (38.199s)! For help, type "help"
+[23:29:56] [Server thread/INFO]: Timings Reset
+[23:29:57] [User Authenticator #0/INFO]: UUID of player JeuneSauvage is 9eb7be24-8c01-4249-8d79-2d1e2e78544d
+[23:29:59] [Server thread/INFO]: [RpgCraft] refresh()
+[23:29:59] [Server thread/INFO]: [RpgCraft] keys of JeuneSauvage:
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 1: class
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 2: team_murloc
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 3: pet
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 4: team_player
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 5: tempering
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 6: staff
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 7: hand
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 8: sword
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 9: bow
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 10: crossbow
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 11: race
+[23:29:59] [Server thread/INFO]: [RpgCraft] key 12: form
+[23:29:59] [Server thread/INFO]: JeuneSauvage joined the game
+[23:30:00] [Server thread/INFO]: JeuneSauvage[/127.0.0.1:58905] logged in with entity id 18 at ([world]-104.31734980219625, 68.0, -279.94918624994494)
+[23:30:45] [Server thread/INFO]: JeuneSauvage issued server command: /despawnmynpc all
+[23:30:49] [Server thread/INFO]: JeuneSauvage issued server command: /spawnmynpc all
+[23:31:36] [Server thread/INFO]: JeuneSauvage lost connection: Disconnected
+[23:31:36] [Server thread/INFO]: JeuneSauvage left the game
+[23:31:37] [Server thread/INFO]: Stopping the server
+[23:31:37] [Server thread/INFO]: Stopping server
+[23:31:37] [Server thread/INFO]: [RpgCraft] Disabling RpgCraft v1.0
+[23:31:37] [Server thread/INFO]: [RpgCraft] RpgCraft OFF
+[23:31:37] [Server thread/INFO]: [SkinsRestorer] Disabling SkinsRestorer v15.12.0
+[23:31:37] [Server thread/INFO]: [BetonQuest] Disabling BetonQuest v2.2.1
+[23:31:37] [Server thread/INFO]: [BetonQuest] BetonQuest successfully disabled!
+[23:31:37] [Server thread/INFO]: [Citizens] Disabling Citizens v2.0.35-SNAPSHOT (build 3598)
+[23:31:37] [Server thread/INFO]: [ProtocolLib] Disabling ProtocolLib v5.4.0
+[23:31:37] [Server thread/INFO]: Saving players
+[23:31:37] [Server thread/INFO]: Saving worlds
+[23:31:37] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[23:31:37] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world'
+[23:31:37] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'world'
+[23:31:37] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Saved 750 block chunks, 749 entity chunks, 0 poi chunks in world 'world' in 1,17s
+[23:31:39] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world_nether]'/minecraft:the_nether
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world_nether'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'world_nether'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world_nether'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Saved 49 block chunks, 49 entity chunks, 0 poi chunks in world 'world_nether' in 0,14s
+[23:31:39] [Server thread/INFO]: Saving chunks for level 'ServerLevel[world_the_end]'/minecraft:the_end
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Waiting 60s for chunk system to halt for world 'world_the_end'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Halted chunk system for world 'world_the_end'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Saving all chunkholders for world 'world_the_end'
+[23:31:39] [Server thread/INFO]: [ChunkHolderManager] Saved 49 block chunks, 49 entity chunks, 0 poi chunks in world 'world_the_end' in 0,07s
+[23:31:39] [Server thread/INFO]: ThreadedAnvilChunkStorage (world): All chunks are saved
+[23:31:39] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[23:31:39] [Server thread/INFO]: ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[23:31:39] [Server thread/INFO]: ThreadedAnvilChunkStorage: All dimensions are saved

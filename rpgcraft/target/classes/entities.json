@@ -1,0 +1,145 @@
+﻿{
+    "cow":  [
+                "(Moobloom)",
+                "(Moolip)"
+            ],
+    "llama":  [
+                  "(Lluna)",
+                  "Jolly.*"
+              ],
+    "evoker":  [
+                   "(Whisperer)",
+                   "(Wavewhisperer)",
+                   "(Geomancer)",
+                   "(Iceologer)"
+               ],
+    "vindicator":  [
+                       "(Johnny)",
+                       "(Frankencrafter)",
+                       "(One-illager Band)"
+                   ],
+    "evoker_fangs":  [
+                         "(Whisperer)",
+                         "(Wavewhisperer)"
+                     ],
+    "chicken":  [
+                    "(Benedict)",
+                    "(Cluckshroom)"
+                ],
+    "horse":  [
+                  "Kirin.*",
+                  "Girin.*",
+                  "Qillin.*",
+                  "Skeleton*"
+              ],
+    "witch":  [
+                  "(Cropsy)"
+              ],
+    "villager":  [
+                     "*Ocelot",
+                     "*Panda",
+                     "*Fox",
+                     "*Polar Bear",
+                     "*Pufferfish",
+                     "*Bee",
+                     "*Cow",
+                     "*Kiosk",
+                     "Arch*",
+                     "*NPC",
+                     "*Scientist",
+                     "*Tumbler",
+                     "*Glider",
+                     "*Brawler",
+                     "*Retired Adventurer"
+                 ],
+    "drowned":  [
+                    "(Swamp Monster)",
+                    "(Monster Drowned)"
+                ],
+    "cow_baby":  [
+                     "(Moobloom)",
+                     "(Moolip)"
+                 ],
+    "wolf_armor":  [
+                       "(Kingbdogz)"
+                   ],
+    "ravager":  [
+                    "(Leapleaf)",
+                    "(Leaper)"
+                ],
+    "llama_decor":  [
+                        "(Lluna)",
+                        "Jolly.*"
+                    ],
+    "skeleton":  [
+                     "Sunken*"
+                 ],
+    "phantom":  [
+                    "(Moth Creature)",
+                    "(Harpy)"
+                ],
+    "zombie":  [
+                   "(The Unshorn)"
+               ],
+    "pig":  [
+                "(Technoblade)",
+                "*Bank"
+            ],
+    "bat":  [
+                "(Batato)"
+            ],
+    "slime":  [
+                  "*Spud"
+              ],
+    "wolf_collar":  [
+                        "(Kingbdogz)"
+                    ],
+    "iron_golem":  [
+                       "Sheared.*",
+                       "(Big Hank)",
+                       "(Large Henry)",
+                       "(Furnace Golem)",
+                       "(White Pumpkin)",
+                       "(Admin)",
+                       "(First of Ore)",
+                       "(First of Iron)",
+                       "(First of Ingot)",
+                       "(Robot)",
+                       "(Redstone Golem)",
+                       "(PAMA)",
+                       "(First of Block)"
+                   ],
+    "creeper":  [
+                    "(Mooboom)",
+                    "(Icy Ender Creeper)"
+                ],
+    "pig_baby":  [
+                     "(Technoblade)"
+                 ],
+    "spider":  [
+                     "(Spider 1)",
+                     "(Spider 2)",
+                     "(Spider 3)",
+                     "(Spider 4)",
+                     "(Spider 5)",
+                     "(Spider 6)",
+                     "(Spider 7)"
+                 ],
+    "cave_spider":  [
+                     "(Cave Spider 1)",
+                     "(Cave Spider 2)"
+                 ],
+    "blaze":  [
+                     "(Blaze 1)",
+                     "(Blaze 2)",
+                     "(Blaze 3)",
+                     "(Blaze 4)",
+                     "(Blaze 5)",
+                     "(Blaze 6)"
+                 ],
+    "wolf":  [
+                     "(Wolf 1)",
+                     "(Wolf 2)",
+                     "(Wolf 3)"
+                 ]
+}

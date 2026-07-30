@@ -1,0 +1,27 @@
+{
+    "BOW":  {
+                            "Staff Basic Wooden":  74,
+                            "Staff Bermundes Hermit":  75,
+                            "Staff Black Snake":  76,
+                            "Staff Divine":  77,
+                            "Staff Goblin Witch":  78,
+                            "Staff Golden Crook":  79,
+                            "Staff Holy Celtic":  80,
+                            "Staff Lich":  81,
+                            "Staff Night":  82,
+                            "Staff Northgate Guardian":  83,
+                            "Staff Olwen":  84,
+                            "Staff Sagrada Winged":  85,
+                            "Staff Unholy Wisdom":  86
+                        },
+    "CROSSBOW": {
+                            "SpellBook Blades Of War":  103,
+                            "SpellBook Hellow":  104,
+                            "SpellBook Braised":  105,
+                            "SpellBook Majestica":  106
+    },
+    "NETHERITE_SWORD": {
+                            "Claw Fire":  164,
+                            "Claw Lightning":  165
+    }
+}
