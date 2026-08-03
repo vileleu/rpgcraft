@@ -279,8 +279,8 @@ public class NPCSpellManager implements Listener {
 		            Vector	velocity = toPlayer.normalize().multiply(force);
 		            livingTarget.setVelocity(velocity);
 					particleEntityRedstoneMagnet(livingTarget.getLocation());
-					particleRedstoneMagnet(center, radius, ticks, maxTicks);
 		        }
+				particleRedstoneMagnet(center, radius, ticks, maxTicks);
 		        ticks++;
 		        if (ticks >= maxTicks)
 		            cancel();
@@ -377,7 +377,7 @@ public class NPCSpellManager implements Listener {
 	public void expulse(LivingEntity launcher, double radius) {
 		World		world = launcher.getWorld();
 		Location	center = launcher.getLocation();
-		double		force = 2;
+		double		force = 3;
         for (LivingEntity livingTarget : world.getNearbyLivingEntities(center, radius)) {
 			if (Group.isInSameGroup(livingTarget, launcher)) continue;
 			if (!TraitSentinel.isBoss(livingTarget)) {
@@ -434,7 +434,7 @@ public class NPCSpellManager implements Listener {
 	    World				world = launcher.getWorld();
 	    int					count = 3;
 	    double				radius = 1.5;
-	    double				heightOffset = 1.0;
+	    double				heightOffset = launcher.getHeight() / 2;
 	    double				rotationSpeedPerTick = Math.toRadians(12);
 	    List<ItemDisplay>	tridents = new ArrayList<>();
 	    for (int i = 0; i < count; i++) {

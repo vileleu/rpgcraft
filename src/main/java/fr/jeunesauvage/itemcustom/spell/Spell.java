@@ -402,8 +402,8 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 					else if (livingTarget instanceof Mob mob)
 						mob.setTarget(damager);
 					particleEntityDeadlyMagnet(livingTarget.getLocation());
-					particleDeadlyMagnet(center, radius, ticks, maxTicks);
 		        }
+				particleDeadlyMagnet(center, radius, ticks, maxTicks);
 		        ticks++;
 		        if (ticks >= maxTicks)
 		            cancel();
@@ -426,6 +426,18 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
     	World	world = center.getWorld();
 		int		points = 16;
     	double	progress = tick / maxTicks;
+    	double	angleOffset = tick * 0.3;
+    	double	heightProgress = (double)tick / maxTicks;
+    	double	currentHeight = heightProgress * 2.0;
+    	double	tiltAngle = Math.toRadians(25);
+    	for (int i = 0; i < points; i++) {
+    	    double angle = angleOffset + (2 * Math.PI * i / points);
+    	    Vector	point = new Vector(Math.cos(angle) * 2, 0, Math.sin(angle) * 2);
+    	    point.rotateAroundX(tiltAngle);
+    	    point.setY(point.getY() + currentHeight);
+    	    Location	particleLoc = center.clone().add(point);
+    	    world.spawnParticle(Particle.ELECTRIC_SPARK, particleLoc, 1, 0, 0, 0, 0);
+    	}
     	for (int i = 0; i < points; i++) {
     	    double	startAngle = (Math.PI * 2 * i) / (double)points;
     	    double	currentAngle = startAngle + tick * 0.25;

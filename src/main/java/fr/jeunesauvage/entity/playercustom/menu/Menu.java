@@ -456,13 +456,16 @@ public class Menu {
         inv.setItem(21, createSlot(Material.SHIELD, "Shield", "print_shields"));
         inv.setItem(22, createSlot(Material.IRON_HELMET, "Helmet", "print_helmets"));
         inv.setItem(23, createSlot(Material.IRON_HELMET, "Helmet2", "print_helmets2"));
-        inv.setItem(24, createSlot(Material.IRON_CHESTPLATE, "Chestplate", "print_chestplates"));
-        inv.setItem(25, createSlot(Material.IRON_CHESTPLATE, "Chestplate2", "print_chestplates2"));
-        inv.setItem(26, createSlot(Material.IRON_LEGGINGS, "Leggings", "print_leggings"));
-        inv.setItem(27, createSlot(Material.IRON_LEGGINGS, "Leggings2", "print_leggings2"));
-        inv.setItem(28, createSlot(Material.IRON_BOOTS, "Boots", "print_boots"));
-        inv.setItem(29, createSlot(Material.IRON_BOOTS, "Boots2", "print_boots2"));
-        inv.setItem(30, createSlot(Material.ELYTRA, "Elytra", "print_elytras"));
+        inv.setItem(24, createSlot(Material.IRON_HELMET, "Helmet3", "print_helmets3"));
+        inv.setItem(25, createSlot(Material.IRON_HELMET, "Helmet4", "print_helmets4"));
+        inv.setItem(26, createSlot(Material.IRON_CHESTPLATE, "Chestplate", "print_chestplates"));
+        inv.setItem(27, createSlot(Material.IRON_CHESTPLATE, "Chestplate2", "print_chestplates2"));
+        inv.setItem(28, createSlot(Material.IRON_CHESTPLATE, "Chestplate3", "print_chestplates3"));
+        inv.setItem(29, createSlot(Material.IRON_LEGGINGS, "Leggings", "print_leggings"));
+        inv.setItem(30, createSlot(Material.IRON_LEGGINGS, "Leggings2", "print_leggings2"));
+        inv.setItem(31, createSlot(Material.IRON_BOOTS, "Boots", "print_boots"));
+        inv.setItem(32, createSlot(Material.IRON_BOOTS, "Boots2", "print_boots2"));
+        inv.setItem(33, createSlot(Material.ELYTRA, "Elytra", "print_elytras"));
         sender.getPlayer().openInventory(inv);
     }
 
@@ -474,7 +477,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -483,6 +485,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -495,7 +498,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -504,6 +506,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -517,7 +520,6 @@ public class Menu {
         int                         i = 1;
         boolean                     skip = true;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -534,6 +536,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -546,7 +549,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -555,6 +557,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -567,7 +570,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -576,6 +578,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -588,7 +591,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -597,6 +599,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -609,7 +612,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -618,6 +620,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -630,7 +633,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -639,6 +641,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -651,7 +654,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -660,6 +662,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -672,7 +675,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
               ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -681,6 +683,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -693,7 +696,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -702,6 +704,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -714,7 +717,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -723,6 +725,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -735,7 +738,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.WEAPON) {
                 WeaponType  weaponType = (WeaponType)type;
@@ -744,6 +746,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -756,7 +759,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -765,6 +767,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -778,7 +781,6 @@ public class Menu {
         int                         i = 1;
         boolean                     skip = true;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -795,6 +797,67 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openHelmets3Menu(ItemCustomManager itemCustomManager) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Helmets"));
+        holder.setInventory(inv);
+        inv.setItem(0, createBack("back_items"));
+        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
+        int                         i = 1;
+        boolean                     skip = true;
+        for (Equipable<?> equipable: equipables.values()) {
+            ItemCustomType  type = equipable.getType();
+            if (type.getCategory() == ItemCustomCategory.ARMOR) {
+                ArmorType  armorType = (ArmorType)type;
+                if (armorType.getName().endsWith("head")) {
+                    if (skip) {
+                        if (i == 106) {
+                            i = 0;
+                            skip = false;
+                        }
+                        i++;
+                        continue;
+                    }
+                    inv.setItem(i, createEquipable(equipable));
+                    i++;
+                }
+            }
+            if (i == 54) break;
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openHelmets4Menu(ItemCustomManager itemCustomManager) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Helmets"));
+        holder.setInventory(inv);
+        inv.setItem(0, createBack("back_items"));
+        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
+        int                         i = 1;
+        boolean                     skip = true;
+        for (Equipable<?> equipable: equipables.values()) {
+            ItemCustomType  type = equipable.getType();
+            if (type.getCategory() == ItemCustomCategory.ARMOR) {
+                ArmorType  armorType = (ArmorType)type;
+                if (armorType.getName().endsWith("head")) {
+                    if (skip) {
+                        if (i == 159) {
+                            i = 0;
+                            skip = false;
+                        }
+                        i++;
+                        continue;
+                    }
+                    inv.setItem(i, createEquipable(equipable));
+                    i++;
+                }
+            }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -807,7 +870,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -816,6 +878,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -829,7 +892,6 @@ public class Menu {
         int                         i = 1;
         boolean                     skip = true;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -846,6 +908,37 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openChestplates3Menu(ItemCustomManager itemCustomManager) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Chestplates"));
+        holder.setInventory(inv);
+        inv.setItem(0, createBack("back_items"));
+        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
+        int                         i = 1;
+        boolean                     skip = true;
+        for (Equipable<?> equipable: equipables.values()) {
+            ItemCustomType  type = equipable.getType();
+            if (type.getCategory() == ItemCustomCategory.ARMOR) {
+                ArmorType  armorType = (ArmorType)type;
+                if (armorType.getName().endsWith("chest")) {
+                    if (skip) {
+                        if (i == 106) {
+                            i = 0;
+                            skip = false;
+                        }
+                        i++;
+                        continue;
+                    }
+                    inv.setItem(i, createEquipable(equipable));
+                    i++;
+                }
+            }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -858,7 +951,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -867,6 +959,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -880,7 +973,6 @@ public class Menu {
         int                         i = 1;
         boolean                     skip = true;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -897,6 +989,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -909,7 +1002,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -918,6 +1010,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -931,7 +1024,6 @@ public class Menu {
         int                         i = 1;
         boolean                     skip = true;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -948,6 +1040,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }
@@ -960,7 +1053,6 @@ public class Menu {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
         int                         i = 1;
         for (Equipable<?> equipable: equipables.values()) {
-            if (i >= 54) break;
             ItemCustomType  type = equipable.getType();
             if (type.getCategory() == ItemCustomCategory.ARMOR) {
                 ArmorType  armorType = (ArmorType)type;
@@ -969,6 +1061,7 @@ public class Menu {
                     i++;
                 }
             }
+            if (i == 54) break;
         }
         sender.getPlayer().openInventory(inv);
     }

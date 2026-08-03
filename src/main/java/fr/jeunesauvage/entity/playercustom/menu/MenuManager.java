@@ -86,8 +86,11 @@ public class MenuManager implements Listener {
                 case "print_shields" -> menu.openShieldsMenu(itemCustomManager);
                 case "print_helmets" -> menu.openHelmetsMenu(itemCustomManager);
                 case "print_helmets2" -> menu.openHelmets2Menu(itemCustomManager);
+                case "print_helmets3" -> menu.openHelmets3Menu(itemCustomManager);
+                case "print_helmets4" -> menu.openHelmets4Menu(itemCustomManager);
                 case "print_chestplates" -> menu.openChestplatesMenu(itemCustomManager);
                 case "print_chestplates2" -> menu.openChestplates2Menu(itemCustomManager);
+                case "print_chestplates3" -> menu.openChestplates3Menu(itemCustomManager);
                 case "print_leggings" -> menu.openLeggingsMenu(itemCustomManager);
                 case "print_leggings2" -> menu.openLeggings2Menu(itemCustomManager);
                 case "print_boots" -> menu.openBootsMenu(itemCustomManager);
