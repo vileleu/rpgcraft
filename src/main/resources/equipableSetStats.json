@@ -1,0 +1,1598 @@
+{
+    "shadow walker":  {
+                          "statsPrimary":  [
+                                               "intellect",
+                                               "spirit"
+                                           ],
+                          "rarity":  1,
+                          "level":  3,
+                          "statsSecondary":  [
+                                                 "spell_armor"
+                                             ],
+                          "type":  "cloth"
+                      },
+    "spooky gourdian":  {
+                            "statsPrimary":  [
+                                                 "strength",
+                                                 "agility",
+                                                 "spirit"
+                                             ],
+                            "rarity":  3,
+                            "level":  60,
+                            "statsSecondary":  [
+                                                   "spell_armor"
+                                               ],
+                            "type":  "mail"
+                        },
+    "verdant":  {
+                    "statsPrimary":  [
+                                         "strength",
+                                         "spirit"
+                                     ],
+                    "rarity":  1,
+                    "level":  2,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "cloth"
+                },
+    "dark":  {
+                 "statsPrimary":  [
+                                      "strength",
+                                      "stamina"
+                                  ],
+                 "rarity":  3,
+                 "level":  10,
+                 "statsSecondary":  [
+                                        "physical_armor"
+                                    ],
+                 "type":  "plate"
+             },
+    "golden apple":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "agility"
+                                          ],
+                         "rarity":  2,
+                         "level":  3,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "leather"
+                     },
+    "droid":  {
+                  "statsPrimary":  [
+                                       "intellect",
+                                       "spirit",
+                                       "agility"
+                                   ],
+                  "rarity":  2,
+                  "level":  5,
+                  "statsSecondary":  [
+                                         "physical_armor",
+                                         "spell_armor"
+                                     ],
+                  "type":  "leather"
+              },
+    "jack o\u0027":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "spirit"
+                                          ],
+                         "rarity":  2,
+                         "level":  4,
+                         "statsSecondary":  [
+                                                "spell_armor"
+                                            ],
+                         "type":  "cloth"
+                     },
+    "robot":  {
+                  "statsPrimary":  [
+                                       "strength",
+                                       "stamina"
+                                   ],
+                  "rarity":  2,
+                  "level":  6,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "leather"
+              },
+    "bard\u0027s":  {
+                        "statsPrimary":  [
+                                             "intellect",
+                                             "stamina"
+                                         ],
+                        "rarity":  2,
+                        "level":  7,
+                        "statsSecondary":  [
+                                               "physical_armor"
+                                           ],
+                        "type":  "cloth"
+                    },
+    "piglin":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "spirit"
+                                    ],
+                   "rarity":  2,
+                   "level":  8,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "cauldron":  {
+                     "statsPrimary":  [
+                                          "strength",
+                                          "stamina",
+                                          "spirit"
+                                      ],
+                     "rarity":  3,
+                     "level":  9,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "plate"
+                 },
+    "poisonous potato":  {
+                                "statsPrimary":  [
+                                                     "spirit"
+                                                 ],
+                                "rarity":  1,
+                                "level":  10,
+                                "statsSecondary":  [
+                                                       "physical_armor"
+                                                   ],
+                                "type":  "cloth"
+                            },
+    "ghostly":  {
+                    "statsPrimary":  [
+                                         "stamina"
+                                     ],
+                    "rarity":  2,
+                    "level":  11,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "leather"
+                },
+    "frost":  {
+                  "statsPrimary":  [
+                                       "intellect",
+                                       "agility"
+                                   ],
+                  "rarity":  3,
+                  "level":  12,
+                  "statsSecondary":  [
+                                         "spell_armor"
+                                     ],
+                  "type":  "cloth"
+              },
+    "wolf":  {
+                 "statsPrimary":  [
+                                      "strength",
+                                      "agility"
+                                  ],
+                 "rarity":  2,
+                 "level":  13,
+                 "statsSecondary":  [
+                                        "physical_armor"
+                                    ],
+                 "type":  "leather"
+             },
+    "ocelot":  {
+                   "statsPrimary":  [
+                                        "spirit",
+                                        "stamina"
+                                    ],
+                   "rarity":  2,
+                   "level":  14,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "climber\u0027s":  {
+                           "statsPrimary":  [
+                                                "agility",
+                                                "stamina"
+                                            ],
+                           "rarity":  1,
+                           "level":  15,
+                           "statsSecondary":  [
+                                                  "physical_armor"
+                                              ],
+                           "type":  "leather"
+                       },
+    "ninja":  {
+                  "statsPrimary":  [
+                                       "agility",
+                                       "strength"
+                                   ],
+                  "rarity":  3,
+                  "level":  16,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "leather"
+              },
+    "highland":  {
+                     "statsPrimary":  [
+                                          "strength",
+                                          "stamina"
+                                      ],
+                     "rarity":  1,
+                     "level":  17,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "mail"
+                 },
+    "phantom ranger":  {
+                           "statsPrimary":  [
+                                                "intellect",
+                                                "spirit",
+                                                "strength"
+                                            ],
+                           "rarity":  3,
+                           "level":  18,
+                           "statsSecondary":  [
+                                                  "spell_armor"
+                                              ],
+                           "type":  "cloth"
+                       },
+    "teleportation":  {
+                          "statsPrimary":  [
+                                               "intellect"
+                                           ],
+                          "rarity":  3,
+                          "level":  19,
+                          "statsSecondary":  [
+                                                 "physical_armor"
+                                             ],
+                          "type":  "cloth"
+                      },
+    "battle":  {
+                   "statsPrimary":  [
+                                        "spirit",
+                                        "stamina"
+                                    ],
+                   "rarity":  2,
+                   "level":  60,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "fred\u0027s":  {
+                        "statsPrimary":  [
+                                             "strength"
+                                         ],
+                        "rarity":  2,
+                        "level":  21,
+                        "statsSecondary":  [
+                                               "physical_armor"
+                                           ],
+                        "type":  "leather"
+                    },
+    "lava warrior":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "stamina"
+                                          ],
+                         "rarity":  3,
+                         "level":  22,
+                         "statsSecondary":  [
+                                                "physical_armor",
+                                                "spell_armor"
+                                            ],
+                         "type":  "plate"
+                     },
+    "wither":  {
+                   "statsPrimary":  [
+                                        "intellect",
+                                        "agility"
+                                    ],
+                   "rarity":  2,
+                   "level":  23,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "portal buster":  {
+                          "statsPrimary":  [
+                                               "strength",
+                                               "spirit"
+                                           ],
+                          "rarity":  2,
+                          "level":  24,
+                          "statsSecondary":  [
+                                                 "physical_armor"
+                                             ],
+                          "type":  "mail"
+                      },
+    "sakura":  {
+                   "statsPrimary":  [
+                                        "agility",
+                                        "strength"
+                                    ],
+                   "rarity":  4,
+                   "level":  25,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "leather"
+               },
+    "hungriest horror":  {
+                             "statsPrimary":  [
+                                                  "stamina"
+                                              ],
+                             "rarity":  2,
+                             "level":  26,
+                             "statsSecondary":  [
+                                                    "physical_armor"
+                                                ],
+                             "type":  "leather"
+                         },
+    "heavy":  {
+                  "statsPrimary":  [
+                                       "strength",
+                                       "stamina"
+                                   ],
+                  "rarity":  4,
+                  "level":  27,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "plate"
+              },
+    "xara\u0027s":  {
+                        "statsPrimary":  [
+                                             "intellect",
+                                             "stamina"
+                                         ],
+                        "rarity":  2,
+                        "level":  28,
+                        "statsSecondary":  [
+                                               "spell_armor"
+                                           ],
+                        "type":  "cloth"
+                    },
+    "redstone riot":  {
+                          "statsPrimary":  [
+                                               "agility",
+                                               "stamina"
+                                           ],
+                          "rarity":  3,
+                          "level":  29,
+                          "statsSecondary":  [
+                                                 "physical_armor"
+                                             ],
+                          "type":  "mail"
+                      },
+    "drowned king":  {
+                         "statsPrimary":  [
+                                              "intellect"
+                                          ],
+                         "rarity":  4,
+                         "level":  60,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "cloth"
+                     },
+    "snow":  {
+                 "statsPrimary":  [
+                                      "intellect",
+                                      "spirit"
+                                  ],
+                 "rarity":  2,
+                 "level":  31,
+                 "statsSecondary":  [
+                                        "spell_armor"
+                                    ],
+                 "type":  "cloth"
+             },
+    "romeo\u0027s":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "stamina",
+                                              "spirit"
+                                          ],
+                         "rarity":  3,
+                         "level":  32,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "plate"
+                     },
+    "golden goliath":  {
+                           "statsPrimary":  [
+                                                "spirit",
+                                                "stamina"
+                                            ],
+                           "rarity":  2,
+                           "level":  33,
+                           "statsSecondary":  [
+                                                  "physical_armor"
+                                              ],
+                           "type":  "mail"
+                       },
+    "black spot":  {
+                       "statsPrimary":  [
+                                            "intellect",
+                                            "stamina"
+                                        ],
+                       "rarity":  3,
+                       "level":  34,
+                       "statsSecondary":  [
+                                              "physical_armor"
+                                          ],
+                       "type":  "cloth"
+                   },
+    "vemi":  {
+                 "statsPrimary":  [
+                                      "strength"
+                                  ],
+                 "rarity":  2,
+                 "level":  35,
+                 "statsSecondary":  [
+                                        "spell_armor"
+                                    ],
+                 "type":  "leather"
+             },
+    "beehive":  {
+                    "statsPrimary":  [
+                                         "strength",
+                                         "stamina",
+                                         "spirit"
+                                     ],
+                    "rarity":  1,
+                    "level":  36,
+                    "statsSecondary":  [
+                                           "spell_armor"
+                                       ],
+                    "type":  "cloth"
+                },
+    "ill":  {
+                "statsPrimary":  [
+                                     "intellect",
+                                     "agility"
+                                 ],
+                "rarity":  3,
+                "level":  37,
+                "statsSecondary":  [
+                                       "spell_armor"
+                                   ],
+                "type":  "cloth"
+            },
+    "redstonia":  {
+                      "statsPrimary":  [
+                                           "strength",
+                                           "spirit"
+                                       ],
+                      "rarity":  2,
+                      "level":  38,
+                      "statsSecondary":  [
+                                             "physical_armor"
+                                         ],
+                      "type":  "leather"
+                  },
+    "royal":  {
+                  "statsPrimary":  [
+                                       "spirit",
+                                       "stamina"
+                                   ],
+                  "rarity":  3,
+                  "level":  39,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "plate"
+              },
+    "goat":  {
+                 "statsPrimary":  [
+                                      "agility",
+                                      "stamina"
+                                  ],
+                 "rarity":  3,
+                 "level":  40,
+                 "statsSecondary":  [
+                                        "physical_armor",
+                                        "spell_armor"
+                                    ],
+                 "type":  "leather"
+             },
+    "ellegaard\u0027s":  {
+                             "statsPrimary":  [
+                                                  "spirit",
+                                                  "strength"
+                                              ],
+                             "rarity":  2,
+                             "level":  41,
+                             "statsSecondary":  [
+                                                    "physical_armor"
+                                                ],
+                             "type":  "leather"
+                         },
+    "pama":  {
+                 "statsPrimary":  [
+                                      "strength",
+                                      "stamina",
+                                      "agility"
+                                  ],
+                 "rarity":  2,
+                 "level":  2,
+                 "statsSecondary":  [
+                                        "spell_armor"
+                                    ],
+                 "type":  "mail"
+             },
+    "opulent":  {
+                    "statsPrimary":  [
+                                         "strength",
+                                         "spirit"
+                                     ],
+                    "rarity":  3,
+                    "level":  43,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "plate"
+                },
+    "necromancer":  {
+                        "statsPrimary":  [
+                                             "intellect",
+                                             "spirit"
+                                         ],
+                        "rarity":  4,
+                        "level":  44,
+                        "statsSecondary":  [
+                                               "physical_armor",
+                                               "spell_armor"
+                                           ],
+                        "type":  "cloth"
+                    },
+    "tower":  {
+                  "statsPrimary":  [
+                                       "agility",
+                                       "stamina"
+                                   ],
+                  "rarity":  2,
+                  "level":  45,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "mail"
+              },
+    "living vines":  {
+                         "statsPrimary":  [
+                                              "intellect",
+                                              "spirit"
+                                          ],
+                         "rarity":  6,
+                         "level":  60,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "cloth"
+                     },
+    "skelly":  {
+                   "statsPrimary":  [
+                                        "agility",
+                                        "spirit"
+                                    ],
+                   "rarity":  2,
+                   "level":  46,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "leather"
+               },
+    "hero\u0027s":  {
+                        "statsPrimary":  [
+                                             "strength"
+                                         ],
+                        "rarity":  2,
+                        "level":  47,
+                        "statsSecondary":  [
+                                               "physical_armor"
+                                           ],
+                        "type":  "plate"
+                    },
+    "star shield":  {
+                        "statsPrimary":  [
+                                             "spirit",
+                                             "stamina"
+                                         ],
+                        "rarity":  1,
+                        "level":  48,
+                        "statsSecondary":  [
+                                               "physical_armor"
+                                           ],
+                        "type":  "cloth"
+                    },
+    "fox":  {
+                "statsPrimary":  [
+                                     "agility",
+                                     "spirit"
+                                 ],
+                "rarity":  3,
+                "level":  49,
+                "statsSecondary":  [
+                                       "physical_armor"
+                                   ],
+                "type":  "leather"
+            },
+    "spelunker\u0027s":  {
+                             "statsPrimary":  [
+                                                  "agility",
+                                                  "spirit"
+                                              ],
+                             "rarity":  2,
+                             "level":  50,
+                             "statsSecondary":  [
+                                                    "physical_armor"
+                                                ],
+                             "type":  "mail"
+                         },
+    "turtle":  {
+                   "statsPrimary":  [
+                                        "stamina"
+                                    ],
+                   "rarity":  3,
+                   "level":  51,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "mail"
+               },
+    "troubadour":  {
+                       "statsPrimary":  [
+                                            "intellect"
+                                        ],
+                       "rarity":  3,
+                       "level":  52,
+                       "statsSecondary":  [
+                                              "spell_armor"
+                                          ],
+                       "type":  "cloth"
+                   },
+    "thief":  {
+                  "statsPrimary":  [
+                                       "agility"
+                                   ],
+                  "rarity":  3,
+                  "level":  53,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "leather"
+              },
+    "scarlet":  {
+                    "statsPrimary":  [
+                                         "strength",
+                                         "stamina",
+                                         "spirit"
+                                     ],
+                    "rarity":  2,
+                    "level":  54,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "mail"
+                },
+    "petra\u0027s":  {
+                         "statsPrimary":  [
+                                              "agility",
+                                              "stamina"
+                                          ],
+                         "rarity":  3,
+                         "level":  56,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "plate"
+                     },
+    "sweet tooth":  {
+                        "statsPrimary":  [
+                                             "agility",
+                                             "intellect"
+                                         ],
+                        "rarity":  4,
+                        "level": 56,
+                        "statsSecondary":  [
+                                               "spell_armor"
+                                           ],
+                        "type":  "cloth"
+                    },
+    "lava infused":  {
+                         "statsPrimary":  [
+                                              "stamina",
+                                              "spirit"
+                                          ],
+                         "rarity":  2,
+                         "level":  57,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "mail"
+                     },
+    "ender":  {
+                  "statsPrimary":  [
+                                       "strength",
+                                       "agility"
+                                   ],
+                  "rarity":  3,
+                  "level":  58,
+                  "statsSecondary":  [
+                                         "spell_armor"
+                                     ],
+                  "type":  "leather"
+              },
+    "nameless":  {
+                     "statsPrimary":  [
+                                          "intellect"
+                                      ],
+                     "rarity":  5,
+                     "level":  59,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "cloth"
+                 },
+    "creed":  {
+                  "statsPrimary":  [
+                                       "strength",
+                                       "stamina"
+                                   ],
+                  "rarity":  4,
+                  "level":  55,
+                  "statsSecondary":  [
+                                         "spell_armor"
+                                     ],
+                  "type":  "plate"
+              },
+    "guard\u0027s":  {
+                         "statsPrimary":  [
+                                              "spirit",
+                                              "stamina"
+                                          ],
+                         "rarity":  1,
+                         "level":  2,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "leather"
+                     },
+    "mega":  {
+                 "statsPrimary":  [
+                                      "strength",
+                                      "intellect"
+                                  ],
+                 "rarity":  3,
+                 "level":  20,
+                 "statsSecondary":  [
+                                        "physical_armor",
+                                        "spell_armor"
+                                    ],
+                 "type":  "mail"
+             },
+    "evocation":  {
+                      "statsPrimary":  [
+                                           "intellect",
+                                           "stamina",
+                                           "spirit"
+                                       ],
+                      "rarity":  3,
+                      "level":  60,
+                      "statsSecondary":  [
+                                             "spell_armor"
+                                         ],
+                      "type":  "cloth"
+                  },
+    "tim\u0027s":  {
+                       "statsPrimary":  [
+                                            "strength",
+                                            "stamina",
+                                            "spirit"
+                                        ],
+                       "rarity":  2,
+                       "level":  10,
+                       "statsSecondary":  [
+                                              "physical_armor"
+                                          ],
+                       "type":  "leather"
+                   },
+    "command block":  {
+                          "statsPrimary":  [
+                                               "strength",
+                                               "agility"
+                                           ],
+                          "rarity":  4,
+                          "level":  42,
+                          "statsSecondary":  [
+                                                 "spell_armor"
+                                             ],
+                          "type":  "mail"
+                      },
+    "rgb ranger":  {
+                       "statsPrimary":  [
+                                            "agility",
+                                            "intellect"
+                                        ],
+                       "rarity":  3,
+                       "level":  60,
+                       "statsSecondary":  [
+                                              "physical_armor",
+                                              "spell_armor"
+                                          ],
+                       "type":  "leather"
+                   },
+    "glow squid":  {
+                       "statsPrimary":  [
+                                            "intellect",
+                                            "stamina"
+                                        ],
+                       "rarity":  2,
+                       "level":  5,
+                       "statsSecondary":  [
+                                              "spell_armor"
+                                          ],
+                       "type":  "cloth"
+                   },
+    "ember":  {
+                  "statsPrimary":  [
+                                       "spirit",
+                                       "stamina",
+                                       "agility"
+                                   ],
+                  "rarity":  1,
+                  "level":  6,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "cloth"
+              },
+    "adamantium impervium":  {
+                                 "statsPrimary":  [
+                                                      "strength"
+                                                  ],
+                                 "rarity":  1,
+                                 "level":  7,
+                                 "statsSecondary":  [
+                                                        "physical_armor"
+                                                    ],
+                                 "type":  "mail"
+                             },
+    "ruby":  {
+                 "statsPrimary":  [
+                                      "strength",
+                                      "intellect"
+                                  ],
+                 "rarity":  2,
+                 "level":  8,
+                 "statsSecondary":  [
+                                        "physical_armor"
+                                    ],
+                 "type":  "cloth"
+             },
+    "ender dragon":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "agility",
+                                              "spirit"
+                                          ],
+                         "rarity":  6,
+                         "level":  60,
+                         "statsSecondary":  [
+                                                "physical_armor",
+                                                "spell_armor"
+                                            ],
+                         "type":  "plate"
+                     },
+    "soren\u0027s":  {
+                         "statsPrimary":  [
+                                              "stamina"
+                                          ],
+                         "rarity":  1,
+                         "level":  9,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "cloth"
+                     },
+    "blastbreaker":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "spirit"
+                                          ],
+                         "rarity":  2,
+                         "level":  10,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "leather"
+                     },
+    "emerald":  {
+                    "statsPrimary":  [
+                                         "intellect"
+                                     ],
+                    "rarity":  2,
+                    "level":  11,
+                    "statsSecondary":  [
+                                           "spell_armor"
+                                       ],
+                    "type":  "cloth"
+                },
+    "shaman\u0027s":  {
+                          "statsPrimary":  [
+                                               "intellect",
+                                               "spirit"
+                                           ],
+                          "rarity":  5,
+                          "level":  60,
+                          "statsSecondary":  [
+                                                 "physical_armor"
+                                             ],
+                          "type":  "cloth"
+                      },
+    "proud":  {
+                  "statsPrimary":  [
+                                       "strength",
+                                       "spirit"
+                                   ],
+                  "rarity":  1,
+                  "level":  12,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "mail"
+              },
+    "prismarine":  {
+                       "statsPrimary":  [
+                                            "spirit"
+                                        ],
+                       "rarity":  1,
+                       "level":  13,
+                       "statsSecondary":  [
+                                              "spell_armor"
+                                          ],
+                       "type":  "cloth"
+                   },
+    "ivor\u0027s":  {
+                        "statsPrimary":  [
+                                             "strength",
+                                             "stamina"
+                                         ],
+                        "rarity":  2,
+                        "level":  14,
+                        "statsSecondary":  [
+                                               "physical_armor"
+                                           ],
+                        "type":  "leather"
+                    },
+    "cloaked skull":  {
+                          "statsPrimary":  [
+                                               "intellect"
+                                           ],
+                          "rarity":  3,
+                          "level":  30,
+                          "statsSecondary":  [
+                                                 "spell_armor"
+                                             ],
+                          "type":  "cloth"
+                      },
+    "plate":  {
+                  "statsPrimary":  [
+                                       "strength",
+                                       "stamina"
+                                   ],
+                  "rarity":  2,
+                  "level":  15,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "plate"
+              },
+    "ore":  {
+                "statsPrimary":  [
+                                     "stamina"
+                                 ],
+                "rarity":  1,
+                "level":  16,
+                "statsSecondary":  [
+                                       "physical_armor"
+                                   ],
+                "type":  "plate"
+            },
+    "swordbreaker":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "stamina",
+                                              "spirit"
+                                          ],
+                         "rarity":  2,
+                         "level":  17,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "leather"
+                     },
+    "vortex":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "spirit"
+                                    ],
+                   "rarity":  3,
+                   "level":  18,
+                   "statsSecondary":  [
+                                          "physical_armor",
+                                          "spell_armor"
+                                      ],
+                   "type":  "mail"
+               },
+    "infinity":  {
+                     "statsPrimary":  [
+                                          "spirit",
+                                          "stamina"
+                                      ],
+                     "rarity":  2,
+                     "level":  19,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "mail"
+                 },
+    "souldancer":  {
+                       "statsPrimary":  [
+                                            "intellect",
+                                            "agility"
+                                        ],
+                       "rarity":  1,
+                       "level":  20,
+                       "statsSecondary":  [
+                                              "spell_armor"
+                                          ],
+                       "type":  "cloth"
+                   },
+    "dragon":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "stamina"
+                                    ],
+                   "rarity":  2,
+                   "level":  21,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "plate"
+               },
+    "boom town":  {
+                      "statsPrimary":  [
+                                           "intellect",
+                                           "stamina",
+                                           "spirit"
+                                       ],
+                      "rarity":  3,
+                      "level":  22,
+                      "statsSecondary":  [
+                                             "spell_armor"
+                                         ],
+                      "type":  "cloth"
+                  },
+    "netherwalker":  {
+                         "statsPrimary":  [
+                                              "agility"
+                                          ],
+                         "rarity":  2,
+                         "level":  23,
+                         "statsSecondary":  [
+                                                "spell_armor"
+                                            ],
+                         "type":  "leather"
+                     },
+    "mega x":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "stamina",
+                                        "spirit"
+                                    ],
+                   "rarity":  3,
+                   "level":  24,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "mail"
+               },
+    "full metal":  {
+                       "statsPrimary":  [
+                                            "strength"
+                                        ],
+                       "rarity":  1,
+                       "level":  25,
+                       "statsSecondary":  [
+                                              "physical_armor"
+                                          ],
+                       "type":  "mail"
+                   },
+    "space":  {
+                  "statsPrimary":  [
+                                       "stamina",
+                                       "spirit"
+                                   ],
+                  "rarity":  1,
+                  "level":  26,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "mail"
+              },
+    "titan\u0027s shroud":  {
+                                "statsPrimary":  [
+                                                     "strength",
+                                                     "stamina",
+                                                     "agility"
+                                                 ],
+                                "rarity":  3,
+                                "level":  27,
+                                "statsSecondary":  [
+                                                       "physical_armor"
+                                                   ],
+                                "type":  "mail"
+                            },
+    "crucuble":  {
+                     "statsPrimary":  [
+                                          "intellect",
+                                          "stamina",
+                                          "spirit"
+                                      ],
+                     "rarity":  4,
+                     "level":  43,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "cloth"
+                 },
+    "gabriel\u0027s":  {
+                           "statsPrimary":  [
+                                                "agility",
+                                                "stamina"
+                                            ],
+                           "rarity":  2,
+                           "level":  28,
+                           "statsSecondary":  [
+                                                  "spell_armor"
+                                              ],
+                           "type":  "leather"
+                       },
+    "soul":  {
+                 "statsPrimary":  [
+                                      "intellect"
+                                  ],
+                 "rarity":  2,
+                 "level":  29,
+                 "statsSecondary":  [
+                                        "physical_armor"
+                                    ],
+                 "type":  "cloth"
+             },
+    "strider":  {
+                    "statsPrimary":  [
+                                         "spirit",
+                                         "stamina"
+                                     ],
+                    "rarity":  1,
+                    "level":  30,
+                    "statsSecondary":  [
+                                           "spell_armor"
+                                       ],
+                    "type":  "cloth"
+                },
+    "entertainer\u0027s":  {
+                               "statsPrimary":  [
+                                                    "spirit",
+                                                    "intellect"
+                                                ],
+                               "rarity":  3,
+                               "level":  31,
+                               "statsSecondary":  [
+                                                      "physical_armor",
+                                                      "spell_armor"
+                                                  ],
+                               "type":  "cloth"
+                           },
+    "splendid":  {
+                     "statsPrimary":  [
+                                          "strength",
+                                          "intellect",
+                                          "stamina"
+                                      ],
+                     "rarity":  3,
+                     "level":  32,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "cloth"
+                 },
+    "cyklopps\u0027s":  {
+                           "statsPrimary":  [
+                                                "strength",
+                                                "stamina"
+                                            ],
+                           "rarity":  2,
+                           "level":  33,
+                           "statsSecondary":  [
+                                                  "physical_armor"
+                                              ],
+                           "type":  "leather"
+                       },
+    "ar":  {
+               "statsPrimary":  [
+                                    "stamina",
+                                    "intellect"
+                                ],
+               "rarity":  2,
+               "level":  34,
+               "statsSecondary":  [
+                                      "physical_armor"
+                                  ],
+               "type":  "mail"
+           },
+    "root rot":  {
+                     "statsPrimary":  [
+                                          "intellect"
+                                      ],
+                     "rarity":  4,
+                     "level":  35,
+                     "statsSecondary":  [
+                                            "spell_armor"
+                                        ],
+                     "type":  "cloth"
+                 },
+    "shulker":  {
+                    "statsPrimary":  [
+                                         "spirit",
+                                         "stamina"
+                                     ],
+                    "rarity":  3,
+                    "level":  36,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "leather"
+                },
+    "dragonsbane":  {
+                        "statsPrimary":  [
+                                             "strength",
+                                             "agility"
+                                         ],
+                        "rarity":  3,
+                        "level":  37,
+                        "statsSecondary":  [
+                                               "physical_armor"
+                                           ],
+                        "type":  "leather"
+                    },
+    "grim":  {
+                 "statsPrimary":  [
+                                      "agility"
+                                  ],
+                 "rarity":  2,
+                 "level":  38,
+                 "statsSecondary":  [
+                                        "physical_armor"
+                                    ],
+                 "type":  "leather"
+             },
+    "red rascal":  {
+                       "statsPrimary":  [
+                                            "strength",
+                                            "stamina",
+                                            "agility"
+                                        ],
+                       "rarity":  3,
+                       "level":  39,
+                       "statsSecondary":  [
+                                              "physical_armor"
+                                          ],
+                       "type":  "leather"
+                   },
+    "trial":  {
+                  "statsPrimary":  [
+                                       "agility",
+                                       "stamina"
+                                   ],
+                  "rarity":  2,
+                  "level":  40,
+                  "statsSecondary":  [
+                                         "physical_armor"
+                                     ],
+                  "type":  "leather"
+              },
+    "beenest":  {
+                    "statsPrimary":  [
+                                         "spirit",
+                                         "stamina"
+                                     ],
+                    "rarity":  1,
+                    "level":  41,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "cloth"
+                },
+    "hungry horror":  {
+                          "statsPrimary":  [
+                                               "agility"
+                                           ],
+                          "rarity":  4,
+                          "level":  42,
+                          "statsSecondary":  [
+                                                 "physical_armor"
+                                             ],
+                          "type":  "leather"
+                      },
+    "magnus\u0027s":  {
+                         "statsPrimary":  [
+                                              "intellect",
+                                              "spirit"
+                                          ],
+                         "rarity":  3,
+                         "level":  60,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "cloth"
+                     },
+    "spleef":  {
+                   "statsPrimary":  [
+                                        "spirit",
+                                        "intellect",
+                                        "strength"
+                                    ],
+                   "rarity":  2,
+                   "level":  44,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "phantom":  {
+                    "statsPrimary":  [
+                                         "strength",
+                                         "stamina"
+                                     ],
+                    "rarity":  2,
+                    "level":  45,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "plate"
+                },
+    "journey":  {
+                    "statsPrimary":  [
+                                         "intellect",
+                                         "spirit",
+                                         "stamina"
+                                     ],
+                    "rarity":  6,
+                    "level":  60,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "cloth"
+                },
+    "sprout":  {
+                   "statsPrimary":  [
+                                        "intellect",
+                                        "stamina"
+                                    ],
+                   "rarity":  2,
+                   "level":  46,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "mystery":  {
+                    "statsPrimary":  [
+                                         "stamina",
+                                         "spirit"
+                                     ],
+                    "rarity":  2,
+                    "level":  47,
+                    "statsSecondary":  [
+                                           "physical_armor"
+                                       ],
+                    "type":  "mail"
+                },
+    "axebreaker":  {
+                       "statsPrimary":  [
+                                            "strength",
+                                            "stamina",
+                                            "spirit"
+                                        ],
+                       "rarity":  2,
+                       "level":  48,
+                       "statsSecondary":  [
+                                              "physical_armor"
+                                          ],
+                       "type":  "leather"
+                   },
+    "spider":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "agility"
+                                    ],
+                   "rarity":  4,
+                   "level":  49,
+                   "statsSecondary":  [
+                                          "physical_armor",
+                                          "spell_armor"
+                                      ],
+                   "type":  "leather"
+               },
+    "fireforged":  {
+                       "statsPrimary":  [
+                                            "strength",
+                                            "spirit"
+                                        ],
+                       "rarity":  2,
+                       "level":  50,
+                       "statsSecondary":  [
+                                              "physical_armor"
+                                          ],
+                       "type":  "mail"
+                   },
+    "stalwart":  {
+                     "statsPrimary":  [
+                                          "agility",
+                                          "stamina",
+                                          "spirit"
+                                      ],
+                     "rarity":  2,
+                     "level":  51,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "leather"
+                 },
+    "unstable":  {
+                     "statsPrimary":  [
+                                          "intellect"
+                                      ],
+                     "rarity":  3,
+                     "level":  52,
+                     "statsSecondary":  [
+                                            "physical_armor",
+                                            "spell_armor"
+                                        ],
+                     "type":  "cloth"
+                 },
+    "renegade":  {
+                     "statsPrimary":  [
+                                          "strength",
+                                          "stamina"
+                                      ],
+                     "rarity":  2,
+                     "level":  53,
+                     "statsSecondary":  [
+                                            "physical_armor"
+                                        ],
+                     "type":  "plate"
+                 },
+    "ender defender":  {
+                           "statsPrimary":  [
+                                                "strength",
+                                                "stamina",
+                                                "agility"
+                                            ],
+                           "rarity":  2,
+                           "level":  54,
+                           "statsSecondary":  [
+                                                  "physical_armor"
+                                              ],
+                           "type":  "leather"
+                       },
+    "dragonslayer":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "agility"
+                                          ],
+                         "rarity":  5,
+                         "level":  55,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "plate"
+                     },
+    "shogun":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "agility"
+                                    ],
+                   "rarity":  2,
+                   "level":  56,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "mail"
+               },
+    "spooky":  {
+                   "statsPrimary":  [
+                                        "intellect",
+                                        "stamina",
+                                        "spirit"
+                                    ],
+                   "rarity":  3,
+                   "level":  57,
+                   "statsSecondary":  [
+                                          "spell_armor"
+                                      ],
+                   "type":  "cloth"
+               },
+    "dragonmaster":  {
+                         "statsPrimary":  [
+                                              "strength",
+                                              "agility"
+                                          ],
+                         "rarity":  4,
+                         "level":  58,
+                         "statsSecondary":  [
+                                                "physical_armor"
+                                            ],
+                         "type":  "plate"
+                     },
+    "squid":  {
+                  "statsPrimary":  [
+                                       "intellect",
+                                       "spirit"
+                                   ],
+                  "rarity":  1,
+                  "level":  59,
+                  "statsSecondary":  [
+                                         "spell_armor"
+                                     ],
+                  "type":  "cloth"
+              },
+    "scarecrow":  {
+                      "statsPrimary":  [
+                                           "spirit",
+                                           "stamina",
+                                           "agility"
+                                       ],
+                      "rarity":  1,
+                      "level":  10,
+                      "statsSecondary":  [
+                                             "spell_armor"
+                                         ],
+                      "type":  "cloth"
+                  },
+    "champion\u0027s":  {
+                            "statsPrimary":  [
+                                                 "strength",
+                                                 "stamina"
+                                             ],
+                            "rarity":  2,
+                            "level":  10,
+                            "statsSecondary":  [
+                                                   "physical_armor"
+                                               ],
+                            "type":  "cloth"
+                        },
+    "combat":  {
+                   "statsPrimary":  [
+                                        "strength",
+                                        "stamina"
+                                    ],
+                   "rarity":  2,
+                   "level":  10,
+                   "statsSecondary":  [
+                                          "physical_armor"
+                                      ],
+                   "type":  "cloth"
+               }
+}

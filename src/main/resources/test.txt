@@ -1,0 +1,51 @@
+agility = chance_crit + dodge
+intellect = damage_spell + chance_crit + mana_max
+spirit = health_regen + mana_regen
+stamina = defense + health_max
+strength = damage_physical + jump_strength
+
+Cauldron hamaxe
+Beenest hamaxe
+Space hamaxe
+Lava Warrior hamaxe
+Vortex hamaxe
+
+Projectiles:
+
+Arrow
+SpectralArrow
+TippedArrow
+Trident
+Snowball
+Egg
+EnderPearl
+ExperienceBottle
+SplashPotion
+LingeringPotion
+Fireball
+SmallFireball
+DragonFireball
+WitherSkull
+ShulkerBullet
+LlamaSpit
+Firework
+WindCharge
+EyeOfEnder
+
+TODO:
+- player custom (WIP)
+- item custom (weapons, armors, consumables, spells)
+- entity custom (npc builder, npc boss)
+- world (necropolis:{poison,darkness},fire,block,craft)
+- quests
+
+- npc type ()
+- item stats ()
+- spells (WIP)
+- npc trader ()
+- npc hologram ()
+
+"Restores a portion of your health"
+"Grants you mana"
+"Grants you rage"
+"Grants you energy"

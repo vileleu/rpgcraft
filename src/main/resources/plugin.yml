@@ -1,0 +1,202 @@
+name: RpgCraft
+version: 1.0
+main: fr.jeunesauvage.RpgCraft
+api-version: 1.21
+author: jeunesauvage
+depend: [ProtocolLib, Citizens, BetonQuest, SkinsRestorer]
+# depend: [ProtocolLib, Citizens, Sentinel, BetonQuest, WorldEdit, WorldGuard, SkinsRestorer]
+
+commands:
+  # npc commands
+  placemynpc:
+    description: give placer to player
+    usage: /placemynpc
+    permission: rpgcraft.op
+  createmynpc:
+    description: create npc using placer
+    usage: /createmynpc <npc name>
+    permission: rpgcraft.op
+  skinmynpc:
+    description: change skin of npc
+    usage: /skinmynpc <skin name> <npc name>
+    permission: rpgcraft.op
+  typemynpc:
+    description: change type of npc
+    usage: /typemynpc <type> <npc name>
+    permission: rpgcraft.op
+  setmynpc:
+    description: set attribute of npc
+    usage: /setmynpc <attribute> <value> <npc name>
+    permission: rpgcraft.op
+  setstatmynpc:
+    description: set stat of npc
+    usage: /setstatmynpc <stat> <value> <npc name>
+    permission: rpgcraft.op
+  equipmynpc:
+    description: equip main item to npc
+    usage: /equipmynpc <npc name>
+    permission: rpgcraft.op
+  teammynpc:
+    description: add/remove team to npc
+    usage: /teammynpc <action> <team> <npc name>
+    permission: rpgcraft.op
+  dropmynpc:
+    description: change drop to npc
+    usage: /dropmynpc <drop> <npc name>
+    permission: rpgcraft.op
+  racemynpc:
+    description: change race to npc
+    usage: /racemynpc <race> <npc name>
+    permission: rpgcraft.op
+  formmynpc:
+    description: change form to npc
+    usage: /formmynpc <form> <npc name>
+    permission: rpgcraft.op
+  templatemynpc:
+    description: change template to npc
+    usage: /templatemynpc <template> <level> <npc name>
+    permission: rpgcraft.op
+  spawnmynpc:
+    description: spawn npc
+    usage: /spawnmynpc <npc name>
+    permission: rpgcraft.op
+  despawnmynpc:
+    description: despawn npc
+    usage: /despawnmynpc <npc name>
+    permission: rpgcraft.op
+  removemynpc:
+    description: remove npc
+    usage: /removemynpc <npc name>
+    permission: rpgcraft.op
+  # item command
+  giveequipable:
+    description: give item to player
+    usage: /giveequipable <player name> <item id>
+    permission: rpgcraft.op
+  givespell:
+    description: give item to player
+    usage: /givespell <player name> <item id>
+    permission: rpgcraft.op
+  givepotion:
+    description: give item to player
+    usage: /givepotion <player name> <item id>
+    permission: rpgcraft.op
+  infositem:
+    description: print infos of item in player's hand
+    usage: /infositem
+    permission: rpgcraft.everyone
+  # player command
+  menu:
+    description: open menu
+    usage: /menu <player name/UUID>
+    permission: rpgcraft.default
+  addstat:
+    description: add stat modifier to a player
+    usage: /addstat <player name> <stat name> <value> <duration>
+    permission: rpgcraft.op
+  removestat:
+    description: remove stat modifier to a player
+    usage: /removestat <player name> <stat name> <id>
+    permission: rpgcraft.op
+  addskill:
+    description: add skill modifier to a player
+    usage: /addskill <player name> <skill name> <value> <duration>
+    permission: rpgcraft.op
+  removeskill:
+    description: remove skill modifier to a player
+    usage: /removeskill <player name> <skill name> <id>
+    permission: rpgcraft.op
+  printmodifiers:
+    description: print infos of modifier to a player
+    usage: /printmodifiers
+    permission: rpgcraft.op
+  print:
+    description: print infos of yourself
+    usage: /print <player name>
+    permission: rpgcraft.op
+  printresources:
+    description: print infos of your resource
+    usage: /printresources <player name>
+    permission: rpgcraft.op
+  printstats:
+    description: print infos of your stat
+    usage: /printstats
+    permission: rpgcraft.op
+  printskills:
+    description: print infos of your skill
+    usage: /printskills
+    permission: rpgcraft.op
+  team:
+    description: set team of player
+    usage: /team <add> <team name> <player name>
+    permission: rpgcraft.op
+  race:
+    description: set race of player
+    usage: /race <player name> <race name>
+    permission: rpgcraft.op
+  form:
+    description: set form of player
+    usage: /form <player name> <form name>
+    permission: rpgcraft.op
+  class:
+    description: set class of player
+    usage: /class <player name> <class name>
+    permission: rpgcraft.op
+  # sound command
+  quote:
+    description: play quote
+    usage: /quote
+    permission: rpgcraft.everyone
+  quotegreeting:
+    description: play quote greeting
+    usage: /quotegreeting
+    permission: rpgcraft.everyone
+  quotefarewell:
+    description: play quote farewell
+    usage: /quotefarewell
+    permission: rpgcraft.everyone
+  quoteattack:
+    description: play quote attack
+    usage: /quoteattack
+    permission: rpgcraft.everyone
+  quotedeath:
+    description: play quote death
+    usage: /quotedeath
+    permission: rpgcraft.everyone
+  # entity stat modifier command
+  addentitymodifier:
+    description: add stat modifier to a entity
+    usage: /addstatentity <uuid> <stat name> <value> <duration>
+    permission: rpgcraft.op
+  removeentitymodifier:
+    description: remove stat modifier to a entity
+    usage: /removestatentity <uuid> <stat name> <id>
+    permission: rpgcraft.op
+  infosentitymodifier:
+    description: print infos of modifier to a entity
+    usage: /printstatentity
+    permission: rpgcraft.op
+  # group command
+  group:
+    description: group menu / group invite
+    usage: /group <player name>
+    permission: rpgcraft.everyone
+  groupaccept:
+    description: accept invite
+    usage: /groupaccept
+    permission: rpgcraft.everyone
+  groupdecline:
+    description: decline invite
+    usage: /groupdecline
+    permission: rpgcraft.everyone
+  # world command
+  cleanentities:
+    description: clean all entities in alls worlds
+    usage: /cleanentities
+    permission: rpgcraft.op
+
+permissions:
+  rpgcraft.op:
+    default: op
+  rpgcraft.everyone:
+    default: true
