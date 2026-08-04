@@ -141,6 +141,8 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			playerCustom.getPlayer().sendActionBar(Message.cantUse());
 			return false;
 		}
+		if (type == SpellType.STEALTH && itemCustomManager.getSpellManager().hasStealth(playerCustom.getPlayer().getUniqueId())) return true;
+		else if (type == SpellType.PET && itemCustomManager.getSpellManager().hasPet(playerCustom.getPlayer().getUniqueId())) return true;
 		int	cost = type.getCost(rarity);
 		if (power.getValue() < cost) {
 			playerCustom.getPlayer().sendActionBar(Message.notEnough(power.getType()));

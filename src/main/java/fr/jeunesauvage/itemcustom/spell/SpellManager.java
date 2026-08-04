@@ -483,13 +483,18 @@ public class SpellManager implements Listener {
 		else if (pet == null)
 			createPet(playerCustom);
 		else if (!(pet.getEntity() instanceof LivingEntity petEntity))
-			teleportPet(player, pet);
+			createPet(playerCustom);
 		else if (petEntity.isDead() || !petEntity.isValid())
-			teleportPet(player, pet);
+			createPet(playerCustom);
 		else if (petEntity.getLocation().distanceSquared(player.getLocation()) > 40 * 40)
 			teleportPet(player, pet);
 		else
 			attackPet(playerCustom, pet);
+	}
+
+	public boolean hasPet(UUID uuid) {
+		NPC		pet = pets.get(uuid);
+		return (pet != null && (pet.getEntity() instanceof LivingEntity petEntity) && !petEntity.isDead() && petEntity.isValid());
 	}
 
 	private void createPet(PlayerCustom playerCustom) {
