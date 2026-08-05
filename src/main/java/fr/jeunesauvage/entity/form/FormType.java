@@ -28,16 +28,18 @@ public enum FormType {
 	// elemental
     ELEMENTAL_FIRE("elemental_fire", 0.9),
     ELEMENTAL_WIND("elemental_wind", 0.9),
-    GOLEM_REDSTONE("golem_redstone", 2),
     GOLEM_MAGMA("golem_magma", 1.2),
+    GOLEM_REDSTONE("golem_redstone", 2),
 	// spider
     SPIDER_CHILD("spider_child", 0.6),
     SPIDER_NORMAL("spider_normal", 0.9),
     SPIDER_BIG("spider_big", 2),
     SPIDER_BOSS("spider_boss", 4),
+	//scorpion
+    SCORPION("scorpion", 1.2),
 	// other
 	DRACTHYR("dracthyr", 1.4),
-	PERFECT("perfect", 1);
+	PERFECT("perfect", 1.2);
 
 	private final String		name;
 	private final double		scale;

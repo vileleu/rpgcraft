@@ -44,8 +44,3 @@ TODO:
 - spells (WIP)
 - npc trader ()
 - npc hologram ()
-
-"Restores a portion of your health"
-"Grants you mana"
-"Grants you rage"
-"Grants you energy"
