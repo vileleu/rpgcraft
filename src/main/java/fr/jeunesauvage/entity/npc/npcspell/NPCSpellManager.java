@@ -348,7 +348,7 @@ public class NPCSpellManager implements Listener {
 					Block	block = point.getBlock().getRelative(BlockFace.UP);
 					if (block.getType() == Material.AIR && canPlaceWater(block, 10)) {
 						block.setType(Material.WATER);
-						Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> block.setType(Material.AIR), 20);
+						Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> block.setType(Material.AIR), 40);
 					}
 		            cancel();
 		            return;
@@ -360,17 +360,29 @@ public class NPCSpellManager implements Listener {
 	}
 
 	private boolean canPlaceWater(Block block, int radius) {
-		Location	center = block.getLocation();
-		World		world = block.getWorld();
-		int			y = 0;
-		for (int x = -radius; x <= radius; x++) {
-		    for (int z = -radius; z <= radius; z++) {
-		        Block	check = world.getBlockAt(center.getBlockX() + x, center.getBlockY() + y, center.getBlockZ() + z);
-		        if (check.isPassable()) {
-		            return false;
-		        }
-		    }
-		}
+	    Location	world_center = block.getLocation();
+	    World		world = block.getWorld();
+	    int			y = 0;
+	    int			lastCheckedChunkX = Integer.MIN_VALUE;
+	    int			lastCheckedChunkZ = Integer.MIN_VALUE;
+	    for (int x = -radius; x <= radius; x++) {
+	        for (int z = -radius; z <= radius; z++) {
+	            int	blockX = world_center.getBlockX() + x;
+	            int	blockZ = world_center.getBlockZ() + z;
+	            int	chunkX = blockX >> 4;
+	            int	chunkZ = blockZ >> 4;
+	            if (chunkX != lastCheckedChunkX || chunkZ != lastCheckedChunkZ) {
+	                if (!world.isChunkLoaded(chunkX, chunkZ)) {
+	                    return false;
+	                }
+	                lastCheckedChunkX = chunkX;
+	                lastCheckedChunkZ = chunkZ;
+	            }
+	            Block	check = world.getBlockAt(blockX, world_center.getBlockY() + y, blockZ);
+	            if (check.isPassable())
+	                return false;
+	        }
+	    }
 	    return true;
 	}
 
@@ -520,17 +532,26 @@ public class NPCSpellManager implements Listener {
 	}
 
 	private boolean canFit(Location loc, double width, double height) {
-	    double	radius = width / 2.0;
-	    for (double x = -radius; x <= radius; x += 0.3) {
-	        for (double z = -radius; z <= radius; z += 0.3) {
-	            for (double y = 0; y <= height; y += 0.5) {
-	                Block block = loc.clone().add(x, y, z).getBlock();
-	                if (!block.isPassable())
-	                    return false;
-	            }
-	        }
-	    }
-	    Block	ground = loc.clone().subtract(0, 1, 0).getBlock();
-	    return ground.isSolid();
+    	World	world = loc.getWorld();
+    	double	radius = width / 2.0;
+    	for (double x = -radius; x <= radius; x += 0.3) {
+    	    for (double z = -radius; z <= radius; z += 0.3) {
+    	        for (double y = 0; y <= height; y += 0.5) {
+    	            Location	checkLoc = loc.clone().add(x, y, z);
+    	            int			chunkX = checkLoc.getBlockX() >> 4;
+    	            int			chunkZ = checkLoc.getBlockZ() >> 4;
+    	            if (!world.isChunkLoaded(chunkX, chunkZ)) 
+    	                return false;
+    	            if (!checkLoc.getBlock().isPassable())
+    	                return false;
+    	        }
+    	    }
+    	}
+    	Block	ground = loc.clone().subtract(0, 1, 0).getBlock();
+    	int		groundChunkX = ground.getX() >> 4;
+    	int		groundChunkZ = ground.getZ() >> 4;
+    	if (!world.isChunkLoaded(groundChunkX, groundChunkZ))
+    	    return false;
+    	return ground.isSolid();
 	}
 }

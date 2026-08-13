@@ -41,13 +41,15 @@ public class MenuManager implements Listener {
                 p.closeInventory();
                 return;
             }
-            switch (action) {
+            ParseAction parseAction = new ParseAction(action);
+            parseAction.parse();
+            switch (parseAction.getResult()) {
                 case "back_main" -> menu.openMainMenu();
                 case "back_stats" -> menu.openStatsMenu();
                 case "back_skills" -> menu.openSkillsMenu();
                 case "back_class" -> menu.openClassMenu();
                 case "back_spell" -> menu.openSpellMenu();
-                case "back_items" -> menu.openItemsMenu();
+                case "back_items" -> menu.openItemsMenu(itemCustomManager);
                 case "get_equipable" -> p.getInventory().addItem(itemCustomManager.getEquipableClone(ItemCustom.getIdentifier(clicked)));
                 case "get_spell" -> p.getInventory().addItem(itemCustomManager.getSpellClone(ItemCustom.getIdentifier(clicked)));
                 // stats + skills
@@ -60,7 +62,7 @@ public class MenuManager implements Listener {
                 // race + class
                 case "open_race" -> menu.openRaceMenu();
                 case "open_class" -> menu.openClassMenu();
-                case "open_items" -> menu.openItemsMenu();
+                case "open_items" -> menu.openItemsMenu(itemCustomManager);
                 case "change_race" -> menu.openRaceChangeMenu();
                 case "change_class" -> menu.openClassChangeMenu();
                 case "print_spell" -> menu.openSpellMenu();
@@ -71,31 +73,23 @@ public class MenuManager implements Listener {
                 case "print_dracthyr" -> menu.openSpellDracthyrMenu(itemCustomManager);
                 case "print_hunter" -> menu.openSpellHunterMenu(itemCustomManager);
                 // items
-                case "print_claws" -> menu.openClawsMenu(itemCustomManager);
-                case "print_swords" -> menu.openSwordsMenu(itemCustomManager);
-                case "print_swords2" -> menu.openSwords2Menu(itemCustomManager);
-                case "print_axes" -> menu.openAxesMenu(itemCustomManager);
-                case "print_pickaxes" -> menu.openPickaxesMenu(itemCustomManager);
-                case "print_hoes" -> menu.openHoesMenu(itemCustomManager);
-                case "print_shovels" -> menu.openShovelsMenu(itemCustomManager);
-                case "print_maces" -> menu.openMacesMenu(itemCustomManager);
-                case "print_bows" -> menu.openBowsMenu(itemCustomManager);
-                case "print_crossbows" -> menu.openCrossbowsMenu(itemCustomManager);
-                case "print_staffs" -> menu.openStaffsMenu(itemCustomManager);
-                case "print_spellbooks" -> menu.openSpellbooksMenu(itemCustomManager);
-                case "print_shields" -> menu.openShieldsMenu(itemCustomManager);
-                case "print_helmets" -> menu.openHelmetsMenu(itemCustomManager);
-                case "print_helmets2" -> menu.openHelmets2Menu(itemCustomManager);
-                case "print_helmets3" -> menu.openHelmets3Menu(itemCustomManager);
-                case "print_helmets4" -> menu.openHelmets4Menu(itemCustomManager);
-                case "print_chestplates" -> menu.openChestplatesMenu(itemCustomManager);
-                case "print_chestplates2" -> menu.openChestplates2Menu(itemCustomManager);
-                case "print_chestplates3" -> menu.openChestplates3Menu(itemCustomManager);
-                case "print_leggings" -> menu.openLeggingsMenu(itemCustomManager);
-                case "print_leggings2" -> menu.openLeggings2Menu(itemCustomManager);
-                case "print_boots" -> menu.openBootsMenu(itemCustomManager);
-                case "print_boots2" -> menu.openBoots2Menu(itemCustomManager);
-                case "print_elytras" -> menu.openElytrasMenu(itemCustomManager);
+                case "print_claw" -> menu.openClawsMenu(itemCustomManager, parseAction.getStart());
+                case "print_sword" -> menu.openSwordsMenu(itemCustomManager, parseAction.getStart());
+                case "print_axe" -> menu.openAxesMenu(itemCustomManager, parseAction.getStart());
+                case "print_pickaxe" -> menu.openPickaxesMenu(itemCustomManager, parseAction.getStart());
+                case "print_hoe" -> menu.openHoesMenu(itemCustomManager, parseAction.getStart());
+                case "print_shovel" -> menu.openShovelsMenu(itemCustomManager, parseAction.getStart());
+                case "print_mace" -> menu.openMacesMenu(itemCustomManager, parseAction.getStart());
+                case "print_bow" -> menu.openBowsMenu(itemCustomManager, parseAction.getStart());
+                case "print_crossbow" -> menu.openCrossbowsMenu(itemCustomManager, parseAction.getStart());
+                case "print_staff" -> menu.openStaffsMenu(itemCustomManager, parseAction.getStart());
+                case "print_spellbook" -> menu.openSpellbooksMenu(itemCustomManager, parseAction.getStart());
+                case "print_shield" -> menu.openShieldsMenu(itemCustomManager, parseAction.getStart());
+                case "print_helmet" -> menu.openHelmetsMenu(itemCustomManager, parseAction.getStart());
+                case "print_chestplate" -> menu.openChestplatesMenu(itemCustomManager, parseAction.getStart());
+                case "print_legging" -> menu.openLeggingsMenu(itemCustomManager, parseAction.getStart());
+                case "print_boot" -> menu.openBootsMenu(itemCustomManager, parseAction.getStart());
+                case "print_elytra" -> menu.openElytrasMenu(itemCustomManager, parseAction.getStart());
             }
         }
     }

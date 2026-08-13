@@ -1,7 +1,10 @@
 package fr.jeunesauvage.entity.playercustom.menu;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.lang.Character;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,6 +32,7 @@ import fr.jeunesauvage.itemcustom.ItemCustomManager;
 import fr.jeunesauvage.itemcustom.ItemCustomType;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
+import fr.jeunesauvage.itemcustom.equipable.armor.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import fr.jeunesauvage.itemcustom.spell.Spell;
@@ -39,7 +43,10 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.wesjd.anvilgui.AnvilGUI;
 
 public class Menu {
-	static public NamespacedKey         KEY_MENU = new NamespacedKey(RpgCraft.name(), "menuid");
+	static public final NamespacedKey   KEY_MENU = new NamespacedKey(RpgCraft.name(), "menuid");
+	static private final int            BACK_SLOT = 0;
+	static private final int            SMALL_SLOT = 27;
+	static private final int            BIG_SLOT = 54;
     private final EntityModifierManager entityModifierManager;
     private final PlayerCustom          sender;
     private final PlayerCustom          targetPlayer;
@@ -63,7 +70,7 @@ public class Menu {
 
     public void openMainMenu() {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 27, Component.text("Menu"));
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu"));
         holder.setInventory(inv);
         inv.setItem(11, createSlot(Material.FLETCHING_TABLE, "Stats", "open_stats"));
         inv.setItem(12, createSlot(Material.CRAFTING_TABLE, "Skills", "open_skills"));
@@ -75,9 +82,9 @@ public class Menu {
 
     public void openStatsMenu() {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 27, Component.text("Menu Stats"));
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Stats"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_main"));
+        inv.setItem(BACK_SLOT, createBack("back_main"));
         inv.setItem(11, createSlot(Material.GLOW_INK_SAC, "Print Primary", "print_stats_primary"));
         inv.setItem(12, createSlot(Material.INK_SAC, "Print Secondary", "print_stats_secondary"));
         inv.setItem(13, createSlot(Material.GREEN_DYE, "Add", "add_stat"));
@@ -156,9 +163,9 @@ public class Menu {
 
     public void openSkillsMenu() {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 27, Component.text("Menu Skills"));
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Skills"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_main"));
+        inv.setItem(BACK_SLOT, createBack("back_main"));
         inv.setItem(11, createSlot(Material.GLOW_INK_SAC, "Print Primary", "print_skills_primary"));
         inv.setItem(12, createSlot(Material.INK_SAC, "Print Secondary", "print_skills_secondary"));
         inv.setItem(13, createSlot(Material.GREEN_DYE, "Add", "add_skill"));
@@ -232,9 +239,9 @@ public class Menu {
 
     public void openRaceMenu() {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 27, Component.text("Menu Race"));
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Race"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_main"));
+        inv.setItem(BACK_SLOT, createBack("back_main"));
         inv.setItem(11, createSlot(Material.PHANTOM_SPAWN_EGG, "Print", "print_race"));
         inv.setItem(12, createSlot(Material.PAPER, "Change", "change_race"));
         sender.getPlayer().openInventory(inv);
@@ -265,9 +272,9 @@ public class Menu {
 
     public void openClassMenu() {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 27, Component.text("Menu Class"));
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Class"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_main"));
+        inv.setItem(BACK_SLOT, createBack("back_main"));
         inv.setItem(11, createSlot(Material.BLAZE_ROD, "Print", "print_class"));
         inv.setItem(12, createSlot(Material.PAPER, "Change", "change_class"));
         inv.setItem(13, createSlot(Material.BLAZE_POWDER, "Spell", "print_spell"));
@@ -299,9 +306,9 @@ public class Menu {
 
     public void openSpellMenu() {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 27, Component.text("Menu Spell"));
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_class"));
+        inv.setItem(BACK_SLOT, createBack("back_class"));
         int i = 11;
         for (ClassType classType: ClassType.values()) {
             if (classType == ClassType.BEGGAR || classType == ClassType.GOD) continue;
@@ -315,7 +322,7 @@ public class Menu {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_spell"));
+        inv.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = itemCustomManager.getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.PYROMANCER)) continue;
@@ -328,7 +335,7 @@ public class Menu {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_spell"));
+        inv.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = itemCustomManager.getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.WARRIOR)) continue;
@@ -341,7 +348,7 @@ public class Menu {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_spell"));
+        inv.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = itemCustomManager.getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.ROGUE)) continue;
@@ -354,7 +361,7 @@ public class Menu {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_spell"));
+        inv.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = itemCustomManager.getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.PRIEST)) continue;
@@ -367,7 +374,7 @@ public class Menu {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_spell"));
+        inv.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = itemCustomManager.getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.DRACTHYR)) continue;
@@ -380,7 +387,7 @@ public class Menu {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_spell"));
+        inv.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = itemCustomManager.getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.HUNTER)) continue;
@@ -436,632 +443,378 @@ public class Menu {
         };
     }
 
-    public void openItemsMenu() {
+    public void openItemsMenu(ItemCustomManager itemCustomManager) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Items"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Items"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_main"));
-        inv.setItem(9, createSlot(Material.NETHERITE_SWORD, "Claw", "print_claws"));
-        inv.setItem(10, createSlot(Material.IRON_SWORD, "Sword", "print_swords"));
-        inv.setItem(11, createSlot(Material.IRON_SWORD, "Sword2", "print_swords2"));
-        inv.setItem(12, createSlot(Material.IRON_AXE, "Axe", "print_axes"));
-        inv.setItem(13, createSlot(Material.IRON_PICKAXE, "Pickaxe", "print_pickaxes"));
-        inv.setItem(14, createSlot(Material.IRON_HOE, "Hoe", "print_hoes"));
-        inv.setItem(15, createSlot(Material.IRON_SHOVEL, "Shovel", "print_shovels"));
-        inv.setItem(16, createSlot(Material.MACE, "Mace", "print_maces"));
-        inv.setItem(17, createSlot(Material.BOW, "Bow", "print_bows"));
-        inv.setItem(18, createSlot(Material.CROSSBOW, "Crossbow", "print_crossbows"));
-        inv.setItem(19, createSlot(Material.BOW, "Staff", "print_staffs"));
-        inv.setItem(20, createSlot(Material.CROSSBOW, "Spellbook", "print_spellbooks"));
-        inv.setItem(21, createSlot(Material.SHIELD, "Shield", "print_shields"));
-        inv.setItem(22, createSlot(Material.IRON_HELMET, "Helmet", "print_helmets"));
-        inv.setItem(23, createSlot(Material.IRON_HELMET, "Helmet2", "print_helmets2"));
-        inv.setItem(24, createSlot(Material.IRON_HELMET, "Helmet3", "print_helmets3"));
-        inv.setItem(25, createSlot(Material.IRON_HELMET, "Helmet4", "print_helmets4"));
-        inv.setItem(26, createSlot(Material.IRON_CHESTPLATE, "Chestplate", "print_chestplates"));
-        inv.setItem(27, createSlot(Material.IRON_CHESTPLATE, "Chestplate2", "print_chestplates2"));
-        inv.setItem(28, createSlot(Material.IRON_CHESTPLATE, "Chestplate3", "print_chestplates3"));
-        inv.setItem(29, createSlot(Material.IRON_LEGGINGS, "Leggings", "print_leggings"));
-        inv.setItem(30, createSlot(Material.IRON_LEGGINGS, "Leggings2", "print_leggings2"));
-        inv.setItem(31, createSlot(Material.IRON_BOOTS, "Boots", "print_boots"));
-        inv.setItem(32, createSlot(Material.IRON_BOOTS, "Boots2", "print_boots2"));
-        inv.setItem(33, createSlot(Material.ELYTRA, "Elytra", "print_elytras"));
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openClawsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Claws"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.CLAW) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
+        inv.setItem(BACK_SLOT, createBack("back_main"));
+        int i = 9;
+        for (WeaponType weaponType: WeaponType.values()) {
+            if (i >= BIG_SLOT) return;
+            if (weaponType == WeaponType.HAND || weaponType == WeaponType.UNKNOWN) continue;
+            String  name = weaponType.getName();
+            int     count = getEquipablesCount(itemCustomManager, weaponType);
+            int     nb = 0;
+            while (count > 0) {
+                inv.setItem(i++, createSlot(weaponType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "print_" + name + (nb > 0 ? nb : "")));
+                nb++;
+                count -= BIG_SLOT - 1;
             }
-            if (i == 54) break;
+        }
+        for (ArmorType armorType: ArmorType.values()) {
+            if (i >= BIG_SLOT) return;
+            if (armorType.getArmorMaterial() != ArmorMaterial.CLOTH && armorType != ArmorType.ELYTRA) continue;
+            String  name = armorType.getName();
+            int     underscore = name.indexOf('_');
+            if (underscore != -1)
+                name = name.substring(underscore + 1);
+            int     count = getEquipablesCount(itemCustomManager, armorType.getMaterial());
+            int     nb = 0;
+            while (count > 0) {
+                inv.setItem(i++, createSlot(armorType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "print_" + name + (nb > 0 ? nb : "")));
+                nb++;
+                count -= BIG_SLOT - 1;
+            }
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openSwordsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Swords"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
+    private int getEquipablesCount(ItemCustomManager itemCustomManager, ItemCustomType itemCustomType) {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.SWORD) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
+        int                         count = 0;
+        if (itemCustomType.getCategory() == ItemCustomCategory.WEAPON) {
+            WeaponType  weaponType = (WeaponType)itemCustomType;
+            WeaponType  equipableType = null;
+            for (Equipable<?> equipable: equipables.values()) {
+                if (equipable.getType().getCategory() != ItemCustomCategory.WEAPON) continue;
+                equipableType = (WeaponType)equipable.getType();
+                if (equipableType != weaponType) continue;
+                count++;
             }
-            if (i == 54) break;
         }
-        sender.getPlayer().openInventory(inv);
+        else if (itemCustomType.getCategory() == ItemCustomCategory.ARMOR) {
+            ArmorType  armorType = (ArmorType)itemCustomType;
+            ArmorType  equipableType = null;
+            for (Equipable<?> equipable: equipables.values()) {
+                if (equipable.getType().getCategory() != ItemCustomCategory.ARMOR) continue;
+                equipableType = (ArmorType)equipable.getType();
+                if (equipableType != armorType) continue;
+                count++;
+            }
+        }
+        return count;
     }
 
-    public void openSwords2Menu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Swords"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
+    // armor only
+    private int getEquipablesCount(ItemCustomManager itemCustomManager, Material material) {
         Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
+        int                         count = 0;
+        ArmorType                   equipableType = null;
         for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.SWORD) {
-                    if (skip) {
-                        if (i == 53) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
+            if (equipable.getType().getCategory() != ItemCustomCategory.ARMOR) continue;
+            equipableType = (ArmorType)equipable.getType();
+            if (equipableType.getMaterial() != material) continue;
+            count++;
+        }
+        return count;
+    }
+
+    private List<Equipable<?>> getEquipablesList(ItemCustomManager itemCustomManager, ItemCustomType itemCustomType, int start) {
+        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
+        List<Equipable<?>>          list = new ArrayList<>();
+        if (itemCustomType.getCategory() == ItemCustomCategory.WEAPON) {
+            WeaponType  weaponType = (WeaponType)itemCustomType;
+            WeaponType  equipableType = null;
+            for (Equipable<?> equipable: equipables.values()) {
+                if (equipable.getType().getCategory() != ItemCustomCategory.WEAPON) continue;
+                equipableType = (WeaponType)equipable.getType();
+                if (equipableType != weaponType) continue;
+                if (start > 0) {
+                    start--;
+                    continue;
+                }
+                for (int i = 0; i < list.size(); i++) {
+                    if (equipable.getLevel() <= list.get(i).getLevel()) {
+                        list.add(i, equipable);
+                        break;
                     }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
+                    else if (i == list.size() - 1)
+                        list.add(equipable);
                 }
+                if (list.size() == BIG_SLOT - 1)
+                    break;
             }
-            if (i == 54) break;
         }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openAxesMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Axes"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.AXE) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
+        else if (itemCustomType.getCategory() == ItemCustomCategory.ARMOR) {
+            ArmorType  armorType = (ArmorType)itemCustomType;
+            ArmorType  equipableType = null;
+            for (Equipable<?> equipable: equipables.values()) {
+                if (equipable.getType().getCategory() != ItemCustomCategory.ARMOR) continue;
+                equipableType = (ArmorType)equipable.getType();
+                if (equipableType != armorType) continue;
+                if (start > 0) {
+                    start--;
+                    continue;
                 }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openPickaxesMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Pickaxes"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.PICKAXE) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openHoesMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Hoes"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.HOE) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openShovelsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Shovels"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.SHOVEL) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openMacesMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Maces"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.MACE) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openBowsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Bows"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.BOW) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openCrossbowsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Crossbows"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-              ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.CROSSBOW) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openStaffsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Staffs"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.STAFF) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openSpellbooksMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Spellbooks"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.SPELLBOOK) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openShieldsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Shields"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.WEAPON) {
-                WeaponType  weaponType = (WeaponType)type;
-                if (weaponType == WeaponType.SHIELD) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openHelmetsMenu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Helmets"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("head")) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
-        }
-        sender.getPlayer().openInventory(inv);
-    }
-
-    public void openHelmets2Menu(ItemCustomManager itemCustomManager) {
-        MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Helmets"));
-        holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("head")) {
-                    if (skip) {
-                        if (i == 53) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
+                for (int i = 0; i < list.size(); i++) {
+                    if (equipable.getLevel() <= list.get(i).getLevel()) {
+                        list.add(i, equipable);
+                        break;
                     }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
+                    else if (i == list.size() - 1)
+                        list.add(equipable);
                 }
+                if (list.size() == BIG_SLOT - 1)
+                    break;
             }
-            if (i == 54) break;
+        }
+        return list;
+    }
+
+    // armor only
+    private List<Equipable<?>> getEquipablesList(ItemCustomManager itemCustomManager, Material material, int start) {
+        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
+        List<Equipable<?>>          list = new ArrayList<>();
+        ArmorType                   equipableType = null;
+        for (Equipable<?> equipable: equipables.values()) {
+            if (equipable.getType().getCategory() != ItemCustomCategory.ARMOR) continue;
+            equipableType = (ArmorType)equipable.getType();
+            if (equipableType.getMaterial() != material) continue;
+            if (start > 0) {
+                start--;
+                continue;
+            }
+            for (int i = 0; i < list.size(); i++) {
+                if (equipable.getLevel() <= list.get(i).getLevel()) {
+                    list.add(i, equipable);
+                    break;
+                }
+                else if (i == list.size() - 1)
+                    list.add(equipable);
+            }
+            if (list.size() == BIG_SLOT - 1)
+                break;
+        }
+        return list;
+    }
+
+    public void openClawsMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Claws"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.CLAW, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openHelmets3Menu(ItemCustomManager itemCustomManager) {
+    public void openSwordsMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Helmets"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Swords"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("head")) {
-                    if (skip) {
-                        if (i == 106) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
-                    }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.SWORD, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openHelmets4Menu(ItemCustomManager itemCustomManager) {
+    public void openAxesMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Helmets"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Axes"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("head")) {
-                    if (skip) {
-                        if (i == 159) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
-                    }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.AXE, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openChestplatesMenu(ItemCustomManager itemCustomManager) {
+    public void openPickaxesMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Chestplates"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Pickaxes"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("chest")) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.PICKAXE, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openChestplates2Menu(ItemCustomManager itemCustomManager) {
+    public void openHoesMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Chestplates"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Hoes"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("chest")) {
-                    if (skip) {
-                        if (i == 53) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
-                    }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.HOE, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openChestplates3Menu(ItemCustomManager itemCustomManager) {
+    public void openShovelsMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Chestplates"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Shovels"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("chest")) {
-                    if (skip) {
-                        if (i == 106) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
-                    }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.SHOVEL, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openLeggingsMenu(ItemCustomManager itemCustomManager) {
+    public void openMacesMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Leggings"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Maces"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("legs")) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.MACE, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openLeggings2Menu(ItemCustomManager itemCustomManager) {
+    public void openBowsMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Leggings"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Bows"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("legs")) {
-                    if (skip) {
-                        if (i == 53) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
-                    }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.BOW, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openBootsMenu(ItemCustomManager itemCustomManager) {
+    public void openCrossbowsMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Boots"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Crossbows"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("feet")) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.CROSSBOW, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openBoots2Menu(ItemCustomManager itemCustomManager) {
+    public void openStaffsMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Boots"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Staffs"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        boolean                     skip = true;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType.getName().endsWith("feet")) {
-                    if (skip) {
-                        if (i == 53) {
-                            i = 0;
-                            skip = false;
-                        }
-                        i++;
-                        continue;
-                    }
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.STAFF, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
 
-    public void openElytrasMenu(ItemCustomManager itemCustomManager) {
+    public void openSpellbooksMenu(ItemCustomManager itemCustomManager, int start) {
         MenuHolder  holder = new MenuHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 54, Component.text("Menu Elytras"));
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Spellbooks"));
         holder.setInventory(inv);
-        inv.setItem(0, createBack("back_items"));
-        Map<String, Equipable<?>>   equipables = itemCustomManager.getEquipables();
-        int                         i = 1;
-        for (Equipable<?> equipable: equipables.values()) {
-            ItemCustomType  type = equipable.getType();
-            if (type.getCategory() == ItemCustomCategory.ARMOR) {
-                ArmorType  armorType = (ArmorType)type;
-                if (armorType == ArmorType.ELYTRA) {
-                    inv.setItem(i, createEquipable(equipable));
-                    i++;
-                }
-            }
-            if (i == 54) break;
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.SPELLBOOK, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openShieldsMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Shields"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, WeaponType.SHIELD, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openHelmetsMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Helmets"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, Material.NETHERITE_HELMET, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openChestplatesMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Chestplates"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, Material.NETHERITE_CHESTPLATE, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openLeggingsMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Leggings"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, Material.NETHERITE_LEGGINGS, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openBootsMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Boots"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, Material.NETHERITE_BOOTS, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
+        }
+        sender.getPlayer().openInventory(inv);
+    }
+
+    public void openElytrasMenu(ItemCustomManager itemCustomManager, int start) {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Elytras"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_items"));
+        List<Equipable<?>>  equipables = getEquipablesList(itemCustomManager, ArmorType.ELYTRA, start);
+        int                 i = 1;
+        for (Equipable<?> equipable: equipables) {
+            inv.setItem(i++, createEquipable(equipable));
         }
         sender.getPlayer().openInventory(inv);
     }
