@@ -25,6 +25,14 @@ public abstract class ItemCustom<T extends ItemCustomType> {
 		this.level = level;
     }
 
+	public String getIdentifier() {
+		if (item == null) return null;
+		ItemMeta	meta = item.getItemMeta();
+		if (meta == null) return null;
+		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
+		return Data.getString(pdc, KEY_IDENTIFIER);
+	}
+
 	public ItemStack getItem() {
 		return item;
 	}

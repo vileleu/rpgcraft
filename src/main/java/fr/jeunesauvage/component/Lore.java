@@ -50,6 +50,13 @@ public class Lore {
 			.append(Component.text(" " + level).color(colorValue));
 	}
 
+	public static Component cost(int cost) {
+		TextColor	colorName = NamedTextColor.GRAY;
+		TextColor	colorValue = NamedTextColor.WHITE;
+		return Component.translatable("cost.rpgcraft").color(colorName).decorate(TextDecoration.BOLD)
+			.append(Component.text(" " + cost).color(colorValue));
+	}
+
 	public static Component stat(StatType type, int value) {
 		TextColor	colorValue = value < 0 ? NamedTextColor.RED : NamedTextColor.WHITE;
 		return type.toComponent().color(type.getColor()).append(Component.text(" " + value).color(colorValue));

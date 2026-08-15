@@ -1,19 +1,27 @@
 package fr.jeunesauvage.itemcustom.equipable.weapon.launcher;
 
 import java.util.Collections;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -24,9 +32,15 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+
+import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
 
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.combat.CombatDamage;
+import fr.jeunesauvage.entity.playercustom.PlayerCustom;
+import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
@@ -62,7 +76,7 @@ public class LauncherManager implements Listener {
 		if (weapon.getType() == WeaponType.SPELLBOOK) {
 			CrossbowMeta	meta = (CrossbowMeta)item.getItemMeta();
 			if (meta.hasChargedProjectiles()) {
-				launchSpellBook(player);
+				launchSpellBook(player, weapon);
 				meta.setChargedProjectiles(Collections.emptyList());
 				item.setItemMeta(meta);
 				damageLauncher(player, item);
@@ -228,43 +242,137 @@ public class LauncherManager implements Listener {
 	}
 
 	// launch staff
-	public SmallFireball launchStaff(LivingEntity shooter, LivingEntity target) {
-	    SmallFireball	smallFireball = shooter.launchProjectile(SmallFireball.class);
-	    smallFireball.setGravity(false);
-	    smallFireball.setVelocity(target.getEyeLocation().subtract(shooter.getEyeLocation()).toVector());
-		SoundManager.playSound(shooter, "staff_shoot");
-		Data.setBoolean(smallFireball.getPersistentDataContainer(), KEY_STAFF);
-		return smallFireball;
+	public void launchStaff(Player shooter) {
+		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(shooter);
+		switch (playerCustom.getClassType()) {
+			case PYROMANCER -> {
+	    		SmallFireball	smallFireball = shooter.launchProjectile(SmallFireball.class);
+	    		smallFireball.setGravity(false);
+	    		smallFireball.setVelocity(shooter.getEyeLocation().getDirection());
+				SoundManager.playSound(shooter, "staff_shoot");
+				Data.setBoolean(smallFireball.getPersistentDataContainer(), KEY_STAFF);
+			}
+			case PRIEST -> {
+	    		DragonFireball	dragonFireball = shooter.launchProjectile(DragonFireball.class);
+	    		dragonFireball.setGravity(false);
+	    		dragonFireball.setVelocity(shooter.getEyeLocation().getDirection());
+				SoundManager.playSound(shooter, "staff_shoot");
+				Data.setBoolean(dragonFireball.getPersistentDataContainer(), KEY_STAFF);
+			}
+			default -> {
+				AttributeInstance	attributeInstance = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+				double				damage = 0;
+				if (attributeInstance != null)
+					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.3;
+				itemCustomManager.getSpellManager().explosion(null, shooter.getEyeLocation(), 6, damage, 2, 0);
+			}
+		}
 	}
 
 	// launch staff
-	public SmallFireball launchStaff(LivingEntity shooter) {
-	    SmallFireball	smallFireball = shooter.launchProjectile(SmallFireball.class);
-	    smallFireball.setGravity(false);
-	    smallFireball.setVelocity(shooter.getEyeLocation().getDirection().normalize().multiply(1));
-		SoundManager.playSound(shooter, "staff_shoot");
-		Data.setBoolean(smallFireball.getPersistentDataContainer(), KEY_STAFF);
-		return smallFireball;
+	public void launchStaff(LivingEntity shooter, LivingEntity target) {
+		switch (shooter.getName()) {
+			case "ClassMaster Priest Tauren" -> {
+	    		DragonFireball	dragonFireball = shooter.launchProjectile(DragonFireball.class);
+	    		dragonFireball.setGravity(false);
+	    		dragonFireball.setVelocity(target.getEyeLocation().subtract(shooter.getEyeLocation()).toVector());
+				SoundManager.playSound(shooter, "staff_shoot");
+				Data.setBoolean(dragonFireball.getPersistentDataContainer(), KEY_STAFF);
+			}
+			default -> {
+	    		SmallFireball	smallFireball = shooter.launchProjectile(SmallFireball.class);
+	    		smallFireball.setGravity(false);
+	    		smallFireball.setVelocity(target.getEyeLocation().subtract(shooter.getEyeLocation()).toVector());
+				SoundManager.playSound(shooter, "staff_shoot");
+				Data.setBoolean(smallFireball.getPersistentDataContainer(), KEY_STAFF);
+			}
+		}
 	}
 
 	// launch spellbook
-	public DragonFireball launchSpellBook(LivingEntity shooter, LivingEntity target) {
-	    DragonFireball	dragonFireball = shooter.launchProjectile(DragonFireball.class);
-	    dragonFireball.setGravity(false);
-	    dragonFireball.setVelocity(target.getEyeLocation().subtract(shooter.getEyeLocation()).toVector());
-		SoundManager.playSound(shooter, "staff_shoot");
-		Data.setBoolean(dragonFireball.getPersistentDataContainer(), KEY_SPELLBOOK);
-		return dragonFireball;
+	public void launchSpellBook(Player shooter, Weapon spellBook) {
+		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(shooter);
+		switch (playerCustom.getClassType()) {
+			case PYROMANCER, PRIEST -> {
+	    		switch (spellBook.getIdentifier()) {
+					case "spellbook_blades_of_war" -> bladesOfWar(shooter);
+					case "spellbook_hellow" -> {}
+					case "spellbook_braised" -> {}
+					case "spellbook_majestica" -> {}
+					default -> {}
+				}
+			}
+			default -> {
+				AttributeInstance	attributeInstance = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+				double				damage = 0;
+				if (attributeInstance != null)
+					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.3;
+				itemCustomManager.getSpellManager().explosion(null, shooter.getEyeLocation(), 6, damage, 2, 0);
+			}
+		}
 	}
 
 	// launch spellbook
-	public DragonFireball launchSpellBook(LivingEntity shooter) {
-	    DragonFireball	dragonFireball = shooter.launchProjectile(DragonFireball.class);
-	    dragonFireball.setGravity(false);
-	    dragonFireball.setVelocity(shooter.getEyeLocation().getDirection().normalize().multiply(1));
+	public void launchSpellBook(LivingEntity shooter, LivingEntity target, Weapon spellBook) {
+		switch (spellBook.getIdentifier()) {
+			case "spellbook_blades_of_war" -> bladesOfWar(shooter);
+			case "spellbook_hellow" -> {}
+			case "spellbook_braised" -> {}
+			case "spellbook_majestica" -> {}
+			default -> {}
+		}
+	}
+
+	// spellbook blades of war
+    public void bladesOfWar(LivingEntity shooter) {
+        Location	eyeLoc = shooter.getEyeLocation();
+        Vector		forward = eyeLoc.getDirection().normalize();
+        Location	center = eyeLoc.clone().add(forward.clone().multiply(6));
+        int			amount = 30;
+        double		range = 5.0;
+		double		rangeSquared = range * range;
+        double		height = 6.0;
+		int			delay = 1;
+        for (int i = 0; i < amount; i++) {
+            double xOffset = ThreadLocalRandom.current().nextDouble(-range, range);
+            double zOffset = ThreadLocalRandom.current().nextDouble(-range, range);
+            if (xOffset * xOffset + zOffset * zOffset > rangeSquared) continue;
+			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+            	Location	spawnLoc = center.clone().add(xOffset, height, zOffset);
+            	Arrow		arrow = shooter.getWorld().spawn(spawnLoc, Arrow.class);
+            	Vector		velocity = forward.clone().multiply(0.5);
+            	velocity.setY(-0.3);
+            	arrow.setShooter(shooter);
+            	arrow.setGravity(false);
+            	arrow.setVelocity(velocity);
+				arrow.setDamage(1);
+				PersistentDataContainer	pdc = arrow.getPersistentDataContainer();
+				Data.setBoolean(pdc, KEY_BOW);
+				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+					if (arrow.isValid() && !arrow.isDead())
+						arrow.remove();
+				}, 40);
+			}, delay++);
+        }
 		SoundManager.playSound(shooter, "staff_shoot");
-		Data.setBoolean(dragonFireball.getPersistentDataContainer(), KEY_SPELLBOOK);
-		return dragonFireball;
+    }
+
+	// dragonfireball hit
+	@EventHandler
+	public void onDragonFireballHit(EnderDragonFireballHitEvent e) {
+		if (!(e.getEntity().getShooter() instanceof Player)) return;
+		e.getAreaEffectCloud().setDuration(40);
+	}
+
+	// dragonfireball area hit
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDragonFireballArea(AreaEffectCloudApplyEvent e) {
+		if (!(e.getEntity().getSource() instanceof Player player)) return;
+		e.setCancelled(true);
+		for (LivingEntity victim: e.getAffectedEntities()) {
+			if (victim.equals(player)) continue;
+			victim.damage(1, CombatDamage.getDamageSource(player, DamageType.MAGIC));
+		}
 	}
 
 	// set key for projectiles from ranged weapons (npc can't trigger this event)
@@ -278,17 +386,17 @@ public class LauncherManager implements Listener {
 		Entity					projectile = e.getProjectile();
 		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
 		// non player
-		if (!(livingEntity instanceof Player)) {
+		if (livingEntity instanceof Mob mob) {
 			switch (weapon.getType()) {
 				case BOW -> Data.setBoolean(pdc, KEY_BOW);
 				case CROSSBOW -> Data.setBoolean(pdc, KEY_CROSSBOW);
 				case STAFF -> {
 					e.setCancelled(true);
-					launchStaff(livingEntity);
+					launchStaff(livingEntity, mob.getTarget());
 				}
 				case SPELLBOOK -> {
 					e.setCancelled(true);
-	    			launchSpellBook(livingEntity);
+	    			launchSpellBook(livingEntity, mob.getTarget(), weapon);
 				}
 				default -> {}
 			}

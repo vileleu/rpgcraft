@@ -78,6 +78,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			lore.add(Lore.raceType(type.getRaceTypes()));
 		if (type.getClassTypes() != null)
 			lore.add(Lore.classType(type.getClassTypes()));
+		lore.add(Lore.cost(type.getCost(rarity)));
 		lore.add(Lore.description(name));
 		meta.lore(lore);
         item.setItemMeta(meta);

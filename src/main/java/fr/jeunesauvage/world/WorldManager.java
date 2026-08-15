@@ -3,6 +3,7 @@ package fr.jeunesauvage.world;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -17,7 +18,9 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
@@ -65,6 +68,17 @@ public class WorldManager implements Listener {
 	@EventHandler
 	public void onBurn(BlockBurnEvent e) {
 	    e.setCancelled(true);
+	}
+
+	// use flint and steel
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+	public void onRightClickFlint(PlayerInteractEvent e) {
+		if (!e.getAction().isRightClick()) return;
+		ItemStack	item = e.getItem();
+		if (item == null || item.getType() != Material.FLINT_AND_STEEL) return;
+		Block	block = e.getClickedBlock();
+		if (block == null || !block.isBurnable()) return;
+		e.setCancelled(true);
 	}
 
 	// remove projectiles + tmp npc

@@ -29,7 +29,7 @@ public class EquipableManager implements Listener {
 
 	public EquipableManager(JavaPlugin plugin, ItemCustomManager itemCustomManager) {
 		this.itemCustomManager = itemCustomManager;
-		this.armorManager = new ArmorManager(this);
+		this.armorManager = new ArmorManager(itemCustomManager);
 		plugin.getServer().getPluginManager().registerEvents(armorManager, plugin);
 		this.weaponManager = new WeaponManager(plugin, itemCustomManager, this);
 		plugin.getServer().getPluginManager().registerEvents(weaponManager, plugin);

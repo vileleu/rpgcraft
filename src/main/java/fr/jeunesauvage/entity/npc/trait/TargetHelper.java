@@ -395,10 +395,15 @@ public class TargetHelper {
 
 	// attack spellbook
 	private void attackSpellBook(LivingEntity livingNPC) {
+		EntityEquipment equipment = livingNPC.getEquipment();
+		ItemStack		item = equipment.getItemInMainHand();
+		if (item == null) return;
+		Weapon	weapon = itemCustomManager.getWeapon(item);
+		if (weapon == null || weapon.getType() != WeaponType.SPELLBOOK) return;
 		LauncherManager	launcherManager = itemCustomManager.getWeaponManager().getLauncherManager();
 		// animation
 		livingNPC.swingMainHand();
-		launcherManager.launchSpellBook(livingNPC, target);
+		launcherManager.launchSpellBook(livingNPC, target, weapon);
 	}
 
 	// attack simple

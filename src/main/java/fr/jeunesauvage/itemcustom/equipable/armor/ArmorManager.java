@@ -1,28 +1,54 @@
 package fr.jeunesauvage.itemcustom.equipable.armor;
 
+import java.util.Set;
+
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 
-import fr.jeunesauvage.itemcustom.equipable.EquipableManager;
+import fr.jeunesauvage.entity.playercustom.PlayerCustom;
+import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
+import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
+import fr.jeunesauvage.itemcustom.ItemCustomManager;
 
 public class ArmorManager implements Listener {
-	private final EquipableManager	equipableManager;
+	private final ItemCustomManager	itemCustomManager;
 
-	public ArmorManager(EquipableManager equipableManager) {
-		this.equipableManager = equipableManager;
+	public ArmorManager(ItemCustomManager itemCustomManager) {
+		this.itemCustomManager = itemCustomManager;
 	}
 
 	// armor equip
 	@EventHandler
 	public void onArmorEquip(PlayerArmorChangeEvent e) {
-		if (isSameArmor(e.getOldItem(), e.getNewItem())) return;
-		equipableManager.refreshEquipement(e.getPlayer());
+		Player	player = e.getPlayer();
+		if (!canWear(player, e.getNewItem())) {
+			PlayerInventory	inv = player.getInventory();
+			EquipmentSlot	slot = EquipmentSlot.valueOf(e.getSlotType().name());
+			ItemStack		armor = inv.getItem(slot);
+			inv.setItem(slot, null);
+			player.getWorld().dropItem(player.getLocation(), armor);
+		}
+		else if (isSameArmor(e.getOldItem(), e.getNewItem())) return;
+		itemCustomManager.getEquipableManager().refreshEquipement(e.getPlayer());
+	}
+
+	private boolean canWear(Player player, ItemStack item) {
+		if (player.hasMetadata("NPC")) return true;
+		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
+		Armor	armor = itemCustomManager.getArmor(item);
+		if (armor == null) return true;
+		Set<ClassType>	classTypes = armor.getType().getArmorMaterial().getClassTypes();
+		if (classTypes.contains(ClassType.BEGGAR)) return true;
+		return classTypes.contains(playerCustom.getClassType());
 	}
 
 	private boolean isSameArmor(ItemStack a, ItemStack b) {

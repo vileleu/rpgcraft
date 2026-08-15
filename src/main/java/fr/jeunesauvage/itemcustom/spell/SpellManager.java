@@ -151,8 +151,7 @@ public class SpellManager implements Listener {
 	public void explosion(LivingEntity launcher, Location center, double radius, double damage, double force, int fireticks) {
 	    World	world = center.getWorld();
 	    for (LivingEntity livingTarget : world.getNearbyLivingEntities(center, radius)) {
-            if (livingTarget.equals(launcher)) continue;
-			if (Group.isInSameGroup(livingTarget, launcher)) continue;
+            if (launcher != null && (livingTarget.equals(launcher) || Group.isInSameGroup(livingTarget, launcher))) continue;
 			if (force > 0 && !TraitSentinel.isBoss(livingTarget)) {
 				Vector	direction = livingTarget.getLocation().toVector().subtract(center.toVector()).normalize();
 				double	resistance = 0;

@@ -31,10 +31,10 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 
 	protected Equipable(String name, EquipableStat equipableStat, T type, int customModelData) {
 		super(type, name, equipableStat.getRarity(), equipableStat.getLevel());
-		buildItem(equipableStat, customModelData);
+		buildEquipable(equipableStat, customModelData);
 	}
 
-	private void buildItem(EquipableStat equipableStat, int customModelData) {
+	private void buildEquipable(EquipableStat equipableStat, int customModelData) {
 		ItemMeta	meta = item.getItemMeta();
 		meta.displayName(Lore.nameEquipable(name, rarity));
         Data.setString(meta.getPersistentDataContainer(), KEY_IDENTIFIER, name);
