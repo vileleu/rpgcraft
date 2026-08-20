@@ -1,5 +1,8 @@
 package fr.jeunesauvage.world;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -15,12 +18,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
@@ -28,6 +30,13 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
 public class WorldManager implements Listener {
+	private static final Set<Material> INFINIBURN = EnumSet.of(
+	    Material.NETHERRACK,
+	    Material.MAGMA_BLOCK,
+	    Material.SOUL_SAND,
+	    Material.SOUL_SOIL
+	);
+
 	public WorldManager(JavaPlugin plugin) {
         WorldCommand   worldCommand = new WorldCommand(this);
         plugin.getCommand("cleanentities").setExecutor(worldCommand);
@@ -70,35 +79,33 @@ public class WorldManager implements Listener {
 	    e.setCancelled(true);
 	}
 
-	// use flint and steel
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-	public void onRightClickFlint(PlayerInteractEvent e) {
-		if (!e.getAction().isRightClick()) return;
-		ItemStack	item = e.getItem();
-		if (item == null || item.getType() != Material.FLINT_AND_STEEL) return;
-		Block	block = e.getClickedBlock();
-		if (block == null || !block.isBurnable()) return;
-		e.setCancelled(true);
+	// cancel fire ignite
+	@EventHandler
+	public void onIgnite(BlockIgniteEvent e) {
+    	Block	block = e.getBlock();
+    	for (int x = -1; x <= 1; x++) {
+    	    for (int y = -1; y <= 1; y++) {
+    	        for (int z = -1; z <= 1; z++) {
+    	            if (x == 0 && y == 0 && z == 0) continue;
+    	            Block		relative = block.getRelative(x, y, z);
+					Material	material = relative.getType();
+    	            if (material.isBurnable() || INFINIBURN.contains(material)) {
+    	                e.setCancelled(true);
+    	                return;
+    	            }
+    	        }
+    	    }
+    	}
 	}
 
-	// remove projectiles + tmp npc
+	// remove projectilesz + display
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent e) {
     	for (Entity entity : e.getChunk().getEntities()) {
-        	if (entity instanceof Projectile) {
+        	if (entity instanceof Projectile)
         	    entity.remove();
-        	}
-        	else if (entity instanceof LivingEntity livingEntity) {
-        	    NPC	npc = CitizensAPI.getNPCRegistry().getNPC(livingEntity);
-				if (npc != null) {
-					TraitSentinel	traitSentinel = npc.getOrAddTrait(TraitSentinel.class);
-					if (traitSentinel.getRespawnTime() == -1 ||  traitSentinel.isPet())
-						npc.destroy();
-				}
-        	}
-			else if (entity instanceof Display display) {
+			else if (entity instanceof Display display)
 				display.remove();
-    		}
     	}
 	}
 
@@ -114,7 +121,7 @@ public class WorldManager implements Listener {
         }
         for (NPC npc: CitizensAPI.getNPCRegistry()) {
 			TraitSentinel	traitSentinel = npc.getOrAddTrait(TraitSentinel.class);
-            if (traitSentinel.getRespawnTime() == -1 ||  traitSentinel.isPet())
+            if (traitSentinel.getRespawnTime() == -1 || traitSentinel.isPet())
                 npc.destroy();
         }
     }

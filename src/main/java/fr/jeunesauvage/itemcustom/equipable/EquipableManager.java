@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entity.EntityManager;
 import fr.jeunesauvage.entity.playercustom.PlayerCustom;
 import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
 import fr.jeunesauvage.itemcustom.ItemCustom;
@@ -27,11 +28,11 @@ public class EquipableManager implements Listener {
 	private final ArmorManager		armorManager;
 	private final WeaponManager		weaponManager;
 
-	public EquipableManager(JavaPlugin plugin, ItemCustomManager itemCustomManager) {
+	public EquipableManager(JavaPlugin plugin, ItemCustomManager itemCustomManager, EntityManager entityManager) {
 		this.itemCustomManager = itemCustomManager;
 		this.armorManager = new ArmorManager(itemCustomManager);
 		plugin.getServer().getPluginManager().registerEvents(armorManager, plugin);
-		this.weaponManager = new WeaponManager(plugin, itemCustomManager, this);
+		this.weaponManager = new WeaponManager(plugin, itemCustomManager, this, entityManager);
 		plugin.getServer().getPluginManager().registerEvents(weaponManager, plugin);
 	}
 

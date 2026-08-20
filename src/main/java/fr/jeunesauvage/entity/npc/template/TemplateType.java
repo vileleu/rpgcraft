@@ -60,7 +60,8 @@ public enum TemplateType {
 	SPIDER_BIG(                    "spider_big",                    "Spider 6",                      EntityType.SPIDER,      null,                     RaceType.SPIDER,          FormType.SPIDER_BIG,      Map.of(StatSecondary.SPELL_ARMOR, 2),     Set.of("spider"),    300, 25,    1.5,          2f,        5f,       0.4f,                        1f,                                false),
 	SPIDER_BOSS(                   "spider_boss",                   "Spider 5",                      EntityType.SPIDER,      null,                     RaceType.SPIDER,          FormType.SPIDER_BOSS,     Map.of(StatSecondary.SPELL_ARMOR, 4),     Set.of("spider"),    600, 50,    3,            2f,        10f,      0.5f,                        1f,                                true),
 	// pet
-	PET_WOLF(                      "pet_wolf",                      "Kingbdogz",                     EntityType.WOLF,        null,                     RaceType.ANIMAL,          FormType.ANIMAL,          null,                                  null,             0,   5,           0.2,          1.5f,      10f,      1.2f,                        1.6f,                              false);
+	PET_WOLF(                      "pet_wolf",                      "Kingbdogz",                     EntityType.WOLF,        null,                     RaceType.ANIMAL,          FormType.ANIMAL,          null,                                  null,             0,   5,           0.2,          1.5f,      10f,      1.2f,                        1.6f,                              false),
+	PET_BRAISED(                   "pet_braised",                   "Blaze",                         EntityType.BLAZE,       null,                     RaceType.ELEMENTAL,       FormType.ELEMENTAL_FIRE,  null,                                  null,             0,   5,           0.2,          1.5f,      10f,      1.1f,                        1.1f,                              false);
 
 	private final String				name;
 	private final String				hideName;
@@ -147,10 +148,12 @@ public enum TemplateType {
 	}
 
 	public double getHealth(int level) {
+		if (level <= 0) level = 1;
 		return level * healthByLevel;
 	}
 
 	public double getDamage(int level) {
+		if (level <= 0) level = 1;
 		return level * damageByLevel;
 	}
 

@@ -56,7 +56,7 @@ public class ItemCustomManager implements Listener {
 		this.itemsUsable = itemBuilder.getUsable();
 		this.itemsConsumable = itemBuilder.getConsumable();
 		// EquipableManager listener
-		this.equipableManager = new EquipableManager(plugin, this);
+		this.equipableManager = new EquipableManager(plugin, this, entityManager);
 		plugin.getServer().getPluginManager().registerEvents(equipableManager, plugin);
 		// SpellManager listener
 		this.spellManager = new SpellManager(plugin, entityManager);

@@ -12,7 +12,6 @@ import fr.jeunesauvage.entity.EntityManager;
 import fr.jeunesauvage.entity.group.Group;
 import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
-import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
 public class CombatManager implements Listener {
@@ -55,7 +54,7 @@ public class CombatManager implements Listener {
 		if (combat.getTarget().getType() == CombatantType.PLAYER) {
 			Player	playerTarget = (Player)combat.getTarget().getLivingEntity();
 			if (TraitSentinel.isOwner(playerTarget)) {
-				NPC				pet = CitizensAPI.getNPCRegistry().getNPC(TraitSentinel.getPet(playerTarget));
+				NPC	pet = TraitSentinel.getPet(playerTarget);
 				if (pet != null) {
 					TraitSentinel	traitSentinel = pet.getOrAddTrait(TraitSentinel.class);
 					traitSentinel.addAggro(combat.getDamager().getLivingEntity(), result.getAmount() + 5);

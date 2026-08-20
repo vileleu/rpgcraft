@@ -31,6 +31,7 @@ import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entity.EntityManager;
+import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
 import fr.jeunesauvage.entity.playercustom.attributecustom.resource.ResourceManager;
 import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
 import fr.jeunesauvage.entity.playercustom.menu.MenuManager;
@@ -39,6 +40,8 @@ import fr.jeunesauvage.entity.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
 import fr.jeunesauvage.sound.QuoteType;
 import fr.jeunesauvage.sound.SoundManager;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import net.kyori.adventure.text.Component;
 
 public class PlayerCustomManager implements Listener {
@@ -87,6 +90,12 @@ public class PlayerCustomManager implements Listener {
 		playerCustom.refreshEquipement();
 		// print keys
 		printKeys(player);
+		// clean pets
+        for (NPC npc: CitizensAPI.getNPCRegistry()) {
+			TraitSentinel	traitSentinel = npc.getOrAddTrait(TraitSentinel.class);
+            if (traitSentinel.getRespawnTime() == -1 || traitSentinel.isPet())
+                npc.destroy();
+        }
 	}
 
 	// player quit
@@ -179,6 +188,7 @@ public class PlayerCustomManager implements Listener {
 		if (!(e.getEntity() instanceof Player player)) return;
 		if (player.hasMetadata("NPC")) return;
 		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
+		if (playerCustom == null) return;
 		playerCustom.getScoreboardCustom().refreshHealth();
 	}
 
@@ -188,6 +198,7 @@ public class PlayerCustomManager implements Listener {
 		if (!(e.getEntity() instanceof Player player)) return;
 		if (player.hasMetadata("NPC")) return;
 		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
+		if (playerCustom == null) return;
 		playerCustom.getScoreboardCustom().refreshHealth();
 	}
 

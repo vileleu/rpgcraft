@@ -24,6 +24,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -208,6 +209,7 @@ public class NPCSpellManager implements Listener {
 			if (Team.has(livingTarget, TeamType.SPIDER)) return;
 			if (livingTarget instanceof Player playerTarget && !playerTarget.hasMetadata("NPC")) {
 				PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(playerTarget);
+				if (playerCustom == null) continue;
 				playerCustom.addStatModifier(StatSecondary.SPEED, slow, 6);
 			}
 			else
@@ -322,7 +324,7 @@ public class NPCSpellManager implements Listener {
 
 	public void launchWater(LivingEntity launcher, LivingEntity target, int level) {
 		World		world = launcher.getWorld();
-		double		damage = level / 2;
+		double		damage = (level / 2 >= 1 ? level / 2 : 1);
 		Location	start = launcher.getEyeLocation();
 		Vector		direction = target.getEyeLocation().toVector().subtract(start.toVector());
 		if (direction.getY() > -0.2)
@@ -399,7 +401,7 @@ public class NPCSpellManager implements Listener {
 				if (instance != null)
 					resistance = instance.getValue();
 	        	knockback.multiply(force - (force * resistance));
-		    	knockback.setY(knockback.getY() + 0.3);
+		    	knockback.setY(knockback.getY() + 0.4);
 				livingTarget.setVelocity(livingTarget.getVelocity().add(knockback));
 			}
 		}
@@ -442,7 +444,7 @@ public class NPCSpellManager implements Listener {
 		}.runTaskTimer(RpgCraft.instance(), 0L, 2L);
 	}
 
-	public void spawnTrident(LivingEntity launcher, int level) {
+	public void spawnTrident(LivingEntity launcher, LivingEntity target, int level) {
 	    World				world = launcher.getWorld();
 	    int					count = 3;
 	    double				radius = 1.5;
@@ -472,6 +474,9 @@ public class NPCSpellManager implements Listener {
 	            if (ticks > 0 && ticks % 50 == 0) {
 					Location	eye = launcher.getEyeLocation();
     				Vector		direction = eye.getDirection();
+					if (target != null && eye.distanceSquared(target.getLocation()) <= 30 * 30)
+						direction = target.getEyeLocation().subtract(launcher.getEyeLocation()).toVector();
+					direction.normalize();
 					Trident		trident = launcher.getWorld().spawn(eye, Trident.class);
     				trident.setShooter(launcher);
     				trident.setVelocity(direction.multiply(1.5));
@@ -500,6 +505,28 @@ public class NPCSpellManager implements Listener {
 	            ticks += 2;
 	        }
 	    }.runTaskTimer(RpgCraft.instance(), 0L, 2L);
+	}
+
+	public void launchFire(LivingEntity launcher, LivingEntity target, int level) {
+	    new BukkitRunnable() {
+	        int			ticks = 0;
+	        final int	maxTicks = 60;
+	        @Override
+	        public void run() {
+				if (launcher == null || launcher.isDead() || !launcher.isValid())
+					cancel();
+				if (ticks >= maxTicks)
+					cancel();
+				Location		start = launcher.getEyeLocation();
+				Vector			direction = start.getDirection();
+				if (target != null && !target.isDead() && target.isValid())
+					direction = target.getEyeLocation().toVector().subtract(start.toVector());
+				direction.normalize();
+				SmallFireball	smallFireball = launcher.launchProjectile(SmallFireball.class);
+				smallFireball.setVelocity(direction);
+				ticks += 20;
+	        }
+	    }.runTaskTimer(RpgCraft.instance(), 0L, 20L);
 	}
 
 	/*

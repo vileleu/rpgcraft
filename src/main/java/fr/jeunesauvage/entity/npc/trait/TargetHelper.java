@@ -403,7 +403,7 @@ public class TargetHelper {
 		LauncherManager	launcherManager = itemCustomManager.getWeaponManager().getLauncherManager();
 		// animation
 		livingNPC.swingMainHand();
-		launcherManager.launchSpellBook(livingNPC, target, weapon);
+		launcherManager.launchSpellBook(livingNPC, weapon);
 	}
 
 	// attack simple
@@ -429,7 +429,7 @@ public class TargetHelper {
 		if (name == null) return;
 		if (entityType == EntityType.PLAYER) {
 			if (name.equals("Mrgl The Oracle"))
-				npcSpellManager.expulse(livingNPC, 4);
+				npcSpellManager.expulse(livingNPC, 5);
 		}
 		else if (entityType == EntityType.SPIDER) {
 			return;
@@ -449,6 +449,9 @@ public class TargetHelper {
 			if (name.equals("Mrgl The Oracle"))
 				npcSpellManager.launchWater(livingNPC, target, a.getLevel());
 		}
+		if (entityType == EntityType.BLAZE) {
+			npcSpellManager.launchFire(livingNPC, target, a.getLevel());
+		}
 		if (entityType == EntityType.SPIDER) {
 			if (name.equals("Spider 6"))
 				npcSpellManager.launchSpiderEgg(livingNPC.getLocation(), target, a.getLevel(), false);
@@ -467,7 +470,7 @@ public class TargetHelper {
 		if (name == null) return;
 		if (entityType == EntityType.PLAYER) {
 			if (name.equals("Mrgl The Oracle"))
-				npcSpellManager.spawnTrident(livingNPC, a.getLevel());
+				npcSpellManager.spawnTrident(livingNPC, target, a.getLevel());
 		}
 		if (entityType == EntityType.SPIDER) {
 			if (name.equals("Spider 5"))

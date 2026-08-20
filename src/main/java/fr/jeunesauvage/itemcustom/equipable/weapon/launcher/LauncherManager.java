@@ -1,6 +1,9 @@
 package fr.jeunesauvage.itemcustom.equipable.weapon.launcher;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
@@ -39,18 +42,25 @@ import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.combat.CombatDamage;
+import fr.jeunesauvage.entity.EntityManager;
+import fr.jeunesauvage.entity.npc.template.TemplateType;
+import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
 import fr.jeunesauvage.entity.playercustom.PlayerCustom;
 import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
+import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import fr.jeunesauvage.sound.SoundManager;
 import io.papermc.paper.persistence.PersistentDataContainerView;
+import net.citizensnpcs.api.CitizensAPI;
+import net.citizensnpcs.api.npc.NPC;
 import net.kyori.adventure.text.Component;
 
 public class LauncherManager implements Listener {
 	private final ItemCustomManager		itemCustomManager;
+	private final EntityManager			entityManager;
 	private static final float			FORCENEED_DEFAULT = 1f;
 	private static final NamespacedKey	KEY_SAVEITEM = new NamespacedKey(RpgCraft.name(), "saveitem");
 	private static final int			SLOT_SAVEITEM = 35;
@@ -58,9 +68,11 @@ public class LauncherManager implements Listener {
 	private static final NamespacedKey	KEY_CROSSBOW = new NamespacedKey(RpgCraft.name(), "crossbow");
 	private static final NamespacedKey	KEY_STAFF = new NamespacedKey(RpgCraft.name(), "staff");
 	private static final NamespacedKey	KEY_SPELLBOOK = new NamespacedKey(RpgCraft.name(), "spellbook");
+	private final Map<UUID, NPC>		braiseds = new HashMap<>();
 
-	public LauncherManager(ItemCustomManager itemCustomManager) {
+	public LauncherManager(ItemCustomManager itemCustomManager, EntityManager entityManager) {
 		this.itemCustomManager = itemCustomManager;
+		this.entityManager = entityManager;
 	}
 
 	// use staff or spellbook without arrows
@@ -290,14 +302,18 @@ public class LauncherManager implements Listener {
 	}
 
 	// launch spellbook
-	public void launchSpellBook(Player shooter, Weapon spellBook) {
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(shooter);
-		switch (playerCustom.getClassType()) {
+	public void launchSpellBook(LivingEntity shooter, Weapon spellBook) {
+		ClassType	classType = ClassType.GOD;
+		if (shooter instanceof Player player) {
+			PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
+			classType = playerCustom.getClassType();
+		}
+		switch (classType) {
 			case PYROMANCER, PRIEST, GOD -> {
 	    		switch (spellBook.getIdentifier()) {
 					case "spellbook_blades_of_war" -> bladesOfWar(shooter);
 					case "spellbook_hellow" -> {}
-					case "spellbook_braised" -> {}
+					case "spellbook_braised" -> braised(shooter);
 					case "spellbook_majestica" -> {}
 					default -> {}
 				}
@@ -309,17 +325,6 @@ public class LauncherManager implements Listener {
 					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.9;
 				itemCustomManager.getSpellManager().explosionFriendlyFire(shooter.getEyeLocation(), 6, damage, 2, 0);
 			}
-		}
-	}
-
-	// launch spellbook
-	public void launchSpellBook(LivingEntity shooter, LivingEntity target, Weapon spellBook) {
-		switch (spellBook.getIdentifier()) {
-			case "spellbook_blades_of_war" -> bladesOfWar(shooter);
-			case "spellbook_hellow" -> {}
-			case "spellbook_braised" -> {}
-			case "spellbook_majestica" -> {}
-			default -> {}
 		}
 	}
 
@@ -357,6 +362,57 @@ public class LauncherManager implements Listener {
         }
 		SoundManager.playSound(shooter, "staff_shoot");
     }
+
+	// spellbook braised
+    public void braised(LivingEntity shooter) {
+		UUID	uuid = shooter.getUniqueId();
+		NPC		braised = braiseds.get(uuid);
+		if (shooter.isSneaking()) {
+			if (braised != null) {
+				braised.destroy();
+				braiseds.remove(uuid);
+			}
+		}
+		else if (braised == null)
+			createBraised(shooter);
+		else if (!braised.isSpawned() || !(braised.getEntity() instanceof LivingEntity braisedEntity))
+			createBraised(shooter);
+		else if (braisedEntity.isDead() || !braisedEntity.isValid())
+			createBraised(shooter);
+		else
+			teleportBraised(shooter, braised);
+		SoundManager.playSound(shooter, "staff_shoot");
+    }
+
+	private void createBraised(LivingEntity shooter) {
+		UUID			uuid = shooter.getUniqueId();
+		TemplateType	templateType = TemplateType.PET_BRAISED;
+		NPC				braised = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName(), shooter.getLocation());
+		TraitSentinel	traitSentinel = braised.getOrAddTrait(TraitSentinel.class);
+		int	level = 1;
+		NPC	npc = CitizensAPI.getNPCRegistry().getNPC(shooter);
+		if (npc != null)
+			level = npc.getOrAddTrait(TraitSentinel.class).getLevel();
+		else if (shooter instanceof Player player) {
+			PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
+			if (playerCustom != null)
+				level = (int)playerCustom.getLevel().getValue();
+		}
+		traitSentinel.setLevel(level);
+		traitSentinel.setTemplate(templateType);
+		traitSentinel.setOwner(shooter);
+		braised.setProtected(false);
+		braised.getNavigator().setTarget(shooter, false);
+		braiseds.put(uuid, braised);
+	}
+
+	private void teleportBraised(LivingEntity shooter, NPC braised) {
+		// to avoid warning
+		entityManager.getEntityModifierManager();
+		braised.despawn();
+		braised.spawn(shooter.getLocation());
+		braised.getOrAddTrait(TraitSentinel.class).getTargetHelper().cleanAggro();
+	}
 
 	// dragonfireball hit
 	@EventHandler
@@ -397,7 +453,7 @@ public class LauncherManager implements Listener {
 				}
 				case SPELLBOOK -> {
 					e.setCancelled(true);
-	    			launchSpellBook(livingEntity, mob.getTarget(), weapon);
+	    			launchSpellBook(livingEntity, weapon);
 				}
 				default -> {}
 			}

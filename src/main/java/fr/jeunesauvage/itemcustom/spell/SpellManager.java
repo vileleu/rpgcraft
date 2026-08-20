@@ -504,7 +504,7 @@ public class SpellManager implements Listener {
 		}
 		else if (pet == null)
 			createPet(playerCustom);
-		else if (!(pet.getEntity() instanceof LivingEntity petEntity))
+		else if (!pet.isSpawned() || !(pet.getEntity() instanceof LivingEntity petEntity))
 			createPet(playerCustom);
 		else if (petEntity.isDead() || !petEntity.isValid())
 			createPet(playerCustom);

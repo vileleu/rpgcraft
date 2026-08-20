@@ -39,7 +39,7 @@ public enum SpellType implements ItemCustomType {
 	STRIKE_BACK("strike_back", Material.HEART_OF_THE_SEA, Set.of(ClassType.DRACTHYR), null, 25, 5, 40, -2, 60, 0, false, 0f),
 	// hunter
 	EXPLOSIVE_SHOT("explosive_shot", Material.GUNPOWDER, Set.of(ClassType.HUNTER), null, 10, 5, 20, -1, 30, -1, false, 0f),
-	PET("pet", Material.BONE, Set.of(ClassType.HUNTER), null, 15, 5, 30, 0, 100, 0, true, 4f),
+	PET("pet", Material.BONE, Set.of(ClassType.HUNTER), null, 15, 5, 10, 0, 100, 0, true, 4f),
 	HUNT("hunt", Material.COMPASS, Set.of(ClassType.HUNTER), null, 20, 5, 60, 0, 20, 0, false, 0f),
 	ICE_TRAP("ice_trap", Material.POWDER_SNOW_BUCKET, Set.of(ClassType.HUNTER), null, 25, 5, 42, -2, 50, 0, true, 2f);
 

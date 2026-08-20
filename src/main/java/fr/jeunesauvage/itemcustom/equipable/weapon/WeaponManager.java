@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import fr.jeunesauvage.entity.EntityManager;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
 import fr.jeunesauvage.itemcustom.equipable.EquipableManager;
 import fr.jeunesauvage.itemcustom.equipable.weapon.launcher.LauncherManager;
@@ -23,9 +24,9 @@ public class WeaponManager implements Listener {
 	private final EquipableManager	equipableManager;
 	private final LauncherManager 	launcherManager;
 
-	public WeaponManager(JavaPlugin plugin, ItemCustomManager itemCustomManager, EquipableManager equipableManager) {
+	public WeaponManager(JavaPlugin plugin, ItemCustomManager itemCustomManager, EquipableManager equipableManager, EntityManager entityManager) {
 		this.equipableManager = equipableManager;
-		this.launcherManager = new LauncherManager(itemCustomManager);
+		this.launcherManager = new LauncherManager(itemCustomManager, entityManager);
 		plugin.getServer().getPluginManager().registerEvents(launcherManager, plugin);
 	}
 

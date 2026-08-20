@@ -3,24 +3,24 @@ package fr.jeunesauvage.entity.npc.trait;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
 public class AttributeHelper {
-	private int			level;
-    private double		health;
-    private double		damage;
-	private double		aggroRange;
-	private double		aggroRangeSquared;
-	private double		chaseRange;
-	private double		chaseRangeSquared;
-	private double		attackRangeClose;
-	private double		attackRangeRanged;
-	private float		attackRate;
-	private float		spellRate;
-    private float		speed;
-    private float		speedCombat;
-	private UUID		uuidOwner;
-	private Player		owner;
+	private int				level;
+    private double			health;
+    private double			damage;
+	private double			aggroRange;
+	private double			aggroRangeSquared;
+	private double			chaseRange;
+	private double			chaseRangeSquared;
+	private double			attackRangeClose;
+	private double			attackRangeRanged;
+	private float			attackRate;
+	private float			spellRate;
+    private float			speed;
+    private float			speedCombat;
+	private UUID			uuidOwner;
+	private LivingEntity	owner;
 
 	AttributeHelper(TraitSentinel traitSentinel) {
 		this.level = traitSentinel.getLevel();
@@ -141,11 +141,11 @@ public class AttributeHelper {
 		return uuidOwner;
 	}
 
-	public Player getOwner() {
+	public LivingEntity getOwner() {
 		return owner;
 	}
 
-	public void setOwner(Player player) {
-		this.owner = player;
+	public void setOwner(LivingEntity owner) {
+		this.owner = owner;
 	}
 }

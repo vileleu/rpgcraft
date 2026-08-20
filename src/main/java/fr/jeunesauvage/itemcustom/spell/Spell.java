@@ -103,6 +103,8 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 
 	@Override
 	public boolean canUse(ItemCustomManager itemCustomManager, PlayerCustom playerCustom, EquipmentSlot slot) {
+		if (type == SpellType.STEALTH && itemCustomManager.getSpellManager().hasStealth(playerCustom.getPlayer().getUniqueId())) return true;
+		else if (type == SpellType.PET && itemCustomManager.getSpellManager().hasPet(playerCustom.getPlayer().getUniqueId())) return true;
 		// check race
 		RaceType		playerRace = playerCustom.getRaceType();
 		Set<RaceType>	raceTypes = type.getRaceTypes();
@@ -142,8 +144,6 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			playerCustom.getPlayer().sendActionBar(Message.cantUse());
 			return false;
 		}
-		if (type == SpellType.STEALTH && itemCustomManager.getSpellManager().hasStealth(playerCustom.getPlayer().getUniqueId())) return true;
-		else if (type == SpellType.PET && itemCustomManager.getSpellManager().hasPet(playerCustom.getPlayer().getUniqueId())) return true;
 		int	cost = type.getCost(rarity);
 		if (power.getValue() < cost) {
 			playerCustom.getPlayer().sendActionBar(Message.notEnough(power.getType()));
@@ -252,8 +252,8 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		}
 		// check class
 		ClassType		playerClass = playerCustom.getClassType();
-		Set<ClassType>	classTypes = type.getClassTypes();
 		if (playerClass == ClassType.GOD) return true;
+		Set<ClassType>	classTypes = type.getClassTypes();
 		if (classTypes != null && !classTypes.contains(playerClass)) {
 			playerCustom.getPlayer().sendActionBar(Message.cantUse());
 			return false;

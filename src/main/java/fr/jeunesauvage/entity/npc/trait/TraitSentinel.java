@@ -31,6 +31,7 @@ import fr.jeunesauvage.entity.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
 import fr.jeunesauvage.skin.Skin;
 import fr.jeunesauvage.skin.SkinData;
+import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
@@ -248,6 +249,7 @@ public class TraitSentinel extends Trait {
 	}
 
 	public void addAggro(LivingEntity livingEntity, double damage) {
+		if (targetHelper == null) return;
 		targetHelper.addAggro(livingEntity, damage);
 	}
 
@@ -590,14 +592,14 @@ public class TraitSentinel extends Trait {
 	}
 
 	public static boolean isOwner(Player player) {
-		return Data.hasString(player.getPersistentDataContainer(), KEY_PET);
+		return Data.hasInteger(player.getPersistentDataContainer(), KEY_PET);
 	}
 
-	public static LivingEntity getPet(Player player) {
-		String	uuidString = Data.getString(player.getPersistentDataContainer(), KEY_PET);
-		if (uuidString == null) return null;
-		if (!(Bukkit.getEntity(UUID.fromString(uuidString)) instanceof LivingEntity pet)) return null;
-		return pet;
+	public static NPC getPet(Player player) {
+		int	id = Data.getInteger(player.getPersistentDataContainer(), KEY_PET);
+		if (id == 0) return null;
+		NPC	npc = CitizensAPI.getNPCRegistry().getById(id);
+		return npc;
 	}
 
 	public static boolean isPet(LivingEntity livingEntity) {
@@ -611,11 +613,11 @@ public class TraitSentinel extends Trait {
 		return player;
 	}
 
-	public void setOwner(Player player) {
+	public void setOwner(LivingEntity owner) {
 		UUID	oldUUID = uuidOwner;
-		this.uuidOwner = (player == null ? null : player.getUniqueId());
+		this.uuidOwner = (owner == null ? null : owner.getUniqueId());
 		if (attributeHelper != null)
-			attributeHelper.setOwner(player);
+			attributeHelper.setOwner(owner);
 		if (!(npc.getEntity() instanceof LivingEntity livingNPC)) return;
 		if (oldUUID != null) {
 			Player	oldOwner = Bukkit.getPlayer(oldUUID);
@@ -625,9 +627,9 @@ public class TraitSentinel extends Trait {
 			}
 			return;
 		}
-		if (player != null) {
-			Data.setString(player.getPersistentDataContainer(), KEY_PET, livingNPC.getUniqueId().toString());
-			Data.setString(livingNPC.getPersistentDataContainer(), KEY_OWNER, player.getUniqueId().toString());
+		if (owner != null) {
+			Data.setInteger(owner.getPersistentDataContainer(), KEY_PET, npc.getId());
+			Data.setString(livingNPC.getPersistentDataContainer(), KEY_OWNER, owner.getUniqueId().toString());
 		}
 	}
 
@@ -636,6 +638,7 @@ public class TraitSentinel extends Trait {
 	}
 
 	public boolean haveTarget() {
+		if (targetHelper == null) return false;
 		return targetHelper.getTarget() == null && targetHelper.getTargetHide() == null;
 	}
 }

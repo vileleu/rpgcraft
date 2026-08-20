@@ -300,8 +300,11 @@ public enum CombatDamage {
 		livingEntity.setHealth(healthActual + amountNext);
 		livingEntity.getWorld().spawnParticle(Particle.HEART, livingEntity.getEyeLocation(), 3, 0.3, 0.5, 0.3, 0);
 		createDisplayHeal(livingEntity, amountNext);
-		if (livingEntity instanceof Player player && !player.hasMetadata("NPC"))
-			PlayerCustomManager.getPlayerCustom(player).getScoreboardCustom().refreshHealth();
+		if (livingEntity instanceof Player player && !player.hasMetadata("NPC")) {
+			PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
+			if (playerCustom == null) return;
+			playerCustom.getScoreboardCustom().refreshHealth();
+		}
 	}
 
 	public static void heal(PlayerCustom playerCustom, double amount) {
