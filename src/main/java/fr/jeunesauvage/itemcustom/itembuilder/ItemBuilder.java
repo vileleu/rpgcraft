@@ -160,13 +160,13 @@ public class ItemBuilder {
     private Equipable<?> buildSet(Material material, String nameSet, String name, int id) {
         EquipableStat    equipableSetStat = itemsSetStatsJson.get(nameSet);
         if (equipableSetStat == null) return null;
-        if (equipableSetStat.getEquipableMaterial() instanceof ArmorMaterial) {
-            ArmorType  armorType = getArmorType(material);
+        if (equipableSetStat.getEquipableMaterial() instanceof ArmorMaterial armorMaterial) {
+            WeaponType  weaponType = getWeaponType(material);
+            if (weaponType != null)
+                return new Weapon(name, weaponType, equipableSetStat, id);
+            ArmorType  armorType = getArmorType(armorMaterial, material);
             if (armorType != null)
                 return new Armor(name, armorType, equipableSetStat, id);
-            WeaponType  weaponType = getWeaponType(material);
-            if (weaponType == null) return null;
-                return new Weapon(name, weaponType, equipableSetStat, id);
         }
         return null;
     }
@@ -174,10 +174,10 @@ public class ItemBuilder {
     private Equipable<?> build(Material material, String nameSet, String name, int id) {
         EquipableStat    equipableStat = itemsStatsJson.get(nameSet);
         if (equipableStat == null) return null;
-        if (equipableStat.getEquipableMaterial() instanceof ArmorMaterial) {
-            ArmorType  armorType = getArmorType(material);
-            if (armorType != null)
-                return new Armor(name, armorType, equipableStat, id);
+        if (equipableStat.getEquipableMaterial() instanceof ArmorMaterial armorMaterial) {
+            ArmorType  armorType = getArmorType(armorMaterial, material);
+            if (armorType == null) return null;
+            return new Armor(name, armorType, equipableStat, id);
         }
         else if (equipableStat.getEquipableMaterial() instanceof WeaponMaterial weaponMaterial) {
             WeaponType  weaponType = getWeaponType(weaponMaterial);
@@ -187,9 +187,11 @@ public class ItemBuilder {
         return null;
     }
 
-    private ArmorType getArmorType(Material material) {
+    private ArmorType getArmorType(ArmorMaterial armorMaterial, Material material) {
+        if (material == Material.ELYTRA)
+            return ArmorType.ELYTRA;
         for (ArmorType type: ArmorType.values()) {
-            if (type.getMaterial() == material)
+            if (type.getArmorMaterial() == armorMaterial && type.getMaterial() == material)
                 return type;
         }
         return null;

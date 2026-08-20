@@ -47,8 +47,9 @@ public class ArmorManager implements Listener {
 		Armor	armor = itemCustomManager.getArmor(item);
 		if (armor == null) return true;
 		Set<ClassType>	classTypes = armor.getType().getArmorMaterial().getClassTypes();
-		if (classTypes.contains(ClassType.BEGGAR)) return true;
-		return classTypes.contains(playerCustom.getClassType());
+		ClassType		classPlayer = playerCustom.getClassType();
+		if (classTypes.contains(ClassType.BEGGAR) || classPlayer == ClassType.GOD) return true;
+		return classTypes.contains(classPlayer);
 	}
 
 	private boolean isSameArmor(ItemStack a, ItemStack b) {

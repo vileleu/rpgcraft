@@ -519,9 +519,9 @@ public class NPCSpellManager implements Listener {
     	        }
     	    }
     	}
-    	for (int y = 0; y >= -2; y++) {
-    	    for (int x = 0; x >= -radius; x++) {
-    	        for (int z = 0; z >= -radius; z++) {
+    	for (int y = 0; y >= -2; y--) {
+    	    for (int x = 0; x >= -radius; x--) {
+    	        for (int z = 0; z >= -radius; z--) {
     	            Location	loc = origin.clone().add(x, y, z);
     	            if (canFit(loc, width, height))
     	                return loc.add(0.5, 0, 0.5);

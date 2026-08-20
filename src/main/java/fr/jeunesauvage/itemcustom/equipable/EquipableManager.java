@@ -70,17 +70,17 @@ public class EquipableManager implements Listener {
 	// get durability of Equipable
 	public int getNewDurability(int damage, Equipable<?> equipable) {
 		int		level = equipable.getRarity().getNumber();
-		int		levelMax = Rarity.LEVEL_MAX + 1;
+		int		levelMax = Rarity.LEVEL_MAX + 3;
 		int		durabilityMax = equipable.getItem().getType().getMaxDurability();
 		double	durabilityPercent = (levelMax - level) / 1000d;
 		int		newDamage = Math.max(1, (int)(durabilityPercent * durabilityMax));
 		/*
-		level 1 = 0.6%
-		level 2 = 0.5%
-		level 3 = 0.4%
-		level 4 = 0.3%
-		level 5 = 0.2%
-		level 6 = 0.1%
+		level 1 = 0.8%
+		level 2 = 0.7%
+		level 3 = 0.6%
+		level 4 = 0.5%
+		level 5 = 0.4%
+		level 6 = 0.3%
 		*/
 		return newDamage;
 	}

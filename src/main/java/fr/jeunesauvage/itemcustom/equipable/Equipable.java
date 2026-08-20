@@ -54,7 +54,8 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 			for (StatPrimary slot: primary) {
 				int	valuePrimary = value;
 				if (this.statsPrimary.isEmpty() && value % 2 != 0)
-					valuePrimary++;
+					valuePrimary--;
+				valuePrimary *= rarity.getNumber();
 				this.statsPrimary.put(slot, valuePrimary);
 				lore.add(Lore.stat(slot, valuePrimary));
 			}
@@ -65,7 +66,8 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 			for (StatSecondary slot: secondary) {
 				int	valueSecondary = value;
 				if (this.statsSecondary.isEmpty() && value % 2 != 0)
-					valueSecondary++;
+					valueSecondary--;
+				valueSecondary *= rarity.getNumber();
 				this.statsSecondary.put(slot, valueSecondary);
 				lore.add(Lore.stat(slot, valueSecondary));
 			}

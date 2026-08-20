@@ -10,7 +10,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.damage.DamageType;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
@@ -245,7 +245,7 @@ public class LauncherManager implements Listener {
 	public void launchStaff(Player shooter) {
 		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(shooter);
 		switch (playerCustom.getClassType()) {
-			case PYROMANCER -> {
+			case PYROMANCER, GOD -> {
 	    		SmallFireball	smallFireball = shooter.launchProjectile(SmallFireball.class);
 	    		smallFireball.setGravity(false);
 	    		smallFireball.setVelocity(shooter.getEyeLocation().getDirection());
@@ -263,8 +263,8 @@ public class LauncherManager implements Listener {
 				AttributeInstance	attributeInstance = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 				double				damage = 0;
 				if (attributeInstance != null)
-					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.3;
-				itemCustomManager.getSpellManager().explosion(null, shooter.getEyeLocation(), 6, damage, 2, 0);
+					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.9;
+				itemCustomManager.getSpellManager().explosionFriendlyFire(shooter.getEyeLocation(), 6, damage, 2, 0);
 			}
 		}
 	}
@@ -293,7 +293,7 @@ public class LauncherManager implements Listener {
 	public void launchSpellBook(Player shooter, Weapon spellBook) {
 		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(shooter);
 		switch (playerCustom.getClassType()) {
-			case PYROMANCER, PRIEST -> {
+			case PYROMANCER, PRIEST, GOD -> {
 	    		switch (spellBook.getIdentifier()) {
 					case "spellbook_blades_of_war" -> bladesOfWar(shooter);
 					case "spellbook_hellow" -> {}
@@ -306,8 +306,8 @@ public class LauncherManager implements Listener {
 				AttributeInstance	attributeInstance = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 				double				damage = 0;
 				if (attributeInstance != null)
-					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.3;
-				itemCustomManager.getSpellManager().explosion(null, shooter.getEyeLocation(), 6, damage, 2, 0);
+					damage = shooter.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue() * 0.9;
+				itemCustomManager.getSpellManager().explosionFriendlyFire(shooter.getEyeLocation(), 6, damage, 2, 0);
 			}
 		}
 	}
@@ -340,18 +340,19 @@ public class LauncherManager implements Listener {
 			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
             	Location	spawnLoc = center.clone().add(xOffset, height, zOffset);
             	Arrow		arrow = shooter.getWorld().spawn(spawnLoc, Arrow.class);
-            	Vector		velocity = forward.clone().multiply(0.5);
+            	Vector		velocity = forward.clone().multiply(1);
             	velocity.setY(-0.3);
             	arrow.setShooter(shooter);
             	arrow.setGravity(false);
             	arrow.setVelocity(velocity);
 				arrow.setDamage(1);
+				arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
 				PersistentDataContainer	pdc = arrow.getPersistentDataContainer();
 				Data.setBoolean(pdc, KEY_BOW);
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 					if (arrow.isValid() && !arrow.isDead())
 						arrow.remove();
-				}, 40);
+				}, 60);
 			}, delay++);
         }
 		SoundManager.playSound(shooter, "staff_shoot");
@@ -361,7 +362,7 @@ public class LauncherManager implements Listener {
 	@EventHandler
 	public void onDragonFireballHit(EnderDragonFireballHitEvent e) {
 		if (!(e.getEntity().getShooter() instanceof Player)) return;
-		e.getAreaEffectCloud().setDuration(40);
+		e.getAreaEffectCloud().setDuration(20);
 	}
 
 	// dragonfireball area hit
@@ -371,7 +372,7 @@ public class LauncherManager implements Listener {
 		e.setCancelled(true);
 		for (LivingEntity victim: e.getAffectedEntities()) {
 			if (victim.equals(player)) continue;
-			victim.damage(1, CombatDamage.getDamageSource(player, DamageType.MAGIC));
+			victim.damage(0.5, CombatDamage.getDamageSource(player, CombatDamage.MAGIC.getType()));
 		}
 	}
 

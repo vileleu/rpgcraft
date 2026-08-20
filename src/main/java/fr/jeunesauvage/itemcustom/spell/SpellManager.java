@@ -171,6 +171,29 @@ public class SpellManager implements Listener {
 	    world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1f);
 	}
 
+	// Friendly fire explosion
+	public void explosionFriendlyFire(Location center, double radius, double damage, double force, int fireticks) {
+	    World	world = center.getWorld();
+	    for (LivingEntity livingTarget : world.getNearbyLivingEntities(center, radius)) {
+			if (force > 0 && !TraitSentinel.isBoss(livingTarget)) {
+				Vector	direction = livingTarget.getLocation().toVector().subtract(center.toVector()).normalize();
+				double	resistance = 0;
+				AttributeInstance	instance = livingTarget.getAttribute(Attribute.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE);
+				if (instance != null)
+					resistance = instance.getValue();
+	        	direction.multiply(force - (force * resistance));
+	        	direction.setY(direction.getY() + 0.3);
+				livingTarget.setVelocity(direction);
+			}
+			livingTarget.damage(damage, CombatDamage.getDamageSource(null, CombatDamage.MAGIC.getType()));
+			if (fireticks > 0)
+				livingTarget.setFireTicks(fireticks);
+	    }
+	    world.spawnParticle(Particle.EXPLOSION, center, 3);
+		world.spawnParticle(Particle.CLOUD, center, 40, 1.5, 1.5, 1.5, 0.1);
+	    world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1f);
+	}
+
 	public void addStealth(UUID uuid, int id) {
 		stealth.put(uuid, id);
 	}

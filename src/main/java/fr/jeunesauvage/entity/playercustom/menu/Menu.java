@@ -450,19 +450,18 @@ public class Menu {
         inv.setItem(BACK_SLOT, createBack("back_main"));
         int i = 9;
         for (WeaponType weaponType: WeaponType.values()) {
-            if (i >= BIG_SLOT) return;
             if (weaponType == WeaponType.HAND || weaponType == WeaponType.UNKNOWN) continue;
             String  name = weaponType.getName();
             int     count = getEquipablesCount(itemCustomManager, weaponType);
             int     nb = 0;
             while (count > 0) {
+                if (i >= BIG_SLOT) return;
                 inv.setItem(i++, createSlot(weaponType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "print_" + name + (nb > 0 ? nb : "")));
                 nb++;
                 count -= BIG_SLOT - 1;
             }
         }
         for (ArmorType armorType: ArmorType.values()) {
-            if (i >= BIG_SLOT) return;
             if (armorType.getArmorMaterial() != ArmorMaterial.CLOTH && armorType != ArmorType.ELYTRA) continue;
             String  name = armorType.getName();
             int     underscore = name.indexOf('_');
@@ -471,6 +470,7 @@ public class Menu {
             int     count = getEquipablesCount(itemCustomManager, armorType.getMaterial());
             int     nb = 0;
             while (count > 0) {
+                if (i >= BIG_SLOT) return;
                 inv.setItem(i++, createSlot(armorType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "print_" + name + (nb > 0 ? nb : "")));
                 nb++;
                 count -= BIG_SLOT - 1;
@@ -533,14 +533,16 @@ public class Menu {
                     start--;
                     continue;
                 }
+                boolean added = false;
                 for (int i = 0; i < list.size(); i++) {
                     if (equipable.getLevel() <= list.get(i).getLevel()) {
                         list.add(i, equipable);
+                        added = true;
                         break;
                     }
-                    else if (i == list.size() - 1)
-                        list.add(equipable);
                 }
+                if (added == false)
+                    list.add(equipable);
                 if (list.size() == BIG_SLOT - 1)
                     break;
             }
@@ -556,14 +558,16 @@ public class Menu {
                     start--;
                     continue;
                 }
+                boolean added = false;
                 for (int i = 0; i < list.size(); i++) {
                     if (equipable.getLevel() <= list.get(i).getLevel()) {
                         list.add(i, equipable);
+                        added = true;
                         break;
                     }
-                    else if (i == list.size() - 1)
-                        list.add(equipable);
                 }
+                if (added == false)
+                    list.add(equipable);
                 if (list.size() == BIG_SLOT - 1)
                     break;
             }
@@ -584,14 +588,16 @@ public class Menu {
                 start--;
                 continue;
             }
+            boolean added = false;
             for (int i = 0; i < list.size(); i++) {
                 if (equipable.getLevel() <= list.get(i).getLevel()) {
                     list.add(i, equipable);
+                    added = true;
                     break;
                 }
-                else if (i == list.size() - 1)
-                    list.add(equipable);
             }
+            if (added == false)
+                list.add(equipable);
             if (list.size() == BIG_SLOT - 1)
                 break;
         }
@@ -869,11 +875,11 @@ public class Menu {
             Print   print = isPlayer() ? new Print(targetPlayer) : new Print(targetMob, entityModifierManager);
             meta.lore(print.printSkillSecondary());
         }
-        else if (action.equals("print_claws"))
+        else if (action.startsWith("print_claw"))
             meta.setCustomModelData(164);
-        else if (action.equals("print_staffs"))
+        else if (action.startsWith("print_staff"))
             meta.setCustomModelData(74);
-        else if (action.equals("print_spellbooks"))
+        else if (action.startsWith("print_spellbook"))
             meta.setCustomModelData(103);
         else if (action.equals("print_race") && isPlayer())
             meta.lore(Lore.raceType(targetPlayer.getRaceType()));

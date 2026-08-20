@@ -75,42 +75,6 @@ public class ItemCustomManager implements Listener {
 		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
 			RpgCraft.debug("item " + count++ + ": " + entry.getKey());
 		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("elytra"))
-				RpgCraft.debug("elytra: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("sword"))
-				RpgCraft.debug("sword: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("mace"))
-				RpgCraft.debug("mace: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("axe"))
-				RpgCraft.debug("axe: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("pickaxe"))
-				RpgCraft.debug("pickaxe: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("shovel"))
-				RpgCraft.debug("shovel: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("hoe"))
-				RpgCraft.debug("hoe: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("bow"))
-				RpgCraft.debug("bow: " + entry.getKey());
-		}
-		for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-			if (entry.getValue().getType().getName().equals("crossbow"))
-				RpgCraft.debug("crossbow: " + entry.getKey());
-		}
 	}
 
 	/*

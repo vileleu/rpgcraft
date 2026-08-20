@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entity.playercustom.PlayerCustom;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomManager;
@@ -43,6 +44,7 @@ public class MenuManager implements Listener {
             }
             ParseAction parseAction = new ParseAction(action);
             parseAction.parse();
+            RpgCraft.debug("parse: result = " + parseAction.getResult() + ", start = " + parseAction.getStart());
             switch (parseAction.getResult()) {
                 case "back_main" -> menu.openMainMenu();
                 case "back_stats" -> menu.openStatsMenu();
@@ -85,10 +87,10 @@ public class MenuManager implements Listener {
                 case "print_staff" -> menu.openStaffsMenu(itemCustomManager, parseAction.getStart());
                 case "print_spellbook" -> menu.openSpellbooksMenu(itemCustomManager, parseAction.getStart());
                 case "print_shield" -> menu.openShieldsMenu(itemCustomManager, parseAction.getStart());
-                case "print_helmet" -> menu.openHelmetsMenu(itemCustomManager, parseAction.getStart());
-                case "print_chestplate" -> menu.openChestplatesMenu(itemCustomManager, parseAction.getStart());
-                case "print_legging" -> menu.openLeggingsMenu(itemCustomManager, parseAction.getStart());
-                case "print_boot" -> menu.openBootsMenu(itemCustomManager, parseAction.getStart());
+                case "print_head" -> menu.openHelmetsMenu(itemCustomManager, parseAction.getStart());
+                case "print_chest" -> menu.openChestplatesMenu(itemCustomManager, parseAction.getStart());
+                case "print_legs" -> menu.openLeggingsMenu(itemCustomManager, parseAction.getStart());
+                case "print_feet" -> menu.openBootsMenu(itemCustomManager, parseAction.getStart());
                 case "print_elytra" -> menu.openElytrasMenu(itemCustomManager, parseAction.getStart());
             }
         }
