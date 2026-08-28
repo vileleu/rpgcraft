@@ -4,8 +4,8 @@ import java.util.Set;
 
 import org.bukkit.Material;
 
-import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
-import fr.jeunesauvage.entity.race.RaceType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.ItemCustomType;
 import fr.jeunesauvage.itemcustom.Rarity;

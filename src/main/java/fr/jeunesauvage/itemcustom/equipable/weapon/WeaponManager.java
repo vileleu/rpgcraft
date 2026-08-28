@@ -1,7 +1,6 @@
 package fr.jeunesauvage.itemcustom.equipable.weapon;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -13,43 +12,41 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.jeunesauvage.entity.EntityManager;
-import fr.jeunesauvage.itemcustom.ItemCustomManager;
-import fr.jeunesauvage.itemcustom.equipable.EquipableManager;
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.itemcustom.equipable.weapon.launcher.LauncherManager;
 
 public class WeaponManager implements Listener {
-	private final EquipableManager	equipableManager;
-	private final LauncherManager 	launcherManager;
-
-	public WeaponManager(JavaPlugin plugin, ItemCustomManager itemCustomManager, EquipableManager equipableManager, EntityManager entityManager) {
-		this.equipableManager = equipableManager;
-		this.launcherManager = new LauncherManager(itemCustomManager, entityManager);
-		plugin.getServer().getPluginManager().registerEvents(launcherManager, plugin);
+	public WeaponManager() {
+		LauncherManager	launcherManager = new LauncherManager();
+		RpgCraft.instance().getServer().getPluginManager().registerEvents(launcherManager, RpgCraft.instance());
 	}
 
 	// weapon hotbar
 	@EventHandler
 	public void onWeaponHotbar(PlayerItemHeldEvent e) {
-	    Player		player = e.getPlayer();
+	    Player			player = e.getPlayer();
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(player.getUniqueId());
+		if (playerCustom == null) return;
 	    int			previousSlot = e.getPreviousSlot();
 	    int			newSlot = e.getNewSlot();
 		ItemStack	previousItem = player.getInventory().getItem(previousSlot);
 		ItemStack	newItem = player.getInventory().getItem(newSlot);
 		if (isWeaponCustom(previousItem) || isWeaponCustom(newItem))
-			equipableManager.refreshEquipement(player);
+			playerCustom.refreshStat();
 	}
 
 	// weapon swap
 	@EventHandler
 	public void onWeaponSwap(PlayerSwapHandItemsEvent e) {
-	    Player		player = e.getPlayer();
+	    Player			player = e.getPlayer();
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(player.getUniqueId());
+		if (playerCustom == null) return;
 	    ItemStack	hand = e.getMainHandItem();
 	    ItemStack	offhand = e.getOffHandItem();
 		if (isWeaponCustom(hand) || isWeaponCustom(offhand))
-			equipableManager.refreshEquipement(player);
+			playerCustom.refreshStat();
 	}
 
 	// weapon click
@@ -57,6 +54,8 @@ public class WeaponManager implements Listener {
 	public void onWeaponClick(InventoryClickEvent e) {
 		if (e.getClickedInventory() == null) return;
 	    if (!(e.getWhoClicked() instanceof Player player)) return;
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(player.getUniqueId());
+		if (playerCustom == null) return;
 	    ItemStack 	current = e.getCurrentItem();
 	    ItemStack 	cursor = e.getCursor();
 		current = (isWeaponCustom(current) ? current : null);
@@ -69,19 +68,19 @@ public class WeaponManager implements Listener {
 		int				slotOffhand = 40;
 		if (typeClick.isShiftClick()) {
 			if (current == null) return;
-			// equip/unequip offensive/defensive weapon
+			// equip/unequip weapon
 			if (current.getType() == Material.SHIELD)
-				equipableManager.refreshEquipement(player);
+				playerCustom.refreshStat();
 			else if (slotClick == slotHand)
-				equipableManager.refreshEquipement(player);
+				playerCustom.refreshStat();
 			else if (inv.getItem(slotHand) == null)
-				equipableManager.refreshEquipement(player);
+				playerCustom.refreshStat();
 		}
 		else if (typeClick.isMouseClick()) {
 			if (e.getClickedInventory().getType() != InventoryType.PLAYER) return;
 			// equip/unequip weapon
 			if (slotClick == slotHand || slotClick == slotOffhand)
-				equipableManager.refreshEquipement(player);
+				playerCustom.refreshStat();
 		}
 	}
 
@@ -89,43 +88,14 @@ public class WeaponManager implements Listener {
 	@EventHandler
 	public void onWeaponPickup(EntityPickupItemEvent e) {
 	    if (!(e.getEntity() instanceof Player player)) return;
-	    Item		itemEntity = e.getItem();
-	    ItemStack 	item = itemEntity.getItemStack();
-	    if (isWeaponCustom(item))
-			equipableManager.refreshEquipement(player);
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(player.getUniqueId());
+		if (playerCustom == null) return;
+	    if (isWeaponCustom(e.getItem().getItemStack()))
+			playerCustom.refreshStat();
 	}
 
 	public boolean isWeaponCustom(ItemStack item) {
-		if (item == null)
-			return false;
-		Material	material = item.getType();
-		for (WeaponType type: WeaponType.values()) {
-			if (type == WeaponType.HAND || type == WeaponType.UNKNOWN) continue;
-			if (type.getMaterial() == material)
-				return true;
-		}
-		return false;
-	}
-
-	public LauncherManager getLauncherManager() {
-		return launcherManager;
-	}
-
-	// is weapon
-	public static boolean isWeapon(Material m) {
-		String	s = m.name();
-	    if (s.endsWith("_SWORD") 
-		|| s.endsWith("_AXE")
-		|| s.endsWith("_PICKAXE")
-		|| s.endsWith("_SHOVEL")
-		|| s.endsWith("_HOE")
-		|| s.equals("SHEARS")
-		|| s.equals("TRIDENT")
-		|| s.equals("MACE")
-		|| s.equals("SHIELD")
-		|| s.equals("BOW")
-		|| s.equals("CROSSBOW"))
-			return true;
-		return false;
+		if (item == null) return false;
+		return RpgCraft.getItemCustomRegistry().getWeapon(item) != null;
 	}
 }

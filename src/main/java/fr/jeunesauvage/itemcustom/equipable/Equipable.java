@@ -18,15 +18,17 @@ import com.google.common.collect.ArrayListMultimap;
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Lore;
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomType;
+import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
+import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import fr.jeunesauvage.itemcustom.itembuilder.EquipableStat;
 import net.kyori.adventure.text.Component;
 
 public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> {
-	protected Map<StatPrimary, Integer>	statsPrimary = new HashMap<>();
+	protected Map<StatPrimary, Integer>		statsPrimary = new HashMap<>();
 	protected Map<StatSecondary, Integer>	statsSecondary = new HashMap<>();
 
 	protected Equipable(String name, EquipableStat equipableStat, T type, int customModelData) {
@@ -55,7 +57,7 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 				int	valuePrimary = value;
 				if (this.statsPrimary.isEmpty() && value % 2 != 0)
 					valuePrimary--;
-				valuePrimary *= rarity.getNumber();
+				valuePrimary *= rarity.getNumber() / 2 + 1;
 				this.statsPrimary.put(slot, valuePrimary);
 				lore.add(Lore.stat(slot, valuePrimary));
 			}
@@ -68,6 +70,19 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 				if (this.statsSecondary.isEmpty() && value % 2 != 0)
 					valueSecondary--;
 				valueSecondary *= rarity.getNumber();
+				if (slot == StatSecondary.PHYSICAL_ARMOR || slot == StatSecondary.SPELL_ARMOR) {
+					if (type instanceof ArmorType armorType) {
+						switch (armorType.getArmorMaterial()) {
+							case LEATHER -> valueSecondary *= 2;
+							case MAIL -> valueSecondary *= 3;
+							case PLATE -> valueSecondary *= 5;
+							default -> {}
+						}
+					}
+					else if (type instanceof WeaponType weaponType && weaponType == WeaponType.SHIELD) {
+						valueSecondary *= 3;
+					}
+				}
 				this.statsSecondary.put(slot, valueSecondary);
 				lore.add(Lore.stat(slot, valueSecondary));
 			}

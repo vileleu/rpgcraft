@@ -3,14 +3,12 @@ package fr.jeunesauvage.sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
-import fr.jeunesauvage.component.Msg;
-import fr.jeunesauvage.entity.playercustom.PlayerCustom;
-import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.TextDecoration;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 
 public class SoundCommand implements CommandExecutor {
     @Override
@@ -33,57 +31,61 @@ public class SoundCommand implements CommandExecutor {
 	private boolean handleQuote(CommandSender sender, String[] args) {
         if (!(sender instanceof Player player)) return true;
         if (args.length != 0) {
-            player.sendMessage(Msg.msg("<red>Usage: /quote"));
+            player.sendMessage(Message.m("<red>Usage: /quote"));
             return true;
         }
-        player.sendMessage(Message.greeting().clickEvent(ClickEvent.runCommand("/quotegreeting")).decorate(TextDecoration.UNDERLINED));
-        player.sendMessage(Message.farewell().clickEvent(ClickEvent.runCommand("/quotefarewell")).decorate(TextDecoration.UNDERLINED));
-        player.sendMessage(Message.attack().clickEvent(ClickEvent.runCommand("/quoteattack")).decorate(TextDecoration.UNDERLINED));
-        player.sendMessage(Message.death().clickEvent(ClickEvent.runCommand("/quotedeath")).decorate(TextDecoration.UNDERLINED));
+        player.sendMessage(Message.u(Message.greeting(), "/quotegreeting"));
+        player.sendMessage(Message.u(Message.farewell(), "/quotefarewell"));
+        player.sendMessage(Message.u(Message.attack(), "/quoteattack"));
+        player.sendMessage(Message.u(Message.death(), "/quotedeath"));
         return true;
     }
 
 	private boolean handleGreeting(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) return true;
+        if (!(sender instanceof LivingEntity l)) return true;
         if (args.length != 0) {
-            player.sendMessage(Msg.msg("<red>Usage: /quotegreeting"));
+            l.sendMessage(Message.m("<red>Usage: /quotegreeting"));
             return true;
         }
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		SoundManager.playQuote(playerCustom, QuoteType.GREETING);
+		LivingEntityCustom  livingEntityCustom = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+        if (livingEntityCustom == null) return true;
+		SoundManager.playQuote(livingEntityCustom, QuoteType.GREETING);
         return true;
     }
 
 	private boolean handleFarewell(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) return true;
+        if (!(sender instanceof LivingEntity l)) return true;
         if (args.length != 0) {
-            player.sendMessage(Msg.msg("<red>Usage: /quotefarewell"));
+            l.sendMessage(Message.m("<red>Usage: /quotefarewell"));
             return true;
         }
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		SoundManager.playQuote(playerCustom, QuoteType.FAREWELL);
+		LivingEntityCustom  livingEntityCustom = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+        if (livingEntityCustom == null) return true;
+		SoundManager.playQuote(livingEntityCustom, QuoteType.FAREWELL);
         return true;
     }
 
 	private boolean handleAttack(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) return true;
+        if (!(sender instanceof LivingEntity l)) return true;
         if (args.length != 0) {
-            player.sendMessage(Msg.msg("<red>Usage: /quoteattack"));
+            l.sendMessage(Message.m("<red>Usage: /quoteattack"));
             return true;
         }
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		SoundManager.playQuote(playerCustom, QuoteType.ATTACK);
+		LivingEntityCustom  livingEntityCustom = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+        if (livingEntityCustom == null) return true;
+		SoundManager.playQuote(livingEntityCustom, QuoteType.ATTACK);
         return true;
     }
 
 	private boolean handleDeath(CommandSender sender, String[] args) {
-        if (!(sender instanceof Player player)) return true;
+        if (!(sender instanceof LivingEntity l)) return true;
         if (args.length != 0) {
-            player.sendMessage(Msg.msg("<red>Usage: /quotedeath"));
+            l.sendMessage(Message.m("<red>Usage: /quotedeath"));
             return true;
         }
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		SoundManager.playQuote(playerCustom, QuoteType.DEATH);
+		LivingEntityCustom  livingEntityCustom = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+        if (livingEntityCustom == null) return true;
+		SoundManager.playQuote(livingEntityCustom, QuoteType.DEATH);
         return true;
     }
 }

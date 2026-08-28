@@ -44,6 +44,6 @@ public enum Rarity {
 			if (type.getNumber() == number)
         		return type;
 		}
-		return null;
+		return POOR;
     }
 }

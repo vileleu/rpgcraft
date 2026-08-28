@@ -5,7 +5,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import fr.jeunesauvage.component.Msg;
+import fr.jeunesauvage.component.Message;
 
 public class WorldCommand implements CommandExecutor {
     private final WorldManager  worldManager;
@@ -27,11 +27,11 @@ public class WorldCommand implements CommandExecutor {
     private boolean handleCleanEntities(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) return true;
         if (args.length != 0) {
-            sender.sendMessage(Msg.msg("<red>Usage: /cleanentities"));
+            sender.sendMessage(Message.m("<red>Usage: /cleanentities"));
             return true;
         }
         worldManager.cleanEntities();
-        sender.sendMessage(Msg.msg("<green>entities cleaned"));
+        sender.sendMessage(Message.m("<green>entities cleaned"));
         return true;
     }
 }

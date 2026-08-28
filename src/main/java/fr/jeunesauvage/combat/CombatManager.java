@@ -1,65 +1,51 @@
 package fr.jeunesauvage.combat;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.combat.combatant.CombatantType;
-import fr.jeunesauvage.entity.EntityManager;
-import fr.jeunesauvage.entity.group.Group;
-import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
-import fr.jeunesauvage.itemcustom.ItemCustomManager;
-import net.citizensnpcs.api.npc.NPC;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 
 public class CombatManager implements Listener {
-	private final ItemCustomManager	itemCustomManager;
-	private final EntityManager		entityManager;
-
-	public CombatManager(ItemCustomManager itemCustomManager, EntityManager entityManager) {
-		this.itemCustomManager = itemCustomManager;
-		this.entityManager = entityManager;
-	}
-
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
-		Combat	combat = Combat.buildCombat(entityManager.getEntityModifierManager(), e.getEntity(), e.getDamager(), e.getCause());
+		Combat	combat = Combat.buildCombat(e);
 		if (combat == null) return;
-		RpgCraft.debug("isInSameGroup = " + Group.isInSameGroup(combat.getTarget().getLivingEntity(), combat.getDamager().getLivingEntity()));
-		if (Group.isInSameGroup(combat.getTarget().getLivingEntity(), combat.getDamager().getLivingEntity())) {
+		if (combat.getDamager().isGrouped(combat.getTarget())) {
 			e.setCancelled(true);
 			return;
 		}
-		RpgCraft.debug("//////////////////////////");
-		RpgCraft.debug("combatType = " + combat.getCombatType().getName());
-		RpgCraft.debug("combatDamage = " + combat.getCombatDamage().getName());
-		RpgCraft.debug("weaponType = " + combat.getWeaponType().getName());
-		RpgCraft.debug("//////////////////////////");
 		CombatResult	result = new CombatResult(e.getDamage(), combat);
-		result = combat.applyBonusDamager(result);
-		result = combat.applyBonusTarget(result);
-		result.calculate();
-		result = combat.applySpell(itemCustomManager.getSpellManager(), result);
-		// aggro npc
-		if (combat.getTarget().getType() == CombatantType.NPC) {
-			NPC				npcTarget = result.getNpcTarget();
-			if (npcTarget != null) {
-				TraitSentinel	traitSentinel = npcTarget.getOrAddTrait(TraitSentinel.class);
-				traitSentinel.addAggro(combat.getDamager().getLivingEntity(), result.getAmount() + 5);
-			}
+		// damage is unmodifiable
+		if (combat.getTarget().damageIsUnmodifiable() != true) {
+			result = combat.applyBonusTarget(result);
+			result = combat.applyBonusDamager(result);
+			result.calculate();
+			result = combat.applySpell(result);
 		}
+		RpgCraft.debug("");
+		RpgCraft.debug("combat infos:");
+		RpgCraft.debug("level target " + combat.getTarget().getLevel());
+		RpgCraft.debug("level damager " + combat.getDamager().getLevel());
+		RpgCraft.debug("critical chance " + result.getCriticalChance());
+		RpgCraft.debug("dodge chance " + result.getDodgeChance());
+		RpgCraft.debug("skill target " + result.getSkillTarget());
+		RpgCraft.debug("skill damager " + result.getSkillDamager());
+		RpgCraft.debug("combat type " + combat.getCombatType().getName());
+		RpgCraft.debug("weapon type " + combat.getWeaponType().getName());
+		RpgCraft.debug("combat damage " + combat.getCombatDamage().getName());
+		RpgCraft.debug("");
 		// aggro npc
-		if (combat.getTarget().getType() == CombatantType.PLAYER) {
-			Player	playerTarget = (Player)combat.getTarget().getLivingEntity();
-			if (TraitSentinel.isOwner(playerTarget)) {
-				NPC	pet = TraitSentinel.getPet(playerTarget);
-				if (pet != null) {
-					TraitSentinel	traitSentinel = pet.getOrAddTrait(TraitSentinel.class);
-					traitSentinel.addAggro(combat.getDamager().getLivingEntity(), result.getAmount() + 5);
-				}
-			}
+		LivingEntityCustom	target = combat.getTarget();
+		if (target instanceof NPCCustom npcCustom) {
+			npcCustom.addAggro(combat.getDamager(), result.getAmount() + 5);
+		}
+		if (target.isOwner()) {
+			NPCCustom	pet = RpgCraft.getEntityCustomRegistry().getNPCCustom(target.getPet());
+			if (pet != null) pet.addAggro(combat.getDamager(), result.getAmount() + 5);
 		}
 		e.setDamage(result.getAmount());
 		combat.printDamage(result);

@@ -13,6 +13,9 @@ import org.jspecify.annotations.NonNull;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 
 public class Data {
+	public static long d(int duration) {
+		return duration * 20;
+	}
 
 	/*
 	** boolean

@@ -10,15 +10,13 @@ import org.bukkit.inventory.meta.PotionMeta;
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.component.Message;
-import fr.jeunesauvage.entity.playercustom.PlayerCustom;
-import fr.jeunesauvage.entity.playercustom.attributecustom.resource.Health;
-import fr.jeunesauvage.entity.playercustom.attributecustom.resource.Resource;
-import fr.jeunesauvage.entity.playercustom.attributecustom.resource.ResourceType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
-import fr.jeunesauvage.itemcustom.consumable.ConsumableManager;
 import net.kyori.adventure.text.Component;
 
 public class Potion extends ItemCustom<PotionType> implements Consumable {
@@ -61,7 +59,7 @@ public class Potion extends ItemCustom<PotionType> implements Consumable {
 	}
 
 	@Override
-	public void consume(ConsumableManager consumableManager, PlayerCustom playerCustom) {
+	public void consume(PlayerCustom playerCustom) {
 		switch (type) {
 			case PotionType.POTION_HEALTH -> potionHealth(playerCustom);
 			case PotionType.POTION_MANA -> potionMana(playerCustom);
@@ -76,7 +74,7 @@ public class Potion extends ItemCustom<PotionType> implements Consumable {
 		// cooldown
 		int	duration = playerCustom.hasCooldown(getMaterial());
 		if (duration > 0) {
-			playerCustom.getPlayer().sendActionBar(Message.cooldown(duration));
+			playerCustom.sendActionBar(Message.cooldown(duration));
 			return false;
 		}
 		playerCustom.addCooldown(type.getMaterial(), type.getCooldown());
@@ -84,33 +82,29 @@ public class Potion extends ItemCustom<PotionType> implements Consumable {
 	}
 
 	private void potionHealth(PlayerCustom playerCustom) {
-		Health	health = playerCustom.getHealth();
-		int	amount = 50 * rarity.getNumber();
-		health.increase(amount);
-		playerCustom.getScoreboardCustom().refreshHealth();
+		double	health = playerCustom.getHealth();
+		int		amount = 50 * rarity.getNumber();
+		playerCustom.setHealth(health + amount);
 	}
 
 	private void potionMana(PlayerCustom playerCustom) {
-		Resource	power = playerCustom.getPower();
-		if (power == null || power.getType() != ResourceType.MANA) return;
+		PowerCustom	power = playerCustom.getPowerCustom();
+		if (power == null || power.getType() != PowerType.MANA) return;
 		int	amount = 10 * rarity.getNumber();
 		power.increase(amount);
-		playerCustom.getScoreboardCustom().refreshPower();
 	}
 
 	private void potionRage(PlayerCustom playerCustom) {
-		Resource	power = playerCustom.getPower();
-		if (power == null || power.getType() != ResourceType.RAGE) return;
+		PowerCustom	power = playerCustom.getPowerCustom();
+		if (power == null || power.getType() != PowerType.RAGE) return;
 		int	amount = 10 * rarity.getNumber();
 		power.increase(amount);
-		playerCustom.getScoreboardCustom().refreshPower();
 	}
 
 	private void potionEnergy(PlayerCustom playerCustom) {
-		Resource	power = playerCustom.getPower();
-		if (power == null || power.getType() != ResourceType.ENERGY) return;
+		PowerCustom	power = playerCustom.getPowerCustom();
+		if (power == null || power.getType() != PowerType.ENERGY) return;
 		int	amount = 10 * rarity.getNumber();
 		power.increase(amount);
-		playerCustom.getScoreboardCustom().refreshPower();
 	}
 }

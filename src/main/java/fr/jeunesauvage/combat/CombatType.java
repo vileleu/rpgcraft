@@ -5,7 +5,7 @@ import java.util.Set;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 
 public enum CombatType {
-	CLOSE("close", Set.of(WeaponType.AXE, WeaponType.HAND, WeaponType.HOE, WeaponType.MACE, WeaponType.PICKAXE, WeaponType.SHOVEL, WeaponType.SWORD, WeaponType.TRIDENT)),
+	CLOSE("close", Set.of(WeaponType.CLAW, WeaponType.AXE, WeaponType.HAND, WeaponType.HOE, WeaponType.MACE, WeaponType.PICKAXE, WeaponType.SHOVEL, WeaponType.SWORD, WeaponType.TRIDENT)),
 	RANGE("range", Set.of(WeaponType.BOW, WeaponType.CROSSBOW, WeaponType.SPELLBOOK, WeaponType.STAFF, WeaponType.TRIDENT)),
 	UNKNOWN("unknown", Set.of(WeaponType.UNKNOWN));
 

@@ -1,16 +1,15 @@
 package fr.jeunesauvage.combat;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.World;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Transformation;
@@ -18,149 +17,109 @@ import org.joml.AxisAngle4f;
 import org.joml.Vector3f;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.combat.combatant.Combatant;
 import fr.jeunesauvage.component.Message;
-import fr.jeunesauvage.entity.modifier.EntityModifierManager;
-import fr.jeunesauvage.entity.playercustom.PlayerCustom;
-import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
-import fr.jeunesauvage.entity.playercustom.attributecustom.resource.Health;
-import fr.jeunesauvage.entity.playercustom.attributecustom.skill.SkillSecondary;
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatSecondary;
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
-import net.citizensnpcs.api.npc.NPC;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 
 
 public enum CombatDamage {
-    PHYSICAL("physical", DamageType.PLAYER_ATTACK) {
-		// player damager
+    PHYSICAL("physical", DamageType.MOB_ATTACK) {
+		// stat player target
         @Override
-        public CombatResult applyStatDamager(PlayerCustom playerCustom, CombatResult result) {
+        public CombatResult applyStatTarget(LivingEntityCustom target, CombatResult result) {
+			// stats + modifiers
+			result.increaseDodgeChance(StatSecondary.DODGE.getAmount(target));
+			result.decreaseCriticalChance(StatSecondary.DEFENSE.getAmount(target));
+            result.increaseArmor(StatSecondary.PHYSICAL_ARMOR.getAmount(target));
+			return result;
+        }
+		// stat player damager
+        @Override
+        public CombatResult applyStatDamager(LivingEntityCustom damager, CombatResult result) {
 			// stats + modifiers
 			// recharge physique
-			if (result.getAttackCooldown() == false)
-            	result.increaseAmount(StatSecondary.getAmount(playerCustom, StatSecondary.PHYSICAL_DAMAGE));
-			result.increaseCriticalChance(StatSecondary.getAmount(playerCustom, StatSecondary.CRITICAL_CHANCE));
+			if (damager.attackIsInCooldown() == false)
+            	result.increaseAmount(StatSecondary.PHYSICAL_DAMAGE.getAmount(damager));
+			result.increaseCriticalChance(StatSecondary.CRITICAL_CHANCE.getAmount(damager));
 			return result;
         }
-		// npc damager
+		// skill player target
         @Override
-        public CombatResult applyStatDamager(EntityModifierManager entityModifierManager, LivingEntity livingEntity, NPC npc, CombatResult result) {
-			// stats
-            result.increaseAmount(StatSecondary.getAmount(npc, StatSecondary.PHYSICAL_DAMAGE));
-			result.increaseCriticalChance(StatSecondary.getAmount(npc, StatSecondary.CRITICAL_CHANCE));
-			// modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.PHYSICAL_DAMAGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.CRITICAL_CHANCE));
+    	public CombatResult applySkillTarget(LivingEntityCustom target, CombatResult result) {
+			Skill	skill = target.getSkill(SkillPrimary.TEMPERING);
+			int		skillAmount = skill.getValue() + skill.getValueModifier();
+			result.setSkillTarget(skillAmount);
+			if (target.attackIsInCooldown() == false ) increaseSkill(target, skill);
 			return result;
-        }
-		// living entity damager
+    	}
+		// skill player damager
         @Override
-        public CombatResult applyStatDamager(EntityModifierManager entityModifierManager, LivingEntity livingEntity, CombatResult result) {
-			// modifiers
-            result.increaseAmount(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.PHYSICAL_DAMAGE));
-			result.increaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.CRITICAL_CHANCE));
+    	public CombatResult applySkillDamager(LivingEntityCustom damager, Combat combat, CombatResult result) {
+			for (SkillPrimary skillPrimary: SkillPrimary.values()) {
+				if (skillPrimary.getWeaponType() == combat.getWeaponType()) {
+					Skill	skill = damager.getSkill(skillPrimary);
+					int		skillAmount = skill.getValue() + skill.getValueModifier();
+					result.setSkillDamager(skillAmount);
+					if (damager.attackIsInCooldown() == false) increaseSkill(damager, skill);
+				}
+			}
 			return result;
-        }
-		// player target
+    	}
+		// print damage
         @Override
-        public CombatResult applyStatTarget(PlayerCustom playerCustom, CombatResult result) {
-			// stats + modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(playerCustom, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(playerCustom, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(playerCustom, StatSecondary.PHYSICAL_ARMOR));
-			return result;
-        }
-		// npc target
-        @Override
-        public CombatResult applyStatTarget(EntityModifierManager entityModifierManager, LivingEntity livingEntity, NPC npc, CombatResult result) {
-			// stats
-			result.increaseDodgeChance(StatSecondary.getAmount(npc, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(npc, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(npc, StatSecondary.PHYSICAL_ARMOR));
-			// modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.PHYSICAL_ARMOR));
-			return result;
-        }
-		// living entity target
-        @Override
-        public CombatResult applyStatTarget(EntityModifierManager entityModifierManager, LivingEntity livingEntity, CombatResult result) {
-			// modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.PHYSICAL_ARMOR));
-			return result;
-        }
-        @Override
-		public void printDamage(Combatant<?> combatant, CombatResult result) {
+		public void printDamage(LivingEntityCustom combatant, CombatResult result) {
 			createDisplay(combatant, result, NamedTextColor.GRAY);
 		}
     },
     MAGIC("magic", DamageType.MAGIC) {
-		// player damager
-        @Override
-        public CombatResult applyStatDamager(PlayerCustom playerCustom, CombatResult result) {
-			// stats + modifiers
-            result.increaseAmount(StatSecondary.getAmount(playerCustom, StatSecondary.SPELL_DAMAGE));
-			result.increaseCriticalChance(StatSecondary.getAmount(playerCustom, StatSecondary.CRITICAL_CHANCE));
-			return result;
-        }
-		// npc damager
-        @Override
-        public CombatResult applyStatDamager(EntityModifierManager entityModifierManager, LivingEntity livingEntity, NPC npc, CombatResult result) {
-			// stats
-            result.increaseAmount(StatSecondary.getAmount(npc, StatSecondary.SPELL_DAMAGE));
-			result.increaseCriticalChance(StatSecondary.getAmount(npc, StatSecondary.CRITICAL_CHANCE));
-			// modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.SPELL_DAMAGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.CRITICAL_CHANCE));
-			return result;
-        }
-		// living entity damager
-        @Override
-        public CombatResult applyStatDamager(EntityModifierManager entityModifierManager, LivingEntity livingEntity, CombatResult result) {
-            result.increaseAmount(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.SPELL_DAMAGE));
-			result.increaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.CRITICAL_CHANCE));
-			return result;
-        }
 		// player target
         @Override
-        public CombatResult applyStatTarget(PlayerCustom playerCustom, CombatResult result) {
+        public CombatResult applyStatTarget(LivingEntityCustom target, CombatResult result) {
 			// stats + modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(playerCustom, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(playerCustom, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(playerCustom, StatSecondary.SPELL_ARMOR));
+			result.increaseDodgeChance(StatSecondary.DODGE.getAmount(target));
+			result.decreaseCriticalChance(StatSecondary.DEFENSE.getAmount(target));
+            result.increaseArmor(StatSecondary.SPELL_ARMOR.getAmount(target));
 			return result;
         }
-		// npc target
+		// player damager
         @Override
-        public CombatResult applyStatTarget(EntityModifierManager entityModifierManager, LivingEntity livingEntity, NPC npc, CombatResult result) {
-			// stats
-			result.increaseDodgeChance(StatSecondary.getAmount(npc, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(npc, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(npc, StatSecondary.SPELL_ARMOR));
-			// modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DEFENSE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.SPELL_ARMOR));
+        public CombatResult applyStatDamager(LivingEntityCustom damager, CombatResult result) {
+			// stats + modifiers
+            result.increaseAmount(StatSecondary.SPELL_DAMAGE.getAmount(damager));
+			result.increaseCriticalChance(StatSecondary.CRITICAL_CHANCE.getAmount(damager));
 			return result;
         }
-		// living entity target
+		// skill player target
         @Override
-        public CombatResult applyStatTarget(EntityModifierManager entityModifierManager, LivingEntity livingEntity, CombatResult result) {
-			// modifiers
-			result.increaseDodgeChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DODGE));
-			result.decreaseCriticalChance(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.DEFENSE));
-            result.increaseArmor(StatSecondary.getAmount(entityModifierManager, livingEntity, StatSecondary.SPELL_ARMOR));
+    	public CombatResult applySkillTarget(LivingEntityCustom target, CombatResult result) {
+			Skill	skill = target.getSkill(SkillPrimary.TEMPERING);
+			int		skillAmount = skill.getValue() + skill.getValueModifier();
+			result.setSkillTarget(skillAmount);
+			if (target.attackIsInCooldown() == false) increaseSkill(target, skill);
 			return result;
-        }
+    	}
+		// skill player damager
         @Override
-		public void printDamage(Combatant<?> combatant, CombatResult result) {
+    	public CombatResult applySkillDamager(LivingEntityCustom damager, Combat combat, CombatResult result) {
+			for (SkillPrimary skillPrimary: SkillPrimary.values()) {
+				if (skillPrimary.getWeaponType() == combat.getWeaponType()) {
+					Skill	skill = damager.getSkill(skillPrimary);
+					int		skillAmount = skill.getValue() + skill.getValueModifier();
+					result.setSkillDamager(skillAmount);
+					if (damager.attackIsInCooldown() == false) increaseSkill(damager, skill);
+				}
+			}
+			return result;
+    	}
+		// print damage
+        @Override
+		public void printDamage(LivingEntityCustom combatant, CombatResult result) {
 			createDisplay(combatant, result, NamedTextColor.LIGHT_PURPLE);
 		}
     };
@@ -173,66 +132,69 @@ public enum CombatDamage {
 		this.damageType = damageType;
 	}
 
-    public abstract CombatResult applyStatDamager(PlayerCustom playerCustom, CombatResult result);
-    public abstract CombatResult applyStatDamager(EntityModifierManager entityModifierManager, LivingEntity livingEntity, NPC npc, CombatResult result);
-	public abstract CombatResult applyStatDamager(EntityModifierManager entityModifierManager, LivingEntity livingEntity, CombatResult result);
+    public abstract CombatResult applyStatTarget(LivingEntityCustom target, CombatResult result);
+    public abstract CombatResult applyStatDamager(LivingEntityCustom damager, CombatResult result);
 
-    public abstract CombatResult applyStatTarget(PlayerCustom playerCustom, CombatResult result);
-    public abstract CombatResult applyStatTarget(EntityModifierManager entityModifierManager, LivingEntity livingEntity, NPC npc, CombatResult result);
-	public abstract CombatResult applyStatTarget(EntityModifierManager entityModifierManager, LivingEntity livingEntity, CombatResult result);
+	public abstract CombatResult applySkillTarget(LivingEntityCustom target, CombatResult result);
+	public abstract CombatResult applySkillDamager(LivingEntityCustom damager, Combat combat, CombatResult result);
 
-	public abstract void printDamage(Combatant<?> combatant, CombatResult result);
-
-	// apply skill
-
-    public CombatResult applySkillDamager(PlayerCustom playerCustom, WeaponType weaponType, CombatType combatType, CombatResult result) {
-		for (SkillSecondary skill: SkillSecondary.values()) {
-			if (skill.getWeaponType() == weaponType) {
-				int	skillAmount = SkillSecondary.getAmount(playerCustom, skill);
-				result.setSkillDamager(skillAmount);
-				if (result.getAttackCooldown() == false)
-					playerCustom.incrementeSkill(skill);
-			}
-		}
-		return result;
-    }
-
-	public CombatResult applySkillDamager(NPC npc, CombatResult result) {
-		// skill = (level * 5)
-		int	npcSkill = result.getLevelDamager() * 5;
-		result.setSkillDamager(npcSkill);
-		return result;
-    }
-
-    public CombatResult applySkillTarget(PlayerCustom playerCustom, CombatResult result) {
-		SkillSecondary	skill = SkillSecondary.TEMPERING;
-		int	skillAmount = SkillSecondary.getAmount(playerCustom, skill);
-		result.setSkillTarget(skillAmount);
-		if (result.getAttackCooldown() == false)
-			playerCustom.incrementeSkill(skill);
-		return result;
-    }
-
-    public CombatResult applySkillTarget(NPC npc, CombatResult result) {
-		// skill = (level * 5)
-		int	npcSkill = result.getLevelTarget() * 5;
-		result.setSkillTarget(npcSkill);
-		return result;
-    }
+	public abstract void printDamage(LivingEntityCustom combatant, CombatResult result);
 
 	// utils
 
-	public DamageSource getDamageSource(Combatant<?> combatant) {
-		if (combatant == null) return DamageSource.builder(damageType).build();
-		LivingEntity	livingEntity = combatant.getLivingEntity();
+	protected void increaseSkill(LivingEntityCustom livingEntityCustom, Skill skill) {
+		if (skill.isMaxed() || !(livingEntityCustom instanceof PlayerCustom playerCustom)) return;
+		double	diff = skill.getDifference();
+		// 100%
+		if (diff >= 100) {
+			skill.increase(1);
+			playerCustom.sendMessage(Message.increaseSkill(skill));
+			return;
+		}
+		int		random = ThreadLocalRandom.current().nextInt(100);
+		// 50%
+		if (diff >= 80 && random % 2 == 0) {
+			skill.increase(1);
+			playerCustom.sendMessage(Message.increaseSkill(skill));
+			return;
+		}
+		// 34%
+		else if (diff >= 40 && random % 3 == 0) {
+			skill.increase(1);
+			playerCustom.sendMessage(Message.increaseSkill(skill));
+			return;
+		}
+		// 25%
+		else if (diff >= 20 && random % 4 == 0) {
+			skill.increase(1);
+			playerCustom.sendMessage(Message.increaseSkill(skill));
+			return;
+		}
+		// 13%
+		else if (diff >= 10 && random % 8 == 0) {
+			skill.increase(1);
+			playerCustom.sendMessage(Message.increaseSkill(skill));
+			return;
+		}
+		// 8%
+		else if (diff >= 5 && random % 12 == 0) {
+			skill.increase(1);
+			playerCustom.sendMessage(Message.increaseSkill(skill));
+			return;
+		}
+	}
+
+	public DamageSource getDamageSource(LivingEntityCustom damager) {
+		if (damager == null) return DamageSource.builder(damageType).build();
+		LivingEntity	livingEntity = damager.getLivingEntity();
 		if (livingEntity == null) return DamageSource.builder(damageType).build();
 		return DamageSource.builder(damageType).withCausingEntity(livingEntity).withDirectEntity(livingEntity).build();
 	}
 
-	protected void createDisplay(Combatant<?> combatant, CombatResult result, NamedTextColor color) {
-		LivingEntity	livingEntity = combatant.getLivingEntity();
-		Location		loc = livingEntity.getLocation().add(0, livingEntity.getHeight() + 0.5, 0);
-		World			world = loc.getWorld();
+	protected void createDisplay(LivingEntityCustom livingEntityCustom, CombatResult result, NamedTextColor color) {
+		World			world = livingEntityCustom.getWorld();
+		if (world == null) return;
+		Location		loc = livingEntityCustom.getLocation().add(0, livingEntityCustom.getHeight() + 0.5, 0);
 		TextDisplay 	display = (TextDisplay)world.spawnEntity(loc, EntityType.TEXT_DISPLAY);
 		if (result.isMiss())
 			display.text(Message.miss().color(color));
@@ -242,7 +204,7 @@ public enum CombatDamage {
 			if (result.getAmount() == 0)
 				display.text(Message.immune().color(color));
 			else {
-				display.text(Component.text(String.format("%.1f", result.getAmount())).color(color).decorate(TextDecoration.BOLD));
+				display.text(Message.c(Component.text(String.format("%.1f", result.getAmount())), color));
 				float	scaleFactor;
 				if (result.isCritical()) {
 					scaleFactor = 2.5f;
@@ -283,51 +245,26 @@ public enum CombatDamage {
 		return damageType;
 	}
 
-	public static DamageSource getDamageSource(LivingEntity livingEntity, DamageType damageType) {
-		if (livingEntity == null) return DamageSource.builder(damageType).build();
-		return DamageSource.builder(damageType).withCausingEntity(livingEntity).withDirectEntity(livingEntity).build();
-	}
-
-	public static void heal(LivingEntity livingEntity, double amount) {
-		if (livingEntity == null) return;
-		double		healthMax = 1;
-		AttributeInstance	instance = livingEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-		if (instance != null)
-			healthMax = instance.getValue();
-		double	healthActual = livingEntity.getHealth();
-		double	amountNext = Math.min(amount, healthMax - healthActual);
+	public static void heal(LivingEntityCustom livingEntityCustom, double amount) {
+		if (livingEntityCustom == null) return;
+		World	world = livingEntityCustom.getWorld();
+		if (world == null) return;
+		double	healthMax = livingEntityCustom.getHealthMax();
+		double	health = livingEntityCustom.getHealth();
+		double	amountNext = Math.min(amount, healthMax - health);
 		if (amountNext <= 0) return;
-		livingEntity.setHealth(healthActual + amountNext);
-		livingEntity.getWorld().spawnParticle(Particle.HEART, livingEntity.getEyeLocation(), 3, 0.3, 0.5, 0.3, 0);
-		createDisplayHeal(livingEntity, amountNext);
-		if (livingEntity instanceof Player player && !player.hasMetadata("NPC")) {
-			PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-			if (playerCustom == null) return;
-			playerCustom.getScoreboardCustom().refreshHealth();
-		}
+		livingEntityCustom.setHealth(health + amountNext);
+		world.spawnParticle(Particle.HEART, livingEntityCustom.getEyeLocation(), 3, 0.3, 0.5, 0.3, 0);
+		createDisplayHeal(livingEntityCustom, amountNext);
 	}
 
-	public static void heal(PlayerCustom playerCustom, double amount) {
-		if (playerCustom == null) return;
-		Player	player = playerCustom.getPlayer();
-		Health	health = playerCustom.getHealth();
-		double	healthMax = health.getValueMax();
-		double	healthActual = health.getValue();
-		double	amountNext = Math.min(amount, healthMax - healthActual);
-		if (amountNext <= 0) return;
-		health.increase(amountNext);
-		player.getWorld().spawnParticle(Particle.HEART, player.getEyeLocation(), 3, 0.3, 0.5, 0.3, 0);
-		createDisplayHeal(player, amountNext);
-		playerCustom.getScoreboardCustom().refreshHealth();
-	}
-
-	private static void createDisplayHeal(LivingEntity livingEntity, double amount) {
+	private static void createDisplayHeal(LivingEntityCustom livingEntityCustom, double amount) {
 		if (amount == 0) return;
-		Location		loc = livingEntity.getLocation().add(0, livingEntity.getHeight() + 0.5, 0);
+		Location		loc = livingEntityCustom.getLocation().add(0, livingEntityCustom.getHeight() + 0.5, 0);
 		World			world = loc.getWorld();
 		TextDisplay 	display = (TextDisplay)world.spawnEntity(loc, EntityType.TEXT_DISPLAY);
 		TextColor		color = NamedTextColor.GREEN;
-		display.text(Component.text(String.format("%.1f", amount)).color(color).decorate(TextDecoration.BOLD));
+		display.text(Message.c(Component.text(String.format("%.1f", amount)), color));
 		float	scaleFactor = 1.0f;
 		display.setTransformation(new Transformation(
 		    new Vector3f(0, 0, 0),

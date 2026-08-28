@@ -22,10 +22,14 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.inventory.PrepareAnvilEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.inventory.ItemStack;
 
-import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
@@ -37,10 +41,12 @@ public class WorldManager implements Listener {
 	    Material.SOUL_SOIL
 	);
 
-	public WorldManager(JavaPlugin plugin) {
+	public WorldManager() {
         WorldCommand   worldCommand = new WorldCommand(this);
-        plugin.getCommand("cleanentities").setExecutor(worldCommand);
+    	RpgCraft.instance().getCommand("cleanentities").setExecutor(worldCommand);
 	}
+
+	// world
 
 	// cancel vanilla boss bar
 	@EventHandler
@@ -50,11 +56,19 @@ public class WorldManager implements Listener {
 	    	wither.getBossBar().setVisible(false);
 	}
 
+	// cancel repair + cancel enchanting on anvil
+	@EventHandler
+	public void onPrepareAnvil(PrepareAnvilEvent e) {
+		e.getView().setRepairCost(0);
+    	ItemStack	right = e.getInventory().getItem(1);
+    	if (right != null && right.getType() != Material.AIR) e.setResult(null);
+	}
+
 	// cancel break block
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onBlockBreak(BlockBreakEvent e) {
 		Player	player = e.getPlayer();
-		if (player.getInventory().getItemInOffHand().getType() != Material.ANCIENT_DEBRIS)
+		if (player.getInventory().getItemInOffHand().getType() != Material.BEDROCK)
 	    	e.setCancelled(true);
 	}
 
@@ -62,8 +76,19 @@ public class WorldManager implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onBlockPlace(BlockPlaceEvent e) {
 		Player	player = e.getPlayer();
-		if (player.getInventory().getItemInOffHand().getType() != Material.ANCIENT_DEBRIS)
+		if (player.getInventory().getItemInOffHand().getType() != Material.BEDROCK)
 	    	e.setCancelled(true);
+	}
+
+	// cancel empty bucket
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+	public void onBucketEmpty(PlayerBucketEmptyEvent e) {
+		Player	player = e.getPlayer();
+        Block	c = e.getBlockClicked();
+		if (e.getBucket() == Material.LAVA_BUCKET && c.getType() == Material.NETHERRACK) return;
+        if (c.getType() == Material.CAULDRON || c.getType() == Material.WATER_CAULDRON) return;
+		if (player.getInventory().getItemInOffHand().getType() == Material.BEDROCK) return;
+		e.setCancelled(true);
 	}
 
 	// cancel fire spread
@@ -114,15 +139,15 @@ public class WorldManager implements Listener {
             for (Entity entity: world.getEntities()) {
                 if (entity instanceof Projectile)
                     entity.remove();
-				else if (entity instanceof Display display) {
+				else if (entity instanceof Display display)
 					display.remove();
-    			}
             }
         }
         for (NPC npc: CitizensAPI.getNPCRegistry()) {
-			TraitSentinel	traitSentinel = npc.getOrAddTrait(TraitSentinel.class);
-            if (traitSentinel.getRespawnTime() == -1 || traitSentinel.isPet())
-                npc.destroy();
+			NPCCustom	npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
+			if (npcCustom == null) continue;
+			if (npcCustom.getRespawnTime() == -1 || npcCustom.isPet() || npcCustom.getTemplateType() == TemplateType.DEFAULT)
+				npcCustom.delete();
         }
     }
 }

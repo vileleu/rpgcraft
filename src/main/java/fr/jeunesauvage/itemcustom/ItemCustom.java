@@ -53,7 +53,9 @@ public abstract class ItemCustom<T extends ItemCustomType> {
 		return level;
 	}
 
-    public abstract Component toComponent();
+    public Component toComponent() {
+		return type.toComponent();
+	}
 
 	public static String getIdentifier(ItemStack item) {
 		if (item == null) return null;

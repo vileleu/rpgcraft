@@ -2,17 +2,12 @@ package fr.jeunesauvage.combat;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
-import net.citizensnpcs.api.npc.NPC;
 
 public class CombatResult {
     private double  amount;
-    private boolean attackCooldown;
     private double  dodgeChance;
     private boolean isDodge;
-	private int		levelTarget;
-	private int		levelDamager;
 	private double	skillTarget;
 	private double	skillDamager;
     private boolean isMiss;
@@ -21,22 +16,17 @@ public class CombatResult {
 	private boolean isBlocking;
 	private boolean isCancelled;
     private double  armor;
-	private NPC		npcTarget;
 
     public CombatResult(double amount, Combat combat) {
         this.amount = amount;
-		this.attackCooldown = false;
-		this.levelTarget = -1;
-		this.levelDamager = -1;
-		this.skillTarget = -1;
-		this.skillDamager = -1;
+		this.skillTarget = 0;
+		this.skillDamager = 0;
 		this.criticalChance = 0;
 		this.isCritical = false;
 		this.isMiss = false;
 		this.dodgeChance = 0;
 		this.isDodge = false;
 		this.armor = 0;
-		this.npcTarget = null;
 		// reduce damage of mace (vanilla damage too huge)
 		if (combat.getCombatType() == CombatType.CLOSE && combat.getWeaponType() == WeaponType.MACE)
 			this.amount /= 3;
@@ -53,17 +43,8 @@ public class CombatResult {
 			amount = 0;
 			return;
 		}
-		// if (target == entity && damager != entity)
-		if (levelTarget == -1 && levelDamager != -1 && skillDamager != -1)
-			skillTarget = levelDamager * 5;
-		// if (target != entity && damager == entity)
-		else if (levelTarget != -1 && levelDamager == -1 && skillTarget != -1)
-			skillDamager = levelTarget * 5;
-		// RpgCraft.debug("skillTarget = " + skillTarget);
-		// RpgCraft.debug("skillDamager = " + skillDamager);
 		double	max = 50;
 		double	diff = Math.max(-max, Math.min(max, skillDamager - skillTarget));
-		RpgCraft.debug("diff skill = " + diff + "%");
 		diff /= 100d;
 		if (diff > 0)
 			amount *= (1 + diff);
@@ -84,16 +65,6 @@ public class CombatResult {
 		}
 	}
 
-	// aggro
-	
-	public void addNPCTarget(NPC npcTarget) {
-		this.npcTarget = npcTarget;
-	}
-
-	public NPC getNpcTarget() {
-		return npcTarget;
-	}
-
 	// amount
 
     public void increaseAmount(double amount) {
@@ -110,16 +81,6 @@ public class CombatResult {
 
     public void setAmount(double amount) {
 		this.amount = amount;
-	}
-
-	// cooldown
-
-	public boolean getAttackCooldown() {
-		return this.attackCooldown;
-	}
-
-	public void setAttackCooldown(boolean attackCooldown) {
-		this.attackCooldown = attackCooldown;
 	}
 
 	// dodge
@@ -142,24 +103,6 @@ public class CombatResult {
 
     public boolean isDodge() {
 		return this.isDodge;
-	}
-
-	// level
-
-	public void setLevelTarget(int level) {
-		this.levelTarget = level;
-	}
-
-	public void setLevelDamager(int level) {
-		this.levelDamager = level;
-	}
-
-	public int getLevelTarget() {
-		return levelTarget;
-	}
-
-	public int getLevelDamager() {
-		return levelDamager;
 	}
 
 	// skillTarget

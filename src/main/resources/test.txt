@@ -33,14 +33,14 @@ WindCharge
 EyeOfEnder
 
 TODO:
-- player custom (WIP)
-- item custom (weapons, armors, consumables, spells)
 - entity custom (npc builder, npc boss)
 - world (necropolis:{poison,darkness},fire,block,craft)
 - quests
 
-- npc type ()
-- item stats ()
-- spells (WIP)
-- npc trader ()
-- npc hologram ()
+- npc with range weapon or no melee attack stop walking
+- translatable race in resource pack
+- translatable elytra in resource pack
+- player can break mineral block
+- spell for tauren black
+- spell for palpoutine
+- spell for alls necro entity

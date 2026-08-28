@@ -2,7 +2,7 @@ package fr.jeunesauvage.itemcustom.equipable.weapon;
 
 import java.util.Set;
 
-import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 import net.kyori.adventure.text.Component;
 

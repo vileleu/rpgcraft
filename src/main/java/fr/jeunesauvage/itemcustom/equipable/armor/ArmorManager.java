@@ -2,7 +2,7 @@ package fr.jeunesauvage.itemcustom.equipable.armor;
 
 import java.util.Set;
 
-import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,37 +14,32 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 
-import fr.jeunesauvage.entity.playercustom.PlayerCustom;
-import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
-import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
-import fr.jeunesauvage.itemcustom.ItemCustomManager;
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 
 public class ArmorManager implements Listener {
-	private final ItemCustomManager	itemCustomManager;
-
-	public ArmorManager(ItemCustomManager itemCustomManager) {
-		this.itemCustomManager = itemCustomManager;
-	}
-
 	// armor equip
 	@EventHandler
 	public void onArmorEquip(PlayerArmorChangeEvent e) {
-		Player	player = e.getPlayer();
-		if (!canWear(player, e.getNewItem())) {
-			PlayerInventory	inv = player.getInventory();
+		Player			p = e.getPlayer();
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+		World	world = playerCustom.getWorld();
+		if (world == null) return;
+		if (!canWear(playerCustom, e.getNewItem())) {
+			PlayerInventory	inv = playerCustom.getInventory();
 			EquipmentSlot	slot = EquipmentSlot.valueOf(e.getSlotType().name());
 			ItemStack		armor = inv.getItem(slot);
 			inv.setItem(slot, null);
-			player.getWorld().dropItem(player.getLocation(), armor);
+			world.dropItem(playerCustom.getLocation(), armor);
 		}
 		else if (isSameArmor(e.getOldItem(), e.getNewItem())) return;
-		itemCustomManager.getEquipableManager().refreshEquipement(e.getPlayer());
+		playerCustom.refreshStat();
 	}
 
-	private boolean canWear(Player player, ItemStack item) {
-		if (player.hasMetadata("NPC")) return true;
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		Armor	armor = itemCustomManager.getArmor(item);
+	private boolean canWear(PlayerCustom playerCustom, ItemStack item) {
+		Armor	armor = RpgCraft.getItemCustomRegistry().getArmor(item);
 		if (armor == null) return true;
 		Set<ClassType>	classTypes = armor.getType().getArmorMaterial().getClassTypes();
 		ClassType		classPlayer = playerCustom.getClassType();
@@ -62,17 +57,5 @@ public class ArmorManager implements Listener {
 	    if (metaA instanceof Damageable) ((Damageable)metaA).setDamage(0);
 	    if (metaB instanceof Damageable) ((Damageable)metaB).setDamage(0);
 	    return metaA.equals(metaB);
-	}
-
-	// is Armor
-	public static boolean isArmor(Material m) {
-		String	s = m.name();
-	    if (s.endsWith("_HELMET") 
-		|| s.endsWith("_CHESTPLATE")
-		|| s.endsWith("_LEGGINGS")
-		|| s.endsWith("_BOOTS")
-		|| s.equals("ELYTRA"))
-			return true;
-		return false;
 	}
 }

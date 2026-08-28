@@ -4,7 +4,7 @@ import java.util.Set;
 
 import org.bukkit.Material;
 
-import fr.jeunesauvage.entity.playercustom.classcustom.ClassType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import net.kyori.adventure.text.Component;
 
 public interface ItemCustomType {

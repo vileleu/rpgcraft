@@ -15,7 +15,6 @@ import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Wolf;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -24,9 +23,9 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 
-import fr.jeunesauvage.entity.form.FormType;
-import fr.jeunesauvage.entity.npc.trait.TraitSentinel;
-import net.citizensnpcs.api.npc.NPC;
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 
 public class SoundPacket extends PacketAdapter {
     private final static Map<FormType, Map<SoundType, List<String>>>    SOUNDS;
@@ -51,8 +50,8 @@ public class SoundPacket extends PacketAdapter {
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_PANT,    Sound.ENTITY_SPIDER_AMBIENT);
     }
 
-    public SoundPacket(JavaPlugin plugin) {
-        super(plugin, ListenerPriority.NORMAL, PacketType.Play.Server.NAMED_SOUND_EFFECT);
+    public SoundPacket() {
+        super(RpgCraft.instance(), ListenerPriority.NORMAL, PacketType.Play.Server.NAMED_SOUND_EFFECT);
     }
 
     @Override
@@ -71,14 +70,6 @@ public class SoundPacket extends PacketAdapter {
 		}
     }
 
-    private void playSound(Location loc, SoundType soundType, FormType formType) {
-        Map<SoundType, List<String>>    map = SOUNDS.get(formType);
-        if (map == null) return;
-        List<String> list = map.get(soundType);
-        if (list == null || list.size() < 1) return;
-        loc.getWorld().playSound(loc, "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.HOSTILE, 1.5f, 1f);
-    }
-
     // replace spider sounds by boss spider sounds
 	private void bossSpider(PacketEvent e, Sound sound) {
         PacketContainer				packet = e.getPacket();
@@ -95,6 +86,14 @@ public class SoundPacket extends PacketAdapter {
         e.setCancelled(true);
         playSound(loc, soundType, FormType.SPIDER_BOSS);
 	}
+
+    private void playSound(Location loc, SoundType soundType, FormType formType) {
+        Map<SoundType, List<String>>    map = SOUNDS.get(formType);
+        if (map == null) return;
+        List<String> list = map.get(soundType);
+        if (list == null || list.size() < 1) return;
+        loc.getWorld().playSound(loc, "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.HOSTILE, 1.5f, 1f);
+    }
 
     // replace wolf sounds by spider sounds
 	private void wolfSpider(PacketEvent e, Sound sound) {
@@ -123,14 +122,15 @@ public class SoundPacket extends PacketAdapter {
         return new Location(world, x, y, z);
     }
 
-    public static void playSound(NPC npc, SoundType soundType) {
-        if (!(npc.getEntity() instanceof LivingEntity livingNPC)) return;
-        FormType                        formType = npc.getOrAddTrait(TraitSentinel.class).getFormType();
+    public static void playSound(NPCCustom npcCustom, SoundType soundType) {
+        World   world = npcCustom.getWorld();
+        if (world == null) return;
+        FormType        formType = npcCustom.getFormType();
         if (formType == null) return;
         Map<SoundType, List<String>>    map = SOUNDS.get(formType);
         if (map == null) return;
         List<String> list = map.get(soundType);
         if (list == null || list.size() < 1) return;
-        livingNPC.getWorld().playSound(livingNPC.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.HOSTILE, 1.5f, 1f);
+       world.playSound(npcCustom.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.HOSTILE, 1.5f, 1f);
     }
 }

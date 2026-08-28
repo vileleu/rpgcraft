@@ -7,8 +7,7 @@ public class DataTask<T>
     private T			data;
     private BukkitTask	task;
 
-    public DataTask(T data, BukkitTask task)
-    {
+    public DataTask(T data, BukkitTask task) {
         this.data = data;
         this.task = task;
     }

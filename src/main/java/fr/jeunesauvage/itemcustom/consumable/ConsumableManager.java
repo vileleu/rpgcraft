@@ -8,45 +8,40 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
+import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
-import fr.jeunesauvage.entity.playercustom.PlayerCustom;
-import fr.jeunesauvage.entity.playercustom.PlayerCustomManager;
-import fr.jeunesauvage.itemcustom.ItemCustomManager;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 
 public class ConsumableManager implements Listener {
-	private final ItemCustomManager	itemCustomManager;
-
-	public ConsumableManager(ItemCustomManager itemCustomManager) {
-		this.itemCustomManager = itemCustomManager;
-	}
-
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onConsume(PlayerItemConsumeEvent e) {
-	    Player		player = e.getPlayer();
+	    Player			p = e.getPlayer();
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
 	    ItemStack	item = e.getItem();
 		if (item == null) return;
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		Consumable		consumable = itemCustomManager.getConsumable(item);
+		Consumable		consumable = RpgCraft.getItemCustomRegistry().getConsumable(item);
 		if (consumable == null) return;
 		if (!consumable.canConsume(playerCustom)) {
 			e.setCancelled(true);
 			return;
 		}
-		consumable.consume(this, playerCustom);
+		consumable.consume(playerCustom);
 	}
 
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onRightClick(PlayerInteractEvent e) {
 		if (!e.getAction().isRightClick()) return;
-		Player		player = e.getPlayer();
-		ItemStack	item = e.getItem();
+	    Player			p = e.getPlayer();
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+	    ItemStack	item = e.getItem();
 		if (item == null) return;
-		PlayerCustom	playerCustom = PlayerCustomManager.getPlayerCustom(player);
-		Consumable		consumable = itemCustomManager.getConsumable(item);
+		Consumable		consumable = RpgCraft.getItemCustomRegistry().getConsumable(item);
 		if (consumable == null) return;
 		int	duration = playerCustom.hasCooldown(consumable.getMaterial());
 		if (duration == 0) return;
 		e.setCancelled(true);
-		playerCustom.getPlayer().sendActionBar(Message.cooldown(duration));
+		playerCustom.sendActionBar(Message.cooldown(duration));
 	}
 }

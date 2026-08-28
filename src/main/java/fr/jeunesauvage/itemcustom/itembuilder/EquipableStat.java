@@ -4,8 +4,8 @@ import java.util.Set;
 
 import com.google.gson.annotations.SerializedName;
 
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 

@@ -21,8 +21,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entity.playercustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
@@ -43,8 +43,8 @@ import fr.jeunesauvage.itemcustom.usable.Usable;
 public class ItemBuilder {
 	private static final String                 EQUIPABLE_FILE = "equipableSet.json";
 	private static final String                 EQUIPABLESTATS_FILE = "equipableSetStats.json";
-	private static final String                 LAUNCHER_FILE = "launcher.json";
-	private static final String                 LAUNCHERSTATS_FILE = "launcherStats.json";
+	private static final String                 LAUNCHER_FILE = "equipable.json";
+	private static final String                 LAUNCHERSTATS_FILE = "equipableStats.json";
     private static final Set<Material>          MATERIALS;
     private Map<Material, Map<String, Integer>> itemsSetJson;
     private Map<String, EquipableStat>	        itemsSetStatsJson;
