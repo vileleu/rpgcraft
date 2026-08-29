@@ -496,6 +496,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         Data.setString(player.getPersistentDataContainer(), ClassType.KEY, classType.getName());
         power = classType.buildPower();
         scoreboardCustom.refreshClass(this);
+        scoreboardCustom.refreshPower(this);
     }
 
     public PowerCustom getPowerCustom() {
@@ -916,6 +917,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onSpawn() {
+        RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();
         refreshCooldown();
@@ -933,6 +935,7 @@ public final class PlayerCustom implements LivingEntityCustom {
             }
             return false;
         });
+        RpgCraft.getSpellRegistry().clean(this);
 		SoundManager.playQuote(this, QuoteType.DEATH);
     }
 
@@ -950,6 +953,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         modifiers.values().forEach(modifier -> {
             modifier.cancel();
         });
+        RpgCraft.getSpellRegistry().clean(this);
         SoundManager.playQuote(this, QuoteType.FAREWELL);
     }
 }

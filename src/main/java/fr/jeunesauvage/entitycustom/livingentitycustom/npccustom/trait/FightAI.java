@@ -17,7 +17,6 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -227,8 +226,7 @@ public class FightAI {
 
     // find item
 	public ItemStack findItem(NPCCustom npcCustom) {
-		EntityEquipment	equipment = npcCustom.getEquipment();
-		return equipment.getItemInMainHand();
+		return npcCustom.getEquipment().getItemInMainHand();
 	}
 
     // find weapon
@@ -249,7 +247,8 @@ public class FightAI {
 		NavigatorParameters	parameters = navigator.getDefaultParameters();
 		// no target
 		if (target == null && targetHide == null) {
-			npcCustom.setHealth(data.getHealth());
+			// heal
+			npcCustom.heal(data.getHealth() / 10);
 			// first no chase
 			if (!inChase) return 0;
 			inChase = false;
@@ -264,7 +263,6 @@ public class FightAI {
 		// npc too far from waypoints (back to waypoints and full life)
 		Location	closestWaypoint = findClosestWaypoint(npcCustom);
 		if (closestWaypoint != null && npcCustom.getLocation().distanceSquared(closestWaypoint) > data.getChaseRangeSquared()) {
-			npcCustom.setHealth(data.getHealth());
 			parameters.speedModifier(2);
 			navigator.setTarget(closestWaypoint);
 			inChase = false;
@@ -285,12 +283,8 @@ public class FightAI {
 			int			now = Bukkit.getCurrentTick();
 			double		width = npcCustom.getWidth() / 2d;
 			double		range;
-			ItemStack	item = null;
-			WeaponType	weaponType = WeaponType.UNKNOWN;
-			if (npcCustom.getType() == EntityType.PLAYER) {
-				item = findItem(npcCustom);
-				weaponType = findWeaponType(item);
-			}
+			ItemStack	item = findItem(npcCustom);
+			WeaponType	weaponType = findWeaponType(item);
 			range = data.getAttackRangeRanged();
 			// spell ranged
 			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
@@ -310,23 +304,42 @@ public class FightAI {
 			// get physical range
 			switch (weaponType) {
 				case BOW, CROSSBOW, STAFF, SPELLBOOK -> range = data.getAttackRangeRanged();
-				default -> range = data.getAttackRangeClose();
+				default -> {
+					if (data.getDamage() == 0) range = data.getAttackRangeRanged();
+					else range = data.getAttackRangeClose();
+				}
 			};
-			// if target close: attack
-			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
-				npc.faceLocation(target.getLocation());
+			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (data.getAttackRangeClose() * data.getAttackRangeClose() + width * width)) {
 				// spell close
 				if (data.getSpellRate() > 0 && now >= nextSpellClose) {
 					launchSpellClose(npcCustom);
 					nextSpellClose = now + (int)(data.getSpellRate() * 20f);
 				}
+			}
+			// if target close: attack
+			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
+				npc.faceLocation(target.getLocation());
+				// no damage == no walking to target
+				if (data.getDamage() == 0) navigator.setTarget(null, false);
 				// physical attack
-				if (data.getAttackRate() > 0 && now >= nextAttack) {
+				else if (data.getAttackRate() > 0 && now >= nextAttack) {
 					switch (weaponType) {
-						case BOW -> attackBow(npcCustom);
-						case CROSSBOW -> attackCrossBow(npcCustom);
-						case STAFF -> attackStaff(npcCustom, item);
-						case SPELLBOOK -> attackSpellBook(npcCustom, item);
+						case BOW -> {
+							attackBow(npcCustom);
+							navigator.setTarget(null, false);
+						}
+						case CROSSBOW -> {
+							attackCrossBow(npcCustom);
+							navigator.setTarget(null, false);
+						}
+						case STAFF -> {
+							attackStaff(npcCustom, item);
+							navigator.setTarget(null, false);
+						}
+						case SPELLBOOK -> {
+							attackSpellBook(npcCustom, item);
+							navigator.setTarget(null, false);
+						}
 						default -> attackSimple(npcCustom);
 					}
 					nextAttack = now + (int)(data.getAttackRate() * 20f);
@@ -443,8 +456,10 @@ public class FightAI {
 			return;
 		}
 		else if (entityType == EntityType.IRON_GOLEM) {
-			if (name.equals("Redstone Golem"))
-				RpgCraft.getSpellRegistry().strikeBackGolem(npcCustom, data.getLevel());
+			if (name.equals("Redstone Golem")) {
+				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
+				RpgCraft.getSpellRegistry().strikeBack(npcCustom, Rarity.fromInt(data.getLevel() / 10));
+			}
 		}
 	}
 
@@ -467,8 +482,10 @@ public class FightAI {
 				RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), true);
 		}
 		else if (entityType == EntityType.IRON_GOLEM) {
-			if (name.equals("Redstone Golem"))
+			if (name.equals("Redstone Golem")) {
+				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, Rarity.fromInt(data.getLevel() / 10));
+			}
 		}
 	}
 
@@ -485,8 +502,10 @@ public class FightAI {
 				RpgCraft.getSpellRegistry().launchCobweb(npcCustom.getLocation(), target);
 		}
 		else if (entityType == EntityType.IRON_GOLEM) {
-			if (name.equals("Redstone Golem"))
+			if (name.equals("Redstone Golem")) {
+				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().launchRedstoneBlock(npcCustom, target, data.getLevel());
+			}
 		}
 	}
 

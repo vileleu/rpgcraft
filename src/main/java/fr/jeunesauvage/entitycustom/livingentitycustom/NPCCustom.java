@@ -52,7 +52,6 @@ import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.sound.QuoteType;
 import fr.jeunesauvage.sound.SoundManager;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.trait.LookClose;
 import net.citizensnpcs.trait.SkinTrait;
 
 public final class NPCCustom implements LivingEntityCustom {
@@ -74,11 +73,6 @@ public final class NPCCustom implements LivingEntityCustom {
 
     public NPCCustom(NPC npc) {
         this.npc = npc;
-		// trait lookclose
-		LookClose	lookClose = npc.getOrAddTrait(LookClose.class);
-		lookClose.lookClose(true);
-		lookClose.setRealisticLooking(true);
-		lookClose.setRange(getFightTrait().getLookRange());
     }
 
     private void loadStats(TemplateType templateType) {
@@ -184,17 +178,17 @@ public final class NPCCustom implements LivingEntityCustom {
 
     public void setTemplate(TemplateType templateType) {
         FightTrait  fightTrait = getFightTrait();
+        fightTrait.setTemplate(templateType);
+        if (skinIsApply(templateType.getFormType())) return;
         setRaceType(templateType.getRaceType());
         setFormType(templateType.getFormType());
         setClassType(templateType.getClassType());
-		Set<String> teamsCopy = templateType.getTeams();
-		if (teamsCopy != null) teamsCopy.forEach(t -> addTeam(TeamType.fromString(t)));
+        if (templateType.getTeams() != null) teams.addAll(templateType.getTeams());
         this.level = fightTrait.getLevel();
         // stats + skills
         loadStats(templateType);
         loadSkills();
         loadModifiers();
-        fightTrait.setTemplate(templateType);
     }
 
     public Location getRespawn() {
@@ -843,13 +837,12 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void refreshSkin() {
-        RpgCraft.debug("////////////");
-        RpgCraft.debug("refreshSkin()");
-        RpgCraft.debug("////////////");
         if (getEntityType() != EntityType.PLAYER) return;
         SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
         String      currentSkin = skinTrait.getSkinName();
         if (!formType.getName().equals(currentSkin)) {
+            RpgCraft.debug("////////////");
+            RpgCraft.debug("refreshSkin()");
 		    SkinData	skinData = formType.getFormTypeSkin().getSkinData();
 		    if (skinData != null)
 		    	skinTrait.setSkinPersistent(formType.getName(), skinData.getSignature(), skinData.getValue());
@@ -865,15 +858,30 @@ public final class NPCCustom implements LivingEntityCustom {
         return l.getType();
     }
 
+    private boolean skinIsApply(FormType formType) {
+        if (getEntityType() != EntityType.PLAYER) return false;
+        SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
+        String      currentSkin = skinTrait.getSkinName();
+        if (!formType.getName().equals(currentSkin)) {
+		    SkinData	skinData = formType.getFormTypeSkin().getSkinData();
+		    if (skinData != null)
+		    	skinTrait.setSkinPersistent(formType.getName(), skinData.getSignature(), skinData.getValue());
+		    else
+		    	skinTrait.setSkinName(formType.getName());
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onSpawn() {
         FightTrait      fightTrait = getFightTrait();
         TemplateType    templateType = fightTrait.getTemplateType();
+        if (skinIsApply(templateType.getFormType())) return;
         setRaceType(templateType.getRaceType());
         setFormType(templateType.getFormType());
         setClassType(templateType.getClassType());
-		Set<String> teamsCopy = templateType.getTeams();
-		if (teamsCopy != null) teamsCopy.forEach(t -> addTeam(TeamType.fromString(t)));
+        if (templateType.getTeams() != null) teams.addAll(templateType.getTeams());
         this.level = fightTrait.getLevel();
         // stats + skills
         loadStats(templateType);

@@ -52,11 +52,9 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 		lore.add(Lore.level(level));
 		Set<StatPrimary>	primary = equipableStat.getStatsPrimary();
 		if (primary != null && !primary.isEmpty()) {
-			int	value = level / primary.size();
+			int	value = Math.max(1, level / primary.size());
 			for (StatPrimary slot: primary) {
 				int	valuePrimary = value;
-				if (this.statsPrimary.isEmpty() && value % 2 != 0)
-					valuePrimary--;
 				valuePrimary *= rarity.getNumber() / 2 + 1;
 				this.statsPrimary.put(slot, valuePrimary);
 				lore.add(Lore.stat(slot, valuePrimary));

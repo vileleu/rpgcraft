@@ -37,9 +37,9 @@ TODO:
 - world (necropolis:{poison,darkness},fire,block,craft)
 - quests
 
-- npc with range weapon or no melee attack stop walking
+- task for regen + power
+- sound for npc spell
 - translatable race in resource pack
-- translatable elytra in resource pack
 - player can break mineral block
 - spell for tauren black
 - spell for palpoutine

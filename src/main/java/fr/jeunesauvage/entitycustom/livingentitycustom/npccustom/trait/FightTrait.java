@@ -128,12 +128,20 @@ public class FightTrait extends Trait {
     @Override
     public void onAttach() {
 		TemplateType	templateType = getTemplateType();
+		// name
 		npc.setName(templateType.getHideName());
+		// entity type
 		npc.setBukkitEntityType(templateType.getEntityType());
 	}
 
 	@Override
 	public void onSpawn() {
+		// trait lookclose
+		LookClose	lookClose = npc.getOrAddTrait(LookClose.class);
+		lookClose.lookClose(true);
+		lookClose.setRealisticLooking(true);
+		lookClose.setRange(lookRange);
+		// template
 		TemplateType	templateType = getTemplateType();
 		setHealth(templateType.getHealth(level));
 		setDamage(templateType.getDamage(level));
@@ -162,9 +170,9 @@ public class FightTrait extends Trait {
     @Override
     public void run() {
 		// check all seconds
-		if (FightAI == null) return;
 		if (tick-- > 0) return;
-        if (npc == null || !npc.isSpawned() || damage == 0) return;
+		if (FightAI == null) return;
+        if (npc == null || !npc.isSpawned() || getTemplateType() == TemplateType.DEFAULT) return;
 		NPCCustom	npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
 		if (npcCustom == null) return;
 		if (loseAggro > 0) {
@@ -227,8 +235,8 @@ public class FightTrait extends Trait {
 		if (statsTmp != null) statsTmp.forEach((s, v) -> setStat(StatType.fromString(s), v));
 		// teams
 		teams.clear();
-		Set<String>	teamsTmp = templateType.getTeams();
-		if (teamsTmp != null) teamsTmp.forEach(t -> addTeam(TeamType.fromString(t)));
+		Set<TeamType> teamsCopy = templateType.getTeams();
+		if (teamsCopy != null) teamsCopy.forEach(t -> addTeam(t));
 		// others
 		setRespawnTime(templateType.getRespawnTime());
 		setHealth(templateType.getHealth(level));

@@ -247,12 +247,12 @@ public enum CombatDamage {
 
 	public static void heal(LivingEntityCustom livingEntityCustom, double amount) {
 		if (livingEntityCustom == null) return;
-		World	world = livingEntityCustom.getWorld();
-		if (world == null) return;
 		double	healthMax = livingEntityCustom.getHealthMax();
 		double	health = livingEntityCustom.getHealth();
 		double	amountNext = Math.min(amount, healthMax - health);
 		if (amountNext <= 0) return;
+		World	world = livingEntityCustom.getWorld();
+		if (world == null) return;
 		livingEntityCustom.setHealth(health + amountNext);
 		world.spawnParticle(Particle.HEART, livingEntityCustom.getEyeLocation(), 3, 0.3, 0.5, 0.3, 0);
 		createDisplayHeal(livingEntityCustom, amountNext);

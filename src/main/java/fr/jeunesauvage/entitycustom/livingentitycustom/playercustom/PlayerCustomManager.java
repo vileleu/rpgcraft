@@ -93,14 +93,18 @@ public class PlayerCustomManager implements Listener {
 		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
 		if (playerCustom == null) return;
 		int			newLevel = e.getNewLevel();
-		if (newLevel > LivingEntityCustom.LEVEL_MAX) {
+		if (newLevel < 1) {
+			p.setLevel(1);
+			return;
+		}
+		else if (newLevel > LivingEntityCustom.LEVEL_MAX) {
 			p.setLevel(LivingEntityCustom.LEVEL_MAX);
 			return;
 		}
 		ClassType		classType = playerCustom.getClassType();
 		if (classType == ClassType.BEGGAR) {
 			p.setExp(0);
-			p.setLevel(0);
+			p.setLevel(1);
 		}
 		else if (newLevel == LivingEntityCustom.LEVEL_MAX) Bukkit.getServer().broadcast(Message.levelMax(playerCustom));
 	}

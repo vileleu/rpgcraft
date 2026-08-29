@@ -20,8 +20,7 @@ public enum SkillPrimary implements SkillType {
     TRIDENT("trident", WeaponType.TRIDENT),
     BOW("bow", WeaponType.BOW),
     CROSSBOW("crossbow", WeaponType.CROSSBOW),
-    STAFF("staff", WeaponType.STAFF),
-    SPELLBOOK("spellbook", WeaponType.SPELLBOOK);
+    STAFF("staff", WeaponType.STAFF);
 
     private final String        name;
     private final NamespacedKey key;

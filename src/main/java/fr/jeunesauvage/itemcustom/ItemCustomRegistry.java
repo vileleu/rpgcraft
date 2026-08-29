@@ -5,11 +5,9 @@ import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
 
-import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
-import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.itembuilder.ItemBuilder;
 import fr.jeunesauvage.itemcustom.potion.Potion;
@@ -36,10 +34,6 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
 		this.spells = itemBuilder.getSpell();
 		this.usables = itemBuilder.getUsable();
 		this.consumables = itemBuilder.getConsumable();
-		for (Equipable<?>	equipable: equipables.values()) {
-			if (equipable.getType() == ArmorType.ELYTRA)
-				RpgCraft.debug(equipable.getIdentifier());
-		}
     }
 
     @Override

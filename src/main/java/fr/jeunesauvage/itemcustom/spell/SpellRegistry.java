@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
-import org.bukkit.EntityEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -1745,7 +1744,6 @@ public class SpellRegistry {
 	// launch redstone block
 
 	public void launchRedstoneBlock(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
-		launcher.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 		World	    world = launcher.getWorld();
 		if (world == null) return;
 		Location		center = launcher.getLocation();
@@ -1784,19 +1782,12 @@ public class SpellRegistry {
 		SoundManager.playSound(center, "spell_redstoneblock");
 	}
 
-	// strikeback
-
-	public void strikeBackGolem(LivingEntityCustom launcher, int level) {
-		launcher.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
-		strikeBack(launcher, Rarity.fromInt(level / 10));
-	}
-
 	// launch water
 
 	public void launchWater(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
-		double		damage = (level / 2 >= 1 ? level / 2 : 1);
+		double		damage = level;
 		Location	start = launcher.getEyeLocation();
 		Vector		direction = target.getEyeLocation().toVector().subtract(start.toVector());
 		if (direction.getY() > -0.2)
@@ -1881,8 +1872,8 @@ public class SpellRegistry {
 			if (instance != null)
 				resistance = instance.getValue();
 	        knockback.multiply(force - (force * resistance));
-		    knockback.setY(knockback.getY() + 0.4);
-			target.setVelocity(target.getVelocity().add(knockback));
+		    knockback.setY(knockback.getY() + 0.3);
+			target.setVelocity(knockback);
 		}
 		SoundManager.playSound(center, "spell_expulse");
 		particleExpulse(radius, center);
@@ -1913,7 +1904,7 @@ public class SpellRegistry {
 		            Location	base = loc.clone().add(x, 0.1, z);
 		            for (double y = 0; y < 3; y += 0.3) {
 		                Location	particleLoc = base.clone().add(0, y, 0);
-		                world.spawnParticle(Particle.FISHING, particleLoc, 1, 0, 0, 0, 0);
+		                world.spawnParticle(Particle.FALLING_WATER, particleLoc, 1, 0, 0, 0, 0);
 		            }
 		        }
 		        angle += 0.2;
@@ -2145,5 +2136,22 @@ public class SpellRegistry {
 	    world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1f);
 	    world.spawnParticle(Particle.EXPLOSION, center, 3);
 		world.spawnParticle(Particle.CLOUD, center, 40, 1.5, 1.5, 1.5, 0.1);
+	}
+
+	public void clean(LivingEntityCustom livingEntityCustom) {
+		UUID	uuid = livingEntityCustom.getUUID();
+		kneeBreaker.remove(uuid);
+		leap.remove(uuid);
+		stealth.remove(uuid);
+		coldBlood.remove(uuid);
+		holyBomb.remove(uuid);
+		holyShield.remove(uuid);
+		dragonSkinPlayer.remove(uuid);
+		strikeBack.remove(uuid);
+		canUseStrikeback.remove(uuid);
+		explosiveShot.remove(uuid);
+		pets.remove(uuid);
+		braiseds.remove(uuid);
+		npcTemporary.remove(uuid);
 	}
 }

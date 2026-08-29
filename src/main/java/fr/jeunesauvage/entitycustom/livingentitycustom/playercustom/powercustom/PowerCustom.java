@@ -7,6 +7,14 @@ public class PowerCustom {
 
     public PowerCustom(PowerType powerType) {
         this.powerType = powerType;
+        if (powerType == PowerType.RAGE || powerType == PowerType.ENERGY) {
+            this.value = 0;
+            this.valueMax = 100;
+        }
+        else {
+            this.value = 0;
+            this.valueMax = 1;
+        }
     }
 
     public PowerType getType() {

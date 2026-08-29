@@ -2,7 +2,6 @@ package fr.jeunesauvage.combat;
 
 import java.util.UUID;
 
-import org.bukkit.Material;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.AbstractArrow;
@@ -23,6 +22,7 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.itemcustom.Rarity;
+import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import fr.jeunesauvage.itemcustom.spell.SpellRegistry;
 
@@ -58,13 +58,11 @@ public class Combat {
 
 	private WeaponType initWeaponType(DamageSource source) {
 	    if (combatType == CombatType.CLOSE) {
-			ItemStack	weapon = damager.getEquipment().getItemInMainHand();
-			Material	material = weapon.getType();
-			for (WeaponType type: CombatType.CLOSE.getWeaponTypes()) {
-				if (type.getMaterial() == material)
-					return type;
-			}
-			return WeaponType.HAND;
+			ItemStack	item = damager.getEquipment().getItemInMainHand();
+			if (item == null) return WeaponType.HAND;
+			Weapon		weapon = RpgCraft.getItemCustomRegistry().getWeapon(item);
+			if (weapon == null) return WeaponType.HAND;
+			return weapon.getType();
 		}
 	    else if (combatType == CombatType.RANGE) {
 			SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
@@ -82,7 +80,7 @@ public class Combat {
 
 	private CombatDamage initCombatDamage(DamageSource source) {
 	    return switch (weaponType) {
-	        case AXE, BOW, CROSSBOW, HAND, HOE, MACE, PICKAXE, SHOVEL, SWORD, TRIDENT -> CombatDamage.PHYSICAL;
+	        case AXE, BOW, CLAW, CROSSBOW, HAND, HOE, MACE, PICKAXE, SHOVEL, SWORD, TRIDENT -> CombatDamage.PHYSICAL;
 			default -> {
 				yield switch (source.getDirectEntity()) {
 					case AbstractArrow e -> CombatDamage.PHYSICAL;
@@ -140,15 +138,13 @@ public class Combat {
 		// kneebreaker (-30% speed)
 		// duration = 2 seconds + rarity number
 		if (combatType == CombatType.CLOSE && spellRegistry.hasKneeBreaker(uuidDamager)) {
-			int	duration = 2 + spellRegistry.removeKneeBreaker(uuidDamager);
+			int	duration = 4 + spellRegistry.removeKneeBreaker(uuidDamager);
 			// need damage and target != boss
-			if (result.getAmount() > 0 && !target.isBoss()) target.addStatModifier(StatSecondary.SPEED, -30, duration);
+			if (result.getAmount() > 0 && !target.isBoss()) target.addStatModifier(StatSecondary.SPEED, -40, duration);
 		}
 		// stealth (remove stealth if attack)
 		if (spellRegistry.hasStealth(damager)) {
-			if (result.getAmount() > 0) {
-				spellRegistry.removeStealth(damager);
-			}
+			if (result.getAmount() > 0) spellRegistry.removeStealth(damager);
 		}
 		// coldblood (100% chance to critical + poison wither)
 		// duration = 4 seconds + rarity number
