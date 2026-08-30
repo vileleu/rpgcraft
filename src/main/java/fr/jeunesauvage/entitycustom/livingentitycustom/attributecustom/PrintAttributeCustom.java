@@ -34,7 +34,7 @@ public class PrintAttributeCustom {
                 if (modifier.getType() != type) continue;
                 value = modifier.getValue();
 				if (value < 0)
-					component = component.append(Component.text(" -" + value).color(NamedTextColor.RED));
+					component = component.append(Component.text(" " + value).color(NamedTextColor.RED));
 				else
 					component = component.append(Component.text(" +" + value).color(NamedTextColor.GREEN));
 				component = component.append(Component.text("(id:" + modifier.getId() + ")").color(NamedTextColor.BLUE));
@@ -55,7 +55,7 @@ public class PrintAttributeCustom {
                 if (modifier.getType() != type) continue;
                 value = modifier.getValue();
 				if (value < 0)
-					component = component.append(Component.text(" -" + value).color(NamedTextColor.RED));
+					component = component.append(Component.text(" " + value).color(NamedTextColor.RED));
 				else
 					component = component.append(Component.text(" +" + value).color(NamedTextColor.GREEN));
 				component = component.append(Component.text("(id:" + modifier.getId() + ")").color(NamedTextColor.BLUE));
@@ -76,7 +76,7 @@ public class PrintAttributeCustom {
                 if (modifier.getType() != type) continue;
                 value = modifier.getValue();
 				if (value < 0)
-					component = component.append(Component.text(" -" + value).color(NamedTextColor.RED));
+					component = component.append(Component.text(" " + value).color(NamedTextColor.RED));
 				else
 					component = component.append(Component.text(" +" + value).color(NamedTextColor.GREEN));
 				component = component.append(Component.text("(id:" + modifier.getId() + ")").color(NamedTextColor.BLUE));
@@ -97,7 +97,7 @@ public class PrintAttributeCustom {
                 if (modifier.getType() != type) continue;
                 value = modifier.getValue();
 				if (value < 0)
-					component = component.append(Component.text(" -" + value).color(NamedTextColor.RED));
+					component = component.append(Component.text(" " + value).color(NamedTextColor.RED));
 				else
 					component = component.append(Component.text(" +" + value).color(NamedTextColor.GREEN));
 				component = component.append(Component.text("(id:" + modifier.getId() + ")").color(NamedTextColor.BLUE));

@@ -38,6 +38,7 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     void                            playEffect(EntityEffect entityEffect);
     EntityEquipment                 getEquipment();
     boolean                         attackIsInCooldown();
+    boolean                         isCreative();
     boolean                         isBlocking();
     boolean                         isSneaking();
     double                          getHealth();
@@ -91,7 +92,7 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     Stat                            getStat(StatType statType);
     Skill                           getSkill(SkillType skillType);
     int                             addStatModifier(StatType statType, int value, int duration);
-    void                            addSkillModifier(SkillType skillType, int value, int duration);
+    int                             addSkillModifier(SkillType skillType, int value, int duration);
     void                            deleteModifier(int id);
     Map<Integer, AttributeModifier> getModifiers();
     void                            refreshStat();

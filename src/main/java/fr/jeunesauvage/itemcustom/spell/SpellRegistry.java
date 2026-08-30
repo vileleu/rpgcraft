@@ -2,15 +2,18 @@ package fr.jeunesauvage.itemcustom.spell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -46,6 +49,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Transformation;
 import org.bukkit.util.Vector;
 import org.joml.Quaternionf;
@@ -278,7 +282,7 @@ public class SpellRegistry {
 		            if (distance < 0.5) continue;
 		            double	force = Math.pow(distance / radius, 2) * forceMax;
 		            Vector	velocity = toPlayer.normalize().multiply(force);
-		            target.setVelocity(velocity);
+		            target.setVelocity(target.getVelocity().add(velocity));
 					if (target instanceof NPCCustom npcCustom) npcCustom.addAggro(launcher, aggro);
 					else if (target instanceof MobCustom mobCustom) mobCustom.setTarget(launcher);
 					particleEntityDeadlyMagnet(target.getLocation());
@@ -695,7 +699,7 @@ public class SpellRegistry {
 					resistance = instance.getValue();
 	        	direction.multiply(force - (force * resistance));
 	        	direction.setY(direction.getY() + 0.3);
-				target.setVelocity(direction);
+				target.setVelocity(target.getVelocity().add(direction));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 		}
@@ -941,7 +945,7 @@ public class SpellRegistry {
         		double	strength = (1 - (distance / radius)) * maxForce;
         		Vector	velocity = direction.clone().multiply(strength);
         		velocity.setY(velocity.getY() + 0.3);
-        		target.setVelocity(velocity);
+				target.setVelocity(target.getVelocity().add(velocity));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 		}
@@ -1411,14 +1415,14 @@ public class SpellRegistry {
 			case PYROMANCER, GOD -> {
 	    		SmallFireball	smallFireball = launcher.launchProjectile(SmallFireball.class);
 	    		smallFireball.setGravity(false);
-	    		smallFireball.setVelocity((target.getEyeLocation().subtract(launcher.getEyeLocation()).toVector().normalize()));
+	    		smallFireball.setVelocity((target.getLocation().subtract(launcher.getEyeLocation()).toVector().normalize()));
 				SoundManager.playSound(launcher, "staff_shoot");
 				setStaff(smallFireball);
 			}
 			case PRIEST -> {
 	    		DragonFireball	dragonFireball = launcher.launchProjectile(DragonFireball.class);
 	    		dragonFireball.setGravity(false);
-	    		dragonFireball.setVelocity((target.getEyeLocation().subtract(launcher.getEyeLocation()).toVector().normalize()));
+	    		dragonFireball.setVelocity((target.getLocation().subtract(launcher.getEyeLocation()).toVector().normalize()));
 				SoundManager.playSound(launcher, "staff_shoot");
 				setStaff(dragonFireball);
 			}
@@ -1743,7 +1747,7 @@ public class SpellRegistry {
 
 	// launch redstone block
 
-	public void launchRedstoneBlock(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
+	public void launchRedstone(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
 		Location		center = launcher.getLocation();
@@ -1779,7 +1783,7 @@ public class SpellRegistry {
     	        }
     	    }
     	}.runTaskTimer(RpgCraft.instance(), 0L, 1L);
-		SoundManager.playSound(center, "spell_redstoneblock");
+		SoundManager.playSound(center, "spell_launchredstone");
 	}
 
 	// launch water
@@ -1807,13 +1811,14 @@ public class SpellRegistry {
 					target.damage(damage, CombatDamage.MAGIC, launcher);
 				    Vector knockback = direction.clone().multiply(1.2);
 				    knockback.setY(0.3);
-				    target.setVelocity(knockback);
+				    target.setVelocity(target.getVelocity().add(knockback));
 				}
     			world.spawnParticle(Particle.SPLASH, point, 10, 0.3, 0.3, 0.3, 0);
 				world.spawnParticle(Particle.BUBBLE, point, 3, 0.1, 0.1, 0.1, 0);
 		        if (point.getBlock().isSolid()) {
 					Block	block = point.getBlock().getRelative(BlockFace.UP);
 					if (block.getType() == Material.AIR && canPlaceWater(block, 10)) {
+						world.playSound(launcher.getLocation(), Sound.ITEM_BUCKET_EMPTY, 1.5f, 1f);
 						block.setType(Material.WATER);
 						Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> block.setType(Material.AIR), 40);
 					}
@@ -1856,24 +1861,25 @@ public class SpellRegistry {
 
 	// expulse
 
-	public void expulse(LivingEntityCustom launcher, double radius) {
+	public void expulse(LivingEntityCustom launcher, int level) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
 		Location	center = launcher.getLocation();
 		double		force = 3;
+		double 		radius = 5;
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-			if (target == null || target.isGrouped(launcher)) continue;
-			if (!target.isBoss()) continue;
+			if (target == null || target.isFriend(launcher)) continue;
+			if (target.isBoss()) continue;
 		    Vector	knockback = target.getLocation().toVector().subtract(center.toVector()).normalize();
 			double	resistance = 0;
 			AttributeInstance	instance = l.getAttribute(Attribute.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE);
 			if (instance != null)
 				resistance = instance.getValue();
 	        knockback.multiply(force - (force * resistance));
-		    knockback.setY(knockback.getY() + 0.3);
-			target.setVelocity(knockback);
+		    knockback.setY(knockback.getY() + 0.4);
+			target.setVelocity(target.getVelocity().add(knockback));
 		}
 		SoundManager.playSound(center, "spell_expulse");
 		particleExpulse(radius, center);
@@ -1890,7 +1896,7 @@ public class SpellRegistry {
 		    world.spawnParticle(Particle.LAVA, locParticle, 1, 0, 0, 0, 0);
 			Vector		diff = locParticle.toVector().subtract(locParticle.toVector()).multiply(0.5);
 			locParticle = locParticle.add(diff);
-			world.spawnParticle(Particle.BUBBLE, locParticle, 1, 0, 0, 0, 0);
+			world.spawnParticle(Particle.FALLING_WATER, locParticle, 1, 0, 0, 0, 0);
 		}
 		new BukkitRunnable() {
 		    double	angle = 0;
@@ -1904,7 +1910,7 @@ public class SpellRegistry {
 		            Location	base = loc.clone().add(x, 0.1, z);
 		            for (double y = 0; y < 3; y += 0.3) {
 		                Location	particleLoc = base.clone().add(0, y, 0);
-		                world.spawnParticle(Particle.FALLING_WATER, particleLoc, 1, 0, 0, 0, 0);
+		                world.spawnParticle(Particle.BUBBLE, particleLoc, 1, 0, 0, 0, 0);
 		            }
 		        }
 		        angle += 0.2;
@@ -1948,11 +1954,18 @@ public class SpellRegistry {
 	            if (ticks > 0 && ticks % 50 == 0) {
 					Location	eye = launcher.getEyeLocation();
     				Vector		direction = eye.getDirection();
-					if (target != null && eye.distanceSquared(target.getLocation()) <= 30 * 30)
+					if (target != null && eye.distanceSquared(target.getLocation()) <= 30 * 30) {
 						direction = target.getEyeLocation().subtract(launcher.getEyeLocation()).toVector();
-					direction.normalize();
+						double	distance = direction.length();
+						double	speed = 0.8 + Math.min(distance * 0.05, 1.8);
+						direction = direction.normalize().multiply(speed);
+						double	gravityCompensation = distance * 0.01;
+						direction.setY(direction.getY() + gravityCompensation);
+					}
+					else
+						direction.normalize().multiply(2);
 					Trident		trident = launcher.launchProjectile(Trident.class);
-    				trident.setVelocity(direction.multiply(1.5));
+    				trident.setVelocity(direction);
     				trident.setPickupStatus(Trident.PickupStatus.DISALLOWED);
 					trident.setDamage(level * 1.5);
                 	ItemDisplay removed = tridents.remove(tridents.size() - 1);
@@ -1978,6 +1991,7 @@ public class SpellRegistry {
 	            ticks += 2;
 	        }
 	    }.runTaskTimer(RpgCraft.instance(), 0L, 2L);
+		SoundManager.playSound(launcher, "spell_spawntrident");
 	}
 
 	// launch fire
@@ -2005,6 +2019,119 @@ public class SpellRegistry {
 				ticks += 20;
 	        }
 	    }.runTaskTimer(RpgCraft.instance(), 0L, 20L);
+	}
+
+	// charge
+
+    public void charge(LivingEntityCustom launcher, LivingEntityCustom target , int level) {
+		World		world = launcher.getWorld();
+        Vector		direction = target.getEyeLocation().subtract(launcher.getLocation()).toVector().setY(0).normalize();
+        Set<UUID>	alreadyHit = new HashSet<>();
+        new BukkitRunnable() {
+            int 	ticks = 0;
+			int		ticksMax = 10;
+			double	hitbox_width = 1.5;
+            @Override
+            public void run() {
+                if (ticks >= ticksMax || !launcher.isPresent()) {
+                    this.cancel();
+                    return;
+                }
+                RayTraceResult wallCheck = world.rayTraceBlocks(
+					launcher.getEyeLocation(), direction, 0.8,
+                    FluidCollisionMode.NEVER, true);
+                if (wallCheck != null) {
+                    this.cancel();
+                    return;
+                }
+                Vector velocity = direction.clone().multiply(2);
+                velocity.setY(launcher.getVelocity().getY());
+                launcher.setVelocity(velocity);
+                BoundingBox hitbox = launcher.getBoundingBox()
+                        .expand(direction.getX() * 1.5, 0.3, direction.getZ() * 1.5)
+                        .expand((hitbox_width / 2), 0, (hitbox_width / 2));
+				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+                for (Entity e : world.getNearbyEntities(hitbox)) {
+					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(e.getUniqueId());
+                    if (target == null || target.isFriend(launcher) || alreadyHit.contains(target.getUUID())) continue;
+                    alreadyHit.add(target.getUUID());
+        			Vector	knockback = direction.clone().multiply(2);
+        			knockback.setY(0.3);
+				    target.setVelocity(target.getVelocity().add(knockback));
+					target.damage(level, CombatDamage.PHYSICAL, launcher);
+                }
+                ticks++;
+            }
+        }.runTaskTimer(RpgCraft.instance(), 0L, 1L);
+		SoundManager.playSound(launcher, "spell_leap");
+    }
+
+	// poison
+
+	public void poison(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
+		LivingEntity l = target.getLivingEntity();
+		if (l == null) return;
+		int	duration = level / 10 + 3;
+		l.addPotionEffect(new PotionEffect(PotionEffectType.POISON, duration * 20, 1, false, true, false));
+		SoundManager.playSound(launcher, "spell_poison");
+	}
+
+	// force
+
+	public void force(LivingEntityCustom launcher, int level) {
+		World	    world = launcher.getWorld();
+		if (world == null) return;
+		Location	center = launcher.getLocation();
+		double		radius = 8;
+		double		damage = level;
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+			if (target == null || target.isFriend(launcher)) continue;
+			if (!target.isBoss()) {
+				target.addStatModifier(StatSecondary.GRAVITY, -90, 5);
+				target.setVelocity(target.getVelocity().setY(0.7));
+			}
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+		}
+		SoundManager.playSound(center, "spell_force");
+		particleForce(radius, center);
+	}
+
+	private void particleForce(double radius, Location loc) {
+		World	world = loc.getWorld();
+		int		points = 24;
+		for (int i = 0; i < points; i++) {
+		    double		angle = 2 * Math.PI * i / points;
+		    double		x = Math.cos(angle) * radius;
+		    double		z = Math.sin(angle) * radius;
+			Location	locParticle = loc.clone().add(x, 0, z);
+		    world.spawnParticle(Particle.LAVA, locParticle, 1, 0, 0, 0, 0);
+			Vector		diff = locParticle.toVector().subtract(locParticle.toVector()).multiply(0.5);
+			locParticle = locParticle.add(diff);
+			world.spawnParticle(Particle.CLOUD, locParticle, 1, 0, 0, 0, 0);
+		}
+		new BukkitRunnable() {
+		    double	angle = 0;
+		    int		ticks = 0;
+		    @Override
+		    public void run() {
+		        for (int i = 0; i < 12; i++) {
+		            double		theta = angle + (i * (Math.PI * 2 / 12));
+		            double		x = Math.cos(theta) * radius;
+		            double		z = Math.sin(theta) * radius;
+		            Location	base = loc.clone().add(x, 0.1, z);
+		            for (double y = 0; y < 3; y += 0.3) {
+		                Location	particleLoc = base.clone().add(0, y, 0);
+		                world.spawnParticle(Particle.ELECTRIC_SPARK, particleLoc, 1, 0, 0, 0, 0);
+		            }
+		        }
+		        angle += 0.2;
+		        ticks++;
+		        if (ticks > 40)
+		            cancel();
+		    }
+		}.runTaskTimer(RpgCraft.instance(), 0L, 2L);
 	}
 
 	// utils
@@ -2102,7 +2229,7 @@ public class SpellRegistry {
 					resistance = instance.getValue();
 	        	direction.multiply(force - (force * resistance));
 	        	direction.setY(direction.getY() + 0.3);
-				target.setVelocity(direction);
+				target.setVelocity(target.getVelocity().add(direction));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 			if (fireticks > 0)
@@ -2127,7 +2254,7 @@ public class SpellRegistry {
 					resistance = instance.getValue();
 	        	direction.multiply(force - (force * resistance));
 	        	direction.setY(direction.getY() + 0.3);
-				target.setVelocity(direction);
+				target.setVelocity(target.getVelocity().add(direction));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher, true);
 			if (fireticks > 0)

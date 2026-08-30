@@ -41,6 +41,7 @@ TODO:
 - sound for npc spell
 - translatable race in resource pack
 - player can break mineral block
-- spell for tauren black
 - spell for palpoutine
 - spell for alls necro entity
+- spell for whisperer
+- spell for leaper

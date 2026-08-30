@@ -281,7 +281,7 @@ public final class NPCCustom implements LivingEntityCustom {
     @Override
     public Vector getVelocity() {
         LivingEntity l = getLivingEntity();
-        if (l == null) return null;
+        if (l == null) return new Vector(0, 0, 0);
         return l.getVelocity();
     }   
 
@@ -328,6 +328,11 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public boolean attackIsInCooldown() {
+        return false;
+    }
+
+    @Override
+    public boolean isCreative() {
         return false;
     }
 
@@ -695,11 +700,12 @@ public final class NPCCustom implements LivingEntityCustom {
         modifiers.put(id, attributeModifier);
         getFightTrait().addModifier(attributeModifier);
         stats.get(statType).increaseModifier(value);
+        refreshStat();
         return id;
     }
 
     @Override
-    public void addSkillModifier(SkillType skillType, int value, int duration) {
+    public int addSkillModifier(SkillType skillType, int value, int duration) {
         final int           id = modifierId++;
         BukkitTask          task = (duration <= 0 ? null : Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> deleteModifier(id), Data.d(duration)));
         AttributeModifier   attributeModifier = new AttributeModifier(
@@ -712,6 +718,8 @@ public final class NPCCustom implements LivingEntityCustom {
         modifiers.put(id, attributeModifier);
         getFightTrait().addModifier(attributeModifier);
         skills.get(skillType).increaseModifier(value);
+        refreshStat();
+        return id;
     }
 
     @Override
@@ -721,6 +729,7 @@ public final class NPCCustom implements LivingEntityCustom {
         stats.get(attributeModifier.getType()).decreaseModifier(attributeModifier.getValue());
         getFightTrait().deleteModifier(id);
         modifiers.remove(id, attributeModifier);
+        refreshStat();
     }
 
     @Override
@@ -841,8 +850,6 @@ public final class NPCCustom implements LivingEntityCustom {
         SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
         String      currentSkin = skinTrait.getSkinName();
         if (!formType.getName().equals(currentSkin)) {
-            RpgCraft.debug("////////////");
-            RpgCraft.debug("refreshSkin()");
 		    SkinData	skinData = formType.getFormTypeSkin().getSkinData();
 		    if (skinData != null)
 		    	skinTrait.setSkinPersistent(formType.getName(), skinData.getSignature(), skinData.getValue());

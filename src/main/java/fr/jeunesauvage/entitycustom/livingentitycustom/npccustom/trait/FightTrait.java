@@ -250,6 +250,7 @@ public class FightTrait extends Trait {
 		npc.setName(templateType.getHideName());
 		npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, true);
 		Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false));
+		if (fightData != null) fightData.setTemplateType(templateType);
 	}
 
 	public RaceType getRaceType() {

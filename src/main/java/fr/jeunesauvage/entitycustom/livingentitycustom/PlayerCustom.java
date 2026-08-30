@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -329,6 +330,11 @@ public final class PlayerCustom implements LivingEntityCustom {
     @Override
     public boolean attackIsInCooldown() {
         return player.getAttackCooldown() != 1f;
+    }
+
+    @Override
+    public boolean isCreative() {
+        return player.getGameMode() == GameMode.CREATIVE;
     }
 
     @Override
@@ -724,11 +730,12 @@ public final class PlayerCustom implements LivingEntityCustom {
         Data.setInteger(pdc, attributeModifier.getKeyValue(), attributeModifier.getValue());
         Data.setLong(pdc, attributeModifier.getKeyEnd(), attributeModifier.getEnd());
         stats.get(statType).increaseModifier(value);
+        refreshStat();
         return id;
     }
 
     @Override
-    public void addSkillModifier(SkillType skillType, int value, int duration) {
+    public int addSkillModifier(SkillType skillType, int value, int duration) {
         final int           id = modifierId++;
         BukkitTask          task = (duration <= 0 ? null : Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> deleteModifier(id), Data.d(duration)));
         AttributeModifier   attributeModifier = new AttributeModifier(
@@ -743,6 +750,8 @@ public final class PlayerCustom implements LivingEntityCustom {
         Data.setInteger(pdc, attributeModifier.getKeyValue(), attributeModifier.getValue());
         Data.setLong(pdc, attributeModifier.getKeyEnd(), attributeModifier.getEnd());
         skills.get(skillType).increaseModifier(value);
+        refreshStat();
+        return id;
     }
 
     @Override
@@ -754,6 +763,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         Data.remove(pdc, attributeModifier.getKeyValue());
         Data.remove(pdc, attributeModifier.getKeyEnd());
         modifiers.remove(id, attributeModifier);
+        refreshStat();
     }
 
     @Override

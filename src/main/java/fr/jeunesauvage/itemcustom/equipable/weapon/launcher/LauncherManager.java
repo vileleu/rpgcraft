@@ -239,7 +239,7 @@ public class LauncherManager implements Listener {
 	@EventHandler
 	public void onDragonFireballHit(EnderDragonFireballHitEvent e) {
 		if (!(e.getEntity().getShooter() instanceof Player)) return;
-		e.getAreaEffectCloud().setDuration(20);
+		e.getAreaEffectCloud().setDuration(40);
 	}
 
 	// dragonfireball area hit

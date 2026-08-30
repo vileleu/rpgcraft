@@ -157,7 +157,7 @@ public class Combat {
 					result.increaseAmount(result.getAmount());
 				}
 				LivingEntity	l = target.getLivingEntity();
-				if (l != null) l.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration * 20, 2, false, false, false));
+				if (l != null) l.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration * 20, 2, false, true, false));
 			}
 		}
 		return result;

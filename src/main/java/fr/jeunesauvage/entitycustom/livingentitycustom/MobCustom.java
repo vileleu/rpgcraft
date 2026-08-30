@@ -191,6 +191,11 @@ public final class MobCustom implements LivingEntityCustom {
     }
 
     @Override
+    public boolean isCreative() {
+        return false;
+    }
+
+    @Override
     public boolean isBlocking() {
         return false;
     }
@@ -514,11 +519,12 @@ public final class MobCustom implements LivingEntityCustom {
         );
         modifiers.put(id, attributeModifier);
         stats.get(statType).increaseModifier(value);
+        refreshStat();
         return id;
     }
 
     @Override
-    public void addSkillModifier(SkillType skillType, int value, int duration) {
+    public int addSkillModifier(SkillType skillType, int value, int duration) {
         final int           id = modifierId++;
         BukkitTask          task = (duration <= 0 ? null : Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> deleteModifier(id), Data.d(duration)));
         AttributeModifier   attributeModifier = new AttributeModifier(
@@ -530,6 +536,8 @@ public final class MobCustom implements LivingEntityCustom {
         );
         modifiers.put(id, attributeModifier);
         skills.get(skillType).increaseModifier(value);
+        refreshStat();
+        return id;
     }
 
     @Override
@@ -538,6 +546,7 @@ public final class MobCustom implements LivingEntityCustom {
         if (attributeModifier == null) return;
         stats.get(attributeModifier.getType()).decreaseModifier(attributeModifier.getValue());
         modifiers.remove(id, attributeModifier);
+        refreshStat();
     }
 
     @Override

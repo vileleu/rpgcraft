@@ -4,8 +4,10 @@ import java.util.UUID;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 
 public class FightData {
+	private TemplateType		templateType;
 	private int					level;
 	private long				silence;
     private double				health;
@@ -24,6 +26,7 @@ public class FightData {
 	private UUID				petUUID;
 
 	FightData(FightTrait fightTrait) {
+		this.templateType = fightTrait.getTemplateType();
 		this.level = fightTrait.getLevel();
 		this.silence = fightTrait.getSilence();
 	    this.health = fightTrait.getHealth();
@@ -39,6 +42,14 @@ public class FightData {
 	    this.speed = fightTrait.getSpeed();
 	    this.speedCombat = fightTrait.getSpeedCombat();
 		this.ownerUUID = fightTrait.getOwnerUUID();
+	}
+
+	public TemplateType getTemplateType() {
+		return templateType;
+	}
+
+	public void setTemplateType(TemplateType templateType) {
+		this.templateType = templateType;
 	}
 
 	public int getLevel() {

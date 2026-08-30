@@ -26,6 +26,7 @@ import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
@@ -108,7 +109,7 @@ public class FightAI {
 					continue;
 				}
 				// target is dead
-    		    if (!entity.isPresent() || entity.isInvulnerable() || entity.isInvisible()) {
+    		    if (!entity.isPresent() || entity.isInvulnerable() || entity.isInvisible() || entity.isCreative()) {
 					it.remove();
 					continue;
 				}
@@ -165,7 +166,7 @@ public class FightAI {
 					continue;
 				}
 				// target is dead
-    		    if (!entity.isPresent() || entity.isInvulnerable() || entity.isInvisible()) {
+    		    if (!entity.isPresent() || entity.isInvulnerable() || entity.isInvisible() || entity.isCreative()) {
 					it.remove();
 					continue;
 				}
@@ -193,9 +194,9 @@ public class FightAI {
 			if (world == null) return;
 			for (LivingEntity l: world.getNearbyLivingEntities(npcCustom.getLocation(), data.getAggroRange())) {
 				LivingEntityCustom	entity = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				if (entity == null || entity.equals(npcCustom) || entity.isFriend(npcCustom)) continue;
+				if (entity == null || entity.isGrouped(npcCustom) || entity.isFriend(npcCustom)) continue;
 				// target choice
-    		    if (!entity.isPresent() || entity.isInvisible() || entity.isInvulnerable()) continue;
+    		    if (!entity.isPresent() || entity.isInvisible() || entity.isInvulnerable() || entity.isCreative()) continue;
         		if (!npcCustom.hasLineOfSight(entity)) {
 				    if (lastTarget == null || !entity.equals(lastTarget)) continue;
                     target = null;
@@ -438,74 +439,53 @@ public class FightAI {
 		target.damage(data.getDamage(), CombatDamage.PHYSICAL, npcCustom);
 		// knockback
 		Vector	knock = target.getEyeLocation().subtract(npcCustom.getEyeLocation()).toVector().normalize().multiply(0.3);
-		target.setVelocity(knock);
+		target.setVelocity(target.getVelocity().add(knock));
 		world.playSound(npcCustom.getLocation(), Sound.ENTITY_PLAYER_ATTACK_WEAK, 1.0f, 1.0f);
 		SoundPacket.playSound(npcCustom, SoundType.ATTACK);
 	}
 
 	// spell close
 	private void launchSpellClose(NPCCustom npcCustom) {
-		EntityType	entityType = npcCustom.getType();
-		String		name = npcCustom.getName();
-		if (name == null) return;
-		if (entityType == EntityType.PLAYER) {
-			if (name.equals("Mrgl The Oracle"))
-				RpgCraft.getSpellRegistry().expulse(npcCustom, 5);
-		}
-		else if (entityType == EntityType.SPIDER) {
-			return;
-		}
-		else if (entityType == EntityType.IRON_GOLEM) {
-			if (name.equals("Redstone Golem")) {
+		TemplateType	templateType = data.getTemplateType();
+		switch (templateType) {
+			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().expulse(npcCustom, data.getLevel());
+			case SCORPION -> RpgCraft.getSpellRegistry().poison(npcCustom, target, data.getLevel());
+			case PALPOUTINE -> RpgCraft.getSpellRegistry().force(npcCustom, data.getLevel());
+			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().strikeBack(npcCustom, Rarity.fromInt(data.getLevel() / 10));
 			}
+			default -> {}
 		}
 	}
 
 	// spell ranged
 	private void launchSpellRanged(NPCCustom npcCustom) {
-		EntityType	entityType = npcCustom.getType();
-		String		name = npcCustom.getName();
-		if (name == null) return;
-		if (entityType == EntityType.PLAYER) {
-			if (name.equals("Mrgl The Oracle"))
-				RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getLevel());
-		}
-		if (entityType == EntityType.BLAZE) {
-			RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getLevel());
-		}
-		if (entityType == EntityType.SPIDER) {
-			if (name.equals("Spider 6"))
-				RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), false);
-			else if (name.equals("Spider 5"))
-				RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), true);
-		}
-		else if (entityType == EntityType.IRON_GOLEM) {
-			if (name.equals("Redstone Golem")) {
+		TemplateType	templateType = data.getTemplateType();
+		switch (templateType) {
+			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getLevel());
+			case TAUREN_BLACK -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getLevel());
+			case PET_BRAISED -> RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getLevel());
+			case SPIDER_BIG -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), false);
+			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), true);
+			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, Rarity.fromInt(data.getLevel() / 10));
 			}
+			default -> {}
 		}
 	}
 
 	private void launchSpellRangedBoss(NPCCustom npcCustom) {
-		EntityType	entityType = npcCustom.getType();
-		String		name = npcCustom.getName();
-		if (name == null) return;
-		if (entityType == EntityType.PLAYER) {
-			if (name.equals("Mrgl The Oracle"))
-				RpgCraft.getSpellRegistry().spawnTrident(npcCustom, target, data.getLevel());
-		}
-		if (entityType == EntityType.SPIDER) {
-			if (name.equals("Spider 5"))
-				RpgCraft.getSpellRegistry().launchCobweb(npcCustom.getLocation(), target);
-		}
-		else if (entityType == EntityType.IRON_GOLEM) {
-			if (name.equals("Redstone Golem")) {
+		TemplateType	templateType = data.getTemplateType();
+		switch (templateType) {
+			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().spawnTrident(npcCustom, target, data.getLevel());
+			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchCobweb(npcCustom.getLocation(), target);
+			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
-				RpgCraft.getSpellRegistry().launchRedstoneBlock(npcCustom, target, data.getLevel());
+				RpgCraft.getSpellRegistry().launchRedstone(npcCustom, target, data.getLevel());
 			}
+			default -> {}
 		}
 	}
 
