@@ -175,7 +175,7 @@ public class SoundManager implements Listener {
             case DRACTHYR_BLACK, DRACTHYR_RED -> FormType.DRACTHYR_BLACK;
             case ELEMENTAL_FIRE, ELEMENTAL_WIND, GOLEM_MAGMA, GOLEM_REDSTONE,
                 SPIDER_CHILD, SPIDER_NORMAL, SPIDER_BIG, SPIDER_BOSS,
-                SCORPION,
+                SCORPION, LEAPER, WHISPERER,
                 ANIMAL,
                 UNKNOWN -> FormType.UNKNOWN;
         };

@@ -596,6 +596,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public boolean isFriend(LivingEntityCustom livingEntityCustom) {
+        if (livingEntityCustom == this) return true;
         if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || (petUUID != null && petUUID.equals(livingEntityCustom.getUUID()))) return true;
         for (TeamType teamType: teams) {
             if (livingEntityCustom.getTeams().contains(teamType)) return true;

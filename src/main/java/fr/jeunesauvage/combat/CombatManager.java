@@ -13,8 +13,7 @@ public class CombatManager implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
 		Combat	combat = Combat.buildCombat(e);
-		if (combat == null) return;
-		if (combat.getDamager().isGrouped(combat.getTarget())) {
+		if (combat == null || combat.getDamager().isGrouped(combat.getTarget())) {
 			e.setCancelled(true);
 			return;
 		}
@@ -26,18 +25,6 @@ public class CombatManager implements Listener {
 			result.calculate();
 			result = combat.applySpell(result);
 		}
-		RpgCraft.debug("");
-		RpgCraft.debug("combat infos:");
-		RpgCraft.debug("level target " + combat.getTarget().getLevel());
-		RpgCraft.debug("level damager " + combat.getDamager().getLevel());
-		RpgCraft.debug("critical chance " + result.getCriticalChance());
-		RpgCraft.debug("dodge chance " + result.getDodgeChance());
-		RpgCraft.debug("skill target " + result.getSkillTarget());
-		RpgCraft.debug("skill damager " + result.getSkillDamager());
-		RpgCraft.debug("combat type " + combat.getCombatType().getName());
-		RpgCraft.debug("weapon type " + combat.getWeaponType().getName());
-		RpgCraft.debug("combat damage " + combat.getCombatDamage().getName());
-		RpgCraft.debug("");
 		// aggro npc
 		LivingEntityCustom	target = combat.getTarget();
 		if (target instanceof NPCCustom npcCustom) {

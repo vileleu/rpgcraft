@@ -1,10 +1,12 @@
 package fr.jeunesauvage.entitycustom.livingentitycustom.mobcustom;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.MobCustom;
@@ -15,6 +17,16 @@ public class MobCustomManager implements Listener {
         if (e.getEntity().hasMetadata("NPC") || !(e.getEntity() instanceof Mob mob)) return;
         MobCustom   mobCustom = RpgCraft.getEntityCustomRegistry().createMobCustom(mob);
         mobCustom.onSpawn();
+    }
+
+    @EventHandler
+    public void onEntitiesLoad(EntitiesLoadEvent e) {
+        for (Entity entity : e.getEntities()) {
+            if (entity.hasMetadata("NPC") || !(entity instanceof Mob mob)) continue;
+            MobCustom   mobCustom = RpgCraft.getEntityCustomRegistry().getMobCustom(mob.getUniqueId());
+            if (mobCustom == null) mobCustom = RpgCraft.getEntityCustomRegistry().createMobCustom(mob);
+            mobCustom.onSpawn();
+        }
     }
 
     @EventHandler

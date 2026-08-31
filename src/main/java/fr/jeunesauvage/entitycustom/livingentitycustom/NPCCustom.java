@@ -604,6 +604,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public boolean isFriend(LivingEntityCustom livingEntityCustom) {
+        if (livingEntityCustom == this) return true;
         if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || (petUUID != null && petUUID.equals(livingEntityCustom.getUUID()))) return true;
         for (TeamType teamType: teams) {
             if (livingEntityCustom.getTeams().contains(teamType)) return true;
@@ -895,7 +896,10 @@ public final class NPCCustom implements LivingEntityCustom {
         loadSkills();
         loadModifiers();
         // cancel respawn
-        if (respawnTask != null) respawnTask.cancel();
+        if (respawnTask != null) {
+            respawnTask.cancel();
+            respawnTask = null;
+        }
         // spawn location
 		if (fightTrait.getRespawn() != null) {
             LivingEntity    l = getLivingEntity();
@@ -913,7 +917,10 @@ public final class NPCCustom implements LivingEntityCustom {
             }
             return false;
         });
-        if (respawnTask != null) respawnTask.cancel();
+        if (respawnTask != null) {
+            respawnTask.cancel();
+            respawnTask = null;
+        }
         int respawnTime = getFightTrait().getRespawnTime();
 		if (respawnTime == 0) return;
 		else if (respawnTime == -1) {
@@ -942,7 +949,10 @@ public final class NPCCustom implements LivingEntityCustom {
         modifiers.values().forEach(modifier -> {
             modifier.cancel();
         });
-        if (respawnTask != null) respawnTask.cancel();
+        if (respawnTask != null) {
+            respawnTask.cancel();
+            respawnTask = null;
+        }
         SoundManager.playQuote(this, QuoteType.FAREWELL);
     }
 }

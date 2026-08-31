@@ -55,7 +55,7 @@ public enum CombatDamage {
 			Skill	skill = target.getSkill(SkillPrimary.TEMPERING);
 			int		skillAmount = skill.getValue() + skill.getValueModifier();
 			result.setSkillTarget(skillAmount);
-			if (target.attackIsInCooldown() == false ) increaseSkill(target, skill);
+			if (target.attackIsInCooldown() == false) increaseSkill(target, skill);
 			return result;
     	}
 		// skill player damager

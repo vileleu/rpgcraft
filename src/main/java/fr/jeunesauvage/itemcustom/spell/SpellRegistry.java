@@ -31,7 +31,7 @@ import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.EvokerFangs;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
@@ -1198,14 +1198,15 @@ public class SpellRegistry {
 		UUID			uuid = launcher.getUUID();
 		if (hasPet(launcher)) removePet(launcher);
 		TemplateType	templateType = TemplateType.PET_WOLF;
-		NPC				rawPet = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName(), launcher.getLocation());
-		rawPet.setProtected(false);
-		NPCCustom	pet = RpgCraft.getEntityCustomRegistry().getNPCCustom(rawPet.getUniqueId());
+		NPC				rawNPC = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
+		rawNPC.setProtected(false);
+		NPCCustom	pet = RpgCraft.getEntityCustomRegistry().createNPCCustom(rawNPC);
 		if (pet == null) return;
 		pet.setLevel(launcher.getLevel());
 		pet.setTemplate(templateType);
 		pets.put(uuid, pet);
 		launcher.setPet(pet);
+		pet.spawn(launcher.getLocation());
 	}
 
 	private void teleportPet(LivingEntityCustom launcher, NPCCustom pet) {
@@ -1585,7 +1586,7 @@ public class SpellRegistry {
 		UUID			uuid = launcher.getUUID();
 		if (hasBraised(uuid)) removeBraised(launcher);
 		TemplateType	templateType = TemplateType.PET_BRAISED;
-		NPC				rawBraised = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName(), launcher.getLocation());
+		NPC				rawBraised = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 		rawBraised.setProtected(false);
 		rawBraised.getNavigator().setTarget(launcher.getLivingEntity(), false);
 		NPCCustom	braised = RpgCraft.getEntityCustomRegistry().createNPCCustom(rawBraised);
@@ -1593,6 +1594,7 @@ public class SpellRegistry {
 		braised.setTemplate(templateType);
 		braiseds.put(uuid, braised);
 		launcher.setPet(braised);
+		braised.spawn(launcher.getLocation());
 	}
 
 	private void teleportBraised(LivingEntityCustom launcher, NPCCustom braised) {
@@ -1667,17 +1669,21 @@ public class SpellRegistry {
 		center.getWorld().spawnParticle(Particle.WHITE_ASH, center, 40, 0.5, 0.5, 0.5, 0.05);
 		NPCCustom	spider;
 		if (isBig) {
-			NPC	npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.SPIDER, "Spider 5");
+			TemplateType	templateType = TemplateType.SPIDER_BIG;
+			NPC npc = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 			npc.setProtected(false);
 			spider = RpgCraft.getEntityCustomRegistry().createNPCCustom(npc);
+			if (spider == null) return;
 			spider.setLevel(level);
 			spider.setTemplate(TemplateType.SPIDER_BIG);
 			spider.setRespawnTime(-1);
 		}
 		else {
-			NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.WOLF, "Wolf 3");
+			TemplateType	templateType = TemplateType.SPIDER_CHILD;
+			NPC npc = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 			npc.setProtected(false);
 			spider = RpgCraft.getEntityCustomRegistry().createNPCCustom(npc);
+			if (spider == null) return;
 			spider.setLevel(level);
 			spider.setTemplate(TemplateType.SPIDER_CHILD);
 			spider.setRespawnTime(-1);	
@@ -1893,7 +1899,7 @@ public class SpellRegistry {
 		    double		x = Math.cos(angle) * radius;
 		    double		z = Math.sin(angle) * radius;
 			Location	locParticle = loc.clone().add(x, 0, z);
-		    world.spawnParticle(Particle.LAVA, locParticle, 1, 0, 0, 0, 0);
+		    world.spawnParticle(Particle.FALLING_DRIPSTONE_WATER, locParticle, 1, 0, 0, 0, 0);
 			Vector		diff = locParticle.toVector().subtract(locParticle.toVector()).multiply(0.5);
 			locParticle = locParticle.add(diff);
 			world.spawnParticle(Particle.FALLING_WATER, locParticle, 1, 0, 0, 0, 0);
@@ -2090,7 +2096,26 @@ public class SpellRegistry {
 			if (target == null || target.isFriend(launcher)) continue;
 			if (!target.isBoss()) {
 				target.addStatModifier(StatSecondary.GRAVITY, -90, 5);
-				target.setVelocity(target.getVelocity().setY(0.7));
+				target.setVelocity(target.getVelocity().setY(0.6));
+			}
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+		}
+		SoundManager.playSound(center, "spell_force");
+		particleForce(radius, center);
+	}
+
+	public void forceClone(LivingEntityCustom launcher, int level) {
+		World	    world = launcher.getWorld();
+		if (world == null) return;
+		Location	center = launcher.getLocation();
+		double		radius = 8;
+		double		damage = level;
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+			if (target == null || target.isFriend(launcher)) continue;
+			if (!target.isBoss()) {
+				target.setVelocity(target.getVelocity().setY(0.6));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 		}
@@ -2106,7 +2131,7 @@ public class SpellRegistry {
 		    double		x = Math.cos(angle) * radius;
 		    double		z = Math.sin(angle) * radius;
 			Location	locParticle = loc.clone().add(x, 0, z);
-		    world.spawnParticle(Particle.LAVA, locParticle, 1, 0, 0, 0, 0);
+		    world.spawnParticle(Particle.SMOKE, locParticle, 1, 0, 0, 0, 0);
 			Vector		diff = locParticle.toVector().subtract(locParticle.toVector()).multiply(0.5);
 			locParticle = locParticle.add(diff);
 			world.spawnParticle(Particle.CLOUD, locParticle, 1, 0, 0, 0, 0);
@@ -2132,6 +2157,81 @@ public class SpellRegistry {
 		            cancel();
 		    }
 		}.runTaskTimer(RpgCraft.instance(), 0L, 2L);
+	}
+
+    public void lightning(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
+        World world = target.getWorld();
+        if (world == null) return;
+		Location				center = target.getLocation();
+		double					damage = level;
+        world.strikeLightningEffect(center);
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+        for (LivingEntity l : world.getNearbyLivingEntities(center, 3)) {
+            LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+            if (t == null || t.isFriend(launcher)) continue;
+            target.damage(damage, CombatDamage.MAGIC, launcher);
+        }
+		TemplateType	templateType = TemplateType.PALPOUTINE_CLONE;
+		NPC				rawNPC = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
+		rawNPC.setProtected(false);
+		NPCCustom	clone = RpgCraft.getEntityCustomRegistry().createNPCCustom(rawNPC);
+		if (clone == null) return;
+		clone.setLevel(launcher.getLevel());
+		clone.setTemplate(templateType);
+		clone.spawn(center);
+		addNPCTemporary(clone);
+    }
+
+	public void fangs(LivingEntityCustom launcher, LivingEntityCustom target, int level) {
+        World world = target.getWorld();
+        if (world == null) return;
+		LivingEntity			livingEntity = launcher.getLivingEntity();
+		if (livingEntity == null) return;
+		Location				center = target.getLocation();
+		double					radius = 2;
+		double					damage = level * 1.5;
+        EvokerFangs 			fangs = world.spawn(center, EvokerFangs.class, f -> f.setOwner(livingEntity));
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+        Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+            if (fangs.isDead() || !fangs.isValid()) return;
+            for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
+                LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+                if (t == null || t.isFriend(launcher)) continue;
+				t.addStatModifier(StatSecondary.SPEED, -100, 5);
+                t.damage(damage, CombatDamage.MAGIC, launcher);
+				new BukkitRunnable() {
+					int		ticks = 0;
+					int		ticksMax = 10;
+					double	angle = 0;
+					@Override
+					public void run() {
+						if (!target.isPresent()) {
+							cancel();
+							return;
+						}
+						particleFangs(angle, target.getLocation().add(0, target.getHeight() + 2, 0));
+						ticks++;
+						angle += 0.2;
+						if (ticks >= ticksMax) {
+							cancel();
+						}
+					}
+				}.runTaskTimer(RpgCraft.instance(), 0, 10L);
+            }
+        }, 20);
+		SoundManager.playSound(launcher, "spell_fangs");
+	}
+
+	private void particleFangs(double angle, Location center) {
+		World	world = center.getWorld();
+        double	radius = 0.5;
+        for (int i = 0; i < 16; i++) {
+            double currentAngle = angle + (Math.PI * 2 * i / 8);
+            double x = Math.cos(currentAngle) * radius;
+            double z = Math.sin(currentAngle) * radius;
+            Location particleLoc = center.clone().add(x, 0, z);
+            world.spawnParticle(Particle.CHERRY_LEAVES, particleLoc, 1, 0, 0, 0, 0);
+        }
 	}
 
 	// utils

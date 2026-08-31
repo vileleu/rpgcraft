@@ -6,8 +6,7 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 
 public enum FormType {
-    UNKNOWN("unknown", 1, FormTypeSkin.UNKNOWN
-	),
+    UNKNOWN("unknown", 1, FormTypeSkin.UNKNOWN),
 	// tauren
     TAUREN("tauren", 1.1, FormTypeSkin.TAUREN),
     TAUREN_GUARD("tauren_guard", 1.1, FormTypeSkin.TAUREN_GUARD),
@@ -65,6 +64,9 @@ public enum FormType {
     SPIDER_BOSS("spider_boss", 4, FormTypeSkin.SPIDER_BOSS),
 	// scorpion
     SCORPION("scorpion", 1.2, FormTypeSkin.SCORPION),
+	// forest
+	LEAPER("leaper", 1.5, FormTypeSkin.LEAPER),
+	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
 	// others
 	ANIMAL("animal", 1, FormTypeSkin.ANIMAL),
 	DRACTHYR_BLACK("dracthyr_black", 1.4, FormTypeSkin.DRACTHYR_BLACK),

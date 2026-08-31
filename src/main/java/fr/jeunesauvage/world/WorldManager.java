@@ -146,7 +146,7 @@ public class WorldManager implements Listener {
         for (NPC npc: CitizensAPI.getNPCRegistry()) {
 			NPCCustom	npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
 			if (npcCustom == null) continue;
-			if (npcCustom.getRespawnTime() == -1 || npcCustom.isPet() || npcCustom.getTemplateType() == TemplateType.DEFAULT)
+			if (npcCustom.getRespawnTime() <= 0 || npcCustom.isPet() || npcCustom.getTemplateType() == TemplateType.DEFAULT)
 				npcCustom.delete();
         }
     }

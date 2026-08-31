@@ -5,18 +5,22 @@ import java.util.UUID;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EvokerFangs;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.FishHook;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.LlamaSpit;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.ShulkerBullet;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.ThrowableProjectile;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
@@ -199,11 +203,41 @@ public class Combat {
 	public static Combat buildCombat(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof LivingEntity target)) return null;
     	DamageSource	source = e.getDamageSource();
-    	Entity 			damager = source.getCausingEntity();
+    	LivingEntity 	damager = resolveDamager(source);
     	if (damager == null) return null;
 		LivingEntityCustom	combatantTarget = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(target.getUniqueId());
 		LivingEntityCustom	combatantDamager = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(damager.getUniqueId());
 		if (combatantTarget == null || combatantDamager == null) return null;
 		return new Combat(combatantTarget, combatantDamager, source);
+	}
+
+	private static LivingEntity resolveDamager(DamageSource source) {
+	    Entity causingEntity = source.getCausingEntity();
+	    if (causingEntity == null) return null;
+	    // direct
+	    if (causingEntity instanceof LivingEntity livingEntity) return livingEntity;
+	    // projectiles
+	    if (causingEntity instanceof Projectile projectile) {
+	        ProjectileSource shooter = projectile.getShooter();
+	        if (shooter instanceof LivingEntity livingEntity) return livingEntity;
+	        return null;
+	    }
+	    // evokerfangs
+	    if (causingEntity instanceof EvokerFangs fangs) return fangs.getOwner();
+	    // areaeffectcloud
+	    if (causingEntity instanceof AreaEffectCloud cloud) {
+	        ProjectileSource sourceEntity = cloud.getSource();
+	        if (sourceEntity instanceof LivingEntity livingEntity) return livingEntity;
+	        return null;
+		}
+	    // TNT
+	    if (causingEntity instanceof TNTPrimed tnt) {
+	        Entity sourceEntity = tnt.getSource();
+	        if (sourceEntity instanceof LivingEntity livingEntity) {
+	            return livingEntity;
+	        }
+	        return null;
+	    }
+	    return null;
 	}
 }

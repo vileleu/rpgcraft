@@ -17,6 +17,7 @@ import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Spellcaster;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -30,6 +31,8 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.Templa
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.sound.QuoteType;
+import fr.jeunesauvage.sound.SoundManager;
 import fr.jeunesauvage.sound.SoundPacket;
 import fr.jeunesauvage.sound.SoundType;
 import net.citizensnpcs.api.ai.Navigator;
@@ -55,6 +58,7 @@ public class FightAI {
     private int						nextSpellClose;
     private int						nextSpellRanged;
     private int						nextSpellRangedBoss;
+	private boolean					quote;
 
     FightAI(NPC npc, FightData fightData) {
 		this.npc = npc;
@@ -70,6 +74,7 @@ public class FightAI {
 		this.nextSpellClose = 0;
 		this.nextSpellRanged = 0;
 		this.nextSpellRangedBoss = 0;
+		this.quote = false;
 		Waypoints			waypoints = npc.getOrAddTrait(Waypoints.class);
 		WaypointProvider	provider = waypoints.getCurrentProvider();
 		if (provider instanceof LinearWaypointProvider linear) {
@@ -248,6 +253,7 @@ public class FightAI {
 		NavigatorParameters	parameters = navigator.getDefaultParameters();
 		// no target
 		if (target == null && targetHide == null) {
+			if (quote) quote = false;
 			// heal
 			npcCustom.heal(data.getHealth() / 10);
 			// first no chase
@@ -281,6 +287,10 @@ public class FightAI {
 		}
 		// target is visible
 		if (target != null) {
+			if (!quote) {
+				quote = true;
+				SoundManager.playQuote(npcCustom, QuoteType.ATTACK);
+			}
 			int			now = Bukkit.getCurrentTick();
 			double		width = npcCustom.getWidth() / 2d;
 			double		range;
@@ -356,9 +366,10 @@ public class FightAI {
 		}
 		// target is not visible
 		else {
+			if (quote) quote = false;
 			// can't find target ()
 			double	width = npcCustom.getWidth() / 2d;
-			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < 3 * 3 + width * width) {
+			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < 2 * 2 + width * width) {
 				navigator.cancelNavigation();
 				lastTarget = null;
 				lastTargetLocation = null;
@@ -435,6 +446,8 @@ public class FightAI {
 			npcCustom.swingMainHand();
 		else if (npcCustom.getType() == EntityType.IRON_GOLEM)
 			npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
+		else if (npcCustom.getType() == EntityType.RAVAGER)
+			npcCustom.playEffect(EntityEffect.RAVAGER_ATTACK);
 		// damage
 		target.damage(data.getDamage(), CombatDamage.PHYSICAL, npcCustom);
 		// knockback
@@ -451,6 +464,7 @@ public class FightAI {
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().expulse(npcCustom, data.getLevel());
 			case SCORPION -> RpgCraft.getSpellRegistry().poison(npcCustom, target, data.getLevel());
 			case PALPOUTINE -> RpgCraft.getSpellRegistry().force(npcCustom, data.getLevel());
+			case PALPOUTINE_CLONE -> RpgCraft.getSpellRegistry().forceClone(npcCustom, data.getLevel());
 			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().strikeBack(npcCustom, Rarity.fromInt(data.getLevel() / 10));
@@ -472,6 +486,13 @@ public class FightAI {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, Rarity.fromInt(data.getLevel() / 10));
 			}
+			case WHISPERER -> {
+				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
+				caster.setSpell(Spellcaster.Spell.FANGS);
+				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
+				}, 40L);
+			}
 			default -> {}
 		}
 	}
@@ -479,11 +500,19 @@ public class FightAI {
 	private void launchSpellRangedBoss(NPCCustom npcCustom) {
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
+			case PALPOUTINE -> RpgCraft.getSpellRegistry().lightning(npcCustom, target, data.getLevel());
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().spawnTrident(npcCustom, target, data.getLevel());
 			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchCobweb(npcCustom.getLocation(), target);
 			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().launchRedstone(npcCustom, target, data.getLevel());
+			}
+			case WHISPERER -> {
+				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
+				caster.setSpell(Spellcaster.Spell.WOLOLO);
+				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
+				}, 40L);
 			}
 			default -> {}
 		}
