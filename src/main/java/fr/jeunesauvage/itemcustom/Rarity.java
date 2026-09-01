@@ -39,9 +39,22 @@ public enum Rarity {
         return Component.translatable("rarity.rpgcraft." + name).color(color);
     }
 
+    public int getLevel() {
+        return number * 10;
+    }
+
     public static Rarity fromInt(int number) {
 		for (Rarity type: Rarity.values()) {
 			if (type.getNumber() == number)
+        		return type;
+		}
+		return POOR;
+    }
+
+    public static Rarity fromLevel(int level) {
+        level /= 10;
+		for (Rarity type: Rarity.values()) {
+			if (type.getNumber() == level)
         		return type;
 		}
 		return POOR;

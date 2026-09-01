@@ -142,10 +142,10 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			// warrior
 			case SpellType.KNEE_BREAKER -> spellRegistry.kneeBreaker(playerCustom, rarity);
 			case SpellType.WHIRLWIND -> spellRegistry.whirlwind(playerCustom, rarity);
-			case SpellType.LEAP -> spellRegistry.leap(playerCustom, rarity);
+			case SpellType.LEAP -> spellRegistry.leap(playerCustom, null, rarity);
 			case SpellType.DEADLY_MAGNET -> spellRegistry.deadlyMagnet(playerCustom, rarity);
 			// pyromancer
-			case SpellType.FIREBALL -> spellRegistry.fireBall(playerCustom, rarity);
+			case SpellType.FIREBALL -> spellRegistry.fireBall(playerCustom, null, rarity);
 			case SpellType.TELEPORT -> spellRegistry.teleport(playerCustom, rarity);
 			case SpellType.MANA_THIRST -> spellRegistry.manaThirst(playerCustom, rarity);
 			case SpellType.FLAME_NOVA -> spellRegistry.flameNova(playerCustom, rarity);
@@ -158,9 +158,9 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			case SpellType.HOLY_BOMB -> spellRegistry.holyBomb(playerCustom, rarity);
 			case SpellType.HOLY_LAND -> spellRegistry.holyLand(playerCustom, rarity);
 			case SpellType.HOLY_SHIELD -> spellRegistry.holyShield(playerCustom, rarity);
-			case SpellType.SHADOW_WORD -> spellRegistry.shadowWord(playerCustom, rarity);
+			case SpellType.SHADOW_WORD -> spellRegistry.shadowWord(playerCustom, null, rarity);
 			// dracthyr
-			case SpellType.DRAGON_BREATH -> spellRegistry.dragonBreath(playerCustom, rarity);
+			case SpellType.DRAGON_BREATH -> spellRegistry.dragonBreath(playerCustom, null, rarity);
 			case SpellType.DRAGON_SKIN -> spellRegistry.dragonSkin(playerCustom, rarity);
 			case SpellType.METAMORPH -> spellRegistry.metamorph(playerCustom, rarity);
 			case SpellType.STRIKE_BACK -> spellRegistry.strikeBack(playerCustom, rarity);

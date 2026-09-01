@@ -100,7 +100,6 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     int                             isSilence();
 
     void                            refreshSkin();
-    EntityType                      getEntityType();
 
     void                            onSpawn();
     void                            onDeath();

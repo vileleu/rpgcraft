@@ -205,6 +205,7 @@ public class Combat {
     	DamageSource	source = e.getDamageSource();
     	LivingEntity 	damager = resolveDamager(source);
     	if (damager == null) return null;
+		RpgCraft.debug("damager: " + damager.getName());
 		LivingEntityCustom	combatantTarget = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(target.getUniqueId());
 		LivingEntityCustom	combatantDamager = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(damager.getUniqueId());
 		if (combatantTarget == null || combatantDamager == null) return null;
@@ -212,6 +213,8 @@ public class Combat {
 	}
 
 	private static LivingEntity resolveDamager(DamageSource source) {
+		// cancel vanilla evoker fangs
+    	if (source.getDirectEntity() instanceof EvokerFangs) return null;
 	    Entity causingEntity = source.getCausingEntity();
 	    if (causingEntity == null) return null;
 	    // direct
@@ -223,7 +226,9 @@ public class Combat {
 	        return null;
 	    }
 	    // evokerfangs
-	    if (causingEntity instanceof EvokerFangs fangs) return fangs.getOwner();
+	    if (causingEntity instanceof EvokerFangs fangs) {
+			return fangs.getOwner();
+		}
 	    // areaeffectcloud
 	    if (causingEntity instanceof AreaEffectCloud cloud) {
 	        ProjectileSource sourceEntity = cloud.getSource();

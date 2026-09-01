@@ -22,8 +22,15 @@ public class CombatManager implements Listener {
 		if (combat.getTarget().damageIsUnmodifiable() != true) {
 			result = combat.applyBonusTarget(result);
 			result = combat.applyBonusDamager(result);
+			RpgCraft.debug("");
+			RpgCraft.debug("combatType: " + combat.getCombatType().getName());
+			RpgCraft.debug("weapontype: " + combat.getWeaponType().getName());
+			RpgCraft.debug("combatDamage: " + combat.getCombatDamage().getName());
+			RpgCraft.debug("armor: " + result.getArmor());
+			RpgCraft.debug("before amount: " + result.getAmount());
 			result.calculate();
 			result = combat.applySpell(result);
+			RpgCraft.debug("after amount: " + result.getAmount());
 		}
 		// aggro npc
 		LivingEntityCustom	target = combat.getTarget();

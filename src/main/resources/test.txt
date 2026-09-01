@@ -33,15 +33,16 @@ WindCharge
 EyeOfEnder
 
 TODO:
-- entity custom (npc builder, npc boss)
-- world (necropolis:{poison,darkness},fire,block,craft)
-- quests
-
-- task for regen + power
-- sound for npc spell
-- translatable race in resource pack
-- player can break mineral block
-- spell for palpoutine
-- spell for alls necro entity
-- spell for whisperer
-- spell for leaper
+- NPC:
+ - task for regen + power
+ - translatable race in resource pack
+ - sound for npc interaction
+ - spell for alls necro entity
+ - spell for leaper
+ - wavewhisperer template + spell
+ - demon template + spell
+- WORLD:
+  - player can break mineral block
+  - necropolis:{poison,darkness}
+  - enchanting table cancel
+- QUESTS:

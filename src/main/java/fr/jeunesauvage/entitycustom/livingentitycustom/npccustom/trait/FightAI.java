@@ -28,7 +28,6 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
-import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import fr.jeunesauvage.sound.QuoteType;
@@ -270,13 +269,14 @@ public class FightAI {
 		// npc too far from waypoints (back to waypoints and full life)
 		Location	closestWaypoint = findClosestWaypoint(npcCustom);
 		if (closestWaypoint != null && npcCustom.getLocation().distanceSquared(closestWaypoint) > data.getChaseRangeSquared()) {
-			parameters.speedModifier(2);
+			EntityType	entityType = npcCustom.getType();
+			parameters.speedModifier(entityType == EntityType.EVOKER ? 1 : 2);
 			navigator.setTarget(closestWaypoint);
 			inChase = false;
 			target = null;
 			lastTarget = null;
 			lastTargetLocation = null;
-			return 160; // 8 secondes
+			return 120; // 6 secondes
 		}
 		// first chase
 		if (!inChase) {
@@ -331,25 +331,25 @@ public class FightAI {
 			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
 				npc.faceLocation(target.getLocation());
 				// no damage == no walking to target
-				if (data.getDamage() == 0) navigator.setTarget(null, false);
+				if (data.getDamage() == 0) flee(npcCustom, navigator);
 				// physical attack
 				else if (data.getAttackRate() > 0 && now >= nextAttack) {
 					switch (weaponType) {
 						case BOW -> {
 							attackBow(npcCustom);
-							navigator.setTarget(null, false);
+							flee(npcCustom, navigator);
 						}
 						case CROSSBOW -> {
 							attackCrossBow(npcCustom);
-							navigator.setTarget(null, false);
+							flee(npcCustom, navigator);
 						}
 						case STAFF -> {
 							attackStaff(npcCustom, item);
-							navigator.setTarget(null, false);
+							flee(npcCustom, navigator);
 						}
 						case SPELLBOOK -> {
 							attackSpellBook(npcCustom, item);
-							navigator.setTarget(null, false);
+							flee(npcCustom, navigator);
 						}
 						default -> attackSimple(npcCustom);
 					}
@@ -380,6 +380,14 @@ public class FightAI {
 		}
 		return 0;
 	}
+
+    public void flee(NPCCustom npcCustom, Navigator navigator) {
+        LivingEntity npcEntity = npcCustom.getLivingEntity();
+        if (npcEntity == null || target == null) return;
+        Vector		awayDirection = npcEntity.getLocation().subtract(target.getLocation()).toVector().normalize();
+        Location	fleeTarget = npcEntity.getLocation().add(awayDirection.multiply(8));
+        navigator.setTarget(fleeTarget);
+    }
 
 	// attack bow
 	private void attackBow(NPCCustom npcCustom) {
@@ -434,7 +442,7 @@ public class FightAI {
 	private void attackSpellBook(NPCCustom npcCustom, ItemStack item) {
 		// animation
 		npcCustom.swingMainHand();
-		RpgCraft.getSpellRegistry().launchSpellBook(npcCustom, item);
+		RpgCraft.getSpellRegistry().launchSpellBook(npcCustom, target, item);
 	}
 
 	// attack simple
@@ -461,13 +469,13 @@ public class FightAI {
 	private void launchSpellClose(NPCCustom npcCustom) {
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
-			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().expulse(npcCustom, data.getLevel());
-			case SCORPION -> RpgCraft.getSpellRegistry().poison(npcCustom, target, data.getLevel());
-			case PALPOUTINE -> RpgCraft.getSpellRegistry().force(npcCustom, data.getLevel());
-			case PALPOUTINE_CLONE -> RpgCraft.getSpellRegistry().forceClone(npcCustom, data.getLevel());
+			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().expulse(npcCustom);
+			case SCORPION -> RpgCraft.getSpellRegistry().poison(npcCustom, target, data.getRarity());
+			case PALPOUTINE -> RpgCraft.getSpellRegistry().force(npcCustom, data.getRarity());
+			case PALPOUTINE_CLONE -> RpgCraft.getSpellRegistry().forceClone(npcCustom, data.getRarity());
 			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
-				RpgCraft.getSpellRegistry().strikeBack(npcCustom, Rarity.fromInt(data.getLevel() / 10));
+				RpgCraft.getSpellRegistry().strikeBack(npcCustom, data.getRarity());
 			}
 			default -> {}
 		}
@@ -477,18 +485,20 @@ public class FightAI {
 	private void launchSpellRanged(NPCCustom npcCustom) {
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
-			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getLevel());
-			case TAUREN_BLACK -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getLevel());
-			case PET_BRAISED -> RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getLevel());
-			case SPIDER_BIG -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), false);
-			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom.getLocation(), target, data.getLevel(), true);
+			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getRarity());
+			case TAUREN_BLACK -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getRarity());
+			case ELEMENTAL_WIND -> RpgCraft.getSpellRegistry().launchWind(npcCustom, target);
+			case ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getRarity());
+			case SPIDER_BIG -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom, target, data.getRarity(), false);
+			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom, target, data.getRarity(), true);
 			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
-				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, Rarity.fromInt(data.getLevel() / 10));
+				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, data.getRarity());
 			}
 			case WHISPERER -> {
 				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
 				caster.setSpell(Spellcaster.Spell.FANGS);
+				RpgCraft.getSpellRegistry().teleportWhisperer(npcCustom);
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);
@@ -500,16 +510,18 @@ public class FightAI {
 	private void launchSpellRangedBoss(NPCCustom npcCustom) {
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
-			case PALPOUTINE -> RpgCraft.getSpellRegistry().lightning(npcCustom, target, data.getLevel());
-			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().spawnTrident(npcCustom, target, data.getLevel());
-			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchCobweb(npcCustom.getLocation(), target);
+			case ELEMENTAL_WIND, ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().teleportElemental(npcCustom, target);
+			case PALPOUTINE -> RpgCraft.getSpellRegistry().lightning(npcCustom, target, data.getRarity());
+			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().spawnTrident(npcCustom, target, data.getRarity());
+			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchCobweb(npcCustom, target, data.getRarity());
 			case GOLEM_REDSTONE -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
-				RpgCraft.getSpellRegistry().launchRedstone(npcCustom, target, data.getLevel());
+				RpgCraft.getSpellRegistry().launchRedstone(npcCustom, target, data.getRarity());
 			}
 			case WHISPERER -> {
 				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
 				caster.setSpell(Spellcaster.Spell.WOLOLO);
+				RpgCraft.getSpellRegistry().fangs(npcCustom, target, data.getRarity());
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);

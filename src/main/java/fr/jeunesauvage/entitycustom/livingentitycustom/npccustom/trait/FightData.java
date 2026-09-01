@@ -5,10 +5,12 @@ import java.util.UUID;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
+import fr.jeunesauvage.itemcustom.Rarity;
 
 public class FightData {
 	private TemplateType		templateType;
 	private int					level;
+	private Rarity				rarity;
 	private long				silence;
     private double				health;
     private double				damage;
@@ -28,6 +30,7 @@ public class FightData {
 	FightData(FightTrait fightTrait) {
 		this.templateType = fightTrait.getTemplateType();
 		this.level = fightTrait.getLevel();
+		this.rarity = Rarity.fromLevel(level);
 		this.silence = fightTrait.getSilence();
 	    this.health = fightTrait.getHealth();
 	    this.damage = fightTrait.getDamage();
@@ -58,6 +61,11 @@ public class FightData {
 
 	public void setLevel(int level) {
 		this.level = level;
+		this.rarity = Rarity.fromLevel(level);
+	}
+
+	public Rarity getRarity() {
+		return rarity;
 	}
 
 	public long getSilence() {

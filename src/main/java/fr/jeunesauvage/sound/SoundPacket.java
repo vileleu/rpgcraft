@@ -94,10 +94,8 @@ public class SoundPacket extends PacketAdapter {
 
     @Override
     public void onPacketSending(PacketEvent e) {
-        PacketContainer				packet = e.getPacket();
-        StructureModifier<Sound>	sounds = packet.getSoundEffects();
-        if (sounds.size() == 0) return;
-        Sound	sound = sounds.read(0);
+        PacketContainer packet = e.getPacket();
+        Sound sound = packet.getSoundEffects().read(0);
         if (sound == null) return;
         String	soundName = sound.name();
         if (soundName.startsWith("ENTITY_WOLF_")) {
@@ -105,9 +103,6 @@ public class SoundPacket extends PacketAdapter {
 		}
         else if (soundName.startsWith("ENTITY_BLAZE_")) {
     		handleBlaze(e, sound);
-		}
-        else if (soundName.startsWith("ENTITY_BREEZE_")) {
-    		handleBreeze(e, sound);
 		}
         else if (soundName.startsWith("ENTITY_SPIDER_")) {
     		handleSpider(e, sound);
@@ -130,18 +125,6 @@ public class SoundPacket extends PacketAdapter {
         Location	    loc = getLocation(packet, world);
         e.setCancelled(true);
         playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_FIRE);
-	}
-
-    // replace breeze sounds
-	private void handleBreeze(PacketEvent e, Sound sound) {
-        SoundType	    soundType = SoundType.fromSound(sound);
-        if (soundType == null) return;
-        PacketContainer	packet = e.getPacket();
-        Player          player = e.getPlayer();
-    	World			world = player.getWorld();
-        Location	    loc = getLocation(packet, world);
-        e.setCancelled(true);
-        playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_WIND);
 	}
 
     // replace spider sounds

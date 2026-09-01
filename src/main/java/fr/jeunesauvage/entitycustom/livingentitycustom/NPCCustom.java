@@ -847,7 +847,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void refreshSkin() {
-        if (getEntityType() != EntityType.PLAYER) return;
+        if (getType() != EntityType.PLAYER) return;
         SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
         String      currentSkin = skinTrait.getSkinName();
         if (!formType.getName().equals(currentSkin)) {
@@ -859,15 +859,8 @@ public final class NPCCustom implements LivingEntityCustom {
         }
     }
 
-    @Override
-    public EntityType getEntityType() {
-        LivingEntity l = getLivingEntity();
-        if (l == null) return null;
-        return l.getType();
-    }
-
     private boolean skinIsApply(FormType formType) {
-        if (getEntityType() != EntityType.PLAYER) return false;
+        if (getType() != EntityType.PLAYER) return false;
         SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
         String      currentSkin = skinTrait.getSkinName();
         if (!formType.getName().equals(currentSkin)) {

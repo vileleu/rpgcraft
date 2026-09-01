@@ -38,7 +38,7 @@ public class MetamorphRegistry {
 	private final Map<UUID, BukkitTask>						tasks = new HashMap<>();
 
 	public void addDracthyr(LivingEntityCustom launcher, Rarity rarity) {
-		if (launcher.getEntityType() != EntityType.PLAYER) return;
+		if (launcher.getType() != EntityType.PLAYER) return;
 		LivingEntity			l = launcher.getLivingEntity();
 		if (l == null) return;
 		PersistentDataContainer	pdc = l.getPersistentDataContainer();
@@ -100,7 +100,7 @@ public class MetamorphRegistry {
 	}
 
 	public void removeDracthyr(LivingEntityCustom launcher) {
-		if (launcher.getEntityType() != EntityType.PLAYER) return;
+		if (launcher.getType() != EntityType.PLAYER) return;
 		UUID					uuid = launcher.getUUID();
 		LivingEntity			l = launcher.getLivingEntity();
 		if (l == null) return;

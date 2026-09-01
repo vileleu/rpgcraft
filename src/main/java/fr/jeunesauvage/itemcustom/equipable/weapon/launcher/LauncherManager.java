@@ -66,7 +66,7 @@ public class LauncherManager implements Listener {
 		if (weapon.getType() == WeaponType.SPELLBOOK) {
 			CrossbowMeta	meta = (CrossbowMeta)item.getItemMeta();
 			if (meta.hasChargedProjectiles()) {
-				RpgCraft.getSpellRegistry().launchSpellBook(launcher, item);
+				RpgCraft.getSpellRegistry().launchSpellBook(launcher, null, item);
 				CrossbowMeta	updatedMeta = (CrossbowMeta)item.getItemMeta();
 				updatedMeta.setChargedProjectiles(Collections.emptyList());
 				item.setItemMeta(updatedMeta);
@@ -152,7 +152,7 @@ public class LauncherManager implements Listener {
 				if (force >= forceNeed) {
 					// staff
 					if (item.getType() == Material.BOW) {
-						RpgCraft.getSpellRegistry().launchStaff(launcher, item);
+						RpgCraft.getSpellRegistry().launchStaff(launcher, null, item);
 					}
 					// spellbook
 					else if (item.getType() == Material.CROSSBOW) {
@@ -273,12 +273,12 @@ public class LauncherManager implements Listener {
 			case CROSSBOW -> RpgCraft.getSpellRegistry().setCrossBow(projectile);
 			case STAFF -> {
 				e.setCancelled(true);
-				if (launcher instanceof PlayerCustom playerCustom) RpgCraft.getSpellRegistry().launchStaff(playerCustom, item);
+				if (launcher instanceof PlayerCustom playerCustom) RpgCraft.getSpellRegistry().launchStaff(playerCustom, null, item);
 				else RpgCraft.getSpellRegistry().launchStaff(launcher, launcher.getTarget(), item);
 			}
 			case SPELLBOOK -> {
 				e.setCancelled(true);
-				RpgCraft.getSpellRegistry().launchSpellBook(launcher, item);
+				RpgCraft.getSpellRegistry().launchSpellBook(launcher, null, item);
 			}
 			default -> {}
 		}

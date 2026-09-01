@@ -141,7 +141,7 @@ public class PlayerCustomManager implements Listener {
 		if (launcher == null) return;
 		if (!launcher.isSneaking()) return;
 		Action	action = e.getAction();
-	    if (action != Action.LEFT_CLICK_AIR && action != Action.RIGHT_CLICK_AIR) return;
+	    if (action != Action.LEFT_CLICK_AIR && action != Action.RIGHT_CLICK_AIR && action != Action.PHYSICAL) return;
 	    LivingEntityCustom	target = getTargetCustom(launcher, PlayerCustom.RANGETARGET_DEFAULT);
 	    if (target == null) return;
 		launcher.setTarget(target);

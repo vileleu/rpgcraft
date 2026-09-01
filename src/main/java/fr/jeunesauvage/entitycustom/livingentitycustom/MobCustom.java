@@ -656,11 +656,6 @@ public final class MobCustom implements LivingEntityCustom {
     public void refreshSkin() {}
 
     @Override
-    public EntityType getEntityType() {
-        return mob.getType();
-    }
-
-    @Override
     public void onSpawn() {
         SoundManager.playQuote(this, QuoteType.GREETING);
     }

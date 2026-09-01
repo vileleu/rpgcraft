@@ -922,11 +922,6 @@ public final class PlayerCustom implements LivingEntityCustom {
 	}
 
     @Override
-    public EntityType getEntityType() {
-        return EntityType.PLAYER;
-    }
-
-    @Override
     public void onSpawn() {
         RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);

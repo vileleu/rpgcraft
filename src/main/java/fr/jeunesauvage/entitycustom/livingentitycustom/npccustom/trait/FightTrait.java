@@ -39,7 +39,7 @@ public class FightTrait extends Trait {
 	private static final double			PATROLRANGE_DEFAULT = 0;                                               // range of patrol
 	public static final double			AGGRORANGE_DEFAULT = 30;                                               // range of aggro
 	public static final double			CHASERANGE_DEFAULT = 70;                                               // range of chase
-	private static final double			ATTACKRANGERANGED_DEFAULT = 15;                                        // range of attack ranged
+	public static final double			ATTACKRANGERANGED_DEFAULT = 15;                                        // range of attack ranged
 	private static final double			ATTACKRANGECLOSE_DEFAULT = 3;                                          // range of attack close
 	public static final float			ATTACKRATE_DEFAULT = TemplateType.DEFAULT.getAttackRate();             // time (in seconds) between each attack
 	public static final float			SPELLRATE_DEFAULT = TemplateType.DEFAULT.getSpellRate();               // time (in seconds) between each spell
