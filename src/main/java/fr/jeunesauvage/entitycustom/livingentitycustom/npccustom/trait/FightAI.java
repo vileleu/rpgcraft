@@ -26,14 +26,9 @@ import fr.jeunesauvage.combat.CombatDamage;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
-import fr.jeunesauvage.sound.QuoteType;
-import fr.jeunesauvage.sound.SoundManager;
-import fr.jeunesauvage.sound.SoundPacket;
-import fr.jeunesauvage.sound.SoundType;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.npc.NPC;
@@ -165,17 +160,12 @@ public class FightAI {
 					continue;
 				}
 				// target is grouped ? 
-				if (entity.isGrouped(npcCustom)) {
+				if (npcCustom.isGrouped(entity)) {
 					it.remove();
 					continue;
 				}
 				// target is dead
     		    if (!entity.isPresent() || entity.isInvulnerable() || entity.isInvisible() || entity.isCreative()) {
-					it.remove();
-					continue;
-				}
-				// check team (no aggro on friendly target)
-				if (entity.isFriend(npcCustom) && !(entity instanceof PlayerCustom)) {
 					it.remove();
 					continue;
 				}
@@ -198,7 +188,7 @@ public class FightAI {
 			if (world == null) return;
 			for (LivingEntity l: world.getNearbyLivingEntities(npcCustom.getLocation(), data.getAggroRange())) {
 				LivingEntityCustom	entity = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				if (entity == null || entity.isGrouped(npcCustom) || entity.isFriend(npcCustom)) continue;
+				if (entity == null || npcCustom.isGrouped(entity)) continue;
 				// target choice
     		    if (!entity.isPresent() || entity.isInvisible() || entity.isInvulnerable() || entity.isCreative()) continue;
         		if (!npcCustom.hasLineOfSight(entity)) {
@@ -289,7 +279,7 @@ public class FightAI {
 		if (target != null) {
 			if (!quote) {
 				quote = true;
-				SoundManager.playQuote(npcCustom, QuoteType.ATTACK);
+				npcCustom.attack();
 			}
 			int			now = Bukkit.getCurrentTick();
 			double		width = npcCustom.getWidth() / 2d;
@@ -462,11 +452,11 @@ public class FightAI {
 		Vector	knock = target.getEyeLocation().subtract(npcCustom.getEyeLocation()).toVector().normalize().multiply(0.3);
 		target.setVelocity(target.getVelocity().add(knock));
 		world.playSound(npcCustom.getLocation(), Sound.ENTITY_PLAYER_ATTACK_WEAK, 1.0f, 1.0f);
-		SoundPacket.playSound(npcCustom, SoundType.ATTACK);
 	}
 
 	// spell close
 	private void launchSpellClose(NPCCustom npcCustom) {
+		if (npcCustom.isSilence() > 0) return;
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().expulse(npcCustom);
@@ -483,6 +473,7 @@ public class FightAI {
 
 	// spell ranged
 	private void launchSpellRanged(NPCCustom npcCustom) {
+		if (npcCustom.isSilence() > 0) return;
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getRarity());
@@ -508,6 +499,7 @@ public class FightAI {
 	}
 
 	private void launchSpellRangedBoss(NPCCustom npcCustom) {
+		if (npcCustom.isSilence() > 0) return;
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
 			case ELEMENTAL_WIND, ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().teleportElemental(npcCustom, target);

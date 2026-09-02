@@ -12,11 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.jeunesauvage.Data;
+import fr.jeunesauvage.DataTask;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.itemcustom.spell.DataTask;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

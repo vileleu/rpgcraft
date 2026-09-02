@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerExpChangeEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLevelChangeEvent;
@@ -141,8 +142,20 @@ public class PlayerCustomManager implements Listener {
 		if (launcher == null) return;
 		if (!launcher.isSneaking()) return;
 		Action	action = e.getAction();
-	    if (action != Action.LEFT_CLICK_AIR && action != Action.RIGHT_CLICK_AIR && action != Action.PHYSICAL) return;
+	    if (action != Action.LEFT_CLICK_AIR && action != Action.RIGHT_CLICK_AIR) return;
 	    LivingEntityCustom	target = getTargetCustom(launcher, PlayerCustom.RANGETARGET_DEFAULT);
+	    if (target == null) return;
+		launcher.setTarget(target);
+	}
+
+	// catch target
+	@EventHandler(ignoreCancelled = false)
+	public void onClick(PlayerInteractEntityEvent e) {
+	    Player			p = e.getPlayer();
+		PlayerCustom	launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (launcher == null) return;
+		if (!launcher.isSneaking()) return;
+	    LivingEntityCustom	target = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(e.getRightClicked().getUniqueId());
 	    if (target == null) return;
 		launcher.setTarget(target);
 	}

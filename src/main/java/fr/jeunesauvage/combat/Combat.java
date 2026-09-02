@@ -24,6 +24,7 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
@@ -52,8 +53,11 @@ public class Combat {
 
 	private CombatType initCombatType(DamageSource source) {
 		DamageType	d = source.getDamageType();
-		if (d == DamageType.MOB_ATTACK || d == DamageType.MOB_ATTACK_NO_AGGRO || d == DamageType.PLAYER_ATTACK)
+		if (d == DamageType.MOB_ATTACK || d == DamageType.MOB_ATTACK_NO_AGGRO || d == DamageType.PLAYER_ATTACK) {
+			// target for player
+			if (damager instanceof PlayerCustom && d == DamageType.PLAYER_ATTACK) damager.setTarget(target);
 	        return CombatType.CLOSE;
+		}
 	    else if (source.getDirectEntity() instanceof Projectile)
 	        return CombatType.RANGE;
 	    else
@@ -205,7 +209,6 @@ public class Combat {
     	DamageSource	source = e.getDamageSource();
     	LivingEntity 	damager = resolveDamager(source);
     	if (damager == null) return null;
-		RpgCraft.debug("damager: " + damager.getName());
 		LivingEntityCustom	combatantTarget = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(target.getUniqueId());
 		LivingEntityCustom	combatantDamager = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(damager.getUniqueId());
 		if (combatantTarget == null || combatantDamager == null) return null;

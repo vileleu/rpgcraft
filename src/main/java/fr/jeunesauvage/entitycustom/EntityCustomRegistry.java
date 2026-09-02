@@ -26,7 +26,7 @@ public class EntityCustomRegistry implements Iterable<EntityCustom> {
 	private final Map<UUID, PlayerCustom>       playersCustom = new HashMap<>();
 	private final Map<UUID, NPCCustom>			npcsCustom = new HashMap<>();
 	private final Map<UUID, MobCustom>          mobsCustom = new HashMap<>();
-    private final Map<UUID, Menu>   menuMap = new HashMap<>();
+    private final Map<UUID, Menu>               menuMap = new HashMap<>();
 
     @Override
     public Iterator<EntityCustom> iterator() {

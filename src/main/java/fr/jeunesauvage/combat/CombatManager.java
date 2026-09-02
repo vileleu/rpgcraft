@@ -8,15 +8,20 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 
 public class CombatManager implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void entityDamageByEntity(EntityDamageByEntityEvent e) {
+		RpgCraft.debug("EntityDamageByEntityEvent");
 		Combat	combat = Combat.buildCombat(e);
 		if (combat == null || combat.getDamager().isGrouped(combat.getTarget())) {
+			RpgCraft.debug("isGrouped");
 			e.setCancelled(true);
 			return;
 		}
+		// mark
+		if (combat.getDamager() instanceof PlayerCustom playerCustom && playerCustom.isFriend(combat.getTarget())) playerCustom.addMark();
 		CombatResult	result = new CombatResult(e.getDamage(), combat);
 		// damage is unmodifiable
 		if (combat.getTarget().damageIsUnmodifiable() != true) {

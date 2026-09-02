@@ -1,4 +1,4 @@
-package fr.jeunesauvage.itemcustom.spell;
+package fr.jeunesauvage;
 
 import org.bukkit.scheduler.BukkitTask;
 
@@ -31,5 +31,6 @@ public class DataTask<T>
     public void cancel() {
         if (task != null)
             task.cancel();
+        task = null;
     }
 }

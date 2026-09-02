@@ -51,6 +51,8 @@ import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.sound.QuoteType;
 import fr.jeunesauvage.sound.SoundManager;
+import fr.jeunesauvage.sound.SoundPacket;
+import fr.jeunesauvage.sound.SoundType;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.trait.SkinTrait;
 
@@ -605,23 +607,23 @@ public final class NPCCustom implements LivingEntityCustom {
     @Override
     public boolean isFriend(LivingEntityCustom livingEntityCustom) {
         if (livingEntityCustom == this) return true;
+        // mark
+        if (livingEntityCustom instanceof PlayerCustom playerCustom && playerCustom.isMarked()) return false;
         if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || (petUUID != null && petUUID.equals(livingEntityCustom.getUUID()))) return true;
         for (TeamType teamType: teams) {
             if (livingEntityCustom.getTeams().contains(teamType)) return true;
         }
-        return false;
-    }
-
-    @Override
-    public boolean isGrouped(LivingEntityCustom livingEntityCustom) {
-        if (livingEntityCustom == this) return true;
-        if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || petUUID != null && petUUID.equals(livingEntityCustom.getUUID())) return true;
         if (group == null) return false;
         if (group.in(livingEntityCustom)) return true;
         EntityCustomRegistry    entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
         if (ownerUUID != null && group.in(entityCustomRegistry.getLivingEntityCustom(livingEntityCustom.getOwner()))) return true;
         if (petUUID != null && group.in(entityCustomRegistry.getLivingEntityCustom(livingEntityCustom.getPet()))) return true;
         return false;
+    }
+
+    @Override
+    public boolean isGrouped(LivingEntityCustom livingEntityCustom) {
+       return isFriend(livingEntityCustom);
     }
 
     @Override
@@ -875,6 +877,30 @@ public final class NPCCustom implements LivingEntityCustom {
     }
 
     @Override
+    public void greeting() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.GREETING);
+        else SoundPacket.playSound(this, SoundType.AMBIENT);
+    }
+
+    @Override
+    public void farewell() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.FAREWELL);
+        else SoundPacket.playSound(this, SoundType.AMBIENT);
+    }
+
+    @Override
+    public void attack() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.ATTACK);
+        else SoundPacket.playSound(this, SoundType.ATTACK);
+    }
+
+    @Override
+    public void death() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.DEATH);
+        else SoundPacket.playSound(this, SoundType.DEATH);
+    }
+
+    @Override
     public void onSpawn() {
         FightTrait      fightTrait = getFightTrait();
         TemplateType    templateType = fightTrait.getTemplateType();
@@ -898,7 +924,7 @@ public final class NPCCustom implements LivingEntityCustom {
             LivingEntity    l = getLivingEntity();
             if (l != null) getLivingEntity().teleport(fightTrait.getRespawn());
         }
-        SoundManager.playQuote(this, QuoteType.GREETING);
+        greeting();
     }
 
     @Override
@@ -929,7 +955,8 @@ public final class NPCCustom implements LivingEntityCustom {
 			else
 				npcCustom.spawn(npcCustom.getLocation());
         }, Data.d(respawnTime));
-        SoundManager.playQuote(this, QuoteType.DEATH);
+        death();
+        if (getTemplateType() == TemplateType.DEMON) RpgCraft.getSpellRegistry().explosion(this, getEyeLocation(), 6, level, 2, 80);
     }
 
     @Override
@@ -946,6 +973,6 @@ public final class NPCCustom implements LivingEntityCustom {
             respawnTask.cancel();
             respawnTask = null;
         }
-        SoundManager.playQuote(this, QuoteType.FAREWELL);
+        farewell();
     }
 }

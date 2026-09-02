@@ -15,7 +15,8 @@ public enum TeamType {
 	FOREST("forest"),
 	NECRO("necro"),
 	SPIDER("spider"),
-	ELEMENTAL("elemental");
+	ELEMENTAL("elemental"),
+	DEMON("demon");
 
 	private final String		name;
 	private final NamespacedKey	key;

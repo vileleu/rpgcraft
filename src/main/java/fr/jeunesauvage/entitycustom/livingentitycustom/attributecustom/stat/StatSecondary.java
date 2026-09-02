@@ -7,8 +7,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum StatSecondary implements StatType {
     // combat
-    PHYSICAL_DAMAGE("physical_damage", 0.2),            // + 0.2  increase physical damage
-    SPELL_DAMAGE("spell_damage", 0.2),                  // + 0.2  increase spell damage
+    PHYSICAL_DAMAGE("physical_damage", 0.5),            // + 0.2  increase physical damage
+    SPELL_DAMAGE("spell_damage", 0.5),                  // + 0.2  increase spell damage
     PHYSICAL_ARMOR("physical_armor", 0.05),             // + 0.05 reduce physical damage taken
     SPELL_ARMOR("spell_armor", 0.05),                   // + 0.05 reduce spell damage taken
     CRITICAL_CHANCE("critical_chance", 0.002),          // + 0.2% chance to hit critical

@@ -67,6 +67,8 @@ public enum FormType {
 	// forest
 	LEAPER("leaper", 1.5, FormTypeSkin.LEAPER),
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
+	// demon
+	DEMON("demon", 1.2, FormTypeSkin.DEMON),
 	// others
 	ANIMAL("animal", 1, FormTypeSkin.ANIMAL),
 	DRACTHYR_BLACK("dracthyr_black", 1.4, FormTypeSkin.DRACTHYR_BLACK),

@@ -101,6 +101,11 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
 
     void                            refreshSkin();
 
+    void                            greeting();
+    void                            farewell();
+    void                            attack();
+    void                            death();
+
     void                            onSpawn();
     void                            onDeath();
     void                            onJoin();

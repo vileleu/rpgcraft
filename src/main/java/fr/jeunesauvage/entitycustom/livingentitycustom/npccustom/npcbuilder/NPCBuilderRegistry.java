@@ -98,6 +98,7 @@ public class NPCBuilderRegistry {
             int level = ThreadLocalRandom.current().nextInt(levelMin, levelMax + 1);
 			npcCustom.setLevel(level);
 			npcCustom.setTemplate(templateType);
+			count++;
 		}
 		placers.clear();
 		launcher.sendMessage(Message.m("<green>" + count + " NPC created (" + templateType.getHideName() + ")"));

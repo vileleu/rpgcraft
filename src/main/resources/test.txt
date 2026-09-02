@@ -36,11 +36,11 @@ TODO:
 - NPC:
  - task for regen + power
  - translatable race in resource pack
- - sound for npc interaction
+ - translatable name in resource pack
  - spell for alls necro entity
  - spell for leaper
  - wavewhisperer template + spell
- - demon template + spell
+ - demon spell
 - WORLD:
   - player can break mineral block
   - necropolis:{poison,darkness}

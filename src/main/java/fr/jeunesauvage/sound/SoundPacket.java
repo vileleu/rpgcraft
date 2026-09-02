@@ -17,6 +17,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Ravager;
 import org.bukkit.entity.Spider;
+import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.entity.Wolf;
 
 import com.comphenix.protocol.PacketType;
@@ -27,7 +28,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.reflect.StructureModifier;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 
 public class SoundPacket extends PacketAdapter {
@@ -77,6 +78,13 @@ public class SoundPacket extends PacketAdapter {
                 SoundType.ATTACK, List.of("leaper_attack1", "leaper_attack2", "leaper_attack3", "leaper_attack4", "leaper_attack5", "leaper_attack6", "leaper_attack7", "leaper_attack8"),
                 SoundType.STEP, List.of("leaper_step1", "leaper_step2", "leaper_step3", "leaper_step4", "leaper_step5", "leaper_step6", "leaper_step7", "leaper_step8", "leaper_step9", "leaper_step10", "leaper_step11", "leaper_step12", "leaper_step13", "leaper_step14", "leaper_step15", "leaper_step16", "leaper_step17", "leaper_step18", "leaper_step19", "leaper_step20"),
                 SoundType.DEATH, List.of("leaper_death1", "leaper_death2", "leaper_death3", "leaper_death4", "leaper_death5", "leaper_death6", "leaper_death7", "leaper_death8", "leaper_death9", "leaper_death10")
+            )),
+            Map.entry(FormType.DEMON, Map.of(
+                SoundType.AMBIENT, List.of("demon_ambient1", "demon_ambient2", "demon_ambient3", "demon_ambient4", "demon_ambient5", "demon_ambient6", "demon_ambient7", "demon_ambient8", "demon_ambient9"),
+                SoundType.HURT, List.of("demon_hurt1", "demon_hurt2", "demon_hurt3", "demon_hurt4", "demon_hurt5", "demon_hurt6", "demon_hurt7", "demon_hurt8", "demon_hurt9", "demon_hurt10"),
+                SoundType.ATTACK, List.of("demon_attack1", "demon_attack2", "demon_attack3", "demon_attack4", "demon_attack5"),
+                SoundType.STEP, List.of("demon_step1", "demon_step2", "demon_step3", "demon_step4", "demon_step5", "demon_step6", "demon_step7", "demon_step8", "demon_step9", "demon_step10", "demon_step11", "demon_step12", "demon_step13", "demon_step14", "demon_step15", "demon_step16", "demon_step17", "demon_step18", "demon_step19", "demon_step20"),
+                SoundType.DEATH, List.of("demon_death1", "demon_death2", "demon_death3", "demon_death4", "demon_death5", "demon_death6")
             )));
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_AMBIENT, Sound.ENTITY_SPIDER_AMBIENT);
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_DEATH,   Sound.ENTITY_SPIDER_DEATH);
@@ -112,6 +120,9 @@ public class SoundPacket extends PacketAdapter {
 		}
         else if (soundName.startsWith("ENTITY_RAVAGER_")) {
     		handleRavager(e, sound);
+		}
+        else if (soundName.startsWith("ENTITY_WITHER_SKELETON_")) {
+    		handleWitherSkeleton(e, sound);
 		}
     }
 
@@ -187,6 +198,24 @@ public class SoundPacket extends PacketAdapter {
         playSoundToPlayer(player, loc, soundType, FormType.LEAPER);
 	}
 
+    // replace wither skeleton sounds
+	private void handleWitherSkeleton(PacketEvent e, Sound sound) {
+        SoundType	    soundType = SoundType.fromSound(sound);
+        if (soundType == null) return;
+        PacketContainer	packet = e.getPacket();
+        Player          player = e.getPlayer();
+    	World			world = player.getWorld();
+        Location	    loc = getLocation(packet, world);
+		Optional<LivingEntity>		closestWitherSkeleton = world.getNearbyLivingEntities(loc, 1).stream()
+			.filter(en -> en instanceof WitherSkeleton).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
+		if (closestWitherSkeleton.isEmpty()) return;
+		String	name = closestWitherSkeleton.get().getName();
+		if (name == null || !name.equals("Demon")) return;
+        e.setCancelled(true);
+        if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.1) return;
+        playSoundToPlayer(player, loc, soundType, FormType.DEMON);
+	}
+
     private void playSoundToPlayer(Player player, Location loc, SoundType soundType, FormType formType) {
         Map<SoundType, List<String>>    map = SOUNDS.get(formType);
         if (map == null) return;
@@ -222,15 +251,15 @@ public class SoundPacket extends PacketAdapter {
         return new Location(world, x, y, z);
     }
 
-    public static void playSound(NPCCustom npcCustom, SoundType soundType) {
-        World   world = npcCustom.getWorld();
+    public static void playSound(LivingEntityCustom livingEntityCustom, SoundType soundType) {
+        World   world = livingEntityCustom.getWorld();
         if (world == null) return;
-        FormType        formType = npcCustom.getFormType();
+        FormType        formType = livingEntityCustom.getFormType();
         if (formType == null) return;
         Map<SoundType, List<String>>    map = SOUNDS.get(formType);
         if (map == null) return;
         List<String> list = map.get(soundType);
         if (list == null || list.size() < 1) return;
-       world.playSound(npcCustom.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.HOSTILE, 1.5f, 1f);
+       world.playSound(livingEntityCustom.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.HOSTILE, 1.5f, 1f);
     }
 }

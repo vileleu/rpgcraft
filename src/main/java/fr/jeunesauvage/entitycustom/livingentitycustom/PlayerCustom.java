@@ -31,6 +31,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import fr.jeunesauvage.Data;
+import fr.jeunesauvage.DataTask;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.combat.CombatDamage;
 import fr.jeunesauvage.component.Message;
@@ -64,8 +65,11 @@ import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.sound.QuoteType;
 import fr.jeunesauvage.sound.SoundManager;
+import fr.jeunesauvage.sound.SoundPacket;
+import fr.jeunesauvage.sound.SoundType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.skinsrestorer.api.exception.DataRequestException;
 import net.skinsrestorer.api.exception.MineSkinException;
 import net.skinsrestorer.api.property.InputDataResult;
@@ -74,6 +78,7 @@ import net.skinsrestorer.api.storage.PlayerStorage;
 import net.skinsrestorer.api.storage.SkinStorage;
 
 public final class PlayerCustom implements LivingEntityCustom {
+    private static final NamespacedKey              KEY_MARK = new NamespacedKey(RpgCraft.name(), "mark");
 	public static final double	                    RANGETARGET_DEFAULT = 60; // blocks
 	public static final long	                    TIMETARGET_DEFAULT = 200; // ticks
     private final Player                            player;
@@ -94,6 +99,7 @@ public final class PlayerCustom implements LivingEntityCustom {
     private final Silence                           silence;
     private final ScoreboardCustom                  scoreboardCustom;
 	private final TargetData                        targetData;
+	private final DataTask<Long>                    mark;
 
     public PlayerCustom(Player player) {
         this.player = player;
@@ -106,10 +112,12 @@ public final class PlayerCustom implements LivingEntityCustom {
         this.silence = new Silence(player);
         this.scoreboardCustom = new ScoreboardCustom(this);
         this.targetData = new TargetData(this);
+        this.mark = new DataTask<Long>(0l, null);
         loadTeams();
         loadStats();
         loadSkills();
         loadModifiers();
+        loadMark();
     }
 
     private void loadTeams() {
@@ -191,6 +199,65 @@ public final class PlayerCustom implements LivingEntityCustom {
                 ));
             }
         }
+    }
+
+    private void loadMark() {
+        long    end = Data.getLong(player.getPersistentDataContainer(), KEY_MARK);
+        if (end == 0) return;
+        mark.setData(end);
+        mark.setTask(new BukkitRunnable() {
+		        int     seconds = 0;
+                long    end = mark.getData();
+			    int     secondsMax = (int)((end - System.currentTimeMillis()) / 1000 + 1);
+		        @Override
+		        public void run() {
+                    if (seconds >= secondsMax || !isPresent()) {
+                        deleteMark();
+                        return;
+                    }
+                    int n = (int)((end - System.currentTimeMillis()) / 1000 + 1);
+                    sendActionBar(Message.c(Component.text("Mark: ").color(NamedTextColor.RED)
+                        .append(Component.text(n).color(NamedTextColor.YELLOW))
+                        .append(Component.text("s").color(NamedTextColor.RED))
+                    ));
+	    	    	seconds++;
+		        }
+		    }.runTaskTimer(RpgCraft.instance(), 0L, 20L)
+        );
+    }
+
+    public void addMark() {
+        mark.cancel();
+        mark.setData(System.currentTimeMillis() + (60 * 1000l));
+        mark.setTask(new BukkitRunnable() {
+		        int     seconds = 0;
+			    int     secondsMax = 60;
+                long    end = mark.getData();
+		        @Override
+		        public void run() {
+                    if (seconds >= secondsMax || !isPresent()) {
+                        deleteMark();
+                        return;
+                    }
+                    int n = (int)((end - System.currentTimeMillis()) / 1000 + 1);
+                    sendActionBar(Message.c(Component.text("Mark: ").color(NamedTextColor.RED)
+                        .append(Component.text(n).color(NamedTextColor.YELLOW))
+                        .append(Component.text("s").color(NamedTextColor.RED))
+                    ));
+	    	    	seconds++;
+		        }
+		    }.runTaskTimer(RpgCraft.instance(), 0L, 20L)
+        );
+        Data.setLong(player.getPersistentDataContainer(), KEY_MARK, mark.getData());
+    }
+
+    public boolean isMarked() {
+        return mark.getData() != 0;
+    }
+
+    public void deleteMark() {
+        mark.setData(0l);
+        mark.cancel();
     }
 
     public void sendMessage(Component component) {
@@ -597,7 +664,6 @@ public final class PlayerCustom implements LivingEntityCustom {
     @Override
     public boolean isFriend(LivingEntityCustom livingEntityCustom) {
         if (livingEntityCustom == this) return true;
-        if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || (petUUID != null && petUUID.equals(livingEntityCustom.getUUID()))) return true;
         for (TeamType teamType: teams) {
             if (livingEntityCustom.getTeams().contains(teamType)) return true;
         }
@@ -922,6 +988,30 @@ public final class PlayerCustom implements LivingEntityCustom {
 	}
 
     @Override
+    public void greeting() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.GREETING);
+        else SoundPacket.playSound(this, SoundType.AMBIENT);
+    }
+
+    @Override
+    public void farewell() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.FAREWELL);
+        else SoundPacket.playSound(this, SoundType.AMBIENT);
+    }
+
+    @Override
+    public void attack() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.ATTACK);
+        else SoundPacket.playSound(this, SoundType.AMBIENT);
+    }
+
+    @Override
+    public void death() {
+        if (getType() == EntityType.PLAYER) SoundManager.playQuote(this, QuoteType.DEATH);
+        else SoundPacket.playSound(this, SoundType.AMBIENT);
+    }
+
+    @Override
     public void onSpawn() {
         RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
@@ -929,7 +1019,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         refreshCooldown();
         scoreboardCustom.refreshAll(this);
         refreshSkin();
-        SoundManager.playQuote(this, QuoteType.GREETING);
+        greeting();
     }
 
     @Override
@@ -942,7 +1032,7 @@ public final class PlayerCustom implements LivingEntityCustom {
             return false;
         });
         RpgCraft.getSpellRegistry().clean(this);
-		SoundManager.playQuote(this, QuoteType.DEATH);
+		death();
     }
 
     @Override
@@ -952,6 +1042,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         refreshCooldown();
         scoreboardCustom.refreshAll(this);
         refreshSkin();
+        greeting();
     }
 
     @Override
@@ -960,6 +1051,6 @@ public final class PlayerCustom implements LivingEntityCustom {
             modifier.cancel();
         });
         RpgCraft.getSpellRegistry().clean(this);
-        SoundManager.playQuote(this, QuoteType.FAREWELL);
+        farewell();
     }
 }

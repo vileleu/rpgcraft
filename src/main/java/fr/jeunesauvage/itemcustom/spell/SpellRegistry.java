@@ -56,6 +56,7 @@ import org.bukkit.util.Vector;
 import org.joml.Quaternionf;
 
 import fr.jeunesauvage.Data;
+import fr.jeunesauvage.DataTask;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.combat.CombatDamage;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
@@ -68,7 +69,6 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.Templa
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.EquipableManager;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
@@ -146,13 +146,13 @@ public class SpellRegistry {
 		if (world == null) return;
 		Location	center = launcher.getLocation();
         double      radius = 4;
-		// damage = physical damage * (30% for rarity 1, 40% for rarity 2, ...)
+		// damage = physical damage * (60% for rarity 1, 70% for rarity 2, ...)
 		double	    damage = StatSecondary.PHYSICAL_DAMAGE.getAmount(launcher);
-		damage *= (rarity.getNumber() + 2) / 10d;
+		damage *= (rarity.getNumber() + 5) / 10d;
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || target.isGrouped(launcher)) continue;
+		    if (target == null || launcher.isGrouped(target)) continue;
 			target.damage(damage, CombatDamage.PHYSICAL, launcher, true);
 		}
 		SoundManager.playSound(launcher, "spell_whirlwind");
@@ -278,7 +278,7 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		        for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		            if (target == null || target.isGrouped(launcher)) continue;
+		            if (target == null || launcher.isGrouped(target)) continue;
 					if (target.isBoss()) continue;
 		            Vector	toPlayer = center.toVector().subtract(target.getLocation().toVector());
 		            double	distance = toPlayer.length();
@@ -501,7 +501,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || target.isGrouped(launcher)) continue;
+		    if (target == null || launcher.isGrouped(target)) continue;
 			if (!target.isBoss()) {
 		    	Vector	knockback = target.getLocation().toVector().subtract(center.toVector()).normalize();
 				double	resistance = 0;
@@ -690,7 +690,7 @@ public class SpellRegistry {
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
 		    if (target == null) continue;
-			if (target.isGrouped(launcher)) {
+			if (launcher.isGrouped(target)) {
 				target.heal(heal);
 				continue;
 			}
@@ -755,7 +755,7 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 				for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				    if (target == null || !target.isGrouped(launcher)) continue;
+				    if (target == null || !launcher.isGrouped(target)) continue;
 					if (target instanceof PlayerCustom playerCustom) {
 						PowerCustom	power = playerCustom.getPowerCustom();
 						if (power != null && power.getType() == PowerType.MANA) power.increase(mana);
@@ -842,7 +842,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || target.isGrouped(launcher)) continue;
+		    if (target == null || launcher.isGrouped(target)) continue;
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 			SoundManager.playSound(launcher, "spell_holyshield_hit");
 			particleHolyShieldHit(center);
@@ -878,11 +878,11 @@ public class SpellRegistry {
 		if (world == null) return;
 		double	radius = 4;
 		double 	damage = rarity.getNumber() * 3 + 3;
-		int		silence = (int)(rarity.getNumber() * 0.5 + 3);
+		int		silence = (int)(rarity.getNumber() * 0.5 + 4);
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || target.isGrouped(launcher)) continue;
+		    if (target == null || launcher.isGrouped(target)) continue;
 			target.addSilence(silence);
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 		}
@@ -937,7 +937,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(start, radius)) {
 			LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (t == null || t.isGrouped(launcher)) continue;
+		    if (t == null || launcher.isGrouped(t)) continue;
     		Vector 			toEntity = t.getLocation().toVector().subtract(start.toVector());
     		double 			distance = toEntity.length();
     		if (distance <= 0 || distance > radius) continue;
@@ -995,7 +995,7 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 				for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				    if (target == null || !target.isGrouped(launcher)) continue;
+				    if (target == null || !launcher.isGrouped(target)) continue;
 					UUID	uuid = target.getUUID();
 					if (!active.containsKey(uuid)) addDragonSkin(target, rarity);
 					current.put(uuid, target);
@@ -1114,7 +1114,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || target.isGrouped(launcher)) continue;
+		    if (target == null || launcher.isGrouped(target)) continue;
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 		}
 		SoundManager.playSound(center, "spell_strikeback_hit");
@@ -1243,7 +1243,7 @@ public class SpellRegistry {
 	public void hunt(LivingEntityCustom launcher, Rarity rarity) {
 		LivingEntityCustom	target = launcher.getTarget();
 		if (target == null || !target.isPresent()) return;
-		if (target.isGrouped(launcher)) return;
+		if (launcher.isGrouped(target)) return;
 		int	value = -50 * rarity.getNumber();
 		target.addStatModifier(StatSecondary.PHYSICAL_ARMOR, value, TIME_HUNT);
 		target.setGlowing(true);
@@ -1296,7 +1296,7 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 				for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				    if (target == null || target.isGrouped(launcher)) continue;
+				    if (target == null || launcher.isGrouped(target)) continue;
 					double	explosionRadius = 8;
 					double	damage = rarity.getNumber() * 4;
 					int		freezeTicks = 40 + rarity.getNumber() * 20;
@@ -1331,7 +1331,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || target.isGrouped(launcher)) continue;
+		    if (target == null || launcher.isGrouped(target)) continue;
 			if (!target.isBoss()) {
 				target.addStatModifier(StatSecondary.SPEED, -60, freezeTicks / 20);
 				target.setFreezeTicks(freezeTicks);
@@ -1524,7 +1524,7 @@ public class SpellRegistry {
             	arrow.setShooter(launcher.getLivingEntity());
             	arrow.setGravity(false);
             	arrow.setVelocity(velocity);
-				arrow.setDamage(1);
+				arrow.setDamage(launcher.getLevel() / 2);
 				arrow.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
 				setSpellBook(arrow);
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
@@ -1711,7 +1711,7 @@ public class SpellRegistry {
 	            currentVelocity.multiply(0.98);
 	            currentVelocity.setY(currentVelocity.getY() - 0.04);
     	        if (!cobweb.isValid() || next.getBlock().isSolid()) {
-					explosionCobweb(cobweb.getLocation(), rarity);
+					explosionCobweb(launcher, cobweb.getLocation(), rarity);
     	            cobweb.remove();
     	            cancel();
     	        }
@@ -1720,14 +1720,14 @@ public class SpellRegistry {
 		SoundManager.playSound(start, "spell_cobweb");
 	}
 
-	public void explosionCobweb(Location center, Rarity rarity) {
+	public void explosionCobweb(LivingEntityCustom launcher, Location center, Rarity rarity) {
 		World	world = center.getWorld();
 		double	radius = 6;
 		int		slow = -60; // -60%
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-			if (target == null || target.getTeams().contains(TeamType.SPIDER)) continue;
+			if (target == null || launcher.isGrouped(target)) continue;
 			target.addStatModifier(StatSecondary.SPEED, slow, 2 + rarity.getNumber());
 		}
 		SoundManager.playSound(center, "spell_cobweb_hit");
@@ -1795,7 +1795,7 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 				for (LivingEntity l: world.getNearbyLivingEntities(point, 1)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-					if (target == null || target.isGrouped(launcher)) continue;
+					if (target == null || launcher.isGrouped(target)) continue;
 					target.damage(damage, CombatDamage.MAGIC, launcher);
 				    Vector knockback = direction.clone().multiply(1.2);
 				    knockback.setY(0.3);
@@ -1858,7 +1858,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-			if (target == null || target.isFriend(launcher)) continue;
+			if (target == null || launcher.isGrouped(target)) continue;
 			if (target.isBoss()) continue;
 		    Vector	knockback = target.getLocation().toVector().subtract(center.toVector()).normalize();
 			double	resistance = 0;
@@ -2080,7 +2080,7 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
                 for (Entity e : world.getNearbyEntities(hitbox)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(e.getUniqueId());
-                    if (target == null || target.isFriend(launcher) || alreadyHit.contains(target.getUUID())) continue;
+                    if (target == null || launcher.isGrouped(target) || alreadyHit.contains(target.getUUID())) continue;
                     alreadyHit.add(target.getUUID());
         			Vector	knockback = direction.clone().multiply(2);
         			knockback.setY(0.3);
@@ -2114,7 +2114,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-			if (target == null || target.isFriend(launcher)) continue;
+			if (target == null || launcher.isGrouped(target)) continue;
 			if (!target.isBoss()) {
 				target.addStatModifier(StatSecondary.GRAVITY, -40, 5);
 				target.setVelocity(target.getVelocity().setY(0.5));
@@ -2134,7 +2134,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-			if (target == null || target.isFriend(launcher)) continue;
+			if (target == null || launcher.isGrouped(target)) continue;
 			if (!target.isBoss()) {
 				target.addStatModifier(StatSecondary.GRAVITY, -40, 5);
 				target.setVelocity(target.getVelocity().setY(0.5));
@@ -2192,7 +2192,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
         for (LivingEntity l : world.getNearbyLivingEntities(center, 3)) {
             LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-            if (t == null || t.isFriend(launcher)) continue;
+            if (t == null || launcher.isGrouped(t)) continue;
             target.damage(damage, CombatDamage.MAGIC, launcher);
         }
 		TemplateType	templateType = TemplateType.PALPOUTINE_CLONE;
@@ -2223,7 +2223,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
         for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
             LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-            if (t == null || t.isFriend(launcher)) continue;
+            if (t == null || launcher.isGrouped(t)) continue;
 			t.addStatModifier(StatSecondary.SPEED, -1000, 5);
 			t.addStatModifier(StatSecondary.JUMP_STRENGTH, -1000, 5);
             t.damage(damage, CombatDamage.MAGIC, launcher);
@@ -2389,7 +2389,7 @@ public class SpellRegistry {
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 	    for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-            if (target == null || target.isGrouped(launcher)) continue;
+            if (target == null || launcher.isGrouped(target)) continue;
 			if (force > 0 && !target.isBoss()) {
 				Vector	direction = target.getLocation().toVector().subtract(center.toVector()).normalize();
 				double	resistance = 0;

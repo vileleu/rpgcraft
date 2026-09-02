@@ -15,16 +15,17 @@ public enum RaceType {
     HUMAN("human", TextColor.fromHexString("#5B8DD9")),
     // others races
     ANIMAL("animal", TextColor.fromHexString("#ffffff")),
-    DWARFIRON("dwarfiron", TextColor.fromHexString("#ffffff")),
-    DWARFIRON_GUARD("dwarfiron_guard", TextColor.fromHexString("#ffffff")),
-    ELFNIGHT("elfnight", TextColor.fromHexString("#ffffff")),
-    ELFBLOOD("elfblood", TextColor.fromHexString("#ffffff")),
-    MURLOC("murloc", TextColor.fromHexString("#ffffff")),
-    NECROMANCER("necromancer", TextColor.fromHexString("#ffffff")),
-    NECROMANCER_SKELETON("necromancer_skeleton", TextColor.fromHexString("#ffffff")),
+    DWARFIRON("dwarfiron", TextColor.fromHexString("#867f83")),
+    DWARFIRON_GUARD("dwarfiron_guard", TextColor.fromHexString("#867f83")),
+    ELFNIGHT("elfnight", TextColor.fromHexString("#7e4bbc")),
+    ELFBLOOD("elfblood", TextColor.fromHexString("#dde411")),
+    MURLOC("murloc", TextColor.fromHexString("#4b8445")),
+    NECROMANCER("necromancer", TextColor.fromHexString("#4ad81f")),
+    NECROMANCER_SKELETON("necromancer_skeleton", TextColor.fromHexString("#4ad81f")),
     ELEMENTAL("elemental", TextColor.fromHexString("#ffffff")),
-    SPIDER("spider", TextColor.fromHexString("#ffffff")),
-    SCORPION("scorpion", TextColor.fromHexString("#ffffff"));
+    SPIDER("spider", TextColor.fromHexString("#292727")),
+    SCORPION("scorpion", TextColor.fromHexString("#c6ef97")),
+    DEMON("demon", TextColor.fromHexString("#931313"));
 
     static public final NamespacedKey   KEY = new NamespacedKey(RpgCraft.name(), "race");
     private final String                name;
