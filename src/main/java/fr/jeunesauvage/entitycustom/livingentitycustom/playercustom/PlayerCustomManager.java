@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerLevelChangeEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.RayTraceResult;
 
 import com.destroystokyo.paper.event.player.PlayerPickupExperienceEvent;
@@ -31,9 +32,27 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 
 public class PlayerCustomManager implements Listener {
+	// health + mana + energy
+	public PlayerCustomManager() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				for (PlayerCustom p: RpgCraft.getEntityCustomRegistry().getPlayerCustoms()) {
+					if (p == null || !p.isPresent()) continue;
+					p.setHealth(p.getHealth() + StatSecondary.REGENERATION_HEALTH.getAmount(p));
+					if (p.getPowerCustom().getType() == PowerType.MANA) p.setPower(p.getPower() + StatSecondary.REGENERATION_MANA.getAmount(p));
+					else if (p.getPowerCustom().getType() == PowerType.ENERGY) p.setPower(p.getPower() + 10);
+					if (p.hasGroup()) p.getScoreboardCustom().refreshAlly(p);
+				}
+			}
+		}.runTaskTimer(RpgCraft.instance(), 0, 40L);
+	}
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		PlayerCustom    playerCustom = RpgCraft.getEntityCustomRegistry().createPlayerCustom(e.getPlayer());
@@ -74,6 +93,13 @@ public class PlayerCustomManager implements Listener {
 		PlayerCustom    playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(e.getPlayer().getUniqueId());
 		if (playerCustom == null) return;
         playerCustom.onDeath();
+	}
+
+	@EventHandler
+	public void onPlayerDamage(EntityDamageEvent e) {
+		PlayerCustom    p = RpgCraft.getEntityCustomRegistry().getPlayerCustom(e.getEntity().getUniqueId());
+		if (p == null) return;
+		if (e.getDamage() > 0 && p.getPowerCustom().getType() == PowerType.RAGE) p.setPower(p.getPower() + 10);
 	}
 
     // player change exp

@@ -9,7 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.DataTask;
@@ -23,17 +22,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class GroupCommand implements CommandExecutor {
 	private final int						TIME_GROUPASK = 10;
 	private final Map<UUID, DataTask<UUID>>	asks = new HashMap<>();
-
-	public GroupCommand() {
-		new BukkitRunnable() {
-		    @Override
-		    public void run() {
-				for (PlayerCustom playerCustom: RpgCraft.getEntityCustomRegistry().getPlayerCustoms()) {
-					if (playerCustom.hasGroup()) playerCustom.getScoreboardCustom().refreshAlly(playerCustom);
-				}
-			}
-		}.runTaskTimer(RpgCraft.instance(), 0L, 60L);
-	}
 
     // handle npc builder commands
     @Override

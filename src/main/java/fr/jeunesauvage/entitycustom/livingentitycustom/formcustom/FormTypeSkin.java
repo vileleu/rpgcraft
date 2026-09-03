@@ -62,6 +62,7 @@ public enum FormTypeSkin {
 	// forest
     LEAPER("leaper", null),
     WHISPERER("whisperer", null),
+    YELLER("yeller", null),
 	// demon
 	DEMON("demon", null),
 	// others

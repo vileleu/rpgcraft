@@ -59,7 +59,7 @@ public class CombatResult {
 			isCritical = true;
 		}
 		amount -= armor;
-		if (amount <= 0) {
+		if (amount < 0) {
 			amount = 0;
 			isCancelled = true;
 		}

@@ -67,6 +67,7 @@ public enum FormType {
 	// forest
 	LEAPER("leaper", 1.5, FormTypeSkin.LEAPER),
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
+	YELLER("yeller", 1.5, FormTypeSkin.YELLER),
 	// demon
 	DEMON("demon", 1.2, FormTypeSkin.DEMON),
 	// others

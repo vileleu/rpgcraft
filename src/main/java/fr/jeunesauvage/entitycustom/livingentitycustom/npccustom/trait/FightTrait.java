@@ -142,12 +142,7 @@ public class FightTrait extends Trait {
 		lookClose.setRealisticLooking(true);
 		lookClose.setRange(lookRange);
 		// template
-		TemplateType	templateType = getTemplateType();
-		setHealth(templateType.getHealth(level));
-		setDamage(templateType.getDamage(level));
-		// name
-		npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, true);
-		Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false));
+		setTemplate(getTemplateType());
 		// patrol
 		if (patrolRange > 0) {
 			goalPatrol = new GoalPatrol(npc, patrolRange);
@@ -222,9 +217,12 @@ public class FightTrait extends Trait {
 	}
 
 	public void setTemplate(TemplateType templateType) {
-		if (templateType == null || templateType == getTemplateType()) return;
+		if (templateType == null) return;
 		this.templateType = templateType.getName();
-		npc.setBukkitEntityType(templateType.getEntityType());
+		if (npc.getEntity() instanceof LivingEntity l && l.getType() != templateType.getEntityType()) {
+			npc.setBukkitEntityType(templateType.getEntityType());
+			return;
+		}
 		// race + form + class
 		setRaceType(templateType.getRaceType());
         setFormType(templateType.getFormType());

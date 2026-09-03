@@ -198,14 +198,20 @@
                           "type":  "spellbook"
                       },
     "fire":  {
-                          "statsPrimary":  [],
+                          "statsPrimary":  [
+                                                "agility",
+                                                "strength"
+                                           ],
                           "rarity":  6,
                           "level":  60,
                           "statsSecondary":  [],
                           "type":  "claw"
                       },
     "lightning":  {
-                          "statsPrimary":  [],
+                          "statsPrimary":  [
+                                                "agility",
+                                                "strength"
+                                           ],
                           "rarity":  6,
                           "level":  60,
                           "statsSecondary":  [],

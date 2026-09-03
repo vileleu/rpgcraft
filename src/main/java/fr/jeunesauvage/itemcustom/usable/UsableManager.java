@@ -1,6 +1,5 @@
 package fr.jeunesauvage.itemcustom.usable;
 
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,7 +33,7 @@ public class UsableManager implements Listener {
 		usable.use(playerCustom, e.getHand());
 	}
 
-	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
 	public void onInteractEntity(PlayerInteractEntityEvent e) {
 		Player			p = e.getPlayer();
 		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
@@ -45,14 +44,6 @@ public class UsableManager implements Listener {
 			if (usable == null) return;
 			if (usable.getCategory() != ItemCustomCategory.WEAPON)
 				e.setCancelled(true);
-		}
-		Entity	entity = e.getRightClicked();
-		if (entity != null) {
-			LivingEntityCustom	target = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(entity.getUniqueId());
-			if (target != null) {
-				if (!target.isFriend(playerCustom))
-					e.setCancelled(true);
-			}
 		}
 	}
 

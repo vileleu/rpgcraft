@@ -424,6 +424,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         amount = Math.max(0, amount);
         amount = Math.min(getHealthMax(), amount);
         player.setHealth(amount);
+        scoreboardCustom.refreshHealth(this);
     }
 
     @Override
@@ -448,7 +449,7 @@ public final class PlayerCustom implements LivingEntityCustom {
     }
 
     public void setPower(double amount) {
-        power.setValueMax(Math.max(0, amount));
+        power.setValue(Math.max(0, amount));
         scoreboardCustom.refreshPower(this);
     }
 
@@ -704,6 +705,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void deleteGroup() {
+        if (group == null) return;
         EntityCustomRegistry    entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
         LivingEntityCustom      l1 = entityCustomRegistry.getLivingEntityCustom(group.getUuid1());
         LivingEntityCustom      l2 = entityCustomRegistry.getLivingEntityCustom(group.getUuid2());
@@ -1031,12 +1033,12 @@ public final class PlayerCustom implements LivingEntityCustom {
             }
             return false;
         });
-        RpgCraft.getSpellRegistry().clean(this);
 		death();
     }
 
     @Override
     public void onJoin() {
+        if (getLevel() < 1) setLevel(1);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();
         refreshCooldown();
@@ -1047,10 +1049,12 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onQuit() {
+        RpgCraft.getSpellRegistry().clean(this);
         modifiers.values().forEach(modifier -> {
             modifier.cancel();
         });
         RpgCraft.getSpellRegistry().clean(this);
+        deleteGroup();
         farewell();
     }
 }

@@ -55,7 +55,7 @@ public class Combat {
 		DamageType	d = source.getDamageType();
 		if (d == DamageType.MOB_ATTACK || d == DamageType.MOB_ATTACK_NO_AGGRO || d == DamageType.PLAYER_ATTACK) {
 			// target for player
-			if (damager instanceof PlayerCustom && d == DamageType.PLAYER_ATTACK) damager.setTarget(target);
+			if (damager.isSneaking() && damager instanceof PlayerCustom && d == DamageType.PLAYER_ATTACK) damager.setTarget(target);
 	        return CombatType.CLOSE;
 		}
 	    else if (source.getDirectEntity() instanceof Projectile)
@@ -70,7 +70,14 @@ public class Combat {
 			if (item == null) return WeaponType.HAND;
 			Weapon		weapon = RpgCraft.getItemCustomRegistry().getWeapon(item);
 			if (weapon == null) return WeaponType.HAND;
-			return weapon.getType();
+			return switch (weapon.getType()) {
+				case BOW -> WeaponType.HAND;
+				case CROSSBOW -> WeaponType.HAND;
+				case STAFF -> WeaponType.HAND;
+				case SPELLBOOK -> WeaponType.HAND;
+				case SHIELD -> WeaponType.HAND;
+				default -> weapon.getType();
+			};
 		}
 	    else if (combatType == CombatType.RANGE) {
 			SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();

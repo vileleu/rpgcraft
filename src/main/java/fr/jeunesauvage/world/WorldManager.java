@@ -21,6 +21,8 @@ import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -38,7 +40,8 @@ public class WorldManager implements Listener {
 	    Material.NETHERRACK,
 	    Material.MAGMA_BLOCK,
 	    Material.SOUL_SAND,
-	    Material.SOUL_SOIL
+	    Material.SOUL_SOIL,
+	    Material.COAL_BLOCK
 	);
 
 	public WorldManager() {
@@ -62,6 +65,18 @@ public class WorldManager implements Listener {
 		e.getView().setRepairCost(0);
     	ItemStack	right = e.getInventory().getItem(1);
     	if (right != null && right.getType() != Material.AIR) e.setResult(null);
+	}
+
+	// cancel enchanting
+	@EventHandler
+	public void onPrepareItemEnchant(PrepareItemEnchantEvent e) {
+	    e.setCancelled(true);
+	}
+
+	// cancel level cost
+	@EventHandler
+	public void onEnchantItem(EnchantItemEvent e) {
+	    e.setExpLevelCost(0);
 	}
 
 	// cancel break block

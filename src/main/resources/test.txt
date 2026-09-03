@@ -34,15 +34,21 @@ EyeOfEnder
 
 TODO:
 - NPC:
- - task for regen + power
  - translatable race in resource pack
  - translatable name in resource pack
- - spell for alls necro entity
- - spell for leaper
- - wavewhisperer template + spell
+ - necromancer spell
+ - leaper spell
+ - wavewhisperer spell
  - demon spell
+ - menu food
+ - menu consumable
+ - menu repair/sell
+ - skins
 - WORLD:
   - player can break mineral block
   - necropolis:{poison,darkness}
   - enchanting table cancel
 - QUESTS:
+
+- BUG:
+ - stealth (change armor can't hide)

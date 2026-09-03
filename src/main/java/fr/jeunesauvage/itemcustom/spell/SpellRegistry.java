@@ -1566,7 +1566,6 @@ public class SpellRegistry {
 		TemplateType	templateType = TemplateType.PET_BRAISED;
 		NPC				rawBraised = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 		rawBraised.setProtected(false);
-		rawBraised.getNavigator().setTarget(launcher.getLivingEntity(), false);
 		NPCCustom	braised = RpgCraft.getEntityCustomRegistry().createNPCCustom(rawBraised);
 		braised.setLevel(launcher.getLevel());
 		braised.setTemplate(templateType);
@@ -2116,7 +2115,7 @@ public class SpellRegistry {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
 			if (target == null || launcher.isGrouped(target)) continue;
 			if (!target.isBoss()) {
-				target.addStatModifier(StatSecondary.GRAVITY, -40, 5);
+				target.addStatModifier(StatSecondary.GRAVITY, -50, 5);
 				target.setVelocity(target.getVelocity().setY(0.5));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher);
@@ -2136,7 +2135,7 @@ public class SpellRegistry {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
 			if (target == null || launcher.isGrouped(target)) continue;
 			if (!target.isBoss()) {
-				target.addStatModifier(StatSecondary.GRAVITY, -40, 5);
+				target.addStatModifier(StatSecondary.GRAVITY, -50, 5);
 				target.setVelocity(target.getVelocity().setY(0.5));
 			}
 			target.damage(damage, CombatDamage.MAGIC, launcher);
@@ -2429,6 +2428,7 @@ public class SpellRegistry {
 			if (fireticks > 0)
 				target.setFireTicks(fireticks);
 	    }
+		launcher.damage(damage, CombatDamage.MAGIC, null, true);
 	    world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1f);
 	    world.spawnParticle(Particle.EXPLOSION, center, 3);
 		world.spawnParticle(Particle.CLOUD, center, 40, 1.5, 1.5, 1.5, 0.1);

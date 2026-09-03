@@ -308,8 +308,8 @@ public class LauncherManager implements Listener {
 			int	level = spellRegistry.getFireballRarity(projectile);
 			if (level == 0) return;
 			Location	location = projectile.getLocation();
-			double		radius = (level * 0.5d) + 3.5;
-			double 		damage = level * 4;
+			double		radius = (level) + 3;
+			double 		damage = level * 3;
 			int			fireTicks = (level + 2) * 20;
 			spellRegistry.explosion(launcher, location, radius, damage, 1, fireTicks);
 		}
@@ -334,7 +334,8 @@ public class LauncherManager implements Listener {
 			Location	location = projectile.getLocation();
 			double		radius = 4;
 			double 		damage = level * 3;
-			spellRegistry.explosion(launcher, location, radius, damage, 1, 0);
+			int			fireTicks = (level + 1) * 20;
+			spellRegistry.explosion(launcher, location, radius, damage, 1, fireTicks);
 		}
 		else
 			return;
