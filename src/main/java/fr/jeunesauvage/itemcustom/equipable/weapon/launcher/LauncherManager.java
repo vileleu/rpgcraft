@@ -290,7 +290,7 @@ public class LauncherManager implements Listener {
 		e.blockList().clear();
 		if (!(e.getEntity() instanceof Projectile projectile)) return;
 		SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
-	    if (spellRegistry.isFireball(projectile) || spellRegistry.isShadowWord(projectile))
+	    if (spellRegistry.isFireball(projectile) || spellRegistry.isShadowWord(projectile) || spellRegistry.isDemonChains(projectile))
     		e.setCancelled(true);
 	}
 
@@ -302,15 +302,14 @@ public class LauncherManager implements Listener {
 		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
 		if (launcher == null) return;
 		SpellRegistry		spellRegistry = RpgCraft.getSpellRegistry();
-		UUID				uuid = (launcher == null ? null : launcher.getUUID());
+		UUID				uuid = launcher.getUUID();
+		Rarity				rarity = null;
 		// fireball
-		if (spellRegistry.isFireball(projectile)) {
-			int	level = spellRegistry.getFireballRarity(projectile);
-			if (level == 0) return;
+		if ((rarity = spellRegistry.getFireballRarity(projectile)) != null) {
 			Location	location = projectile.getLocation();
-			double		radius = (level) + 3;
-			double 		damage = level * 3;
-			int			fireTicks = (level + 2) * 20;
+			double		radius = (rarity.getNumber()) + 3;
+			double 		damage = rarity.getNumber() * 3;
+			int			fireTicks = (rarity.getNumber() + 2) * 20;
 			spellRegistry.explosion(launcher, location, radius, damage, 1, fireTicks);
 		}
 		// holybomb
@@ -321,21 +320,32 @@ public class LauncherManager implements Listener {
 			spellRegistry.holyBombExplosion(launcher, projectile.getLocation(), Rarity.fromInt(level));
 		}
 		// shadowword
-		else if (spellRegistry.isShadowWord(projectile)) {
-			int	level = spellRegistry.getShadowWordRarity(projectile);
-			if (level == 0) return;
-			Location	location = projectile.getLocation();
-			spellRegistry.shadowWordExplosion(launcher, Rarity.fromInt(level), location);
+		else if ((rarity = spellRegistry.getShadowWordRarity(projectile)) != null) {
+			Location	center = projectile.getLocation();
+			spellRegistry.shadowWordExplosion(launcher, rarity, center);
 		}
 		// explosive shot
 		else if (spellRegistry.hasExplosiveShot(uuid) && (spellRegistry.isBow(projectile) || spellRegistry.isCrossBow(projectile))) {
 			int	level = spellRegistry.removeExplosiveShot(uuid);
 			if (level == 0) return;
-			Location	location = projectile.getLocation();
+			Location	center = projectile.getLocation();
 			double		radius = 4;
 			double 		damage = level * 3;
 			int			fireTicks = (level + 1) * 20;
-			spellRegistry.explosion(launcher, location, radius, damage, 1, fireTicks);
+			spellRegistry.explosion(launcher, center, radius, damage, 1, fireTicks);
+		}
+		else if ((rarity = spellRegistry.getWind(projectile)) != null) {
+			Location	center = projectile.getLocation();
+			double		radius = 6;
+			double 		damage = rarity.getNumber() * 5;
+			spellRegistry.explosionWind(launcher, center, radius, damage);
+		}
+		else if ((rarity = spellRegistry.getDemonChains(projectile)) != null) {
+			LivingEntityCustom	a = spellRegistry.findNearestFromLoc(launcher, projectile.getLocation());
+			if (a == null || !a.isPresent()) return;
+			LivingEntityCustom	b = spellRegistry.findNearestFromEntity(launcher, a);
+			if (b == null || !b.isPresent()) return;
+			spellRegistry.demonChainsAttract(launcher, a, b);
 		}
 		else
 			return;

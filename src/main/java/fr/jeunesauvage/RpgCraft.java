@@ -34,6 +34,7 @@ public class RpgCraft extends JavaPlugin {
     private SpellRegistry           spellRegistry;
     private MetamorphRegistry       metamorphRegistry;
     private NPCBuilderRegistry      npcBuilderRegistry;
+    private WorldManager            worldManager;
 
     @Override
     public void onEnable() {
@@ -66,7 +67,7 @@ public class RpgCraft extends JavaPlugin {
         CombatManager       combatManager = new CombatManager();
         getServer().getPluginManager().registerEvents(combatManager, this);
         // world manager
-        WorldManager worldManager = new WorldManager();
+        this.worldManager = new WorldManager();
         getServer().getPluginManager().registerEvents(worldManager, this);
         // sound
         new SoundManager();
@@ -76,6 +77,7 @@ public class RpgCraft extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        worldManager.cleanEntities();
         getLogger().info("RpgCraft OFF");
     }
 

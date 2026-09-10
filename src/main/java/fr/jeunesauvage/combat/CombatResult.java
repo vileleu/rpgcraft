@@ -5,6 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 
 public class CombatResult {
+	CombatDamage	combatDamage;
     private double  amount;
     private double  dodgeChance;
     private boolean isDodge;
@@ -18,6 +19,7 @@ public class CombatResult {
     private double  armor;
 
     public CombatResult(double amount, Combat combat) {
+		this.combatDamage = combat.getCombatDamage();
         this.amount = amount;
 		this.skillTarget = 0;
 		this.skillDamager = 0;

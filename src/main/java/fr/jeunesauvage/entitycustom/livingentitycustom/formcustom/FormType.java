@@ -55,21 +55,22 @@ public enum FormType {
 	// elemental
     ELEMENTAL_FIRE("elemental_fire", 0.9, FormTypeSkin.ELEMENTAL_FIRE),
     ELEMENTAL_WIND("elemental_wind", 0.9, FormTypeSkin.ELEMENTAL_WIND),
-    GOLEM_MAGMA("golem_magma", 1.2, FormTypeSkin.GOLEM_MAGMA),
-    GOLEM_REDSTONE("golem_redstone", 2, FormTypeSkin.GOLEM_REDSTONE),
+    REDSTONE_GOLEM("redstone_golem", 2, FormTypeSkin.REDSTONE_GOLEM),
 	// spider
-    SPIDER_CHILD("spider_child", 0.6, FormTypeSkin.SPIDER_CHILD),
-    SPIDER_NORMAL("spider_normal", 0.9, FormTypeSkin.SPIDER_NORMAL),
-    SPIDER_BIG("spider_big", 2, FormTypeSkin.SPIDER_BIG),
-    SPIDER_BOSS("spider_boss", 4, FormTypeSkin.SPIDER_BOSS),
+    SMALL_SPIDER("small_spider", 0.6, FormTypeSkin.SMALL_SPIDER),
+    SPIDER("spider", 0.9, FormTypeSkin.SPIDER),
+    BIG_SPIDER("big_spider", 2, FormTypeSkin.BIG_SPIDER),
+    TARENTULA("spider_boss", 4, FormTypeSkin.TARENTULA),
 	// scorpion
     SCORPION("scorpion", 1.2, FormTypeSkin.SCORPION),
 	// forest
 	LEAPER("leaper", 1.5, FormTypeSkin.LEAPER),
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
-	YELLER("yeller", 1.5, FormTypeSkin.YELLER),
+	FROZER("frozer", 1.5, FormTypeSkin.FROZER),
 	// demon
 	DEMON("demon", 1.2, FormTypeSkin.DEMON),
+    MAGMA_GOLEM("magla_golem", 1.2, FormTypeSkin.MAGMA_GOLEM),
+	ELEMENTAL_VOID("elemental_void", 1.5, FormTypeSkin.ELEMENTAL_VOID),
 	// others
 	ANIMAL("animal", 1, FormTypeSkin.ANIMAL),
 	DRACTHYR_BLACK("dracthyr_black", 1.4, FormTypeSkin.DRACTHYR_BLACK),

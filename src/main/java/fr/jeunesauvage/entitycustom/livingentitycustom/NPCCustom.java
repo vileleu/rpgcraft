@@ -72,6 +72,7 @@ public final class NPCCustom implements LivingEntityCustom {
     private UUID                                    petUUID = null;
     private boolean                                 damageIsUnmodifiable = false;
     private Group                                   group = null;
+    private boolean                                 changeForm = false;
 
     public NPCCustom(NPC npc) {
         this.npc = npc;
@@ -179,11 +180,17 @@ public final class NPCCustom implements LivingEntityCustom {
     }
 
     public void setTemplate(TemplateType templateType) {
+        boolean wasSpawned = npc.isSpawned();
+        if (wasSpawned == true) despawn();
         FightTrait  fightTrait = getFightTrait();
         fightTrait.setTemplate(templateType);
-        if (skinIsApply(templateType.getFormType())) return;
         setRaceType(templateType.getRaceType());
-        setFormType(templateType.getFormType());
+        // form
+        this.formType = templateType.getFormType();
+        getFightTrait().setFormType(formType);
+        refreshSkin();
+        refreshScale();
+        //
         setClassType(templateType.getClassType());
         if (templateType.getTeams() != null) teams.addAll(templateType.getTeams());
         this.level = fightTrait.getLevel();
@@ -191,6 +198,7 @@ public final class NPCCustom implements LivingEntityCustom {
         loadStats(templateType);
         loadSkills();
         loadModifiers();
+        if (wasSpawned == true && getRespawn() != null) spawn(getRespawn());
     }
 
     public Location getRespawn() {
@@ -470,6 +478,20 @@ public final class NPCCustom implements LivingEntityCustom {
     }
 
     @Override
+    public void setAI(boolean ai) {
+        LivingEntity l = getLivingEntity();
+        if (l == null) return;
+        l.setAI(ai);
+    }
+
+    @Override
+    public void setGravity(boolean gravity) {
+        LivingEntity l = getLivingEntity();
+        if (l == null) return;
+        l.setGravity(gravity);
+    }
+
+    @Override
     public RaceType getRaceType() {
         return raceType;
     }
@@ -487,6 +509,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void setFormType(FormType formType) {
+        changeForm = true;
         this.formType = formType;
         getFightTrait().setFormType(formType);
         refreshSkin();
@@ -904,9 +927,14 @@ public final class NPCCustom implements LivingEntityCustom {
     public void onSpawn() {
         FightTrait      fightTrait = getFightTrait();
         TemplateType    templateType = fightTrait.getTemplateType();
-        if (skinIsApply(templateType.getFormType())) return;
+        if (!changeForm && skinIsApply(templateType.getFormType())) return;
         setRaceType(templateType.getRaceType());
-        setFormType(templateType.getFormType());
+        if (!changeForm) setFormType(templateType.getFormType());
+        else {
+            getFightTrait().setFormType(formType);
+            refreshScale();
+        }
+        changeForm = false;
         setClassType(templateType.getClassType());
         if (templateType.getTeams() != null) teams.addAll(templateType.getTeams());
         this.level = fightTrait.getLevel();
@@ -914,15 +942,20 @@ public final class NPCCustom implements LivingEntityCustom {
         loadStats(templateType);
         loadSkills();
         loadModifiers();
+        refreshStat();
         // cancel respawn
         if (respawnTask != null) {
             respawnTask.cancel();
             respawnTask = null;
         }
         // spawn location
-		if (fightTrait.getRespawn() != null) {
+		if (getRespawn() != null) {
             LivingEntity    l = getLivingEntity();
-            if (l != null) getLivingEntity().teleport(fightTrait.getRespawn());
+            if (l != null) {
+                getLivingEntity().teleport(getRespawn());
+                l.setAI(true);
+                l.setGravity(true);
+            }
         }
         greeting();
     }

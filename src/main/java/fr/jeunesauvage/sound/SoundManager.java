@@ -173,11 +173,11 @@ public class SoundManager implements Listener {
             case NECROMANCER, NECROMANCER_NOFACE, NECROMANCER_BONE, NECROMANCER_BONEGREY -> FormType.NECROMANCER;
             case NECROMANCER_SKELETON -> FormType.NECROMANCER_SKELETON;
             case DRACTHYR_BLACK, DRACTHYR_RED -> FormType.DRACTHYR_BLACK;
-            case ELEMENTAL_FIRE, ELEMENTAL_WIND, GOLEM_REDSTONE,
-                SPIDER_CHILD, SPIDER_NORMAL, SPIDER_BIG, SPIDER_BOSS,
+            case ELEMENTAL_FIRE, ELEMENTAL_WIND, REDSTONE_GOLEM,
+                SMALL_SPIDER, SPIDER, BIG_SPIDER, TARENTULA,
                 SCORPION,
-                LEAPER, WHISPERER, YELLER,
-                DEMON, GOLEM_MAGMA,
+                LEAPER, WHISPERER, FROZER,
+                DEMON, MAGMA_GOLEM, ELEMENTAL_VOID,
                 ANIMAL,
                 UNKNOWN -> FormType.UNKNOWN;
         };

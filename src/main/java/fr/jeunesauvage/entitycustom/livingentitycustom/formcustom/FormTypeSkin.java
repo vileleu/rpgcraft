@@ -50,21 +50,22 @@ public enum FormTypeSkin {
 	// elemental
     ELEMENTAL_FIRE("elemental_fire", null),
     ELEMENTAL_WIND("elemental_wind", null),
-    GOLEM_MAGMA("golem_magma", null),
-    GOLEM_REDSTONE("golem_redstone", null),
+    REDSTONE_GOLEM("golem_redstone", null),
 	// spider
-    SPIDER_CHILD("spider_child", null),
-    SPIDER_NORMAL("spider_normal", null),
-    SPIDER_BIG("spider_big", null),
-    SPIDER_BOSS("spider_boss", null),
+    SMALL_SPIDER("spider_child", null),
+    SPIDER("spider_normal", null),
+    BIG_SPIDER("spider_big", null),
+    TARENTULA("spider_boss", null),
 	// scorpion
     SCORPION("scorpion", null),
 	// forest
     LEAPER("leaper", null),
     WHISPERER("whisperer", null),
-    YELLER("yeller", null),
+    FROZER("yeller", null),
 	// demon
 	DEMON("demon", null),
+    MAGMA_GOLEM("golem_magma", null),
+	ELEMENTAL_VOID("elemental_void", null),
 	// others
 	ANIMAL("animal", null),
 	DRACTHYR_BLACK("dracthyr_black", new SkinData("W2jhOScdisVkXCBNDung3EXRNIk/ic4CPXSjZoH3XW5gHpHQFZ8Ye4PvdTS8EXt0upyqwXzw3y0AnChszJFOv+PWj1gpx7O1knFZsFI82h98EL/jpFgXQGAoI3t+PDxwH8P1uU/i+rT1NtH5g4Ew8LZvKKAiytiHokmX7+LH9dRFFGaYzqWMb+tY00QUZ0giUGV7ZiUdKGvS+wavIel3GGqVw+7aLFPf/8zw4LGnEiQ0F2HucqWb5nkh4gf9/KFY6S5a0RwGHFhlk/RTXa8XnCJkOWYYaBAKLBJxBwXfsqxZdpwcM2yLaZNyiJNiqMKBf6/DGaf8V+O5o1Yp2xFE3aCO2IvslbM3D4W5UlMP/aBysrlpSb2VOWxjSj0/7Ky5a7AwsOw6KOz9qxFxZSuZEm2nL/MDOCvoM3Atx+me6x+qDCcHQ/tlwuHo7eGUJCw7HGmy1c8WUJfFWS1LYtgzscwEltyF4spKEHMTubcvJk7uXC6QVvqdwnjUh7c+tmo8wnQKMG3buk+HeD8hz3emajo3a4CH+nkuhSc0geC0oYrM9eWXF1o3/VtKXLu5Kp2wUTQQn52tkMl0wIuR0vrbZKLeJMqCZd75uWJCsr1VC5QL0QU0nmDdebRQa7jfKACRmfJRZneDU198p/72W9Kgm91QmfJidWCtKgLnMCt9sjk=", "ewogICJ0aW1lc3RhbXAiIDogMTc2OTgwOTQ1NDIzNywKICAicHJvZmlsZUlkIiA6ICJkOTcwYzEzZTM4YWI0NzlhOTY1OGM1ZDQ1MjZkMTM0YiIsCiAgInByb2ZpbGVOYW1lIiA6ICJDcmltcHlMYWNlODUxMjciLAogICJzaWduYXR1cmVSZXF1aXJlZCIgOiB0cnVlLAogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjE0MTY0NTgwOWUzNTQxZjk1ZjAwNjBhNmVmM2U3YWUzYWY4NzQxOWE4NjcwN2FkMzk2MzZlYTkzYzE5OTg1ZSIKICAgIH0KICB9Cn0=")),

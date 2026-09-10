@@ -15,7 +15,6 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Spellcaster;
 import org.bukkit.inventory.ItemStack;
@@ -78,62 +77,6 @@ public class FightAI {
 		}
     }
 
-    // find better target (aggro or not in team) (for pet)
-	public void findTargetPet(NPCCustom npcCustom) {
-		target = null;
-		targetHide = null;
-		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
-		if (!aggro.isEmpty()) {
-			double	bestScore = 0;
-			Iterator<Entry<UUID, Double>>	it = aggro.entrySet().iterator();
-    		while (it.hasNext()) {
-				Entry<UUID, Double>	entry = it.next();
-    		    double				score = entry.getValue();
-				Double				newScore = score * 0.90;
-				entry.setValue(newScore);
-				// no more aggro
-				if (newScore <= 0.5) {
-					it.remove();
-					continue;
-				}
-				// target is not living entity ?
-				LivingEntityCustom	entity = entityCustomRegistry.getLivingEntityCustom(entry.getKey());
-    		    if (entity == null) {
-					it.remove();
-					continue;
-				}
-				// target is grouped ? 
-				if (entity.isGrouped(npcCustom)) {
-					it.remove();
-					continue;
-				}
-				// target is dead
-    		    if (!entity.isPresent() || entity.isInvulnerable() || entity.isInvisible() || entity.isCreative()) {
-					it.remove();
-					continue;
-				}
-				// target too far from npc
-				if (score > bestScore) {
-                    bestScore = score;
-        			if (!npcCustom.hasLineOfSight(entity)) {
-					    if (entity == null || !entity.equals(entity)) continue;
-						target = null;
-						targetHide = entity;
-				    }
-                    else
-    		            target = entity;
-    		    }
-    		}
-		}
-		if (target == null && targetHide == null) {
-			LivingEntityCustom	owner = data.getOwner();
-			if (owner != null)
-				npc.getNavigator().setTarget(owner.getLivingEntity(), false);
-			else
-				npc.getNavigator().setTarget(null, false);
-		}
-	}
-
     // find better target (aggro or not in team) (for non pet)
 	public void findTarget(NPCCustom npcCustom) {
 		target = null;
@@ -146,7 +89,6 @@ public class FightAI {
 				Entry<UUID, Double>	entry = it.next();
     		    double				score = entry.getValue();
 				Double				newScore = score * 0.90;
-				RpgCraft.debug("newScore = " + newScore);
 				entry.setValue(newScore);
 				// no more aggro
 				if (newScore <= 0.5) {
@@ -184,21 +126,27 @@ public class FightAI {
     		}
 		}
 		if (target == null && targetHide == null) {
-			World	world = npcCustom.getWorld();
-			if (world == null) return;
-			for (LivingEntity l: world.getNearbyLivingEntities(npcCustom.getLocation(), data.getAggroRange())) {
-				LivingEntityCustom	entity = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				if (entity == null || npcCustom.isGrouped(entity)) continue;
-				// target choice
-    		    if (!entity.isPresent() || entity.isInvisible() || entity.isInvulnerable() || entity.isCreative()) continue;
-        		if (!npcCustom.hasLineOfSight(entity)) {
-				    if (lastTarget == null || !entity.equals(lastTarget)) continue;
-                    target = null;
-					targetHide = entity;
+			if (npcCustom.isPet()) {
+				LivingEntityCustom	owner = data.getOwner();
+				npc.getNavigator().setTarget(owner != null ? owner.getLivingEntity() : null, false);
+			}
+			else {
+				World	world = npcCustom.getWorld();
+				if (world == null) return;
+				for (LivingEntity l: world.getNearbyLivingEntities(npcCustom.getLocation(), data.getAggroRange())) {
+					LivingEntityCustom	entity = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+					if (entity == null || npcCustom.isGrouped(entity)) continue;
+					// target choice
+    			    if (!entity.isPresent() || entity.isInvisible() || entity.isInvulnerable() || entity.isCreative()) continue;
+        			if (!npcCustom.hasLineOfSight(entity)) {
+					    if (lastTarget == null || !entity.equals(lastTarget)) continue;
+            	        target = null;
+						targetHide = entity;
+					}
+            	    else
+    					target = entity;
+					return;
 				}
-                else
-    				target = entity;
-				return;
 			}
 		}
 	}
@@ -240,33 +188,39 @@ public class FightAI {
 	public int attackTarget(NPCCustom npcCustom) {
 		Navigator			navigator = npc.getNavigator();
 		NavigatorParameters	parameters = navigator.getDefaultParameters();
+		Location			closestWaypoint = findClosestWaypoint(npcCustom);
 		// no target
 		if (target == null && targetHide == null) {
 			if (quote) quote = false;
 			// heal
 			npcCustom.heal(data.getHealth() / 10);
+			if (isFlightType(npcCustom)) {
+				setTargetFlight(npcCustom, navigator, closestWaypoint);
+				if (!inChase) return 0;
+			}
+			else {
+				if (!inChase) return 0;
+				navigator.cancelNavigation();
+			}
 			// first no chase
-			if (!inChase) return 0;
 			inChase = false;
 			npc.getOrAddTrait(LookClose.class).lookClose(true);
 			if (parameters.speedModifier() != data.getSpeed())
 				parameters.speedModifier(data.getSpeed());
-			navigator.cancelNavigation();
 			lastTarget = null;
 			lastTargetLocation = null;
 			return 0;
 		}
 		// npc too far from waypoints (back to waypoints and full life)
-		Location	closestWaypoint = findClosestWaypoint(npcCustom);
 		if (closestWaypoint != null && npcCustom.getLocation().distanceSquared(closestWaypoint) > data.getChaseRangeSquared()) {
-			EntityType	entityType = npcCustom.getType();
-			parameters.speedModifier(entityType == EntityType.EVOKER ? 1 : 2);
-			navigator.setTarget(closestWaypoint);
+			parameters.speedModifier(data.getSpeedCombat());
+			if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, closestWaypoint);
+			else setTargetGround(npcCustom, navigator, closestWaypoint);
 			inChase = false;
 			target = null;
 			lastTarget = null;
 			lastTargetLocation = null;
-			return 120; // 6 secondes
+			return 12; // 6 secondes
 		}
 		// first chase
 		if (!inChase) {
@@ -282,7 +236,7 @@ public class FightAI {
 				npcCustom.attack();
 			}
 			int			now = Bukkit.getCurrentTick();
-			double		width = npcCustom.getWidth() / 2d;
+			double		width = npcCustom.getWidth();
 			double		range;
 			ItemStack	item = findItem(npcCustom);
 			WeaponType	weaponType = findWeaponType(item);
@@ -306,7 +260,7 @@ public class FightAI {
 			switch (weaponType) {
 				case BOW, CROSSBOW, STAFF, SPELLBOOK -> range = data.getAttackRangeRanged();
 				default -> {
-					if (data.getDamage() == 0) range = data.getAttackRangeRanged();
+					if (data.getDamage() <= 0 || data.getAttackRate() <= 0) range = data.getAttackRangeRanged();
 					else range = data.getAttackRangeClose();
 				}
 			};
@@ -321,7 +275,7 @@ public class FightAI {
 			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
 				npc.faceLocation(target.getLocation());
 				// no damage == no walking to target
-				if (data.getDamage() == 0) flee(npcCustom, navigator);
+				if (data.getDamage() <= 0 || data.getAttackRate() <= 0) flee(npcCustom, navigator);
 				// physical attack
 				else if (data.getAttackRate() > 0 && now >= nextAttack) {
 					switch (weaponType) {
@@ -349,7 +303,8 @@ public class FightAI {
 			else {
 				if (parameters.speedModifier() != data.getSpeedCombat())
 					parameters.speedModifier(data.getSpeedCombat());
-				navigator.setTarget(target.getLivingEntity(), false);
+				if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, target);
+				else setTargetGround(npcCustom, navigator, target);
 				lastTarget = target;
 				lastTargetLocation = target.getLocation();
 			}
@@ -358,17 +313,57 @@ public class FightAI {
 		else {
 			if (quote) quote = false;
 			// can't find target ()
-			double	width = npcCustom.getWidth() / 2d;
-			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < 2 * 2 + width * width) {
-				navigator.cancelNavigation();
+			double	width = npcCustom.getWidth();
+			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < width * width) {
+				if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, closestWaypoint);
+				else navigator.cancelNavigation();
 				lastTarget = null;
 				lastTargetLocation = null;
 				return 0;
 			}
 			// go to last position of target
-			navigator.setTarget(lastTargetLocation);
+			if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, lastTargetLocation);
+			else setTargetGround(npcCustom, navigator, lastTargetLocation);
 		}
 		return 0;
+	}
+
+	private boolean isFlightType(NPCCustom npcCustom) {
+		return switch (npcCustom.getType()) {
+			case BLAZE, BREEZE, WITHER -> true;
+			default -> false;
+		};
+	}
+
+	private void setTargetFlight(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
+		if (target == null) return;
+	    Location	npcLoc = npcCustom.getLocation();
+	    Location	targetLoc = target.getLocation();
+	    Vector direction = targetLoc.toVector().subtract(npcLoc.toVector());
+	    double distance = direction.length();
+	    if (distance < 3) return;
+	    direction.normalize().multiply(5);
+		navigator.setTarget(npcLoc.clone().add(direction));
+	}
+
+	private void setTargetFlight(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
+		if (targetLoc == null) return;
+		Location	npcLoc = npcCustom.getLocation();
+	    Vector direction = targetLoc.toVector().subtract(npcLoc.toVector());
+	    double distance = direction.length();
+	    if (distance < 3) return;
+	    direction.normalize().multiply(5);
+		navigator.setTarget(npcLoc.clone().add(direction));
+	}
+
+	private void setTargetGround(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
+		if (target == null) return;
+	    navigator.setTarget(target.getLocation());
+	}
+
+	private void setTargetGround(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
+		if (targetLoc == null) return;
+		navigator.setTarget(targetLoc);
 	}
 
     public void flee(NPCCustom npcCustom, Navigator navigator) {
@@ -440,16 +435,18 @@ public class FightAI {
 		World	world = npcCustom.getWorld();
 		if (world == null) return;
 		// animation
-		if (npcCustom.getType() == EntityType.PLAYER)
-			npcCustom.swingMainHand();
-		else if (npcCustom.getType() == EntityType.IRON_GOLEM)
-			npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
-		else if (npcCustom.getType() == EntityType.RAVAGER)
-			npcCustom.playEffect(EntityEffect.RAVAGER_ATTACK);
+		switch (npcCustom.getType()) {
+			case PLAYER -> npcCustom.swingMainHand();
+			case IRON_GOLEM -> npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
+			case RAVAGER -> npcCustom.playEffect(EntityEffect.RAVAGER_ATTACK);
+			default -> {}
+		}
 		// damage
 		target.damage(data.getDamage(), CombatDamage.PHYSICAL, npcCustom);
 		// knockback
-		Vector	knock = target.getEyeLocation().subtract(npcCustom.getEyeLocation()).toVector().normalize().multiply(0.3);
+		Vector	knock = target.getEyeLocation().subtract(npcCustom.getEyeLocation()).toVector();
+		if (knock.lengthSquared() < 1.0E-6) knock = new Vector(0, 0, 1);
+		else knock.normalize().multiply(0.3);
 		target.setVelocity(target.getVelocity().add(knock));
 		world.playSound(npcCustom.getLocation(), Sound.ENTITY_PLAYER_ATTACK_WEAK, 1.0f, 1.0f);
 	}
@@ -463,7 +460,7 @@ public class FightAI {
 			case SCORPION -> RpgCraft.getSpellRegistry().poison(npcCustom, target, data.getRarity());
 			case PALPOUTINE -> RpgCraft.getSpellRegistry().force(npcCustom, data.getRarity());
 			case PALPOUTINE_CLONE -> RpgCraft.getSpellRegistry().forceClone(npcCustom, data.getRarity());
-			case GOLEM_REDSTONE -> {
+			case REDSTONE_GOLEM -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().strikeBack(npcCustom, data.getRarity());
 			}
@@ -478,22 +475,17 @@ public class FightAI {
 		switch (templateType) {
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getRarity());
 			case TAUREN_BLACK -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getRarity());
-			case ELEMENTAL_WIND -> RpgCraft.getSpellRegistry().launchWind(npcCustom, target);
+			case ELEMENTAL_VOID -> RpgCraft.getSpellRegistry().demonChains(npcCustom, target, data.getRarity());
+			case ELEMENTAL_WIND -> RpgCraft.getSpellRegistry().launchWind(npcCustom, target, data.getRarity());
 			case ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getRarity());
-			case SPIDER_BIG -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom, target, data.getRarity(), false);
-			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom, target, data.getRarity(), true);
-			case GOLEM_REDSTONE -> {
+			case BIG_SPIDER -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom, target, data.getRarity(), false);
+			case TARENTULA -> RpgCraft.getSpellRegistry().launchSpiderEgg(npcCustom, target, data.getRarity(), true);
+			case REDSTONE_GOLEM -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, data.getRarity());
 			}
-			case WHISPERER -> {
-				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
-				caster.setSpell(Spellcaster.Spell.FANGS);
-				RpgCraft.getSpellRegistry().teleportWhisperer(npcCustom);
-				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
-				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
-				}, 40L);
-			}
+			case WHISPERER -> RpgCraft.getSpellRegistry().teleportWhisperer(npcCustom);
+			case LEAPER -> RpgCraft.getSpellRegistry().impact(npcCustom, data.getRarity());
 			default -> {}
 		}
 	}
@@ -502,11 +494,10 @@ public class FightAI {
 		if (npcCustom.isSilence() > 0) return;
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
-			case ELEMENTAL_WIND, ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().teleportElemental(npcCustom, target);
 			case PALPOUTINE -> RpgCraft.getSpellRegistry().lightning(npcCustom, target, data.getRarity());
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().spawnTrident(npcCustom, target, data.getRarity());
-			case SPIDER_BOSS -> RpgCraft.getSpellRegistry().launchCobweb(npcCustom, target, data.getRarity());
-			case GOLEM_REDSTONE -> {
+			case TARENTULA -> RpgCraft.getSpellRegistry().launchCobweb(npcCustom, target, data.getRarity());
+			case REDSTONE_GOLEM -> {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().launchRedstone(npcCustom, target, data.getRarity());
 			}

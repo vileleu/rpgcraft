@@ -305,6 +305,16 @@ public final class MobCustom implements LivingEntityCustom {
     }
 
     @Override
+    public void setAI(boolean ai) {
+        mob.setAI(ai);
+    }
+
+    @Override
+    public void setGravity(boolean gravity) {
+        mob.setGravity(gravity);
+    }
+
+    @Override
     public RaceType getRaceType() {
         return raceType;
     }

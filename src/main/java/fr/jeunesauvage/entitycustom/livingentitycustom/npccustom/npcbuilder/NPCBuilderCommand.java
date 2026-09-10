@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 
@@ -39,6 +40,8 @@ public class NPCBuilderCommand implements CommandExecutor {
         	    return handleTeamMyNPC(sender, args);
         	case "dropmynpc":
         	    return handleDropMyNPC(sender, args);
+        	case "formmynpc":
+        	    return handleFormMyNPC(sender, args);
         	case "templatemynpc":
         	    return handleTemplateMyNPC(sender, args);
             case "spawnmynpc":
@@ -259,6 +262,24 @@ public class NPCBuilderCommand implements CommandExecutor {
         String  npcName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
         npcBuilder.changeDrop(player, npcName, drop);
         */
+        return true;
+    }
+
+    // change form
+    private boolean handleFormMyNPC(CommandSender sender, String[] args) {
+        if (!(sender instanceof Player p)) return true;
+        if (args.length < 3) {
+            sender.sendMessage(Message.m("<red>Usage: /formmynpc <template> <npc name>"));
+            return true;
+        }
+        PlayerCustom    launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+        if (launcher == null) {
+            sender.sendMessage(Message.m("<red>player not found (CRITICAL ERROR)"));
+            return true;
+        }
+        FormType    formType = FormType.fromString(args[0]);
+        String      npcName = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+        RpgCraft.getNPCBuilderRegistry().changeForm(launcher, npcName, formType);
         return true;
     }
 

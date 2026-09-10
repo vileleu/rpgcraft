@@ -38,7 +38,7 @@ public class FightTrait extends Trait {
 	public static final double			DAMAGEBYLEVEL_DEFAULT = TemplateType.DEFAULT.getDamage(LEVEL_DEFAULT); // damage of attack
 	private static final double			PATROLRANGE_DEFAULT = 0;                                               // range of patrol
 	public static final double			AGGRORANGE_DEFAULT = 30;                                               // range of aggro
-	public static final double			CHASERANGE_DEFAULT = 70;                                               // range of chase
+	public static final double			CHASERANGE_DEFAULT = 60;                                               // range of chase
 	public static final double			ATTACKRANGERANGED_DEFAULT = 15;                                        // range of attack ranged
 	private static final double			ATTACKRANGECLOSE_DEFAULT = 3;                                          // range of attack close
 	public static final float			ATTACKRATE_DEFAULT = TemplateType.DEFAULT.getAttackRate();             // time (in seconds) between each attack
@@ -117,7 +117,7 @@ public class FightTrait extends Trait {
     	this.tick = 0;
     	this.tickActive = 10;     // 0.5 seconds if active
     	this.tickUnactive = 80;   // 4 seconds if unactive
-    	this.rangeActive = 60;    // range where npc is active
+    	this.rangeActive = 100;   // range where npc is active
     	this.rangeActiveSquared = rangeActive * rangeActive;
 		this.fightData = null;
     	this.FightAI = null;
@@ -142,7 +142,32 @@ public class FightTrait extends Trait {
 		lookClose.setRealisticLooking(true);
 		lookClose.setRange(lookRange);
 		// template
-		setTemplate(getTemplateType());
+		TemplateType	templateType = getTemplateType();
+		// race + form + class
+		setRaceType(templateType.getRaceType());
+        setFormType(templateType.getFormType());
+		setClassType(templateType.getClassType());
+		// stats
+		stats.clear();
+		Map<String, Integer>	statsTmp = templateType.getStats(level);
+		if (statsTmp != null) statsTmp.forEach((s, v) -> setStat(StatType.fromString(s), v));
+		// teams
+		teams.clear();
+		Set<TeamType> teamsCopy = templateType.getTeams();
+		if (teamsCopy != null) teamsCopy.forEach(t -> addTeam(t));
+		// others
+		setRespawnTime(templateType.getRespawnTime());
+		setHealth(templateType.getHealth(level));
+		setDamage(templateType.getDamage(level));
+		setAttackRate(templateType.getAttackRate());
+		setSpellRate(templateType.getSpellRate());
+		setSpeed(templateType.getSpeed());
+		setSpeedCombat(templateType.getSpeedCombat());
+		setBoss(templateType.isBoss());
+		// name
+		npc.setName(templateType.getHideName());
+		npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, true);
+		Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> npc.data().setPersistent(NPC.Metadata.NAMEPLATE_VISIBLE, false));
 		// patrol
 		if (patrolRange > 0) {
 			goalPatrol = new GoalPatrol(npc, patrolRange);
@@ -165,26 +190,23 @@ public class FightTrait extends Trait {
     @Override
     public void run() {
 		// check all seconds
-		if (tick-- > 0) return;
-		if (FightAI == null) return;
+		if (tick-- > 0 || FightAI == null) return;
         if (npc == null || !npc.isSpawned() || getTemplateType() == TemplateType.DEFAULT) return;
 		NPCCustom	npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
 		if (npcCustom == null) return;
 		if (loseAggro > 0) {
-			npcCustom.setHealth(health);
+			tick = tickActive;
 			if (--loseAggro == 0)
 				npc.getNavigator().getDefaultParameters().speedModifier(speed);
 			return;
 		}
 		if (!isActive(npcCustom)) {
 			tick = tickUnactive;
+			resetSpawn(npcCustom);
 			return;
 		}
 		tick = tickActive;
-		if (ownerUUID != null) 
-			FightAI.findTargetPet(npcCustom);
-		else
-			FightAI.findTarget(npcCustom);
+		FightAI.findTarget(npcCustom);
 		loseAggro = FightAI.attackTarget(npcCustom);
     }
 
@@ -198,6 +220,11 @@ public class FightTrait extends Trait {
 			return true;
 		}
 		return false;
+	}
+
+	private void resetSpawn(NPCCustom npcCustom) {
+	    if (npcCustom == null || !npcCustom.isPresent() || respawn == null) return;
+	    if (npcCustom.getLocation().distanceSquared(respawn) > patrolRange * patrolRange) npcCustom.teleport(respawn);
 	}
 
 	public void addAggro(LivingEntityCustom livingEntityCustom, double damage) {
@@ -219,10 +246,7 @@ public class FightTrait extends Trait {
 	public void setTemplate(TemplateType templateType) {
 		if (templateType == null) return;
 		this.templateType = templateType.getName();
-		if (npc.getEntity() instanceof LivingEntity l && l.getType() != templateType.getEntityType()) {
-			npc.setBukkitEntityType(templateType.getEntityType());
-			return;
-		}
+		npc.setBukkitEntityType(templateType.getEntityType());
 		// race + form + class
 		setRaceType(templateType.getRaceType());
         setFormType(templateType.getFormType());

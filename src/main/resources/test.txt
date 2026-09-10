@@ -34,21 +34,22 @@ EyeOfEnder
 
 TODO:
 - NPC:
- - translatable race in resource pack
  - translatable name in resource pack
- - necromancer spell
- - leaper spell
- - wavewhisperer spell
- - demon spell
+ - necromancer spell (spawn skeletons + ...)
+ - frozer spell (multiple freeze fangs + area that make group invulnerable + expulse fangs)
  - menu food
  - menu consumable
  - menu repair/sell
  - skins
+ - mannequin
 - WORLD:
   - player can break mineral block
   - necropolis:{poison,darkness}
   - enchanting table cancel
 - QUESTS:
 
-- BUG:
- - stealth (change armor can't hide)
+- TESTS:
+ - change formtype on NPC
+ - stealth
+ - menu potions
+ - leaper (spell + movement)

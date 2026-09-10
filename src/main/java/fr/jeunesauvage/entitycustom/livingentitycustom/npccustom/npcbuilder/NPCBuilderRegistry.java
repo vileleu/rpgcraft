@@ -21,6 +21,7 @@ import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
@@ -87,17 +88,18 @@ public class NPCBuilderRegistry {
 			loc.getBlock().setType(Material.AIR);
 			Location				spawn = loc.clone().add(0.5, 0, 0.5);
 			Location				path = loc.clone();
-			NPC						rawNPC = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName(), spawn);
-			NPCCustom				npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(rawNPC.getUniqueId());
+			NPC						rawNPC = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
+			rawNPC.setProtected(false);
 			Waypoints				waypoints = rawNPC.getOrAddTrait(Waypoints.class);
 			LinearWaypointProvider	linearWaypointProvider = (LinearWaypointProvider)waypoints.getCurrentProvider();
 			linearWaypointProvider.addWaypoint(new Waypoint(path));
 			linearWaypointProvider.setCycle(true);
-			rawNPC.setProtected(false);
+			NPCCustom				npcCustom = RpgCraft.getEntityCustomRegistry().createNPCCustom(rawNPC);
 			npcCustom.setRespawn(spawn);
             int level = ThreadLocalRandom.current().nextInt(levelMin, levelMax + 1);
 			npcCustom.setLevel(level);
 			npcCustom.setTemplate(templateType);
+			npcCustom.spawn(spawn);
 			count++;
 		}
 		placers.clear();
@@ -295,6 +297,27 @@ public class NPCBuilderRegistry {
 		player.sendMessage(Msg.msg("<red> drop <yellow><drop><red> is invalid", Msg.text("drop", drop)));
 	}
 	*/
+
+	// change form
+	public void changeForm(PlayerCustom launcher, String npcName, FormType formType) {
+		if (npcName == null) {
+			launcher.sendMessage(Message.m("<red>npcName is invalid"));
+			return;
+		}
+		if (formType == null) {
+			launcher.sendMessage(Message.m("<red>formType is invalid"));
+			return;
+		}
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		int	count = 0;
+        for (NPC npc: CitizensAPI.getNPCRegistry()) {
+            if (!npc.getName().toLowerCase().equals(npcName.toLowerCase())) continue;
+			NPCCustom		npcCustom = entityCustomRegistry.getNPCCustom(npc.getUniqueId());
+            npcCustom.setFormType(formType);
+            count++;
+        }
+		launcher.sendMessage(Message.m("<green>" + count + " form " + formType.getName() + " applied"));
+	}
 
 	// change template
 	public void changeTemplate(PlayerCustom launcher, String npcName, TemplateType templateType) {

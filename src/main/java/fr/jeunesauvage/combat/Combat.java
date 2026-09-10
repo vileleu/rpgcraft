@@ -2,6 +2,7 @@ package fr.jeunesauvage.combat;
 
 import java.util.UUID;
 
+import org.bukkit.Location;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.AbstractArrow;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Vector;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
@@ -38,6 +40,7 @@ public class Combat {
 	private final CombatType			combatType;
 	private final WeaponType			weaponType;
 	private final CombatDamage			combatDamage;
+	private final Location				attackLocation;
 
 	/*
 	** init
@@ -49,6 +52,7 @@ public class Combat {
 		this.combatType = initCombatType(source);
 		this.weaponType = initWeaponType(source);
 		this.combatDamage = initCombatDamage(source);
+		this.attackLocation = source.getDirectEntity().getLocation();
 	}
 
 	private CombatType initCombatType(DamageSource source) {
@@ -116,7 +120,7 @@ public class Combat {
 
 	// apply resistance from target
 	public CombatResult applyBonusTarget(CombatResult result) {
-		result.setBlocking(target.isBlocking());
+		if (isFrontalAttack()) result.setBlocking(target.isBlocking());
 		result = combatDamage.applyStatTarget(target, result);
 		if (weaponType != WeaponType.UNKNOWN) result = combatDamage.applySkillTarget(target, result);
 		return result;
@@ -181,6 +185,20 @@ public class Combat {
 	// print damage above target
 	public void printDamage(CombatResult result) {
 		combatDamage.printDamage(target, result);
+	}
+
+	private boolean isFrontalAttack() {
+		if (combatDamage != CombatDamage.PHYSICAL) return false;
+	    Vector	toSource = attackLocation.toVector().subtract(target.getLocation().toVector());
+	    toSource.setY(0);
+	    if (toSource.lengthSquared() < 1.0E-6) return true;
+	    toSource.normalize();
+	    Vector	facing = target.getLocation().getDirection();
+	    facing.setY(0);
+	    if (facing.lengthSquared() < 1.0E-6) return true;
+	    facing.normalize();
+	    double dot = facing.dot(toSource);
+	    return dot >= 0;
 	}
 
 	/*

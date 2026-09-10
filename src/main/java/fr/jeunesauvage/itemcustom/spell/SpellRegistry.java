@@ -23,7 +23,6 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Arrow;
@@ -90,6 +89,8 @@ public class SpellRegistry {
 	public static final int						TIME_ICETRAP = 30;
 	private final NamespacedKey					KEY_FIREBALL = new NamespacedKey(RpgCraft.name(), "fireball");
 	private final NamespacedKey					KEY_SHADOWWORD = new NamespacedKey(RpgCraft.name(), "shadowword");
+	private final NamespacedKey					KEY_WIND = new NamespacedKey(RpgCraft.name(), "wind");
+	private final NamespacedKey					KEY_DEMONCHAINS = new NamespacedKey(RpgCraft.name(), "demonchains");
 	private final NamespacedKey					KEY_BOW = new NamespacedKey(RpgCraft.name(), "bow");
 	private final NamespacedKey					KEY_CROSSBOW = new NamespacedKey(RpgCraft.name(), "crossbow");
 	private final NamespacedKey					KEY_STAFF = new NamespacedKey(RpgCraft.name(), "staff");
@@ -104,6 +105,7 @@ public class SpellRegistry {
 	private final Map<UUID, DataTask<Integer>>	strikeBack = new HashMap<>();
 	private final Map<UUID, Boolean>			canUseStrikeback = new HashMap<>();
 	private final Map<UUID, Integer>			explosiveShot = new HashMap<>();
+    private final Set<UUID> 					demonChains = new HashSet<>();
 	private final Map<UUID, NPCCustom>			pets = new HashMap<>();
 	private final Map<UUID, NPCCustom>			braiseds = new HashMap<>();
 	private static final int					TIME_TEMPORARYNPC = 60; // seconds
@@ -202,9 +204,11 @@ public class SpellRegistry {
 
 	public void leap(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
 		Location	start = launcher.getEyeLocation();
-    	Vector		dir = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
-    	dir.setY(0.5);
-    	launcher.setVelocity(dir.multiply(1.5));
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
+    	direction.setY(0.5);
+    	launcher.setVelocity(direction.multiply(1.5));
 		addLeap(launcher, rarity.getNumber());
     	SoundManager.playSound(launcher, "spell_leap");
 		particleLeap(start);
@@ -342,8 +346,10 @@ public class SpellRegistry {
 	// fireball
 
 	public void fireBall(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
-		Location				start = launcher.getEyeLocation();
-	    Vector					direction = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+		Location	start = launcher.getEyeLocation();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
 		Fireball 				fireball = launcher.launchProjectile(Fireball.class);
 		PersistentDataContainer	pdc = fireball.getPersistentDataContainer();
 		Data.setInteger(pdc, KEY_FIREBALL, rarity.getNumber());
@@ -372,12 +378,13 @@ public class SpellRegistry {
 
 	public boolean isFireball(Projectile projectile) {
 		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
-		return Data.hasBoolean(pdc, KEY_FIREBALL);
+		return Data.hasInteger(pdc, KEY_FIREBALL);
 	}
 
-	public int getFireballRarity(Projectile projectile) {
+	public Rarity getFireballRarity(Projectile projectile) {
 		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
-		return Data.getInteger(pdc, KEY_FIREBALL);
+		int	n = Data.getInteger(pdc, KEY_FIREBALL);
+		return n != 0 ? Rarity.fromInt(n) : null;
 	}
 
 	// teleport
@@ -588,7 +595,7 @@ public class SpellRegistry {
 		l.removePotionEffect(PotionEffectType.INVISIBILITY);
 		Integer	id = stealth.remove(launcher.getUUID());
 		if (id != null) launcher.deleteModifier(id);
-		RpgCraft.getInstancEquipmentHidden().onStealthActivated(launcher);
+		RpgCraft.getInstancEquipmentHidden().onStealthDeactivated(launcher);
 		SoundManager.playSound(launcher, "spell_stealth");
 		particleStealth(launcher.getLocation());
 	}
@@ -857,14 +864,16 @@ public class SpellRegistry {
 	// shadow word
 
 	public void shadowWord(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
-		Location				start = launcher.getEyeLocation();
-    	Vector					dir = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+		Location	start = launcher.getEyeLocation();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
 		WitherSkull				witherSkull = launcher.launchProjectile(WitherSkull.class);
 		PersistentDataContainer	pdc = witherSkull.getPersistentDataContainer();
 		Data.setInteger(pdc, KEY_SHADOWWORD, rarity.getNumber());
 		witherSkull.setYield(0);
 		witherSkull.setCharged(false);
-		witherSkull.setVelocity(dir.multiply(1));
+		witherSkull.setVelocity(direction.multiply(1));
 		SoundManager.playSound(launcher, "spell_shadowword");
 		particleShadowWord(start);
 	}
@@ -914,9 +923,10 @@ public class SpellRegistry {
 		return Data.hasInteger(pdc, KEY_SHADOWWORD);
 	}
 
-	public int getShadowWordRarity(Projectile projectile) {
+	public Rarity getShadowWordRarity(Projectile projectile) {
 		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
-		return Data.getInteger(pdc, KEY_SHADOWWORD);
+		int	n = Data.getInteger(pdc, KEY_SHADOWWORD);
+		return n != 0 ? Rarity.fromInt(n) : null;
 	}
 
 	/////////////////////
@@ -931,8 +941,10 @@ public class SpellRegistry {
     	double		radius = 8 + rarity.getNumber();
     	double		maxAngle = Math.toRadians(25); // 50°
     	double		maxForce = 3;
-    	Location	start = launcher.getEyeLocation();
-    	Vector		direction = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+		Location	start = launcher.getEyeLocation();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
 		double		damage = (3 + rarity.getNumber() * 3);
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(start, radius)) {
@@ -1244,7 +1256,7 @@ public class SpellRegistry {
 		LivingEntityCustom	target = launcher.getTarget();
 		if (target == null || !target.isPresent()) return;
 		if (launcher.isGrouped(target)) return;
-		int	value = -50 * rarity.getNumber();
+		int	value = -100 * rarity.getNumber();
 		target.addStatModifier(StatSecondary.PHYSICAL_ARMOR, value, TIME_HUNT);
 		target.setGlowing(true);
 		new BukkitRunnable() {
@@ -1504,9 +1516,11 @@ public class SpellRegistry {
     public void bladesOfWar(LivingEntityCustom launcher, LivingEntityCustom target) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
-        Location	eyeLoc = launcher.getEyeLocation();
-        Vector		forward = target != null ? target.getLocation().subtract(launcher.getEyeLocation()).toVector().normalize() : eyeLoc.getDirection();
-        Location	center = eyeLoc.clone().add(forward.clone().multiply(6));
+		Location	start = launcher.getEyeLocation();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
+        Location	center = start.clone().add(direction.clone().multiply(6));
         int			amount = 30;
         double		range = 5.0;
 		double		rangeSquared = range * range;
@@ -1519,7 +1533,7 @@ public class SpellRegistry {
 			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
             	Location	spawnLoc = center.clone().add(xOffset, height, zOffset);
             	Arrow		arrow = world.spawn(spawnLoc, Arrow.class);
-            	Vector		velocity = forward.clone().multiply(1);
+            	Vector		velocity = direction.clone().multiply(1);
             	velocity.setY(-0.3);
             	arrow.setShooter(launcher.getLivingEntity());
             	arrow.setGravity(false);
@@ -1549,9 +1563,11 @@ public class SpellRegistry {
 		else if (braised == null)
 			createBraised(launcher);
 		else if (!braised.isPresent())
-			createBraised(launcher);
-		else
 			teleportBraised(launcher, braised);
+		else if (braised.getLocation().distanceSquared(launcher.getLocation()) > 40 * 40)
+			teleportPet(launcher, braised);
+		else
+			attackBraised(launcher, braised);
 		SoundManager.playSound(launcher, "staff_shoot");
     }
 
@@ -1578,6 +1594,16 @@ public class SpellRegistry {
 		braised.despawn();
 		braised.spawn(launcher.getLocation());
 		braised.cleanAggro();
+	}
+
+	private void attackBraised(LivingEntityCustom launcher, NPCCustom braised) {
+		LivingEntityCustom	target = launcher.getTarget();
+		if (target == null || !target.isPresent()) return;
+		LivingEntityCustom	actuelTarget = braised.getTarget();
+		if (actuelTarget != null)
+			braised.cleanAggro();
+		else
+			braised.addAggro(target, 1000);
 	}
 
 	public void removeBraised(LivingEntityCustom launcher) {
@@ -1648,23 +1674,23 @@ public class SpellRegistry {
 		center.getWorld().spawnParticle(Particle.WHITE_ASH, center, 40, 0.5, 0.5, 0.5, 0.05);
 		NPCCustom	spider;
 		if (isBig) {
-			TemplateType	templateType = TemplateType.SPIDER_BIG;
+			TemplateType	templateType = TemplateType.BIG_SPIDER;
 			NPC npc = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 			npc.setProtected(false);
 			spider = RpgCraft.getEntityCustomRegistry().createNPCCustom(npc);
 			if (spider == null) return;
 			spider.setLevel(rarity.getLevel());
-			spider.setTemplate(TemplateType.SPIDER_BIG);
+			spider.setTemplate(TemplateType.BIG_SPIDER);
 			spider.setRespawnTime(-1);
 		}
 		else {
-			TemplateType	templateType = TemplateType.SPIDER_CHILD;
+			TemplateType	templateType = TemplateType.SMALL_SPIDER;
 			NPC npc = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 			npc.setProtected(false);
 			spider = RpgCraft.getEntityCustomRegistry().createNPCCustom(npc);
 			if (spider == null) return;
 			spider.setLevel(rarity.getLevel());
-			spider.setTemplate(TemplateType.SPIDER_CHILD);
+			spider.setTemplate(TemplateType.SMALL_SPIDER);
 			spider.setRespawnTime(-1);	
 		}
 		spider.spawn(center);
@@ -1737,7 +1763,7 @@ public class SpellRegistry {
 	public void launchRedstone(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
-		Location		start = launcher.getLocation();
+		Location		start = launcher.getEyeLocation();
 	    BlockDisplay	redstone = world.spawn(start, BlockDisplay.class);
 	    redstone.setBlock(Bukkit.createBlockData(Material.REDSTONE_BLOCK));
 	    Transformation	transformation = redstone.getTransformation();
@@ -1745,7 +1771,9 @@ public class SpellRegistry {
 	    redstone.setTransformation(transformation);
 		redstone.setInterpolationDelay(0);
 		redstone.setInterpolationDuration(1);
-		Vector	direction = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
 		double	distance = direction.length();
 		double	speed = 0.9;
 		direction.normalize();
@@ -1780,13 +1808,14 @@ public class SpellRegistry {
 		if (world == null) return;
 		double		damage = rarity.getLevel();
 		Location	start = launcher.getEyeLocation();
-		Vector		direction = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
 		if (direction.getY() > -0.2)
 			direction.setY(-0.2);
 		direction.normalize();
-		double	maxDistance = 20;
 		new BukkitRunnable() {
 		    double	distance = 0;
+			double	maxDistance = 20;
 		    @Override
 		    public void run() {
 		        distance += 0.5;
@@ -1803,12 +1832,6 @@ public class SpellRegistry {
     			world.spawnParticle(Particle.SPLASH, point, 10, 0.3, 0.3, 0.3, 0);
 				world.spawnParticle(Particle.BUBBLE, point, 3, 0.1, 0.1, 0.1, 0);
 		        if (point.getBlock().isSolid()) {
-					Block	block = point.getBlock().getRelative(BlockFace.UP);
-					if (block.getType() == Material.AIR && canPlaceWater(block, 10)) {
-						world.playSound(launcher.getLocation(), Sound.ITEM_BUCKET_EMPTY, 1.5f, 1f);
-						block.setType(Material.WATER);
-						Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> block.setType(Material.AIR), 40);
-					}
 		            cancel();
 		            return;
 		        }
@@ -1817,33 +1840,6 @@ public class SpellRegistry {
 		    }
 		}.runTaskTimer(RpgCraft.instance(), 0, 1);
 		SoundManager.playSound(start, "spell_launchwater");
-	}
-
-	private boolean canPlaceWater(Block block, int radius) {
-	    Location	world_center = block.getLocation();
-	    World		world = block.getWorld();
-	    int			y = 0;
-	    int			lastCheckedChunkX = Integer.MIN_VALUE;
-	    int			lastCheckedChunkZ = Integer.MIN_VALUE;
-	    for (int x = -radius; x <= radius; x++) {
-	        for (int z = -radius; z <= radius; z++) {
-	            int	blockX = world_center.getBlockX() + x;
-	            int	blockZ = world_center.getBlockZ() + z;
-	            int	chunkX = blockX >> 4;
-	            int	chunkZ = blockZ >> 4;
-	            if (chunkX != lastCheckedChunkX || chunkZ != lastCheckedChunkZ) {
-	                if (!world.isChunkLoaded(chunkX, chunkZ)) {
-	                    return false;
-	                }
-	                lastCheckedChunkX = chunkX;
-	                lastCheckedChunkZ = chunkZ;
-	            }
-	            Block	check = world.getBlockAt(blockX, world_center.getBlockY() + y, blockZ);
-	            if (check.isPassable())
-	                return false;
-	        }
-	    }
-	    return true;
 	}
 
 	// expulse
@@ -1983,17 +1979,26 @@ public class SpellRegistry {
 
 	// launch wind charge
 
-    public void launchWind(LivingEntityCustom launcher, LivingEntityCustom target) {
+    public void launchWind(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
         World	world = launcher.getWorld();
         if (world == null) return;
 		LivingEntity	l = launcher.getLivingEntity();
 		if (l == null) return;
 		Location	start = launcher.getEyeLocation();
-        Vector		dir = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
         WindCharge	windCharge = launcher.launchProjectile(WindCharge.class);
-		windCharge.setVelocity(dir.multiply(2));
+		Data.setInteger(windCharge.getPersistentDataContainer(), KEY_WIND, rarity.getNumber());
+		windCharge.setVelocity(direction.multiply(2));
         windCharge.setShooter(l);
     }
+
+	public Rarity getWind(Projectile projectile) {
+		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
+		int	n = Data.getInteger(pdc, KEY_WIND);
+		return n != 0 ? Rarity.fromInt(n) : null;
+	}
 
 	// launch fire
 
@@ -2009,8 +2014,10 @@ public class SpellRegistry {
 					cancel();
 					return;
 				}
-				Location		start = launcher.getEyeLocation();
-				Vector			direction = target != null ? target.getLocation().subtract(start).toVector().normalize() : start.getDirection();
+				Location	start = launcher.getEyeLocation();
+    			Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+				if (direction.lengthSquared() < 1.0E-6) return;
+				else direction.normalize();
 				SmallFireball	smallFireball = launcher.launchProjectile(SmallFireball.class);
 				smallFireball.setVelocity(direction);
 				// damage
@@ -2044,6 +2051,25 @@ public class SpellRegistry {
 		SoundManager.playSound(launcher, "spell_teleportation");
 		particleTeleport(destination);
     }
+
+	// leap elemental
+
+	public void leapElemental(LivingEntityCustom launcher, LivingEntityCustom target) {
+	    double		horizontalDistance = 10;
+	    double		jumpHeight = 6;
+	    double		gravity = 0.08;
+	    double		verticalVelocity = Math.sqrt(2 * gravity * jumpHeight);
+	    double		timeToApex = verticalVelocity / gravity;
+	    double		totalAirTime = timeToApex * 2;
+	    double		horizontalSpeed = horizontalDistance / totalAirTime;
+		Location	start = launcher.getEyeLocation();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		else direction.normalize();
+	    Vector 		velocity = direction.multiply(horizontalSpeed);
+	    velocity.setY(verticalVelocity);
+	    launcher.setVelocity(velocity);
+	}
 
 	// charge
 
@@ -2086,6 +2112,7 @@ public class SpellRegistry {
 				    target.setVelocity(target.getVelocity().add(knockback));
 					target.damage(rarity.getLevel(), CombatDamage.PHYSICAL, launcher);
                 }
+				world.spawnParticle(Particle.CLOUD, launcher.getEyeLocation(), 1, 0, 0, 0, 0);
                 ticks++;
             }
         }.runTaskTimer(RpgCraft.instance(), 0L, 1L);
@@ -2302,6 +2329,156 @@ public class SpellRegistry {
         return null;
     }
 
+	// demon chains
+
+	public void demonChains(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
+		Location	start = launcher.getEyeLocation();
+    	Vector		direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+		if (direction.lengthSquared() < 1.0E-6) return;
+		direction.normalize();
+		WitherSkull				witherSkull = launcher.launchProjectile(WitherSkull.class);
+		PersistentDataContainer	pdc = witherSkull.getPersistentDataContainer();
+		Data.setInteger(pdc, KEY_DEMONCHAINS, rarity.getNumber());
+		witherSkull.setYield(0);
+		witherSkull.setCharged(false);
+		witherSkull.setVelocity(direction.multiply(1));
+		SoundManager.playSound(launcher, "spell_demonchains");
+	}
+
+    public LivingEntityCustom findNearestFromLoc(LivingEntityCustom launcher, Location start) {
+		World	world = launcher.getWorld();
+		if (world == null) return null;
+        LivingEntityCustom		closest = null;
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+        double closestDistSq = 6 * 6;
+        for (LivingEntity l : world.getNearbyLivingEntities(start, 6)) {
+            LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+            if (t == null || t.isGrouped(launcher)) continue;
+            double	distSq = t.getLocation().distanceSquared(start);
+            if (distSq < closestDistSq) {
+                closest = t;
+                closestDistSq = distSq;
+            }
+        }
+        return closest;
+    }
+
+    public LivingEntityCustom findNearestFromEntity(LivingEntityCustom launcher, LivingEntityCustom a) {
+		World	world = launcher.getWorld();
+		if (world == null) return null;
+		Location				start = a.getLocation();
+        LivingEntityCustom		closest = null;
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+        double closestDistSq = 25 * 25;
+        for (LivingEntity l : world.getNearbyLivingEntities(start, 25)) {
+            LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+            if (t == null || t.equals(a) || t.isGrouped(launcher)) continue;
+            double	distSq = t.getLocation().distanceSquared(start);
+            if (distSq < closestDistSq) {
+                closest = t;
+                closestDistSq = distSq;
+            }
+        }
+        return closest;
+    }
+
+    public void demonChainsAttract(LivingEntityCustom launcher, LivingEntityCustom a, LivingEntityCustom b) {
+        demonChains.add(a.getUUID());
+        demonChains.add(b.getUUID());
+        new BukkitRunnable() {
+            int ticks = 0;
+			int	ticksMax = 30;
+			double	distanceMax = 1.5 * 1.5;
+            @Override
+            public void run() {
+                if (!a.isPresent() || !b.isPresent() || ticks++ > ticksMax) {
+                    cleanup();
+                    return;
+                }
+                double distance = a.getLocation().distanceSquared(b.getLocation());
+                if (distance <= distanceMax) {
+                    explosion(launcher, a.getLocation(), 6, launcher.getLevel(), 1, 80);
+                    cleanup();
+                    return;
+                }
+				particleDemonChains(a, b);
+                pull(a, b.getLocation());
+                pull(b, a.getLocation());
+            }
+            private void pull(LivingEntityCustom l, Location target) {
+                Vector	direction = target.toVector().subtract(l.getLocation().toVector());
+                if (direction.lengthSquared() < 1.0E-6) return;
+                direction.normalize().multiply(0.3);
+                l.setVelocity(direction);
+            }
+            private void cleanup() {
+                demonChains.remove(a.getUUID());
+                demonChains.remove(b.getUUID());
+                cancel();
+            }
+        }.runTaskTimer(RpgCraft.instance(), 0L, 4L);
+		SoundManager.playSound(launcher, "spell_demonchains_attract");
+    }
+
+	private void particleDemonChains(LivingEntityCustom a, LivingEntityCustom b) {
+	    Location	locA = a.getLocation().add(0, a.getHeight() / 2, 0);
+	    Location	locB = b.getLocation().add(0, b.getHeight() / 2, 0);
+	    Vector		direction = locB.toVector().subtract(locA.toVector());
+	    double		distance = direction.length();
+	    if (distance < 1.0E-6) return;
+	    Vector		step = direction.normalize().multiply(0.3);
+	    int steps = (int)(distance / 0.3);
+	    Location	current = locA.clone();
+	    World		world = locA.getWorld();
+	    for (int i = 0; i <= steps; i++) {
+	        world.spawnParticle(Particle.SCULK_CHARGE_POP, current, 1, 0, 0, 0, 0);
+	        current.add(step);
+	    }
+	}
+
+	public boolean isDemonChains(Projectile projectile) {
+		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
+		return Data.hasInteger(pdc, KEY_DEMONCHAINS);
+	}
+
+	public Rarity getDemonChains(Projectile projectile) {
+		PersistentDataContainer	pdc = projectile.getPersistentDataContainer();
+		int	n = Data.getInteger(pdc, KEY_DEMONCHAINS);
+		return n != 0 ? Rarity.fromInt(n) : null;
+	}
+
+	public void impact(LivingEntityCustom launcher, Rarity rarity) {
+		World	    world = launcher.getWorld();
+		if (world == null) return;
+		Location	center = launcher.getLocation();
+		double		radius = 8;
+		double 		damage = rarity.getNumber() * 5;
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+		    if (target == null || launcher.isGrouped(target)) continue;
+			if (!target.isBoss()) target.setVelocity(target.getVelocity().setY(1));
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+		}
+		SoundManager.playSound(center, "spell_strikeback_hit");
+		particleImpact(radius, center);
+	}
+
+	private void particleImpact(double radius, Location center) {
+		World	world = center.getWorld();
+		Random	random = new Random();
+		for (int i = 0; i < 256; i++) {
+		    double		angle = random.nextDouble() * Math.PI * 2;
+		    double		distance = Math.sqrt(random.nextDouble()) * radius;
+		    double		x = Math.cos(angle) * distance;
+		    double		z = Math.sin(angle) * distance;
+		    Location	loc = center.clone().add(x, 0, z);
+			loc.add(0, random.nextDouble() * 0.3, 0);
+			BlockData data = loc.clone().subtract(0, 1, 0).getBlock().getBlockData();
+			world.spawnParticle(Particle.BLOCK, loc, 1, data);
+		}
+	}
+
 	// utils
 
 	private void addNPCTemporary(NPCCustom npcCustom) {
@@ -2390,7 +2567,9 @@ public class SpellRegistry {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
             if (target == null || launcher.isGrouped(target)) continue;
 			if (force > 0 && !target.isBoss()) {
-				Vector	direction = target.getLocation().toVector().subtract(center.toVector()).normalize();
+				Vector	direction = target.getLocation().toVector().subtract(center.toVector());
+				if (direction.lengthSquared() < 1.0E-6) direction = new Vector(0, 1, 0);
+				else direction.normalize();
 				double	resistance = 0;
 				AttributeInstance	instance = l.getAttribute(Attribute.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE);
 				if (instance != null)
@@ -2434,20 +2613,52 @@ public class SpellRegistry {
 		world.spawnParticle(Particle.CLOUD, center, 40, 1.5, 1.5, 1.5, 0.1);
 	}
 
+	public void explosionWind(LivingEntityCustom launcher, Location center, double radius, double damage) {
+	    World	world = launcher.getWorld();
+		if (world == null) return;
+	    world.spawnParticle(Particle.GUST_EMITTER_LARGE, center, 1, 0, 0, 0, 0);
+	    int burstCount = 16;
+	    for (int i = 0; i < burstCount; i++) {
+	        double angle = (2 * Math.PI / burstCount) * i;
+	        Vector		burstDir = new Vector(Math.cos(angle), 0.2, Math.sin(angle)).normalize();
+	        Location	burstLoc = center.clone().add(burstDir.clone().multiply(0.5));
+	        world.spawnParticle(Particle.GUST, burstLoc, 1, burstDir.getX() * 0.3, burstDir.getY() * 0.3, burstDir.getZ() * 0.3, 0.1);
+	    }
+	    for (int i = 0; i < 24; i++) {
+	        double angle = (2 * Math.PI / 24) * i;
+	        Location	ringLoc = center.clone().add(Math.cos(angle) * radius, 0.1, Math.sin(angle) * radius);
+	        world.spawnParticle(Particle.CLOUD, ringLoc, 1, 0, 0, 0, 0);
+	    }
+	    world.playSound(center, Sound.ENTITY_WIND_CHARGE_WIND_BURST, 1.5F, 1.0F);
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+	    for (LivingEntity l : center.getWorld().getNearbyLivingEntities(center, radius)) {
+	        LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+			if (target == null || launcher.isGrouped(target)) continue;
+	        Vector direction =	target.getLocation().toVector().subtract(center.toVector());
+	        if (direction.lengthSquared() < 1.0E-6) direction = new Vector(0, 1, 0);
+			else direction.normalize();
+	        double distance = target.getLocation().distance(center);
+	        double falloff = Math.max(0, 1 - (distance / radius));
+	        direction.multiply(1.2 * falloff);
+	        direction.setY(Math.max(direction.getY(), 0.3 * falloff));
+	        target.setVelocity(direction);
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+	    }
+	}
+
 	public void clean(LivingEntityCustom livingEntityCustom) {
 		UUID	uuid = livingEntityCustom.getUUID();
-		kneeBreaker.remove(uuid);
-		leap.remove(uuid);
-		stealth.remove(uuid);
-		coldBlood.remove(uuid);
-		holyBomb.remove(uuid);
-		holyShield.remove(uuid);
-		dragonSkinPlayer.remove(uuid);
-		strikeBack.remove(uuid);
-		canUseStrikeback.remove(uuid);
-		explosiveShot.remove(uuid);
-		pets.remove(uuid);
-		braiseds.remove(uuid);
-		npcTemporary.remove(uuid);
+		removeKneeBreaker(uuid);
+		removeLeap(uuid);
+		removeStealth(livingEntityCustom);
+		removeColdBlood(uuid);
+		removeHolyBomb(uuid);
+		removeHolyShield(uuid);
+		removeDragonSkin(livingEntityCustom);
+		removeStrikeBack(uuid);
+		removeExplosiveShot(uuid);
+		removeExplosiveShot(uuid);
+		removePet(livingEntityCustom);
+		removeBraised(livingEntityCustom);
 	}
 }

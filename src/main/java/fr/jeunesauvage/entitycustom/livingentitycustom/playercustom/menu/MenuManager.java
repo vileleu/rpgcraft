@@ -37,8 +37,10 @@ public class MenuManager implements Listener {
                 case "back_class" -> menu.openClassMenu();
                 case "back_spell" -> menu.openSpellMenu();
                 case "back_items" -> menu.openItemsMenu();
+                case "back_potions" -> menu.openPotionsMenu();
                 case "get_equipable" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
                 case "get_spell" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
+                case "get_potion" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
                 // stats + skills
                 case "open_stats" -> menu.openStatsMenu();
                 case "open_skills" -> menu.openSkillsMenu();
@@ -96,6 +98,12 @@ public class MenuManager implements Listener {
                 case "open_legs" -> menu.openLeggingsMenu(parseAction.getStart());
                 case "open_feet" -> menu.openBootsMenu(parseAction.getStart());
                 case "open_elytra" -> menu.openElytrasMenu(parseAction.getStart());
+                // potions
+                case "open_potions" -> menu.openPotionsMenu();
+                case "open_potion_health" -> menu.openPotionsHealthMenu();
+                case "open_potion_mana" -> menu.openPotionsManaMenu();
+                case "open_potion_rage" -> menu.openPotionsRageMenu();
+                case "open_potion_energy" -> menu.openPotionsEnergyMenu();
             }
         }
     }

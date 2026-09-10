@@ -27,6 +27,7 @@ public class NPCBuilderManager implements Listener {
         rpgCraft.getCommand("equipmynpc").setExecutor(npcBuilderCommand);
         rpgCraft.getCommand("teammynpc").setExecutor(npcBuilderCommand);
         rpgCraft.getCommand("dropmynpc").setExecutor(npcBuilderCommand);
+        rpgCraft.getCommand("formmynpc").setExecutor(npcBuilderCommand);
         rpgCraft.getCommand("templatemynpc").setExecutor(npcBuilderCommand);
         rpgCraft.getCommand("spawnmynpc").setExecutor(npcBuilderCommand);
         rpgCraft.getCommand("despawnmynpc").setExecutor(npcBuilderCommand);

@@ -35,6 +35,8 @@ import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.armor.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.itemcustom.potion.Potion;
+import fr.jeunesauvage.itemcustom.potion.PotionType;
 import fr.jeunesauvage.itemcustom.spell.Spell;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
@@ -65,7 +67,8 @@ public class Menu {
         inv.setItem(13, createSlot(Material.BLAZE_ROD, "Class", "open_class"));
         inv.setItem(14, createSlot(Material.WRITTEN_BOOK, "Team", "open_team"));
         inv.setItem(15, createSlot(Material.IRON_SWORD, "Items", "open_items"));
-        inv.setItem(16, createSlot(Material.PUFFERFISH, "NPC", "open_npc"));
+        inv.setItem(16, createSlot(Material.POTION, "Potions", "open_potions"));
+        inv.setItem(19, createSlot(Material.PUFFERFISH, "NPC", "open_npc"));
         launcher.openInventory(inv);
     }
 
@@ -604,7 +607,6 @@ public class Menu {
             }
         }
         if (list.size() > BIG_SLOT - 1) list = new ArrayList<>(list.subList(start, Math.min(start + BIG_SLOT - 1, list.size())));
-        RpgCraft.debug("list.size() = " + list.size());
         return list;
     }
 
@@ -629,7 +631,6 @@ public class Menu {
                 list.add(equipable);
         }
         if (list.size() > BIG_SLOT - 1) list = new ArrayList<>(list.subList(start, Math.min(start + BIG_SLOT - 1, list.size())));
-        RpgCraft.debug("list.size() = " + list.size());
         return list;
     }
 
@@ -852,6 +853,89 @@ public class Menu {
             inv.setItem(i++, createEquipable(equipable));
         }
         launcher.openInventory(inv);
+    }
+
+    public void openPotionsMenu() {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_main"));
+        int i = 10;
+        for (PotionType potionType: PotionType.values()) {
+            String  name = potionType.getName();
+            inv.setItem(i++, createSlot(potionType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1).replaceAll("_", " "), "open_" + name));
+        }
+        launcher.openInventory(inv);
+    }
+
+    public void openPotionsHealthMenu() {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        List<Potion>  potions = getPotionsList(PotionType.POTION_HEALTH);
+        int i = 10;
+        for (Potion potion: potions) {
+            inv.setItem(i++, createPotion(potion));
+        }
+        launcher.openInventory(inv);
+    }
+
+    public void openPotionsManaMenu() {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        List<Potion>  potions = getPotionsList(PotionType.POTION_MANA);
+        int i = 10;
+        for (Potion potion: potions) {
+            inv.setItem(i++, createPotion(potion));
+        }
+        launcher.openInventory(inv);
+    }
+
+    public void openPotionsRageMenu() {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        List<Potion>  potions = getPotionsList(PotionType.POTION_RAGE);
+        int i = 10;
+        for (Potion potion: potions) {
+            inv.setItem(i++, createPotion(potion));
+        }
+        launcher.openInventory(inv);
+    }
+
+    public void openPotionsEnergyMenu() {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        List<Potion>  potions = getPotionsList(PotionType.POTION_ENERGY);
+        int i = 10;
+        for (Potion potion: potions) {
+            inv.setItem(i++, createPotion(potion));
+        }
+        launcher.openInventory(inv);
+    }
+
+    private List<Potion> getPotionsList(PotionType potionType) {
+        List<Potion>    list = new ArrayList<>();
+        for (Potion potion: RpgCraft.getItemCustomRegistry().getPotions().values()) {
+            if (potion.getType() != potionType) continue;
+            boolean added = false;
+            for (int i = 0; i < list.size(); i++) {
+                if (potion.getLevel() <= list.get(i).getLevel()) {
+                    list.add(i, potion);
+                    added = true;
+                    break;
+                }
+            }
+            if (added == false)
+                list.add(potion);
+        }
+        return list;
     }
 
     public void openNPCMenu() {
@@ -1221,6 +1305,15 @@ public class Menu {
         ItemMeta				meta = item.getItemMeta();
 		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
         Data.setString(pdc, KEY_MENU, "get_equipable");
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    private ItemStack createPotion(Potion potion) {
+        ItemStack               item = potion.getItemClone();
+        ItemMeta				meta = item.getItemMeta();
+		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
+        Data.setString(pdc, KEY_MENU, "get_potion");
         item.setItemMeta(meta);
         return item;
     }

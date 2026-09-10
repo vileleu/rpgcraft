@@ -48,6 +48,10 @@ commands:
     description: change drop to npc
     usage: /dropmynpc <drop> <npc name>
     permission: rpgcraft.op
+  formmynpc:
+    description: change form to npc
+    usage: /formmynpc <form> <npc name>
+    permission: rpgcraft.op
   templatemynpc:
     description: change template to npc
     usage: /templatemynpc <template> <npc name>

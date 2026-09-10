@@ -32,6 +32,8 @@ public class MobCustomManager implements Listener {
     @EventHandler
     public void onMobCustomDeath(EntityDeathEvent e) {
         if (e.getEntity().hasMetadata("NPC") || !(e.getEntity() instanceof Mob mob)) return;
+        e.getDrops().clear();
+        e.setDroppedExp(0);
         MobCustom   mobCustom = RpgCraft.getEntityCustomRegistry().createMobCustom(mob);
         if (mobCustom == null) return;
         mobCustom.onDeath();

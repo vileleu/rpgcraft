@@ -47,46 +47,6 @@ public class UsableManager implements Listener {
 		}
 	}
 
-	// spell
-
-	/*
-    // apply real invisibility
-    @EventHandler
-    public void onInvisibility(EntityPotionEffectEvent e) {
-		PotionEffect	potionEffect = e.getNewEffect();
-        if (potionEffect == null || potionEffect.getType() != PotionEffectType.INVISIBILITY) return;
-        if (e.getEntity() instanceof Player player && !player.hasMetadata("NPC")) {
-			Action	action = e.getAction();
-			if (action == Action.ADDED) {
-        		for (Player p: Bukkit.getOnlinePlayers()) {
-        		    if (p.equals(player)) continue;
-        		    p.hidePlayer(RpgCraft.instance(), player);
-        		}
-			}
-			else if (action == Action.REMOVED || action == Action.CLEARED) {
-        		for (Player p: Bukkit.getOnlinePlayers()) {
-        		    if (p.equals(player)) continue;
-        		    p.showPlayer(RpgCraft.instance(), player);
-        		}
-			}
-		}
-    }
-
-    // apply real invisibility when player join
-    @EventHandler
-    public void onJoin(PlayerJoinEvent e) {
-		Player	player = e.getPlayer();
-		boolean	isInvisible = player.hasPotionEffect(PotionEffectType.INVISIBILITY);
-	    for (Player p: Bukkit.getOnlinePlayers()) {
-            if (p.equals(player)) continue;
-			if (isInvisible)
-            	p.hidePlayer(RpgCraft.instance(), player);
-			if (p.hasPotionEffect(PotionEffectType.INVISIBILITY))
-				player.hidePlayer(RpgCraft.instance(), p);
-        }
-	}
-	*/
-
 	// cancel damage fall on leap + cancel stealth for all damage
 	@EventHandler
 	public void onDamage(EntityDamageEvent e) {

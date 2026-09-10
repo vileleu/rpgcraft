@@ -79,6 +79,7 @@ import net.skinsrestorer.api.storage.SkinStorage;
 
 public final class PlayerCustom implements LivingEntityCustom {
     private static final NamespacedKey              KEY_MARK = new NamespacedKey(RpgCraft.name(), "mark");
+	public static final double	                    HEALTH_DEFAULT = 50;
 	public static final double	                    RANGETARGET_DEFAULT = 60; // blocks
 	public static final long	                    TIMETARGET_DEFAULT = 200; // ticks
     private final Player                            player;
@@ -361,6 +362,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void setVelocity(Vector vector) {
+        if (vector == null) return;
         player.setVelocity(vector);
     }
 
@@ -531,6 +533,16 @@ public final class PlayerCustom implements LivingEntityCustom {
     @Override
     public void setGlowing(boolean glowing) {
         player.setGlowing(glowing);
+    }
+
+    @Override
+    public void setAI(boolean ai) {
+        player.setAI(ai);
+    }
+
+    @Override
+    public void setGravity(boolean gravity) {
+        player.setGravity(gravity);
     }
 
     @Override
@@ -888,7 +900,7 @@ public final class PlayerCustom implements LivingEntityCustom {
             // refresh alls vanilla attributes
             stats.values().forEach(stat -> {
                 switch (stat.getType()) {
-                    case StatSecondary.MAXIMUM_HEALTH -> setHealthMax(StatSecondary.MAXIMUM_HEALTH.getAmount(this));
+                    case StatSecondary.MAXIMUM_HEALTH -> setHealthMax(HEALTH_DEFAULT + StatSecondary.MAXIMUM_HEALTH.getAmount(this));
                     case StatSecondary.MAXIMUM_MANA -> {
                         if (power.getType() == PowerType.MANA) setPowerMax(StatSecondary.MAXIMUM_MANA.getAmount(this));
                     }
@@ -1015,6 +1027,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onSpawn() {
+        setHealthMax(HEALTH_DEFAULT);
         RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();
@@ -1038,6 +1051,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onJoin() {
+        setHealthMax(HEALTH_DEFAULT);
         if (getLevel() < 1) setLevel(1);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();

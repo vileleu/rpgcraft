@@ -58,6 +58,8 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     BoundingBox                     getBoundingBox();
     <T extends Projectile> T        launchProjectile(Class<T> projectile);
     void                            setGlowing(boolean glowing);
+    void                            setAI(boolean ai);
+    void                            setGravity(boolean gravity);
 
     RaceType                        getRaceType();
     void                            setRaceType(RaceType raceType);

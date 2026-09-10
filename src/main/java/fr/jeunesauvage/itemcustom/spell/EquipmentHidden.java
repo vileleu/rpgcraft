@@ -43,6 +43,7 @@ public class EquipmentHidden extends PacketAdapter {
     private void sendEquipmentUpdate(LivingEntityCustom target, boolean hide) {
         EntityEquipment equipment = target.getEquipment();
         if (equipment == null) return;
+        invisibleEntities.put(target.getEntityId(), target.getUUID());
         ProtocolManager protocolManager = RpgCraft.instanceProtocolLib();
         List<Pair<ItemSlot, ItemStack>> slots = new ArrayList<>();
         slots.add(new Pair<>(ItemSlot.HEAD, hide ? new ItemStack(Material.AIR) : equipment.getHelmet()));
