@@ -45,7 +45,7 @@ public enum FormType {
     MURLOC("murloc", 0.7, FormTypeSkin.MURLOC),
     MURLOC_ELITE("murloc_elite", 0.8, FormTypeSkin.MURLOC_ELITE),
     MURLOC_BOSS("murloc_boss", 1.6, FormTypeSkin.MURLOC_BOSS),
-    MURLOC_NICE("murloc_nice", 1.6, FormTypeSkin.MURLOC_NICE),
+    MURLOC_NICE("murloc_nice", 0.7, FormTypeSkin.MURLOC_NICE),
 	// necromancer
     NECROMANCER("necromancer", 0.9, FormTypeSkin.NECROMANCER),
     NECROMANCER_NOFACE("necromancer_noface", 0.9, FormTypeSkin.NECROMANCER_NOFACE),
@@ -64,7 +64,7 @@ public enum FormType {
 	// scorpion
     SCORPION("scorpion", 1.2, FormTypeSkin.SCORPION),
 	// forest
-	LEAPER("leaper", 1.5, FormTypeSkin.LEAPER),
+	LEAPER("leaper", 1.2, FormTypeSkin.LEAPER),
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
 	FROZER("frozer", 1.5, FormTypeSkin.FROZER),
 	// demon

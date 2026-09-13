@@ -764,7 +764,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 		    int	ticks = 0;
 		    @Override
 		    public void run() {
-				if (!isPresent() || !target.isPresent()) {
+				if (target == null || !isPresent() || !target.isPresent()) {
 					targetData.deactive();
 					return;
 				}
@@ -774,7 +774,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 				bar.name(Message.c(Component.translatable("level.rpgcraft.short").append(Component.text(target.getLevel() + " " + target.getName()))));
 				bar.progress(progress);
 				if (ticks == TIMETARGET_DEFAULT) {
-					if (getLocation().distanceSquared(getLocation()) > RANGETARGET_DEFAULT * RANGETARGET_DEFAULT)
+					if (getWorld() != target.getWorld() || target.getLocation().distanceSquared(getLocation()) > RANGETARGET_DEFAULT * RANGETARGET_DEFAULT)
 						targetData.deactive();
 					else
 						ticks = 0;

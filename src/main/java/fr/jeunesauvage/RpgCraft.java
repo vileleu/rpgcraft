@@ -1,5 +1,7 @@
 package fr.jeunesauvage;
 
+import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -71,6 +73,11 @@ public class RpgCraft extends JavaPlugin {
         getServer().getPluginManager().registerEvents(worldManager, this);
         // sound
         new SoundManager();
+        // world hellow
+        if (Bukkit.getWorld("world_hellow") == null) {
+            WorldCreator creator = new WorldCreator("world_hellow");
+            Bukkit.createWorld(creator);
+        }
         // plugin ON
         getLogger().info("RpgCraft ON");
     }

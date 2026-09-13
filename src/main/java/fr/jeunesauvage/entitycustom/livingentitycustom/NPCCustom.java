@@ -147,6 +147,10 @@ public final class NPCCustom implements LivingEntityCustom {
         }
     }
 
+    public NPC getNPC() {
+        return npc;
+    }
+
     public FightTrait getFightTrait() {
         return npc.getOrAddTrait(FightTrait.class);
     }

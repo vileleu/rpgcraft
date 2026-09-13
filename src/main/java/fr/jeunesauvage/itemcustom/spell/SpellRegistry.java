@@ -208,6 +208,10 @@ public class SpellRegistry {
 		if (direction.lengthSquared() < 1.0E-6) return;
 		else direction.normalize();
     	direction.setY(0.5);
+		if (launcher instanceof NPCCustom npcCustom) {
+			NPC	npc = npcCustom.getNPC();
+			npc.getNavigator().setPaused(true);
+		}
     	launcher.setVelocity(direction.multiply(1.5));
 		addLeap(launcher, rarity.getNumber());
     	SoundManager.playSound(launcher, "spell_leap");
@@ -238,19 +242,18 @@ public class SpellRegistry {
 		UUID	uuid = launcher.getUUID();
 		if (hasLeap(uuid)) return;
 		leap.put(uuid, new BukkitRunnable() {
-			boolean	cancel = false;
 		    @Override
 		    public void run() {
-				if (cancel) {
-					removeLeap(uuid);
-					return;
-				}
 				if (!isLanding(launcher)) return;
+				if (launcher instanceof NPCCustom npcCustom) {
+					NPC	npc = npcCustom.getNPC();
+					npc.getNavigator().setPaused(false);
+				}
 	    		Location	loc = launcher.getLocation();
 				double		radius = 6;
 				double 		damage = level * 4 + 2;
 				explosion(launcher, loc, radius, damage, 0.5, 0);
-				cancel = true;
+				removeLeap(uuid);
 		    }
 		}.runTaskTimer(RpgCraft.instance(), 5L, 2L));
 	}
@@ -2457,7 +2460,7 @@ public class SpellRegistry {
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
 		    if (target == null || launcher.isGrouped(target)) continue;
-			if (!target.isBoss()) target.setVelocity(target.getVelocity().setY(1));
+			if (!target.isBoss()) target.setVelocity(target.getVelocity().setY(1.5));
 			target.damage(damage, CombatDamage.MAGIC, launcher);
 		}
 		SoundManager.playSound(center, "spell_strikeback_hit");

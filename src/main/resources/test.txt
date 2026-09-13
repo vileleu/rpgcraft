@@ -44,12 +44,10 @@ TODO:
  - mannequin
 - WORLD:
   - player can break mineral block
-  - necropolis:{poison,darkness}
+  - necropolis:{poison,darkness} (task to detect position, NEVER use PlayerMoveEvent)
   - enchanting table cancel
 - QUESTS:
 
 - TESTS:
- - change formtype on NPC
  - stealth
  - menu potions
- - leaper (spell + movement)

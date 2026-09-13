@@ -72,4 +72,12 @@ public enum PotionType implements ItemCustomType {
 	public int getCooldown() {
 		return cooldown;
 	}
+
+	public static PotionType fromString(String name) {
+		if (name == null) return null;
+		for (PotionType potionType: PotionType.values()) {
+			if (potionType.getName().equals(name)) return potionType;
+		}
+		return null;
+	}
 }

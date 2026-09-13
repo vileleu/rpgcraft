@@ -52,6 +52,9 @@ public class FightAI {
     private int						nextSpellRanged;
     private int						nextSpellRangedBoss;
 	private boolean					quote;
+	private int						nextStuckRate;
+	private int						nextStuck;
+	private Location				lastLocation;
 
     FightAI(NPC npc, FightData fightData) {
 		this.npc = npc;
@@ -68,6 +71,10 @@ public class FightAI {
 		this.nextSpellRanged = 0;
 		this.nextSpellRangedBoss = 0;
 		this.quote = false;
+		this.nextStuckRate = 2;
+		this.nextStuck = 0;
+		this.lastLocation = npc.getStoredLocation();
+		this.lastLocation.setY(0);
 		Waypoints			waypoints = npc.getOrAddTrait(Waypoints.class);
 		WaypointProvider	provider = waypoints.getCurrentProvider();
 		if (provider instanceof LinearWaypointProvider linear) {
@@ -237,42 +244,44 @@ public class FightAI {
 			}
 			int			now = Bukkit.getCurrentTick();
 			double		width = npcCustom.getWidth();
-			double		range;
+			double		rangeClose = data.getAttackRangeClose() + width;
+			double		rangeRanged = data.getAttackRangeRanged() + width;
+			double		rangeBoss = rangeRanged + rangeRanged / 2;
 			ItemStack	item = findItem(npcCustom);
 			WeaponType	weaponType = findWeaponType(item);
-			range = data.getAttackRangeRanged();
-			// spell ranged
-			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
-				if (data.getSpellRate() > 0 && now >= nextSpellRanged) {
-					launchSpellRanged(npcCustom);
-					nextSpellRanged = now + (int)(data.getSpellRate() * 20f);
-				}
-			}
-			range += range / 2;
-			// spell ranged boss
-			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
-				if (data.getSpellRate() > 0 && now >= nextSpellRangedBoss) {
-					launchSpellRangedBoss(npcCustom);
-					nextSpellRangedBoss = now + (int)(data.getSpellRate() * 30f);
-				}
-			}
-			// get physical range
-			switch (weaponType) {
-				case BOW, CROSSBOW, STAFF, SPELLBOOK -> range = data.getAttackRangeRanged();
-				default -> {
-					if (data.getDamage() <= 0 || data.getAttackRate() <= 0) range = data.getAttackRangeRanged();
-					else range = data.getAttackRangeClose();
-				}
-			};
-			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (data.getAttackRangeClose() * data.getAttackRangeClose() + width * width)) {
+			// spell close
+			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= rangeClose * rangeClose) {
 				// spell close
 				if (data.getSpellRate() > 0 && now >= nextSpellClose) {
 					launchSpellClose(npcCustom);
 					nextSpellClose = now + (int)(data.getSpellRate() * 20f);
 				}
 			}
+			// spell ranged
+			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (rangeRanged * rangeRanged)) {
+				if (data.getSpellRate() > 0 && now >= nextSpellRanged) {
+					launchSpellRanged(npcCustom);
+					nextSpellRanged = now + (int)(data.getSpellRate() * 20f);
+				}
+			}
+			// spell ranged boss
+			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (rangeBoss * rangeBoss)) {
+				if (data.getSpellRate() > 0 && now >= nextSpellRangedBoss) {
+					launchSpellRangedBoss(npcCustom);
+					nextSpellRangedBoss = now + (int)(data.getSpellRate() * 30f);
+				}
+			}
+			// get physical range
+			double	rangePhysical;
+			switch (weaponType) {
+				case BOW, CROSSBOW, STAFF, SPELLBOOK -> rangePhysical = rangeRanged;
+				default -> {
+					if (data.getDamage() <= 0 || data.getAttackRate() <= 0) rangePhysical = rangeRanged;
+					else rangePhysical = rangeClose;
+				}
+			};
 			// if target close: attack
-			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= (range * range + width * width)) {
+			if (npcCustom.getLocation().distanceSquared(target.getLocation()) <= rangePhysical * rangePhysical) {
 				npc.faceLocation(target.getLocation());
 				// no damage == no walking to target
 				if (data.getDamage() <= 0 || data.getAttackRate() <= 0) flee(npcCustom, navigator);
@@ -308,13 +317,14 @@ public class FightAI {
 				lastTarget = target;
 				lastTargetLocation = target.getLocation();
 			}
+			isStuck(npcCustom);
 		}
 		// target is not visible
 		else {
 			if (quote) quote = false;
 			// can't find target ()
-			double	width = npcCustom.getWidth();
-			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < width * width) {
+			double	range = 2 + npcCustom.getWidth();
+			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < range * range) {
 				if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, closestWaypoint);
 				else navigator.cancelNavigation();
 				lastTarget = null;
@@ -324,6 +334,7 @@ public class FightAI {
 			// go to last position of target
 			if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, lastTargetLocation);
 			else setTargetGround(npcCustom, navigator, lastTargetLocation);
+			isStuck(npcCustom);
 		}
 		return 0;
 	}
@@ -373,6 +384,22 @@ public class FightAI {
         Location	fleeTarget = npcEntity.getLocation().add(awayDirection.multiply(8));
         navigator.setTarget(fleeTarget);
     }
+
+	// check if npc is stuck
+	public void isStuck(NPCCustom npcCustom) {
+		Location	start = npcCustom.getEyeLocation().clone();
+		start.setY(0);
+		int			now = Bukkit.getCurrentTick();
+		if (now >= nextStuck) {
+			if (start.distanceSquared(lastLocation) < 2) {
+				Location	targetLoc = target != null ? target.getLocation() : lastTargetLocation;
+				Vector	direction = targetLoc.toVector().subtract(start.toVector()).normalize();
+				npcCustom.setVelocity(npcCustom.getVelocity().add(direction.multiply(1).setY(0.5)));
+			}
+			lastLocation = start;
+			nextStuck = now + nextStuckRate * 20;
+		}
+	}
 
 	// attack bow
 	private void attackBow(NPCCustom npcCustom) {
@@ -464,6 +491,7 @@ public class FightAI {
 				npcCustom.playEffect(EntityEffect.IRON_GOLEN_ATTACK);
 				RpgCraft.getSpellRegistry().strikeBack(npcCustom, data.getRarity());
 			}
+			case LEAPER -> RpgCraft.getSpellRegistry().impact(npcCustom, data.getRarity());
 			default -> {}
 		}
 	}
@@ -485,7 +513,7 @@ public class FightAI {
 				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, data.getRarity());
 			}
 			case WHISPERER -> RpgCraft.getSpellRegistry().teleportWhisperer(npcCustom);
-			case LEAPER -> RpgCraft.getSpellRegistry().impact(npcCustom, data.getRarity());
+			case LEAPER -> RpgCraft.getSpellRegistry().leap(npcCustom, target, data.getRarity());
 			default -> {}
 		}
 	}

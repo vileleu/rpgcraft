@@ -5,6 +5,7 @@ import org.bukkit.entity.Mob;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 
@@ -38,5 +39,11 @@ public class MobCustomManager implements Listener {
         if (mobCustom == null) return;
         mobCustom.onDeath();
         RpgCraft.getEntityCustomRegistry().deleteEntityCustom(mobCustom);
+    }
+
+    // cancel grief by mob
+    @EventHandler
+    public void onEntityChangeBlock(EntityChangeBlockEvent e) {
+        e.setCancelled(true);
     }
 }

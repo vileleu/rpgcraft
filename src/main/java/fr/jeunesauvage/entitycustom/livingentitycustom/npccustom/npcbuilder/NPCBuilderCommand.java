@@ -268,8 +268,8 @@ public class NPCBuilderCommand implements CommandExecutor {
     // change form
     private boolean handleFormMyNPC(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) return true;
-        if (args.length < 3) {
-            sender.sendMessage(Message.m("<red>Usage: /formmynpc <template> <npc name>"));
+        if (args.length < 2) {
+            sender.sendMessage(Message.m("<red>Usage: /formmynpc <form> <npc name>"));
             return true;
         }
         PlayerCustom    launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
@@ -286,7 +286,7 @@ public class NPCBuilderCommand implements CommandExecutor {
     // change template
     private boolean handleTemplateMyNPC(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) return true;
-        if (args.length < 3) {
+        if (args.length < 2) {
             sender.sendMessage(Message.m("<red>Usage: /templatemynpc <template> <npc name>"));
             return true;
         }

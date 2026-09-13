@@ -13,6 +13,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
 import fr.jeunesauvage.Data;
@@ -1340,6 +1341,13 @@ public class Menu {
     private ItemStack createSlot(Material mat, String name, String action) {
         ItemStack				item = new ItemStack(mat);
         ItemMeta				meta = item.getItemMeta();
+        if (mat == Material.POTION) {
+            PotionType  potionType = PotionType.fromString(action.substring(action.indexOf('_') + 1));
+            if (potionType != null) {
+                PotionMeta  potionMeta = (PotionMeta)meta;
+                potionMeta.setColor(potionType.getColor());
+            }
+        }
 		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
         meta.displayName(Message.c(Component.text(name)));
         Data.setString(pdc, KEY_MENU, action);

@@ -244,7 +244,7 @@ public class SoundPacket extends PacketAdapter {
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestWitherSkeleton.get().getUniqueId());
         if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.DEMON) return;
         e.setCancelled(true);
-        if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.1) return;
+        if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.2) return;
         playSoundToPlayer(player, loc, soundType, FormType.DEMON);
 	}
 
@@ -262,7 +262,7 @@ public class SoundPacket extends PacketAdapter {
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestWither.get().getUniqueId());
         if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.ELEMENTAL_VOID) return;
         e.setCancelled(true);
-        if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.1) return;
+        if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.2) return;
         playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_VOID);
 	}
 
