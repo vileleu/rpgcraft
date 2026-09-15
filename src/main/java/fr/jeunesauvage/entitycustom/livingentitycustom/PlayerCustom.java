@@ -546,6 +546,11 @@ public final class PlayerCustom implements LivingEntityCustom {
     }
 
     @Override
+    public void setInvulnerable(boolean invulnerable) {
+        player.setInvulnerable(invulnerable);
+    }
+
+    @Override
     public RaceType getRaceType() {
         return raceType;
     }

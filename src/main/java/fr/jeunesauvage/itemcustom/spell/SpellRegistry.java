@@ -13,6 +13,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,6 +26,7 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.BlockDisplay;
 import org.bukkit.entity.Display;
@@ -78,39 +80,40 @@ import net.citizensnpcs.api.npc.NPC;
 import net.kyori.adventure.text.Component;
 
 public class SpellRegistry {
-	public static final int						TIME_DEADLYMAGNET = 4;
-	public static final int						TIME_ESCAPE = 8;
-	public static final int						TIME_HOLYLAND = 10;
-	public static final int						TIME_HOLYSHIELD = 8;
-	public static final int						TIME_DRAGONSKIN = 20;
-	public static final int						TIME_METAMORPH = 40;
-	public static final int						TIME_STRIKEBACK = 10;
-	public static final int						TIME_HUNT = 15;
-	public static final int						TIME_ICETRAP = 30;
-	private final NamespacedKey					KEY_FIREBALL = new NamespacedKey(RpgCraft.name(), "fireball");
-	private final NamespacedKey					KEY_SHADOWWORD = new NamespacedKey(RpgCraft.name(), "shadowword");
-	private final NamespacedKey					KEY_WIND = new NamespacedKey(RpgCraft.name(), "wind");
-	private final NamespacedKey					KEY_DEMONCHAINS = new NamespacedKey(RpgCraft.name(), "demonchains");
-	private final NamespacedKey					KEY_BOW = new NamespacedKey(RpgCraft.name(), "bow");
-	private final NamespacedKey					KEY_CROSSBOW = new NamespacedKey(RpgCraft.name(), "crossbow");
-	private final NamespacedKey					KEY_STAFF = new NamespacedKey(RpgCraft.name(), "staff");
-	private final NamespacedKey					KEY_SPELLBOOK = new NamespacedKey(RpgCraft.name(), "spellbook");
-	private final Map<UUID, Integer>			kneeBreaker = new HashMap<>();
-	private final Map<UUID, BukkitTask>			leap = new HashMap<>();
-	private final Map<UUID, Integer>			stealth = new HashMap<>();
-	private final Map<UUID, Integer>			coldBlood = new HashMap<>();
-	private final Map<UUID, Integer>			holyBomb = new HashMap<>();
-	private final Map<UUID, DataTask<Integer>>	holyShield = new HashMap<>();
-	private final Map<UUID, Integer>			dragonSkinPlayer = new HashMap<>();
-	private final Map<UUID, DataTask<Integer>>	strikeBack = new HashMap<>();
-	private final Map<UUID, Boolean>			canUseStrikeback = new HashMap<>();
-	private final Map<UUID, Integer>			explosiveShot = new HashMap<>();
-    private final Set<UUID> 					demonChains = new HashSet<>();
-	private final Map<UUID, NPCCustom>			pets = new HashMap<>();
-	private final Map<UUID, NPCCustom>			braiseds = new HashMap<>();
-	private static final int					TIME_TEMPORARYNPC = 60; // seconds
-	private final Map<UUID, Integer>			npcTemporary = new HashMap<>();
-	private BukkitTask							taskNPCTemporary;
+	public static final int							TIME_DEADLYMAGNET = 4;
+	public static final int							TIME_ESCAPE = 8;
+	public static final int							TIME_HOLYLAND = 10;
+	public static final int							TIME_HOLYSHIELD = 8;
+	public static final int							TIME_DRAGONSKIN = 20;
+	public static final int							TIME_METAMORPH = 40;
+	public static final int							TIME_STRIKEBACK = 10;
+	public static final int							TIME_HUNT = 15;
+	public static final int							TIME_ICETRAP = 30;
+	private final NamespacedKey						KEY_FIREBALL = new NamespacedKey(RpgCraft.name(), "fireball");
+	private final NamespacedKey						KEY_SHADOWWORD = new NamespacedKey(RpgCraft.name(), "shadowword");
+	private final NamespacedKey						KEY_WIND = new NamespacedKey(RpgCraft.name(), "wind");
+	private final NamespacedKey						KEY_DEMONCHAINS = new NamespacedKey(RpgCraft.name(), "demonchains");
+	private final NamespacedKey						KEY_BOW = new NamespacedKey(RpgCraft.name(), "bow");
+	private final NamespacedKey						KEY_CROSSBOW = new NamespacedKey(RpgCraft.name(), "crossbow");
+	private final NamespacedKey						KEY_STAFF = new NamespacedKey(RpgCraft.name(), "staff");
+	private final NamespacedKey						KEY_SPELLBOOK = new NamespacedKey(RpgCraft.name(), "spellbook");
+	private final Map<UUID, Integer>				kneeBreaker = new HashMap<>();
+	private final Map<UUID, BukkitTask>				leap = new HashMap<>();
+	private final Map<UUID, Integer>				stealth = new HashMap<>();
+	private final Map<UUID, Integer>				coldBlood = new HashMap<>();
+	private final Map<UUID, Integer>				holyBomb = new HashMap<>();
+	private final Map<UUID, DataTask<Integer>>		holyShield = new HashMap<>();
+	private final Map<UUID, Integer>				dragonSkins = new HashMap<>();
+	private final Map<UUID, DataTask<Integer>>		strikeBack = new HashMap<>();
+	private final Map<UUID, Boolean>				canUseStrikeback = new HashMap<>();
+	private final Map<UUID, Integer>				explosiveShot = new HashMap<>();
+    private final Set<UUID> 						demonChains = new HashSet<>();
+	private final Map<UUID, NPCCustom>				pets = new HashMap<>();
+	private final Map<UUID, NPCCustom>				braiseds = new HashMap<>();
+	private final Map<UUID, Pair<Integer, Integer>>	cloudFrozers = new HashMap<>();
+	private static final int						TIME_TEMPORARYNPC = 60; // seconds
+	private final Map<UUID, Integer>				npcTemporary = new HashMap<>();
+	private BukkitTask								taskNPCTemporary;
 
 	/////////////////////
 	///*   WARRIOR   *///
@@ -208,10 +211,7 @@ public class SpellRegistry {
 		if (direction.lengthSquared() < 1.0E-6) return;
 		else direction.normalize();
     	direction.setY(0.5);
-		if (launcher instanceof NPCCustom npcCustom) {
-			NPC	npc = npcCustom.getNPC();
-			npc.getNavigator().setPaused(true);
-		}
+		if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(true);
     	launcher.setVelocity(direction.multiply(1.5));
 		addLeap(launcher, rarity.getNumber());
     	SoundManager.playSound(launcher, "spell_leap");
@@ -245,10 +245,7 @@ public class SpellRegistry {
 		    @Override
 		    public void run() {
 				if (!isLanding(launcher)) return;
-				if (launcher instanceof NPCCustom npcCustom) {
-					NPC	npc = npcCustom.getNPC();
-					npc.getNavigator().setPaused(false);
-				}
+				if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(false);
 	    		Location	loc = launcher.getLocation();
 				double		radius = 6;
 				double 		damage = level * 4 + 2;
@@ -1054,13 +1051,13 @@ public class SpellRegistry {
 	public void addDragonSkin(LivingEntityCustom launcher, Rarity rarity) {
 		UUID	uuid = launcher.getUUID();
 		int		value = rarity.getNumber() * 100;
-		dragonSkinPlayer.put(uuid, launcher.addStatModifier(StatSecondary.SPELL_ARMOR, value, 0));
+		dragonSkins.put(uuid, launcher.addStatModifier(StatSecondary.SPELL_ARMOR, value, 0));
 	}
 
 
 	public void removeDragonSkin(LivingEntityCustom launcher) {
 		UUID	uuid = launcher.getUUID();
-		Integer	id = dragonSkinPlayer.get(uuid);
+		Integer	id = dragonSkins.get(uuid);
 		if (id == null) return;
 		launcher.deleteModifier(id);
 	}
@@ -2238,7 +2235,7 @@ public class SpellRegistry {
 	// fangs
 
 	public void fangs(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
-        World world = target.getWorld();
+        World world = launcher.getWorld();
         if (world == null) return;
 		LivingEntity			livingEntity = launcher.getLivingEntity();
 		if (livingEntity == null) return;
@@ -2253,21 +2250,21 @@ public class SpellRegistry {
         for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
             LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
             if (t == null || launcher.isGrouped(t)) continue;
-			t.addStatModifier(StatSecondary.SPEED, -1000, 5);
-			t.addStatModifier(StatSecondary.JUMP_STRENGTH, -1000, 5);
+			t.addStatModifier(StatSecondary.SPEED, -100, 5);
+			t.addStatModifier(StatSecondary.JUMP_STRENGTH, -100, 5);
             t.damage(damage, CombatDamage.MAGIC, launcher);
 			new BukkitRunnable() {
 				int		ticks = 0;
-				int		ticksMax = 10;
+				int		ticksMax = 100;
 				double	angle = 0;
 				@Override
 				public void run() {
-					if (!target.isPresent()) {
+					if (!t.isPresent()) {
 						cancel();
 						return;
 					}
-					particleFangs(angle, target.getLocation().add(0, target.getHeight() + 2, 0));
-					ticks++;
+					particleFangs(angle, t.getLocation().add(0, t.getHeight() + 2, 0));
+					ticks += 10;
 					angle += 0.2;
 					if (ticks >= ticksMax) {
 						cancel();
@@ -2275,7 +2272,7 @@ public class SpellRegistry {
 				}
 			}.runTaskTimer(RpgCraft.instance(), 0, 10L);
         }
-		SoundManager.playSound(launcher, "spell_fangs");
+		SoundManager.playSound(target, "spell_fangs");
 	}
 
 	private void particleFangs(double angle, Location center) {
@@ -2450,6 +2447,8 @@ public class SpellRegistry {
 		return n != 0 ? Rarity.fromInt(n) : null;
 	}
 
+	// impact
+
 	public void impact(LivingEntityCustom launcher, Rarity rarity) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
@@ -2480,6 +2479,137 @@ public class SpellRegistry {
 			BlockData data = loc.clone().subtract(0, 1, 0).getBlock().getBlockData();
 			world.spawnParticle(Particle.BLOCK, loc, 1, data);
 		}
+	}
+
+	// fangs
+
+	public void fangsFrozer(LivingEntityCustom launcher, Rarity rarity) {
+        World world = launcher.getWorld();
+        if (world == null) return;
+		LivingEntity			livingEntity = launcher.getLivingEntity();
+		if (livingEntity == null) return;
+		Location	start = launcher.getEyeLocation();
+		Set<UUID>	alreadyHit = new HashSet<>();
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		for (LivingEntity l: world.getNearbyLivingEntities(start, 20)) {
+			LivingEntityCustom		t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+			if (t == null || launcher.isGrouped(t) || alreadyHit.contains(t.getUUID())) continue;
+			Location				center = t.getLocation();
+			double					radius = 2;
+			double					damage = rarity.getLevel() * 1.5;
+			EvokerFangs 			fangs = world.createEntity(center, EvokerFangs.class);
+			fangs.setOwner(livingEntity);
+			fangs.customName(Component.text("Frozer"));
+			fangs.spawnAt(center);
+        	for (LivingEntity l1 : world.getNearbyLivingEntities(center, radius)) {
+        	    LivingEntityCustom	t1 = entityCustomRegistry.getLivingEntityCustom(l1.getUniqueId());
+        	    if (t1 == null || launcher.isGrouped(t1) || alreadyHit.contains(t.getUUID())) continue;
+				alreadyHit.add(t.getUUID());
+				t1.addStatModifier(StatSecondary.SPEED, -100, 5);
+				t1.addStatModifier(StatSecondary.JUMP_STRENGTH, -100, 5);
+        	    t1.damage(damage, CombatDamage.MAGIC, launcher);
+				new BukkitRunnable() {
+					int		ticks = 0;
+					int		ticksMax = 100;
+					double	angle = 0;
+					@Override
+					public void run() {
+						if (!t1.isPresent()) {
+							cancel();
+							return;
+						}
+						particleFangsFrozer(angle, t1.getLocation().add(0, t1.getHeight() + 2, 0));
+						ticks += 10;
+						angle += 0.2;
+						if (ticks >= ticksMax) cancel();
+					}
+				}.runTaskTimer(RpgCraft.instance(), 0, 10L);
+        	}
+			SoundManager.playSound(t, "spell_fangs");
+		}
+	}
+
+	private void particleFangsFrozer(double angle, Location center) {
+		World	world = center.getWorld();
+        double	radius = 0.5;
+        for (int i = 0; i < 16; i++) {
+            double currentAngle = angle + (Math.PI * 2 * i / 8);
+            double x = Math.cos(currentAngle) * radius;
+            double z = Math.sin(currentAngle) * radius;
+            Location particleLoc = center.clone().add(x, 0, z);
+            world.spawnParticle(Particle.SNOWFLAKE, particleLoc, 1, 0, 0, 0, 0);
+        }
+	}
+
+	// cloud frozer
+
+	public void cloudFrozer(LivingEntityCustom launcher, Rarity rarity) {
+		World	world = launcher.getWorld();
+		if (world == null) return;
+		Location	start = launcher.getLocation();
+		float		radius = 3 + rarity.getNumber();
+		int			ticksMax = 160;
+	    AreaEffectCloud	cloud = world.spawn(start, AreaEffectCloud.class);
+	    cloud.setRadius(radius);
+	    cloud.setRadiusOnUse(0f);
+	    cloud.setRadiusPerTick(0f);
+	    cloud.setDuration(ticksMax);
+	    cloud.setParticle(Particle.CLOUD);
+		cloud.setColor(Color.BLUE);
+		new BukkitRunnable() {
+			Map<UUID, LivingEntityCustom>	current = new HashMap<>();
+			Map<UUID, LivingEntityCustom>	active = new HashMap<>();
+			float		ticks = 0f;
+		    @Override
+			public void run() {
+				current.clear();
+				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+				for (LivingEntity l : world.getNearbyLivingEntities(start, radius)) {
+					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+				    if (target == null || !launcher.isGrouped(target)) continue;
+					UUID	uuid = target.getUUID();
+					if (!active.containsKey(uuid)) addCloudFrozer(target);
+					current.put(uuid, target);
+					active.put(uuid, target);
+				}
+				Iterator<Entry<UUID, LivingEntityCustom>>	it = active.entrySet().iterator();
+				while (it.hasNext()) {
+					Entry<UUID, LivingEntityCustom>	e = it.next();
+					if (!current.containsKey(e.getKey())) {
+						removeCloudFrozer(e.getValue());
+						it.remove();
+					}
+				}
+				ticks += 20;
+				if (ticks >= ticksMax) {
+					current.clear();
+					active.values().forEach(l -> removeCloudFrozer(l));
+					active.clear();
+					cancel();
+				}
+			}
+		}.runTaskTimer(RpgCraft.instance(), 0L, 20L);
+		SoundManager.playSound(launcher, "spell_cloudfrozer");
+	}
+
+	public void addCloudFrozer(LivingEntityCustom launcher) {
+		UUID	uuid = launcher.getUUID();
+		int		value = 10000;
+		cloudFrozers.put(uuid, new Pair<Integer,Integer>(
+			launcher.addStatModifier(StatSecondary.PHYSICAL_ARMOR, value, 0),
+			launcher.addStatModifier(StatSecondary.SPELL_ARMOR, value, 0))
+		);
+	}
+
+
+	public void removeCloudFrozer(LivingEntityCustom launcher) {
+		UUID	uuid = launcher.getUUID();
+		Integer	id1 = cloudFrozers.get(uuid).getFirst();
+		Integer	id2 = cloudFrozers.get(uuid).getSecond();
+		if (id1 == null) return;
+		launcher.deleteModifier(id1);
+		if (id2 == null) return;
+		launcher.deleteModifier(id2);
 	}
 
 	// utils

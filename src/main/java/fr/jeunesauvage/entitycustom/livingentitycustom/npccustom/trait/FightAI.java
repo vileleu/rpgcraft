@@ -514,6 +514,14 @@ public class FightAI {
 			}
 			case WHISPERER -> RpgCraft.getSpellRegistry().teleportWhisperer(npcCustom);
 			case LEAPER -> RpgCraft.getSpellRegistry().leap(npcCustom, target, data.getRarity());
+			case FROZER -> {
+				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
+				caster.setSpell(Spellcaster.Spell.WOLOLO);
+				RpgCraft.getSpellRegistry().fangsFrozer(npcCustom, data.getRarity());
+				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
+				}, 40L);
+			}
 			default -> {}
 		}
 	}
@@ -533,6 +541,14 @@ public class FightAI {
 				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
 				caster.setSpell(Spellcaster.Spell.WOLOLO);
 				RpgCraft.getSpellRegistry().fangs(npcCustom, target, data.getRarity());
+				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
+				}, 40L);
+			}
+			case FROZER -> {
+				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
+				caster.setSpell(Spellcaster.Spell.FANGS);
+				RpgCraft.getSpellRegistry().cloudFrozer(npcCustom, data.getRarity());
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);

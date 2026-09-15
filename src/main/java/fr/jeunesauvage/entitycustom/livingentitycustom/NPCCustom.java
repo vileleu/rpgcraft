@@ -155,6 +155,10 @@ public final class NPCCustom implements LivingEntityCustom {
         return npc.getOrAddTrait(FightTrait.class);
     }
 
+    public void pauseNavigator(boolean pause) {
+        npc.getNavigator().setPaused(pause);
+    }
+
     public void setPatrolRange(double patrolRange) {
         getFightTrait().setPatrolRange(patrolRange);
     }
@@ -496,6 +500,13 @@ public final class NPCCustom implements LivingEntityCustom {
     }
 
     @Override
+    public void setInvulnerable(boolean invulnerable) {
+        LivingEntity l = getLivingEntity();
+        if (l == null) return;
+        l.setInvulnerable(invulnerable);
+    }
+
+    @Override
     public RaceType getRaceType() {
         return raceType;
     }
@@ -816,7 +827,7 @@ public final class NPCCustom implements LivingEntityCustom {
         // refresh alls vanilla attributes
         stats.values().forEach(stat -> {
             switch (stat.getType()) {
-                case StatSecondary.MAXIMUM_HEALTH -> setHealthMax(StatSecondary.MAXIMUM_HEALTH.getAmount(this));
+                case StatSecondary.MAXIMUM_HEALTH -> setHealthMax(getHealthMax() + StatSecondary.MAXIMUM_HEALTH.getAmount(this));
                 case StatSecondary.MAXIMUM_MANA -> {}
                 case StatSecondary.JUMP_STRENGTH -> addAttributeModifier(l.getAttribute(Attribute.GENERIC_JUMP_STRENGTH), StatSecondary.JUMP_STRENGTH.getAmount(this));
                 case StatSecondary.SPEED -> addAttributeModifier(l.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED), StatSecondary.SPEED.getAmount(this));
@@ -955,11 +966,7 @@ public final class NPCCustom implements LivingEntityCustom {
         // spawn location
 		if (getRespawn() != null) {
             LivingEntity    l = getLivingEntity();
-            if (l != null) {
-                getLivingEntity().teleport(getRespawn());
-                l.setAI(true);
-                l.setGravity(true);
-            }
+            if (l != null) getLivingEntity().teleport(getRespawn());
         }
         greeting();
     }

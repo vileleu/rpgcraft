@@ -66,7 +66,7 @@ public enum FormType {
 	// forest
 	LEAPER("leaper", 1.2, FormTypeSkin.LEAPER),
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
-	FROZER("frozer", 1.5, FormTypeSkin.FROZER),
+	FROZER("frozer", 2, FormTypeSkin.FROZER),
 	// demon
 	DEMON("demon", 1.2, FormTypeSkin.DEMON),
     MAGMA_GOLEM("magla_golem", 1.2, FormTypeSkin.MAGMA_GOLEM),

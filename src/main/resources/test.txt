@@ -36,7 +36,7 @@ TODO:
 - NPC:
  - translatable name in resource pack
  - necromancer spell (spawn skeletons + ...)
- - frozer spell (multiple freeze fangs + area that make group invulnerable + expulse fangs)
+ - frozer spell (expulse fangs)
  - menu food
  - menu consumable
  - menu repair/sell

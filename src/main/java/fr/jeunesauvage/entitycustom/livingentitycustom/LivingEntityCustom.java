@@ -60,6 +60,7 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     void                            setGlowing(boolean glowing);
     void                            setAI(boolean ai);
     void                            setGravity(boolean gravity);
+    void                            setInvulnerable(boolean invulnerable);
 
     RaceType                        getRaceType();
     void                            setRaceType(RaceType raceType);
