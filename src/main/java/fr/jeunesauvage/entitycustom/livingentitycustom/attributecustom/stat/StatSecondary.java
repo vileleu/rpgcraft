@@ -7,14 +7,14 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum StatSecondary implements StatType {
     // combat
-    PHYSICAL_DAMAGE("physical_damage", 0.5),            // + 0.5   increase physical damage
-    SPELL_DAMAGE("spell_damage", 0.05),                  // + 0.05 increase spell damage
-    PHYSICAL_ARMOR("physical_armor", 0.02),             // + 0.02  reduce physical damage taken
-    SPELL_ARMOR("spell_armor", 0.05),                   // + 0.05  reduce spell damage taken
-    CRITICAL_CHANCE("critical_chance", 0.002),          // + 0.2%  chance to hit critical
-    DEFENSE("defense", 0.001),                          // + 0.1%  chance to cancel critical taken
-    DODGE("dodge", 0.002),                              // + 0.2%  chance to dodge
-    CAST_SPEED("cast_speed", 0.01),                     // + 1%    speed of casting
+    PHYSICAL_DAMAGE("physical_damage", 0.05),           // + 0.05 increase physical damage
+    SPELL_DAMAGE("spell_damage", 0.05),                 // + 0.05 increase spell damage
+    PHYSICAL_ARMOR("physical_armor", 0.02),             // + 0.02 reduce physical damage taken
+    SPELL_ARMOR("spell_armor", 0.02),                   // + 0.02 reduce spell damage taken
+    CRITICAL_CHANCE("critical_chance", 0.001),          // + 0.1% chance to hit critical
+    DEFENSE("defense", 0.001),                          // + 0.1% chance to cancel critical taken
+    DODGE("dodge", 0.001),                              // + 0.1% chance to dodge
+    CAST_SPEED("cast_speed", 0.01),                     // + 1%   speed of casting
     // resources
     MAXIMUM_HEALTH("maximum_health", 1),                // + 1    increase health maximum
     MAXIMUM_MANA("maximum_mana", 1),                    // + 1    increase mana maxmimum

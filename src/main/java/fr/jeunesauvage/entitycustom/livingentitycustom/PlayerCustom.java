@@ -25,6 +25,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
@@ -79,7 +81,7 @@ import net.skinsrestorer.api.storage.SkinStorage;
 
 public final class PlayerCustom implements LivingEntityCustom {
     private static final NamespacedKey              KEY_MARK = new NamespacedKey(RpgCraft.name(), "mark");
-	public static final double	                    HEALTH_DEFAULT = 50;
+	public static final double	                    HEALTHBYLEVEL_DEFAULT = 5;
 	public static final double	                    RANGETARGET_DEFAULT = 60; // blocks
 	public static final long	                    TIMETARGET_DEFAULT = 200; // ticks
     private final Player                            player;
@@ -303,6 +305,18 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     public ScoreboardCustom getScoreboardCustom() {
         return scoreboardCustom;
+    }
+
+    public void addPotionEffect(PotionEffect potionEffect) {
+        player.addPotionEffect(potionEffect);
+    }
+
+    public void removePotionEffect(PotionEffectType potionEffectType) {
+        player.removePotionEffect(potionEffectType);
+    }
+
+    public boolean hasPotionEffect(PotionEffectType potionEffectType) {
+        return player.hasPotionEffect(potionEffectType);
     }
 
     @Override
@@ -905,7 +919,7 @@ public final class PlayerCustom implements LivingEntityCustom {
             // refresh alls vanilla attributes
             stats.values().forEach(stat -> {
                 switch (stat.getType()) {
-                    case StatSecondary.MAXIMUM_HEALTH -> setHealthMax(HEALTH_DEFAULT + StatSecondary.MAXIMUM_HEALTH.getAmount(this));
+                    case StatSecondary.MAXIMUM_HEALTH -> setHealthMax(getLevel() * HEALTHBYLEVEL_DEFAULT + StatSecondary.MAXIMUM_HEALTH.getAmount(this));
                     case StatSecondary.MAXIMUM_MANA -> {
                         if (power.getType() == PowerType.MANA) setPowerMax(StatSecondary.MAXIMUM_MANA.getAmount(this));
                     }
@@ -1032,7 +1046,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onSpawn() {
-        setHealthMax(HEALTH_DEFAULT);
+        setHealthMax(getLevel() * HEALTHBYLEVEL_DEFAULT);
         RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();
@@ -1056,8 +1070,8 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onJoin() {
-        setHealthMax(HEALTH_DEFAULT);
         if (getLevel() < 1) setLevel(1);
+        setHealthMax(getLevel() * HEALTHBYLEVEL_DEFAULT);
         RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();
         refreshCooldown();

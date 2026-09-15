@@ -2234,7 +2234,7 @@ public class SpellRegistry {
 
 	// fangs
 
-	public void fangs(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
+	public void fang(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
         World world = launcher.getWorld();
         if (world == null) return;
 		LivingEntity			livingEntity = launcher.getLivingEntity();
@@ -2242,12 +2242,13 @@ public class SpellRegistry {
 		Location				center = target.getLocation();
 		double					radius = 2;
 		double					damage = rarity.getLevel() * 1.5;
-		EvokerFangs 			fangs = world.createEntity(center, EvokerFangs.class);
-		fangs.setOwner(livingEntity);
-		fangs.customName(Component.text("Whisperer"));
-		fangs.spawnAt(center);
+		Location				fangLocation = adjustFang(world, center);
+		EvokerFangs 			fang = world.createEntity(center, EvokerFangs.class);
+		fang.setOwner(livingEntity);
+		fang.customName(Component.text("Whisperer"));
+		fang.spawnAt(fangLocation);
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
-        for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
+        for (LivingEntity l : world.getNearbyLivingEntities(fangLocation, radius)) {
             LivingEntityCustom	t = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
             if (t == null || launcher.isGrouped(t)) continue;
 			t.addStatModifier(StatSecondary.SPEED, -100, 5);
@@ -2263,7 +2264,7 @@ public class SpellRegistry {
 						cancel();
 						return;
 					}
-					particleFangs(angle, t.getLocation().add(0, t.getHeight() + 2, 0));
+					particleFang(angle, t.getLocation().add(0, t.getHeight() + 2, 0));
 					ticks += 10;
 					angle += 0.2;
 					if (ticks >= ticksMax) {
@@ -2272,10 +2273,10 @@ public class SpellRegistry {
 				}
 			}.runTaskTimer(RpgCraft.instance(), 0, 10L);
         }
-		SoundManager.playSound(target, "spell_fangs");
+		SoundManager.playSound(fangLocation, "spell_fang");
 	}
 
-	private void particleFangs(double angle, Location center) {
+	private void particleFang(double angle, Location center) {
 		World	world = center.getWorld();
         double	radius = 0.5;
         for (int i = 0; i < 16; i++) {
@@ -2285,6 +2286,14 @@ public class SpellRegistry {
             Location particleLoc = center.clone().add(x, 0, z);
             world.spawnParticle(Particle.CHERRY_LEAVES, particleLoc, 1, 0, 0, 0, 0);
         }
+	}
+
+	private Location adjustFang(World world, Location start) {
+		Location	result = start.clone();
+		int	y = getHighestSolidBlockY(world, start.getBlockX(), start.getBlockZ(), start.getBlockY());
+		if (y < start.getY())
+    		result.setY(y);
+    	return result;
 	}
 
 	// teleport whisperer
@@ -2483,11 +2492,12 @@ public class SpellRegistry {
 
 	// fangs
 
-	public void fangsFrozer(LivingEntityCustom launcher, Rarity rarity) {
+	public void fangFrozer(LivingEntityCustom launcher, Rarity rarity) {
         World world = launcher.getWorld();
         if (world == null) return;
 		LivingEntity			livingEntity = launcher.getLivingEntity();
 		if (livingEntity == null) return;
+		int			duration = 5;
 		Location	start = launcher.getEyeLocation();
 		Set<UUID>	alreadyHit = new HashSet<>();
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
@@ -2497,20 +2507,22 @@ public class SpellRegistry {
 			Location				center = t.getLocation();
 			double					radius = 2;
 			double					damage = rarity.getLevel() * 1.5;
-			EvokerFangs 			fangs = world.createEntity(center, EvokerFangs.class);
-			fangs.setOwner(livingEntity);
-			fangs.customName(Component.text("Frozer"));
-			fangs.spawnAt(center);
-        	for (LivingEntity l1 : world.getNearbyLivingEntities(center, radius)) {
+			Location				fangLocation = adjustFang(world, center);
+			EvokerFangs 			fang = world.createEntity(center, EvokerFangs.class);
+			fang.setOwner(livingEntity);
+			fang.customName(Component.text("Frozer"));
+			fang.spawnAt(fangLocation);
+        	for (LivingEntity l1 : world.getNearbyLivingEntities(fangLocation, radius)) {
         	    LivingEntityCustom	t1 = entityCustomRegistry.getLivingEntityCustom(l1.getUniqueId());
         	    if (t1 == null || launcher.isGrouped(t1) || alreadyHit.contains(t.getUUID())) continue;
 				alreadyHit.add(t.getUUID());
-				t1.addStatModifier(StatSecondary.SPEED, -100, 5);
-				t1.addStatModifier(StatSecondary.JUMP_STRENGTH, -100, 5);
+				t1.addStatModifier(StatSecondary.SPEED, -100, duration);
+				t1.addStatModifier(StatSecondary.JUMP_STRENGTH, -100, duration);
+				t1.setFreezeTicks(duration * 20);
         	    t1.damage(damage, CombatDamage.MAGIC, launcher);
 				new BukkitRunnable() {
 					int		ticks = 0;
-					int		ticksMax = 100;
+					int		ticksMax = duration * 20;
 					double	angle = 0;
 					@Override
 					public void run() {
@@ -2525,7 +2537,7 @@ public class SpellRegistry {
 					}
 				}.runTaskTimer(RpgCraft.instance(), 0, 10L);
         	}
-			SoundManager.playSound(t, "spell_fangs");
+			SoundManager.playSound(fangLocation, "spell_fang");
 		}
 	}
 
@@ -2566,11 +2578,14 @@ public class SpellRegistry {
 				EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 				for (LivingEntity l : world.getNearbyLivingEntities(start, radius)) {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-				    if (target == null || !launcher.isGrouped(target)) continue;
-					UUID	uuid = target.getUUID();
-					if (!active.containsKey(uuid)) addCloudFrozer(target);
-					current.put(uuid, target);
-					active.put(uuid, target);
+				    if (target == null) continue;
+					else if (!launcher.isGrouped(target)) target.setFreezeTicks(20);
+					else {
+						UUID	uuid = target.getUUID();
+						if (!active.containsKey(uuid)) addCloudFrozer(target);
+						current.put(uuid, target);
+						active.put(uuid, target);
+					}
 				}
 				Iterator<Entry<UUID, LivingEntityCustom>>	it = active.entrySet().iterator();
 				while (it.hasNext()) {
@@ -2594,10 +2609,9 @@ public class SpellRegistry {
 
 	public void addCloudFrozer(LivingEntityCustom launcher) {
 		UUID	uuid = launcher.getUUID();
-		int		value = 10000;
 		cloudFrozers.put(uuid, new Pair<Integer,Integer>(
-			launcher.addStatModifier(StatSecondary.PHYSICAL_ARMOR, value, 0),
-			launcher.addStatModifier(StatSecondary.SPELL_ARMOR, value, 0))
+			launcher.addStatModifier(StatSecondary.PHYSICAL_ARMOR, 50000, 0),
+			launcher.addStatModifier(StatSecondary.SPELL_ARMOR, 20000, 0))
 		);
 	}
 
@@ -2610,6 +2624,51 @@ public class SpellRegistry {
 		launcher.deleteModifier(id1);
 		if (id2 == null) return;
 		launcher.deleteModifier(id2);
+	}
+
+	// expulse frozer
+
+	public void expulseFrozer(LivingEntityCustom launcher, Rarity rarity) {
+		World	world = launcher.getWorld();
+		if (world == null) return;
+		LivingEntity			livingEntity = launcher.getLivingEntity();
+		if (livingEntity == null) return;
+		Location	center = launcher.getLocation();
+	    double		radius = 3 + rarity.getNumber() / 2;
+		double		damage = rarity.getLevel() / 2;
+		double		force = 3;
+	    int			count = 8;
+	    for (int i = 0; i < count; i++) {
+	        double		angle = 2 * Math.PI * i / count;
+	        double		x = center.getX() + radius * Math.cos(angle);
+	        double		z = center.getZ() + radius * Math.sin(angle);
+	        Location	fangLocation = adjustFang(world, new Location(center.getWorld(), x, center.getY(), z));
+			EvokerFangs	fang = world.createEntity(center, EvokerFangs.class);
+			fang.setOwner(livingEntity);
+			fang.customName(Component.text("Frozer"));
+			fang.spawnAt(fangLocation);
+	        Vector toCenter = center.toVector().subtract(fangLocation.toVector()).setY(0);
+	        if (toCenter.lengthSquared() > 0) {
+	            fangLocation.setDirection(toCenter);
+	            fang.setRotation(fangLocation.getYaw(), 0);
+	        }
+			SoundManager.playSound(fangLocation, "spell_fang");
+	    }
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		for (LivingEntity l: world.getNearbyLivingEntities(center, radius)) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+			if (target == null || launcher.isGrouped(target)) continue;
+			if (target.isBoss()) continue;
+		    Vector	knockback = target.getLocation().toVector().subtract(center.toVector()).normalize();
+			double	resistance = 0;
+			AttributeInstance	instance = l.getAttribute(Attribute.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE);
+			if (instance != null)
+				resistance = instance.getValue();
+	        knockback.multiply(force - (force * resistance));
+		    knockback.setY(knockback.getY() + 0.4);
+			target.setVelocity(target.getVelocity().add(knockback));
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+		}
 	}
 
 	// utils

@@ -160,12 +160,12 @@ public class SoundManager implements Listener {
         return switch (formType) {
             case TAUREN, TAUREN_GUARD, TAUREN_SHAMAN_BLUE, TAUREN_SHAMAN_RED, TAUREN_KING -> FormType.TAUREN;
             case TAUREN_DESERT, TAUREN_BLACK -> FormType.TAUREN_DESERT;
-            case ORC -> FormType.ORC;
-            case ORC_FEMALE -> FormType.ORC_FEMALE;
+            case ORC, ORC_DEMON, ORC_GUARD, ORC_TRADER, ORC_FATHER, ORC_FOREST -> FormType.ORC;
+            case ORC_FEMALE, ORC_MOTHER -> FormType.ORC_FEMALE;
             case DWARF, DWARF_GUARD, DWARF_TRADER, DWARF_REDHEAD, DWARF_HUNTER, DWARF_KING -> FormType.DWARF;
             case HUMAN -> FormType.HUMAN;
             case HUMAN_PALPOUTINE, HUMAN_ROGUE -> FormType.HUMAN_ROGUE;
-            case DWARFIRON, DWARFIRON_TRADER, DWARFIRON_BLACKSMITH, DWARFIRON_REDHEADBEARD, DWARFIRON_GUY, DWARFIRON_KING -> FormType.DWARFIRON;
+            case DWARFIRON, DWARFIRON_TRADER, DWARFIRON_BLACKSMITH, DWARFIRON_REDHEADBEARD, DWARFIRON_GUY, DWARFIRON_PYROMANCER, DWARFIRON_KING -> FormType.DWARFIRON;
             case DWARFIRON_GUARD -> FormType.DWARFIRON_GUARD;
             case MURLOC, MURLOC_ELITE, MURLOC_BOSS, MURLOC_NICE -> FormType.MURLOC;
             case ELFNIGHT -> FormType.ELFNIGHT;
@@ -178,7 +178,7 @@ public class SoundManager implements Listener {
                 SCORPION,
                 LEAPER, WHISPERER, FROZER,
                 DEMON, MAGMA_GOLEM, ELEMENTAL_VOID,
-                ANIMAL,
+                ANIMAL, ORC_CHILD,
                 UNKNOWN -> FormType.UNKNOWN;
         };
     }

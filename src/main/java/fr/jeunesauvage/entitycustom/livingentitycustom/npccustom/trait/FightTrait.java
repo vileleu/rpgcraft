@@ -108,7 +108,7 @@ public class FightTrait extends Trait {
     private final double			rangeActive;
     private final double			rangeActiveSquared;
     private FightData				fightData;
-    private FightAI					FightAI;
+    private FightAI					fightAI;
     private GoalPatrol				goalPatrol;
 
     public FightTrait() {
@@ -120,7 +120,7 @@ public class FightTrait extends Trait {
     	this.rangeActive = 100;   // range where npc is active
     	this.rangeActiveSquared = rangeActive * rangeActive;
 		this.fightData = null;
-    	this.FightAI = null;
+    	this.fightAI = null;
 		this.goalPatrol = null;
     }
 
@@ -174,12 +174,12 @@ public class FightTrait extends Trait {
 			npc.getDefaultGoalController().addGoal(goalPatrol, 1);
 		}
 		fightData = new FightData(this);
-		FightAI = new FightAI(npc, fightData);
+		fightAI = new FightAI(npc, fightData);
 	}
 
 	@Override
 	public void onDespawn() {
-		FightAI = null;
+		fightAI = null;
 		fightData = null;
 		if (goalPatrol != null) {
 			npc.getDefaultGoalController().removeGoal(goalPatrol);
@@ -190,7 +190,7 @@ public class FightTrait extends Trait {
     @Override
     public void run() {
 		// check all seconds
-		if (tick-- > 0 || FightAI == null) return;
+		if (tick-- > 0 || fightAI == null) return;
         if (npc == null || !npc.isSpawned() || getTemplateType() == TemplateType.DEFAULT) return;
 		NPCCustom	npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
 		if (npcCustom == null) return;
@@ -206,8 +206,8 @@ public class FightTrait extends Trait {
 			return;
 		}
 		tick = tickActive;
-		FightAI.findTarget(npcCustom);
-		loseAggro = FightAI.attackTarget(npcCustom);
+		fightAI.findTarget(npcCustom);
+		loseAggro = fightAI.attackTarget(npcCustom);
     }
 
 	private boolean isActive(NPCCustom npcCustom) {
@@ -228,13 +228,13 @@ public class FightTrait extends Trait {
 	}
 
 	public void addAggro(LivingEntityCustom livingEntityCustom, double damage) {
-		if (FightAI == null) return;
-		FightAI.addAggro(livingEntityCustom, damage);
+		if (fightAI == null) return;
+		fightAI.addAggro(livingEntityCustom, damage);
 	}
 
 	public void cleanAggro() {
-		if (FightAI == null) return;
-		FightAI.cleanAggro();
+		if (fightAI == null) return;
+		fightAI.cleanAggro();
 	}
 
 	// getter + setter
@@ -575,11 +575,11 @@ public class FightTrait extends Trait {
 	// fight IA
 
 	public FightAI getFightAI() {
-		return FightAI;
+		return fightAI;
 	}
 
 	public boolean haveTarget() {
-		if (FightAI == null) return false;
-		return FightAI.getTarget() == null && FightAI.getTargetHide() == null;
+		if (fightAI == null) return false;
+		return fightAI.getTarget() == null && fightAI.getTargetHide() == null;
 	}
 }

@@ -24,7 +24,14 @@ public enum FormType {
     DWARF_KING("dwarf_king", 0.7, FormTypeSkin.DWARF_KING),
 	// orc
     ORC("orc", 0.9, FormTypeSkin.ORC),
+    ORC_DEMON("orc_demon", 0.9, FormTypeSkin.ORC_DEMON),
     ORC_FEMALE("orc_female", 0.9, FormTypeSkin.ORC_FEMALE),
+	ORC_TRADER("orc_trader", 0.9, FormTypeSkin.ORC_TRADER),
+	ORC_GUARD("orc_guard", 0.9, FormTypeSkin.ORC_GUARD),
+	ORC_FOREST("orc_forest", 0.9, FormTypeSkin.ORC_FOREST),
+    ORC_FATHER("orc_father", 0.9, FormTypeSkin.ORC_FATHER),
+    ORC_MOTHER("orc_mother", 0.9, FormTypeSkin.ORC_MOTHER),
+    ORC_CHILD("orc_child", 0.6, FormTypeSkin.ORC_CHILD),
 	// human
     HUMAN("human", 0.9, FormTypeSkin.HUMAN),
     HUMAN_ROGUE("human_rogue", 0.9, FormTypeSkin.HUMAN_ROGUE),
@@ -37,6 +44,7 @@ public enum FormType {
     DWARFIRON_GUY("dwarfiron_guy", 0.7, FormTypeSkin.DWARFIRON_GUY),
     DWARFIRON_KING("dwarfiron_king", 0.7, FormTypeSkin.DWARFIRON_KING),
     DWARFIRON_GUARD("dwarfiron_guard", 1.4, FormTypeSkin.DWARFIRON_GUARD),
+    DWARFIRON_PYROMANCER("dwarfiron_pyromancer", 0.7, FormTypeSkin.DWARFIRON_PYROMANCER),
 	// elfnight
     ELFNIGHT("elfnight", 1, FormTypeSkin.ELFNIGHT),
 	// elfblood

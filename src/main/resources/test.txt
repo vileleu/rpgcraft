@@ -36,7 +36,6 @@ TODO:
 - NPC:
  - translatable name in resource pack
  - necromancer spell (spawn skeletons + ...)
- - frozer spell (expulse fangs)
  - menu food
  - menu consumable
  - menu repair/sell
@@ -44,10 +43,7 @@ TODO:
  - mannequin
 - WORLD:
   - player can break mineral block
-  - necropolis:{poison,darkness} (task to detect position, NEVER use PlayerMoveEvent)
-  - enchanting table cancel
 - QUESTS:
 
 - TESTS:
  - stealth
- - menu potions

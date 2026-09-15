@@ -4,8 +4,10 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
@@ -28,9 +30,13 @@ import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
@@ -43,10 +49,47 @@ public class WorldManager implements Listener {
 	    Material.SOUL_SOIL,
 	    Material.COAL_BLOCK
 	);
+	private static final Set<Material> POISON = EnumSet.of(
+	    Material.LIME_STAINED_GLASS,
+	    Material.LIME_STAINED_GLASS_PANE
+	);
 
 	public WorldManager() {
         WorldCommand   worldCommand = new WorldCommand(this);
     	RpgCraft.instance().getCommand("cleanentities").setExecutor(worldCommand);
+		// task world
+		new BukkitRunnable() {
+		    @Override
+		    public void run() {
+		        for (PlayerCustom playerCustom : RpgCraft.getEntityCustomRegistry().getPlayerCustoms()) {
+					World		world = playerCustom.getWorld();
+					Location	center = playerCustom.getLocation();
+		            Biome	currentBiome = center.getBlock().getBiome();
+					if (playerCustom.hasPotionEffect(PotionEffectType.DARKNESS) && currentBiome != Biome.DEEP_DARK)
+						playerCustom.removePotionEffect(PotionEffectType.DARKNESS);
+					else if (!world.getName().equals("world_the_end") && !playerCustom.hasPotionEffect(PotionEffectType.DARKNESS) && currentBiome == Biome.DEEP_DARK)
+		            	playerCustom.addPotionEffect(new PotionEffect(PotionEffectType.DARKNESS, 7199980, 0, false, true, false));
+            		if (!playerCustom.hasPotionEffect(PotionEffectType.POISON) && isNearPoisonBlock(center, 1))
+						playerCustom.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 60, 1, false, true, false));
+		        }
+		    }
+		}.runTaskTimer(RpgCraft.instance(), 0L, 20L);
+	}
+
+	private boolean isNearPoisonBlock(Location center, int radius) {
+	    World	world = center.getWorld();
+	    int		baseX = center.getBlockX();
+	    int		baseY = center.getBlockY();
+	    int		baseZ = center.getBlockZ();
+	    for (int x = -radius; x <= radius; x++) {
+	        for (int y = -radius; y <= radius; y++) {
+	            for (int z = -radius; z <= radius; z++) {
+	                Block block = world.getBlockAt(baseX + x, baseY + y, baseZ + z);
+	                if (POISON.contains(block.getType())) return true;
+	            }
+	        }
+	    }
+	    return false;
 	}
 
 	// world

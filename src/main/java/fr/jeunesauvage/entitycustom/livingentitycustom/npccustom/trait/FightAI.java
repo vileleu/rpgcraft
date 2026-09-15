@@ -286,7 +286,7 @@ public class FightAI {
 				// no damage == no walking to target
 				if (data.getDamage() <= 0 || data.getAttackRate() <= 0) flee(npcCustom, navigator);
 				// physical attack
-				else if (data.getAttackRate() > 0 && now >= nextAttack) {
+				else if (now >= nextAttack) {
 					switch (weaponType) {
 						case BOW -> {
 							attackBow(npcCustom);
@@ -492,6 +492,14 @@ public class FightAI {
 				RpgCraft.getSpellRegistry().strikeBack(npcCustom, data.getRarity());
 			}
 			case LEAPER -> RpgCraft.getSpellRegistry().impact(npcCustom, data.getRarity());
+			case FROZER -> {
+				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
+				caster.setSpell(Spellcaster.Spell.FANGS);
+				RpgCraft.getSpellRegistry().expulseFrozer(npcCustom, data.getRarity());
+				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
+				}, 40L);
+			}
 			default -> {}
 		}
 	}
@@ -517,7 +525,7 @@ public class FightAI {
 			case FROZER -> {
 				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
 				caster.setSpell(Spellcaster.Spell.WOLOLO);
-				RpgCraft.getSpellRegistry().fangsFrozer(npcCustom, data.getRarity());
+				RpgCraft.getSpellRegistry().fangFrozer(npcCustom, data.getRarity());
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);
@@ -540,7 +548,7 @@ public class FightAI {
 			case WHISPERER -> {
 				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
 				caster.setSpell(Spellcaster.Spell.WOLOLO);
-				RpgCraft.getSpellRegistry().fangs(npcCustom, target, data.getRarity());
+				RpgCraft.getSpellRegistry().fang(npcCustom, target, data.getRarity());
 				Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);
