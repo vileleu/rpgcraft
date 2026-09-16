@@ -11,6 +11,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 
 import fr.jeunesauvage.RpgCraft;
@@ -25,6 +26,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 
 public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCustom, NPCCustom, MobCustom {
@@ -91,6 +93,8 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     LivingEntityCustom              getAlly();
     LivingEntityCustom              getTarget();
     void                            setTarget(LivingEntityCustom target);
+    FormType                        getMetamorph();
+    void                            setMetamorph(FormType formType);
 
     Stat                            getStat(StatType statType);
     Skill                           getSkill(SkillType skillType);
@@ -101,6 +105,9 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     void                            refreshStat();
     void                            addSilence(int time);
     int                             isSilence();
+    Map<SaveEquipment, ItemStack>   getSavedEquipment();
+    void                            saveEquipment(SaveEquipment slot, ItemStack item);
+    void                            deleteSavedEquipment();
 
     void                            refreshSkin();
 

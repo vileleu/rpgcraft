@@ -47,6 +47,8 @@ public enum FormType {
     DWARFIRON_PYROMANCER("dwarfiron_pyromancer", 0.7, FormTypeSkin.DWARFIRON_PYROMANCER),
 	// elfnight
     ELFNIGHT("elfnight", 1, FormTypeSkin.ELFNIGHT),
+    ILLIDAN("elfnight", 1, FormTypeSkin.ILLIDAN),
+    MALFURION("elfnight", 1, FormTypeSkin.MALFURION),
 	// elfblood
     ELFBLOOD("elfblood", 1, FormTypeSkin.ELFBLOOD),
 	// murloc
@@ -56,10 +58,11 @@ public enum FormType {
     MURLOC_NICE("murloc_nice", 0.7, FormTypeSkin.MURLOC_NICE),
 	// necromancer
     NECROMANCER("necromancer", 0.9, FormTypeSkin.NECROMANCER),
-    NECROMANCER_NOFACE("necromancer_noface", 0.9, FormTypeSkin.NECROMANCER_NOFACE),
-    NECROMANCER_BONE("necromancer_bone", 0.9, FormTypeSkin.NECROMANCER_BONE),
-    NECROMANCER_BONEGREY("necromancer_bonegrey", 0.9, FormTypeSkin.NECROMANCER_BONEGREY),
+    NECROMANCER_FACELESS("necromancer_faceless", 1.2, FormTypeSkin.NECROMANCER_FACELESS),
+    NECROMANCER_SKELETAL("necromancer_skeletal", 0.9, FormTypeSkin.NECROMANCER_SKELETAL),
+    NECROMANCER_SKELETAL_GREY("necromancer_skeletal_grey", 0.9, FormTypeSkin.NECROMANCER_SKELETAL_GREY),
     NECROMANCER_SKELETON("necromancer_skeleton", 0.9, FormTypeSkin.NECROMANCER_SKELETON),
+    ZOMBIE("zombie", 0.9, FormTypeSkin.ZOMBIE),
 	// elemental
     ELEMENTAL_FIRE("elemental_fire", 0.9, FormTypeSkin.ELEMENTAL_FIRE),
     ELEMENTAL_WIND("elemental_wind", 0.9, FormTypeSkin.ELEMENTAL_WIND),

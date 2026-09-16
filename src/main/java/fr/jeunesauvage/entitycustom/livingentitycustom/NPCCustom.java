@@ -17,8 +17,10 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -44,6 +46,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
@@ -61,6 +64,7 @@ public final class NPCCustom implements LivingEntityCustom {
     private RaceType                                raceType = RaceType.UNKNOWN;
     private FormType                                formType = FormType.UNKNOWN;
     private ClassType                               classType = ClassType.BEGGAR;
+    private FormType                                metamorph = FormType.UNKNOWN;
     private final Set<TeamType>                     teams = new HashSet<>();
     private int                                     level = 1;
     private final Map<StatType, Stat>               stats = new HashMap<>();
@@ -72,7 +76,7 @@ public final class NPCCustom implements LivingEntityCustom {
     private UUID                                    petUUID = null;
     private boolean                                 damageIsUnmodifiable = false;
     private Group                                   group = null;
-    private boolean                                 changeForm = false;
+    private boolean                                 isDying = false;
 
     public NPCCustom(NPC npc) {
         this.npc = npc;
@@ -110,7 +114,8 @@ public final class NPCCustom implements LivingEntityCustom {
         while (it.hasNext()) {
             Entry<Integer, String>  e = it.next();
             String[]                array = e.getValue().split("/");
-            int                     id = e.getKey();
+            Integer                 id = e.getKey();
+            if (id == null || id <= 0) continue;
             int                     value;
             long                    end;
             try {
@@ -190,17 +195,18 @@ public final class NPCCustom implements LivingEntityCustom {
     public void setTemplate(TemplateType templateType) {
         boolean wasSpawned = npc.isSpawned();
         if (wasSpawned == true) despawn();
+        // trait
         FightTrait  fightTrait = getFightTrait();
         fightTrait.setTemplate(templateType);
+        // race
         setRaceType(templateType.getRaceType());
         // form
-        this.formType = templateType.getFormType();
-        getFightTrait().setFormType(formType);
-        refreshSkin();
-        refreshScale();
-        //
+        setFormType(templateType.getFormType());
+        // class
         setClassType(templateType.getClassType());
+        // teams
         if (templateType.getTeams() != null) teams.addAll(templateType.getTeams());
+        // level
         this.level = fightTrait.getLevel();
         // stats + skills
         loadStats(templateType);
@@ -272,7 +278,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public boolean isPresent() {
-        return npc.isSpawned() && npc.getEntity() instanceof LivingEntity l && !l.isDead() && l.isValid();
+        return npc.isSpawned() && npc.getEntity() instanceof LivingEntity l && l.isValid();
     }
 
     @Override
@@ -513,6 +519,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void setRaceType(RaceType raceType) {
+        if (raceType == null) raceType = RaceType.UNKNOWN;
         this.raceType = raceType;
         getFightTrait().setRaceType(raceType);
     }
@@ -524,9 +531,22 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void setFormType(FormType formType) {
-        changeForm = true;
+        if (formType == null) formType = FormType.UNKNOWN;
         this.formType = formType;
         getFightTrait().setFormType(formType);
+        refreshSkin();
+        refreshScale();
+    }
+
+    @Override
+    public FormType getMetamorph() {
+        return metamorph;
+    }
+
+    @Override
+    public void setMetamorph(FormType formType) {
+        if (formType == null) formType = FormType.UNKNOWN;
+        metamorph = formType;
         refreshSkin();
         refreshScale();
     }
@@ -538,6 +558,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void setClassType(ClassType classType) {
+        if (classType == null) classType = ClassType.BEGGAR;
         this.classType = classType;
         getFightTrait().setClassType(classType);
     }
@@ -548,7 +569,8 @@ public final class NPCCustom implements LivingEntityCustom {
         if (l == null) return;
         AttributeInstance   attributeInstance = l.getAttribute(Attribute.GENERIC_SCALE);
         if (attributeInstance == null) return;
-        attributeInstance.setBaseValue(formType.getScale());
+        FormType    f = metamorph != FormType.UNKNOWN ? metamorph : formType;
+        attributeInstance.setBaseValue(f.getScale());
     }
 
     @Override
@@ -886,32 +908,50 @@ public final class NPCCustom implements LivingEntityCustom {
     }
 
     @Override
-    public void refreshSkin() {
-        if (getType() != EntityType.PLAYER) return;
-        SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
-        String      currentSkin = skinTrait.getSkinName();
-        if (!formType.getName().equals(currentSkin)) {
-		    SkinData	skinData = formType.getFormTypeSkin().getSkinData();
-		    if (skinData != null)
-		    	skinTrait.setSkinPersistent(formType.getName(), skinData.getSignature(), skinData.getValue());
-		    else
-		    	skinTrait.setSkinName(formType.getName());
+    public Map<SaveEquipment, ItemStack> getSavedEquipment() {
+        Map<SaveEquipment, ItemStack>   result = new HashMap<>();
+        FightTrait  fightTrait = npc.getOrAddTrait(FightTrait.class);
+        for (SaveEquipment slot: SaveEquipment.values()) {
+            if (fightTrait.hasData(slot.getKey())) {
+                result.put(slot, Data.fromBase64(fightTrait.getData(slot.getKey())));
+            }
+        }
+        return result;
+    }
+
+    @EventHandler
+    public void saveEquipment(SaveEquipment slot, ItemStack item) {
+        FightTrait  fightTrait = npc.getOrAddTrait(FightTrait.class);
+        fightTrait.addData(slot.getKey(), Data.toBase64(item));
+    }
+
+    @Override
+    public void deleteSavedEquipment() {
+        FightTrait  fightTrait = npc.getOrAddTrait(FightTrait.class);
+        for (SaveEquipment slot: SaveEquipment.values()) {
+            if (fightTrait.hasData(slot.getKey())) {
+                fightTrait.deleteData(slot.getKey());
+            }
         }
     }
 
-    private boolean skinIsApply(FormType formType) {
-        if (getType() != EntityType.PLAYER) return false;
+    @Override
+    public void refreshSkin() {
+        if (getType() != EntityType.PLAYER) return;
+        if (isDying) return;
         SkinTrait   skinTrait = npc.getOrAddTrait(SkinTrait.class);
         String      currentSkin = skinTrait.getSkinName();
-        if (!formType.getName().equals(currentSkin)) {
-		    SkinData	skinData = formType.getFormTypeSkin().getSkinData();
+        FormType    f = metamorph != FormType.UNKNOWN ? metamorph : formType;
+        if (!f.getName().equals(currentSkin)) {
+            if (formType == FormType.TAUREN) {
+                RpgCraft.debug("refreshSkin()");
+            }
+		    SkinData	skinData = f.getFormTypeSkin().getSkinData();
 		    if (skinData != null)
-		    	skinTrait.setSkinPersistent(formType.getName(), skinData.getSignature(), skinData.getValue());
+		    	skinTrait.setSkinPersistent(f.getName(), skinData.getSignature(), skinData.getValue());
 		    else
-		    	skinTrait.setSkinName(formType.getName());
-            return true;
+		    	skinTrait.setSkinName(f.getName());
         }
-        return false;
     }
 
     @Override
@@ -940,16 +980,19 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void onSpawn() {
+        if (formType == FormType.TAUREN) {
+            RpgCraft.debug("|||||||||SPAWN|||||||||");
+        }
+        if (metamorph == FormType.DRACTHYR_BLACK) RpgCraft.getMetamorphRegistry().equipDracthyr(this);
+        else RpgCraft.getMetamorphRegistry().unequipDracthyr(this);
+        // trait
         FightTrait      fightTrait = getFightTrait();
         TemplateType    templateType = fightTrait.getTemplateType();
-        if (!changeForm && skinIsApply(templateType.getFormType())) return;
+        // race
         setRaceType(templateType.getRaceType());
-        if (!changeForm) setFormType(templateType.getFormType());
-        else {
-            getFightTrait().setFormType(formType);
-            refreshScale();
-        }
-        changeForm = false;
+        // form
+        setFormType(templateType.getFormType());
+        // class
         setClassType(templateType.getClassType());
         if (templateType.getTeams() != null) teams.addAll(templateType.getTeams());
         this.level = fightTrait.getLevel();
@@ -963,16 +1006,13 @@ public final class NPCCustom implements LivingEntityCustom {
             respawnTask.cancel();
             respawnTask = null;
         }
-        // spawn location
-		if (getRespawn() != null) {
-            LivingEntity    l = getLivingEntity();
-            if (l != null) getLivingEntity().teleport(getRespawn());
-        }
         greeting();
     }
 
     @Override
     public void onDeath() {
+        isDying = true;
+        if (getTemplateType() == TemplateType.DEMON) RpgCraft.getSpellRegistry().explosion(this, getEyeLocation(), 6, level, 2, 80);
         modifiers.values().removeIf(modifier -> {
             if (modifier.getDuration() == 0) {
                 modifier.cancel();
@@ -985,22 +1025,24 @@ public final class NPCCustom implements LivingEntityCustom {
             respawnTask = null;
         }
         int respawnTime = getFightTrait().getRespawnTime();
-		if (respawnTime == 0) return;
+		if (respawnTime > 0) {
+		    respawnTask = Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+                NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(getUUID());
+                if (npcCustom != this || npcCustom.isPresent()) return;
+			    Location	respawn = npcCustom.getFightTrait().getRespawn();
+			    if (respawn != null)
+		        	npcCustom.spawn(respawn);
+			    else
+			    	npcCustom.spawn(npcCustom.getLocation());
+            }, Data.d(respawnTime));
+        }
 		else if (respawnTime == -1) {
 			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> delete(), 20);
-			return;
 		}
-		respawnTask = Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
-            NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(getUUID());
-            if (npcCustom != this || npcCustom.isPresent()) return;
-			Location	respawn = npcCustom.getFightTrait().getRespawn();
-			if (respawn != null)
-		    	npcCustom.spawn(respawn);
-			else
-				npcCustom.spawn(npcCustom.getLocation());
-        }, Data.d(respawnTime));
+        RpgCraft.getSpellRegistry().clean(this);
+        RpgCraft.getMetamorphRegistry().clean(this);
         death();
-        if (getTemplateType() == TemplateType.DEMON) RpgCraft.getSpellRegistry().explosion(this, getEyeLocation(), 6, level, 2, 80);
+        isDying = false;
     }
 
     @Override
@@ -1017,6 +1059,7 @@ public final class NPCCustom implements LivingEntityCustom {
             respawnTask.cancel();
             respawnTask = null;
         }
+        RpgCraft.getSpellRegistry().clean(this);
         farewell();
     }
 }

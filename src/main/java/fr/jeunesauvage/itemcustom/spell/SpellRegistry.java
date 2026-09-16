@@ -151,9 +151,13 @@ public class SpellRegistry {
 		if (world == null) return;
 		Location	center = launcher.getLocation();
         double      radius = 4;
-		// damage = physical damage * (60% for rarity 1, 70% for rarity 2, ...)
-		double	    damage = StatSecondary.PHYSICAL_DAMAGE.getAmount(launcher);
-		damage *= (rarity.getNumber() + 5) / 10d;
+		double		damage;
+		if (launcher instanceof PlayerCustom) {
+			// damage = physical damage * (60% for rarity 1, 70% for rarity 2, ...)
+			damage = StatSecondary.PHYSICAL_DAMAGE.getAmount(launcher);
+			damage *= (rarity.getNumber() + 5) / 10d;
+		}
+		else damage = rarity.getLevel();
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
@@ -566,7 +570,7 @@ public class SpellRegistry {
 	/////////////////////
 	
 	public void stealth(LivingEntityCustom launcher, Rarity rarity) {
-		if (hasStealth(launcher)) {
+		if (hasStealth(launcher.getUUID())) {
 			removeStealth(launcher);
 			return;
 		}
@@ -600,8 +604,8 @@ public class SpellRegistry {
 		particleStealth(launcher.getLocation());
 	}
 
-	public boolean hasStealth(LivingEntityCustom launcher) {
-		return stealth.containsKey(launcher.getUUID());
+	public boolean hasStealth(UUID uuid) {
+		return stealth.containsKey(uuid);
 	}
 
 	// escape
@@ -1107,6 +1111,10 @@ public class SpellRegistry {
 		return (level == null ? 1 : level);
 	}
 
+	public boolean hasStrikeBack(UUID uuid) {
+		return strikeBack.containsKey(uuid);
+	}
+
 	public boolean canUseStrikeBack(UUID uuid) {
 		if (!strikeBack.containsKey(uuid)) return false;
 		boolean	canUse = canUseStrikeback.get(uuid);
@@ -1204,14 +1212,14 @@ public class SpellRegistry {
 		loc.getWorld().spawnParticle(Particle.SPIT, loc, 40, 0.5, 0.5, 0.5, 0.05);
 	}
 
-	public boolean hasPet(LivingEntityCustom launcher) {
-		NPCCustom	pet = pets.get(launcher.getUUID());
+	public boolean hasPet(UUID uuid) {
+		NPCCustom	pet = pets.get(uuid);
 		return (pet != null && pet.isPresent());
 	}
 
 	private void createPet(LivingEntityCustom launcher) {
 		UUID			uuid = launcher.getUUID();
-		if (hasPet(launcher)) removePet(launcher);
+		if (hasPet(uuid)) removePet(launcher);
 		TemplateType	templateType = TemplateType.PET_WOLF;
 		NPC				rawNPC = CitizensAPI.getNPCRegistry().createNPC(templateType.getEntityType(), templateType.getHideName());
 		rawNPC.setProtected(false);
@@ -2840,17 +2848,16 @@ public class SpellRegistry {
 
 	public void clean(LivingEntityCustom livingEntityCustom) {
 		UUID	uuid = livingEntityCustom.getUUID();
-		removeKneeBreaker(uuid);
-		removeLeap(uuid);
-		removeStealth(livingEntityCustom);
-		removeColdBlood(uuid);
-		removeHolyBomb(uuid);
-		removeHolyShield(uuid);
+		if (hasKneeBreaker(uuid)) removeKneeBreaker(uuid);
+		if (hasLeap(uuid)) removeLeap(uuid);
+		if (hasStealth(uuid)) removeStealth(livingEntityCustom);
+		if (hasColdBlood(uuid)) removeColdBlood(uuid);
+		if (hasHolyBomb(uuid)) removeHolyBomb(uuid);
+		if (hasHolyShield(uuid)) removeHolyShield(uuid);
 		removeDragonSkin(livingEntityCustom);
-		removeStrikeBack(uuid);
-		removeExplosiveShot(uuid);
-		removeExplosiveShot(uuid);
-		removePet(livingEntityCustom);
-		removeBraised(livingEntityCustom);
+	 	if (hasStrikeBack(uuid)) removeStrikeBack(uuid);
+		if (hasExplosiveShot(uuid)) removeExplosiveShot(uuid);
+		if (hasPet(uuid)) removePet(livingEntityCustom);
+		if (hasBraised(uuid)) removeBraised(livingEntityCustom);
 	}
 }

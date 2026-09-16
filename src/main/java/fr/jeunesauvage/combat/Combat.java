@@ -162,7 +162,7 @@ public class Combat {
 			if (result.getAmount() > 0 && !target.isBoss()) target.addStatModifier(StatSecondary.SPEED, -40, duration);
 		}
 		// stealth (remove stealth if attack)
-		if (spellRegistry.hasStealth(damager)) {
+		if (spellRegistry.hasStealth(uuidDamager)) {
 			if (result.getAmount() > 0) spellRegistry.removeStealth(damager);
 		}
 		// coldblood (100% chance to critical + poison wither)

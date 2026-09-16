@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -40,7 +41,7 @@ public class FightTrait extends Trait {
 	public static final double			AGGRORANGE_DEFAULT = 30;                                               // range of aggro
 	public static final double			CHASERANGE_DEFAULT = 60;                                               // range of chase
 	public static final double			ATTACKRANGERANGED_DEFAULT = 15;                                        // range of attack ranged
-	private static final double			ATTACKRANGECLOSE_DEFAULT = 3;                                          // range of attack close
+	private static final double			ATTACKRANGECLOSE_DEFAULT = 2;                                          // range of attack close
 	public static final float			ATTACKRATE_DEFAULT = TemplateType.DEFAULT.getAttackRate();             // time (in seconds) between each attack
 	public static final float			SPELLRATE_DEFAULT = TemplateType.DEFAULT.getSpellRate();               // time (in seconds) between each spell
 	public static final float			SPEED_DEFAULT = TemplateType.DEFAULT.getSpeed();                       // speed walk
@@ -49,67 +50,69 @@ public class FightTrait extends Trait {
 
 	// persistent
 	@Persist
-	private String					templateType = null;
+	private String						templateType = null;
 	@Persist
-	private String					raceType = null;
+	private String						raceType = null;
 	@Persist
-	private String					formType = null;
+	private String						formType = null;
 	@Persist
-	private String					classType = null;
+	private String						classType = null;
 	@Persist
-	private Map<String, Integer>	stats = new HashMap<>();
+	private Map<NamespacedKey, String>	data = new HashMap<>();
+	@Persist(valueType = Integer.class)
+	private Map<String, Integer>		stats = new HashMap<>();
+	@Persist(keyType = Integer.class)
+	private Map<Integer, String>		modifiers = new HashMap<>();
 	@Persist
-	private Map<Integer, String>	modifiers = new HashMap<>();
+	private Set<String>					teams = new HashSet<>();
 	@Persist
-	private Set<String>				teams = new HashSet<>();
+	private int							level = LEVEL_DEFAULT;
 	@Persist
-	private int						level = LEVEL_DEFAULT;
+	private long						silence = 0;
 	@Persist
-	private long					silence = 0;
+	private Location					respawn = null;
 	@Persist
-	private Location				respawn = null;
+	private int							respawnTime = RESPAWNTIME_DEFAULT;
 	@Persist
-	private int						respawnTime = RESPAWNTIME_DEFAULT;
+    private double						health = HEALTHBYLEVEL_DEFAULT * level;
 	@Persist
-    private double					health = HEALTHBYLEVEL_DEFAULT * level;
+    private double						damage = DAMAGEBYLEVEL_DEFAULT * level;
 	@Persist
-    private double					damage = DAMAGEBYLEVEL_DEFAULT * level;
+    private double						patrolRange = PATROLRANGE_DEFAULT;
 	@Persist
-    private double					patrolRange = PATROLRANGE_DEFAULT;
+    private double						aggroRange = AGGRORANGE_DEFAULT;
 	@Persist
-    private double					aggroRange = AGGRORANGE_DEFAULT;
+    private double						chaseRange = CHASERANGE_DEFAULT;
 	@Persist
-    private double					chaseRange = CHASERANGE_DEFAULT;
+    private double						attackRangeClose = ATTACKRANGECLOSE_DEFAULT;
 	@Persist
-    private double					attackRangeClose = ATTACKRANGECLOSE_DEFAULT;
+    private double						attackRangeRanged = ATTACKRANGERANGED_DEFAULT;
 	@Persist
-    private double					attackRangeRanged = ATTACKRANGERANGED_DEFAULT;
+    private float						attackRate = ATTACKRATE_DEFAULT;
 	@Persist
-    private float					attackRate = ATTACKRATE_DEFAULT;
+    private float						spellRate = SPELLRATE_DEFAULT;
 	@Persist
-    private float					spellRate = SPELLRATE_DEFAULT;
+	private float						speed = SPEED_DEFAULT;
 	@Persist
-	private float					speed = SPEED_DEFAULT;
+	private float						speedCombat = SPEEDCOMBAT_DEFAULT;
 	@Persist
-	private float					speedCombat = SPEEDCOMBAT_DEFAULT;
+	private double						lookRange = LOOKRANGE_DEFAULT;
 	@Persist
-	private double					lookRange = LOOKRANGE_DEFAULT;
+	private boolean						isBoss = false;
 	@Persist
-	private boolean					isBoss = false;
+	private UUID						ownerUUID = null;
 	@Persist
-	private UUID					ownerUUID = null;
-	@Persist
-	private UUID					petUUID = null;
+	private UUID						petUUID = null;
 	// utils
-    private int						tick;
-    private final int				tickActive;
-    private final int				tickUnactive;
-    private int						loseAggro;
-    private final double			rangeActive;
-    private final double			rangeActiveSquared;
-    private FightData				fightData;
-    private FightAI					fightAI;
-    private GoalPatrol				goalPatrol;
+    private int							tick;
+    private final int					tickActive;
+    private final int					tickUnactive;
+    private int							loseAggro;
+    private final double				rangeActive;
+    private final double				rangeActiveSquared;
+    private FightData					fightData;
+    private FightAI						fightAI;
+    private GoalPatrol					goalPatrol;
 
     public FightTrait() {
         super("fighttrait");
@@ -117,7 +120,7 @@ public class FightTrait extends Trait {
     	this.tick = 0;
     	this.tickActive = 10;     // 0.5 seconds if active
     	this.tickUnactive = 80;   // 4 seconds if unactive
-    	this.rangeActive = 100;   // range where npc is active
+    	this.rangeActive = 130;   // range where npc is active
     	this.rangeActiveSquared = rangeActive * rangeActive;
 		this.fightData = null;
     	this.fightAI = null;
@@ -299,6 +302,26 @@ public class FightTrait extends Trait {
 		this.classType = classType.getName();
 	}
 
+	public Map<NamespacedKey, String> getData() {
+		return data;
+	}
+
+	public String getData(NamespacedKey key) {
+		return data.get(key);
+	}
+
+	public boolean hasData(NamespacedKey key) {
+		return data.containsKey(key);
+	}
+
+	public void addData(NamespacedKey key, String value) {
+		data.put(key, value);
+	}
+
+	public void deleteData(NamespacedKey key) {
+		data.remove(key);
+	}
+
 	public Map<String, Integer> getStats() {
 		return stats;
 	}
@@ -309,10 +332,8 @@ public class FightTrait extends Trait {
 	}
 
 	public int getStat(StatType statType) {
-		if (statType == null) return 0;
-		Integer	value = stats.get(statType.getName());
-		if (value == null) return 0;
-		return value;
+		if (statType == null || !stats.containsKey(statType.getName())) return 0;
+		return stats.get(statType.getName());
 	}
 
 	public Map<Integer, String> getModifiers() {
@@ -357,8 +378,7 @@ public class FightTrait extends Trait {
 		setHealth(tmp.getHealth(level));
 		setDamage(tmp.getDamage(level));
 		Map<String, Integer>	tmpStats = tmp.getStats(level);
-		if (tmpStats != null)
-			this.stats = tmpStats;
+		if(tmpStats != null) stats = tmpStats;
 	}
 
 	public long getSilence() {
@@ -398,8 +418,7 @@ public class FightTrait extends Trait {
 		AttributeInstance	attributeInstance = livingNPC.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 		if (attributeInstance != null)
 			attributeInstance.setBaseValue(health);
-		if (livingNPC.getHealth() > health)
-			livingNPC.setHealth(health);
+		livingNPC.setHealth(health);
 	}
 
 	public double getDamage() {

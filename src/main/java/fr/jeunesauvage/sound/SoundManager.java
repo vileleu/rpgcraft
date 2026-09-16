@@ -168,9 +168,9 @@ public class SoundManager implements Listener {
             case DWARFIRON, DWARFIRON_TRADER, DWARFIRON_BLACKSMITH, DWARFIRON_REDHEADBEARD, DWARFIRON_GUY, DWARFIRON_PYROMANCER, DWARFIRON_KING -> FormType.DWARFIRON;
             case DWARFIRON_GUARD -> FormType.DWARFIRON_GUARD;
             case MURLOC, MURLOC_ELITE, MURLOC_BOSS, MURLOC_NICE -> FormType.MURLOC;
-            case ELFNIGHT -> FormType.ELFNIGHT;
+            case ELFNIGHT, ILLIDAN, MALFURION -> FormType.ELFNIGHT;
             case ELFBLOOD -> FormType.ELFBLOOD;
-            case NECROMANCER, NECROMANCER_NOFACE, NECROMANCER_BONE, NECROMANCER_BONEGREY -> FormType.NECROMANCER;
+            case NECROMANCER, NECROMANCER_FACELESS, NECROMANCER_SKELETAL, NECROMANCER_SKELETAL_GREY -> FormType.NECROMANCER;
             case NECROMANCER_SKELETON -> FormType.NECROMANCER_SKELETON;
             case DRACTHYR_BLACK, DRACTHYR_RED -> FormType.DRACTHYR_BLACK;
             case ELEMENTAL_FIRE, ELEMENTAL_WIND, REDSTONE_GOLEM,
@@ -178,7 +178,9 @@ public class SoundManager implements Listener {
                 SCORPION,
                 LEAPER, WHISPERER, FROZER,
                 DEMON, MAGMA_GOLEM, ELEMENTAL_VOID,
-                ANIMAL, ORC_CHILD,
+                ORC_CHILD,
+                ZOMBIE, 
+                ANIMAL,
                 UNKNOWN -> FormType.UNKNOWN;
         };
     }

@@ -22,6 +22,7 @@ public enum RaceType {
     MURLOC("murloc", TextColor.fromHexString("#4b8445")),
     NECROMANCER("necromancer", TextColor.fromHexString("#4ad81f")),
     NECROMANCER_SKELETON("necromancer_skeleton", TextColor.fromHexString("#4ad81f")),
+    ZOMBIE("zombie", TextColor.fromHexString("#2d3d28")),
     ELEMENTAL("elemental", TextColor.fromHexString("#ffffff")),
     SPIDER("spider", TextColor.fromHexString("#292727")),
     SCORPION("scorpion", TextColor.fromHexString("#c6ef97")),

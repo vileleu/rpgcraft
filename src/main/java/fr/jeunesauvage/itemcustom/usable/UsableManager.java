@@ -55,7 +55,7 @@ public class UsableManager implements Listener {
 		if (livingEntityCustom == null) return;
 		SpellRegistry		spellRegistry = RpgCraft.getSpellRegistry();
 		// cancel stealth
-		if (e.getDamage() > 0 && spellRegistry.hasStealth(livingEntityCustom)) {
+		if (e.getDamage() > 0 && spellRegistry.hasStealth(livingEntityCustom.getUUID())) {
 			spellRegistry.removeStealth(livingEntityCustom);
 		}
 		// cancel damage on leap

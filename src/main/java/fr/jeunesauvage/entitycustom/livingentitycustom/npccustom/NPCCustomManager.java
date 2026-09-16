@@ -32,7 +32,7 @@ public class NPCCustomManager implements Listener {
     public void onNPCCustomDespawn(NPCDespawnEvent e) {
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(e.getNPC().getUniqueId());
         if (npcCustom == null) return;
-        npcCustom.onDeath();
+        npcCustom.onQuit();
     }
 
     @EventHandler

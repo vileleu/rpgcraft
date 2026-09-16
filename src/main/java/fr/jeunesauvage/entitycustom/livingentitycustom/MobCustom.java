@@ -17,8 +17,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -40,6 +43,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.silence.Silence;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
@@ -53,9 +57,10 @@ import fr.jeunesauvage.sound.SoundType;
 
 public final class MobCustom implements LivingEntityCustom {
     private final Mob                               mob;
-    private RaceType                                raceType;
-    private FormType                                formType;
-    private ClassType                               classType;
+    private RaceType                                raceType = RaceType.UNKNOWN;
+    private FormType                                formType = FormType.UNKNOWN;
+    private ClassType                               classType = ClassType.BEGGAR;
+    private FormType                                metamorph = FormType.UNKNOWN;
     private final Set<TeamType>                     teams = new HashSet<>();
     private int                                     level;
     private final Map<StatType, Stat>               stats = new HashMap<>();
@@ -70,9 +75,6 @@ public final class MobCustom implements LivingEntityCustom {
 
     public MobCustom(Mob mob) {
         this.mob = mob;
-        this.raceType = RaceType.UNKNOWN;
-        this.formType = FormType.UNKNOWN;
-        this.classType = ClassType.BEGGAR;
         level = ThreadLocalRandom.current().nextInt(1, LivingEntityCustom.LEVEL_MAX + 1);
         this.silence = new Silence(mob);
         loadStats();
@@ -326,6 +328,7 @@ public final class MobCustom implements LivingEntityCustom {
 
     @Override
     public void setRaceType(RaceType raceType) {
+        if (raceType == null) raceType = RaceType.UNKNOWN;
         this.raceType = raceType;
     }
 
@@ -336,7 +339,19 @@ public final class MobCustom implements LivingEntityCustom {
 
     @Override
     public void setFormType(FormType formType) {
+        if (formType == null) formType = FormType.UNKNOWN;
         this.formType = formType;
+    }
+
+    @Override
+    public FormType getMetamorph() {
+        return metamorph;
+    }
+
+    @Override
+    public void setMetamorph(FormType formType) {
+        if (formType == null) formType = FormType.UNKNOWN;
+        metamorph = formType;
     }
 
     @Override
@@ -346,6 +361,7 @@ public final class MobCustom implements LivingEntityCustom {
 
     @Override
     public void setClassType(ClassType classType) {
+        if (classType == null) classType = ClassType.BEGGAR;
         this.classType = classType;
     }
 
@@ -667,6 +683,34 @@ public final class MobCustom implements LivingEntityCustom {
     @Override
     public int isSilence() {
         return silence.is();
+    }
+
+    @Override
+    public Map<SaveEquipment, ItemStack> getSavedEquipment() {
+        Map<SaveEquipment, ItemStack>   result = new HashMap<>();
+        PersistentDataContainer         pdc = mob.getPersistentDataContainer();
+        for (SaveEquipment slot: SaveEquipment.values()) {
+            if (Data.hasString(pdc, slot.getKey())) {
+                result.put(slot, Data.fromBase64(Data.getString(pdc, slot.getKey())));
+            }
+        }
+        return result;
+    }
+
+    @EventHandler
+    public void saveEquipment(SaveEquipment slot, ItemStack item) {
+        PersistentDataContainer pdc = mob.getPersistentDataContainer();
+        Data.setString(pdc, slot.getKey(), Data.toBase64(item));
+    }
+
+    @Override
+    public void deleteSavedEquipment() {
+        PersistentDataContainer         pdc = mob.getPersistentDataContainer();
+        for (SaveEquipment slot: SaveEquipment.values()) {
+            if (Data.hasString(pdc, slot.getKey())) {
+                Data.remove(pdc, slot.getKey());
+            }
+        }
     }
 
     @Override

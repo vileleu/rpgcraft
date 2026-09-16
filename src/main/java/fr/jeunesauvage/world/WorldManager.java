@@ -26,6 +26,7 @@ import org.bukkit.event.block.BlockSpreadEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -35,9 +36,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
@@ -120,6 +123,14 @@ public class WorldManager implements Listener {
 	@EventHandler
 	public void onEnchantItem(EnchantItemEvent e) {
 	    e.setExpLevelCost(0);
+	}
+
+	// cancel zombie to burn
+	@EventHandler
+	public void onEntityCombust(EntityCombustEvent e) {
+		LivingEntityCustom	zombie = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(e.getEntity().getUniqueId());
+	    if (zombie.getRaceType() != RaceType.ZOMBIE) return;
+		e.setCancelled(true);
 	}
 
 	// cancel break block

@@ -79,8 +79,8 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 	@Override
 	public boolean canUse(PlayerCustom playerCustom, EquipmentSlot slot) {
 		SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
-		if (type == SpellType.STEALTH && spellRegistry.hasStealth(playerCustom)) return true;
-		else if (type == SpellType.PET && spellRegistry.hasPet(playerCustom)) return true;
+		if (type == SpellType.STEALTH && spellRegistry.hasStealth(playerCustom.getUUID())) return true;
+		else if (type == SpellType.PET && spellRegistry.hasPet(playerCustom.getUUID())) return true;
 		// check race
 		RaceType		playerRace = playerCustom.getRaceType();
 		Set<RaceType>	raceTypes = type.getRaceTypes();

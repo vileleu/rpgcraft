@@ -34,12 +34,11 @@ EyeOfEnder
 
 TODO:
 - NPC:
- - translatable name in resource pack
  - necromancer spell (spawn skeletons + ...)
  - menu food
  - menu consumable
  - menu repair/sell
- - skins
+ - skins (mercenary orc)
  - mannequin
 - WORLD:
   - player can break mineral block
@@ -47,3 +46,73 @@ TODO:
 
 - TESTS:
  - stealth
+
+
+"Default"
+"Tauren"
+"Vendor Potion Tauren"
+"Vendor Food Tauren"
+"BlackSmith Tauren"
+"ClassMaster Dracthyr Tauren"
+"ClassMaster Priest Tauren"
+"ClassMaster Pyromancer Tauren"
+"Guard Tauren"
+"Shaman Tauren Blue"
+"Shaman Tauren Red"
+"King Tauren"
+"Orc"
+"ClassMaster Warrior Orc"
+"ClassMaster Rogue Orc"
+"ClassMaster Hunter Orc"
+"Demon Orc"
+"Orc"
+"Vendor Food Orc"
+"Guard Orc"
+"Forest Orc"
+"Magrash"
+"Khalash"
+"Go'el"
+"Dwarf"
+"Vendor Food Dwarf"
+"BlackSmith Dwarf"
+"Guard Dwarf"
+"King Dwarf"
+"Human"
+"DwarfIron"
+"Vendor Food DwarfIron"
+"BlackSmith DwarfIron"
+"Guard DwarfIron"
+"King DwarfIron"
+"Pyromancer DwarfIron"
+"Swamp Murloc"
+"Archer Murloc"
+"Elite Murloc"
+"Mrgl The Oracle"
+"Nice Murloc"
+"Black Tauren"
+"Palpoutine"
+"Palpoutine Clone"
+"Rogue Human"
+"Desert Tauren"
+"Scorpion"
+"Elf Night"
+"Elf Blood"
+"Redstone Golem"
+"Elemental Fire"
+"Elemental Wind"
+"Small Spider"
+"Spider"
+"Big Spider"
+"Tarentula"
+"Necromancer"
+"Faceless Necromancer"
+"Bone Necromancer"
+"Bone Grey Necromancer"
+"Skeleton Necromancer"
+"Leaper"
+"Whisperer"
+"Frozer"
+"Demon"
+"Magma Golem"
+"Elemental Void"
+"Wolf"

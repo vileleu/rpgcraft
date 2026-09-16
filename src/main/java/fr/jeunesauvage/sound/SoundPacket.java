@@ -20,6 +20,7 @@ import org.bukkit.entity.Spider;
 import org.bukkit.entity.Wither;
 import org.bukkit.entity.WitherSkeleton;
 import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -102,6 +103,13 @@ public class SoundPacket extends PacketAdapter {
                 SoundType.ATTACK, List.of("elemental_void_attack1", "elemental_void_attack2", "elemental_void_attack3", "elemental_void_attack4", "elemental_void_attack5", "elemental_void_attack6", "elemental_void_attack7", "elemental_void_attack8", "elemental_void_attack9"),
                 SoundType.STEP, List.of(),
                 SoundType.DEATH, List.of("elemental_void_death1", "elemental_void_death2", "elemental_void_death3", "elemental_void_death4", "elemental_void_death5", "elemental_void_death6", "elemental_void_death7", "elemental_void_death8", "elemental_void_death9")
+            )),
+            Map.entry(FormType.ZOMBIE, Map.of(
+                SoundType.AMBIENT, List.of("zombie_ambient1", "zombie_ambient2"),
+                SoundType.HURT, List.of("zombie_hurt1", "zombie_hurt2", "zombie_hurt3", "zombie_hurt4"),
+                SoundType.ATTACK, List.of("zombie_attack1", "zombie_attack2", "zombie_attack3", "zombie_attack4"),
+                SoundType.STEP, List.of("zombie_step1", "zombie_step2", "zombie_step3", "zombie_step4"),
+                SoundType.DEATH, List.of("zombie_death1")
             )));
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_AMBIENT, Sound.ENTITY_SPIDER_AMBIENT);
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_DEATH,   Sound.ENTITY_SPIDER_DEATH);
@@ -143,6 +151,9 @@ public class SoundPacket extends PacketAdapter {
 		}
         else if (soundName.startsWith("ENTITY_WITHER_")) {
     		handleWither(e, sound);
+		}
+        else if (soundName.startsWith("ENTITY_ZOMBIE_")) {
+    		handleZombie(e, sound);
 		}
     }
 
@@ -264,6 +275,24 @@ public class SoundPacket extends PacketAdapter {
         e.setCancelled(true);
         if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.2) return;
         playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_VOID);
+	}
+
+    // replace zombie sounds
+	private void handleZombie(PacketEvent e, Sound sound) {
+        SoundType	    soundType = SoundType.fromSound(sound);
+        if (soundType == null) return;
+        PacketContainer	packet = e.getPacket();
+        Player          player = e.getPlayer();
+    	World			world = player.getWorld();
+        Location	    loc = getLocation(packet, world);
+		Optional<LivingEntity>		closestZombie = world.getNearbyLivingEntities(loc, 1).stream()
+			.filter(en -> en instanceof Zombie).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
+		if (closestZombie.isEmpty()) return;
+        NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestZombie.get().getUniqueId());
+        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.ZOMBIE) return;
+        e.setCancelled(true);
+        if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.5) return;
+        playSoundToPlayer(player, loc, soundType, FormType.ZOMBIE);
 	}
 
     private void playSoundToPlayer(Player player, Location loc, SoundType soundType, FormType formType) {

@@ -41,7 +41,7 @@ public class Cooldown {
 	}
 
 	public void refresh() {
-		Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> {
+		Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 			cooldowns.entrySet().removeIf(entry -> {
 				CooldownData	cooldownData = entry.getValue();
 			    int				duration = cooldownData.getDuration();
@@ -52,7 +52,7 @@ public class Cooldown {
 			    player.setCooldown(entry.getKey(), duration * 20);
 			    return false;
 			});
-		});
+		}, 5L);
 	}
 
 	private void load(Player player) {

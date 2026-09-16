@@ -500,7 +500,17 @@ public class FightAI {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);
 			}
-			default -> {}
+			default -> {
+				switch (npcCustom.getClassType()) {
+					case WARRIOR -> RpgCraft.getSpellRegistry().whirlwind(npcCustom, data.getRarity());
+					case ROGUE -> RpgCraft.getSpellRegistry().escape(npcCustom, data.getRarity());
+					case HUNTER -> RpgCraft.getSpellRegistry().iceTrap(npcCustom, data.getRarity());
+					case PYROMANCER -> RpgCraft.getSpellRegistry().flameNova(npcCustom, data.getRarity());
+					case PRIEST -> RpgCraft.getSpellRegistry().holyShield(npcCustom, data.getRarity());
+					case DRACTHYR -> RpgCraft.getSpellRegistry().strikeBack(npcCustom, data.getRarity());
+					default -> {}
+				}
+			}
 		}
 	}
 
@@ -510,7 +520,7 @@ public class FightAI {
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getRarity());
-			case TAUREN_BLACK -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getRarity());
+			case DEMON -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getRarity());
 			case ELEMENTAL_VOID -> RpgCraft.getSpellRegistry().demonChains(npcCustom, target, data.getRarity());
 			case ELEMENTAL_WIND -> RpgCraft.getSpellRegistry().launchWind(npcCustom, target, data.getRarity());
 			case ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getRarity());
@@ -530,7 +540,17 @@ public class FightAI {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);
 			}
-			default -> {}
+			default -> {
+				switch (npcCustom.getClassType()) {
+					case WARRIOR -> RpgCraft.getSpellRegistry().kneeBreaker(npcCustom, data.getRarity());
+					case ROGUE -> RpgCraft.getSpellRegistry().coldBlood(npcCustom, data.getRarity());
+					case HUNTER -> RpgCraft.getSpellRegistry().explosiveShot(npcCustom, data.getRarity());
+					case PYROMANCER -> RpgCraft.getSpellRegistry().fireBall(npcCustom, target, data.getRarity());
+					case PRIEST -> RpgCraft.getSpellRegistry().holyBomb(npcCustom, data.getRarity());
+					case DRACTHYR -> RpgCraft.getSpellRegistry().dragonBreath(npcCustom, target, data.getRarity());
+					default -> {}
+				}
+			}
 		}
 	}
 
@@ -561,7 +581,17 @@ public class FightAI {
 				    if (!caster.isDead() && caster.isValid()) caster.setSpell(Spellcaster.Spell.NONE);
 				}, 40L);
 			}
-			default -> {}
+			default -> {
+				switch (npcCustom.getClassType()) {
+					case WARRIOR -> RpgCraft.getSpellRegistry().leap(npcCustom, target, data.getRarity());
+					case ROGUE -> RpgCraft.getSpellRegistry().stealth(npcCustom, data.getRarity());
+					case HUNTER -> RpgCraft.getSpellRegistry().pet(npcCustom, data.getRarity());
+					case PYROMANCER -> RpgCraft.getSpellRegistry().teleport(npcCustom, data.getRarity());
+					case PRIEST -> RpgCraft.getSpellRegistry().shadowWord(npcCustom, target, data.getRarity());
+					case DRACTHYR -> RpgCraft.getSpellRegistry().metamorph(npcCustom, data.getRarity());
+					default -> {}
+				}
+			}
 		}
 	}
 

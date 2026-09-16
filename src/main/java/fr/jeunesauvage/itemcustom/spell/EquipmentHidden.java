@@ -73,7 +73,7 @@ public class EquipmentHidden extends PacketAdapter {
         if (uuid == null) return;
         LivingEntityCustom  target = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(uuid);
         if (target == null) return;
-        if (RpgCraft.getSpellRegistry().hasStealth(target)) {
+        if (RpgCraft.getSpellRegistry().hasStealth(target.getUUID())) {
             List<Pair<ItemSlot, ItemStack>> slots = event.getPacket().getSlotStackPairLists().read(0);
             List<Pair<ItemSlot, ItemStack>> filtered = new ArrayList<>();
             for (Pair<ItemSlot, ItemStack> pair : slots) {

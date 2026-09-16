@@ -20,9 +20,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.potion.PotionEffect;
@@ -59,6 +61,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.scoreboardcustom.ScoreboardCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.silence.Silence;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
@@ -88,6 +91,7 @@ public final class PlayerCustom implements LivingEntityCustom {
     private RaceType                                raceType;
     private FormType                                formType;
     private ClassType                               classType;
+    private FormType                                metamorph;
     private PowerCustom                             power;
     private final Set<TeamType>                     teams = new HashSet<>();
     private final Map<StatType, Stat>               stats = new HashMap<>();
@@ -110,6 +114,7 @@ public final class PlayerCustom implements LivingEntityCustom {
         this.raceType = RaceType.fromString(Data.getString(pdc, RaceType.KEY));
         this.formType = FormType.fromString(Data.getString(pdc, FormType.KEY));
         this.classType = ClassType.fromString(Data.getString(pdc, ClassType.KEY));
+        this.metamorph = FormType.UNKNOWN;
         this.power = classType.buildPower();
         this.cooldown = new Cooldown(player);
         this.silence = new Silence(player);
@@ -131,6 +136,7 @@ public final class PlayerCustom implements LivingEntityCustom {
                     teams.add(teamType);
             }
         });
+        if (!teams.contains(TeamType.PLAYER)) teams.add(TeamType.PLAYER);
     }
 
     private void loadStats() {
@@ -571,6 +577,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void setRaceType(RaceType raceType) {
+        if (raceType == null) raceType = RaceType.UNKNOWN;
         this.raceType = raceType;
         Data.setString(player.getPersistentDataContainer(), RaceType.KEY, raceType.getName());
         scoreboardCustom.refreshRace(this);
@@ -584,8 +591,22 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void setFormType(FormType formType) {
+        if (formType == null) formType = FormType.UNKNOWN;
         this.formType = formType;
         Data.setString(player.getPersistentDataContainer(), FormType.KEY, formType.getName());
+        refreshSkin();
+        refreshScale();
+    }
+
+    @Override
+    public FormType getMetamorph() {
+        return metamorph;
+    }
+
+    @Override
+    public void setMetamorph(FormType formType) {
+        if (formType == null) formType = FormType.UNKNOWN;
+        metamorph = formType;
         refreshSkin();
         refreshScale();
     }
@@ -597,6 +618,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void setClassType(ClassType classType) {
+        if (classType == null) classType = ClassType.BEGGAR;
         this.classType = classType;
         Data.setString(player.getPersistentDataContainer(), ClassType.KEY, classType.getName());
         power = classType.buildPower();
@@ -612,7 +634,8 @@ public final class PlayerCustom implements LivingEntityCustom {
     public void refreshScale() {
         AttributeInstance   attributeInstance = player.getAttribute(Attribute.GENERIC_SCALE);
         if (attributeInstance == null) return;
-        attributeInstance.setBaseValue(formType.getScale());
+		FormType    f = metamorph != FormType.UNKNOWN ? metamorph : formType;
+        attributeInstance.setBaseValue(f.getScale());
     }
 
     @Override
@@ -773,7 +796,14 @@ public final class PlayerCustom implements LivingEntityCustom {
 		double		maxHealth = target.getHealthMax();
 		float		progress = (float)(health / maxHealth);
 		BossBar	bar = BossBar.bossBar(
-		        Message.c(Component.translatable("level.rpgcraft.short").append(Component.text(target.getLevel() + " " + target.getName()))),
+		        Message.c(Component.translatable("level.rpgcraft.short")
+                    .append(Component.text(target.getLevel() + " "))
+                    .append(
+                        target instanceof NPCCustom
+                        ? Component.translatable("entity.rpgcraft." + target.getName().replace(' ', '_').replace('\'', '_').toLowerCase())
+                        : Component.text(target.getName())
+                    )
+                ),
 		        progress,
 		        BossBar.Color.RED,
 		        BossBar.Overlay.PROGRESS
@@ -790,7 +820,16 @@ public final class PlayerCustom implements LivingEntityCustom {
 				double		health = target.getHealth();
 				double		maxHealth = target.getHealthMax();
 				float		progress = (float)(health / maxHealth);
-				bar.name(Message.c(Component.translatable("level.rpgcraft.short").append(Component.text(target.getLevel() + " " + target.getName()))));
+				bar.name(
+                    Message.c(Component.translatable("level.rpgcraft.short")
+                        .append(Component.text(target.getLevel() + " "))
+                        .append(
+                            target instanceof NPCCustom
+                            ? Component.translatable("entity.rpgcraft." +target.getName().replace(' ', '_').replace('\'', '_').toLowerCase())
+                            : Component.text(target.getName())
+                        )
+                    )
+                );
 				bar.progress(progress);
 				if (ticks == TIMETARGET_DEFAULT) {
 					if (getWorld() != target.getWorld() || target.getLocation().distanceSquared(getLocation()) > RANGETARGET_DEFAULT * RANGETARGET_DEFAULT)
@@ -973,8 +1012,39 @@ public final class PlayerCustom implements LivingEntityCustom {
     }
 
     @Override
+    public Map<SaveEquipment, ItemStack> getSavedEquipment() {
+        Map<SaveEquipment, ItemStack>   result = new HashMap<>();
+        PersistentDataContainer         pdc = player.getPersistentDataContainer();
+        for (SaveEquipment slot: SaveEquipment.values()) {
+            if (Data.hasString(pdc, slot.getKey())) {
+                result.put(slot, Data.fromBase64(Data.getString(pdc, slot.getKey())));
+            }
+        }
+        return result;
+    }
+
+    @EventHandler
+    public void saveEquipment(SaveEquipment slot, ItemStack item) {
+        PersistentDataContainer pdc = player.getPersistentDataContainer();
+        Data.setString(pdc, slot.getKey(), Data.toBase64(item));
+    }
+
+    @Override
+    public void deleteSavedEquipment() {
+        PersistentDataContainer         pdc = player.getPersistentDataContainer();
+        for (SaveEquipment slot: SaveEquipment.values()) {
+            if (Data.hasString(pdc, slot.getKey())) {
+                Data.remove(pdc, slot.getKey());
+            }
+        }
+    }
+
+    @Override
     public void refreshSkin() {
-		SkinData		skinData = formType.getFormTypeSkin().getSkinData();
+		SkinData		skinData =
+            metamorph != FormType.UNKNOWN
+            ? metamorph.getFormTypeSkin().getSkinData()
+            : formType.getFormTypeSkin().getSkinData();
         if (skinData != null) {
             SkinStorage		skinStorage = RpgCraft.instanceSkinsRestorer().getSkinStorage();
             skinStorage.setCustomSkinData(formType.getName(), SkinProperty.of(skinData.getValue(), skinData.getSignature()));
@@ -1047,8 +1117,6 @@ public final class PlayerCustom implements LivingEntityCustom {
     @Override
     public void onSpawn() {
         setHealthMax(getLevel() * HEALTHBYLEVEL_DEFAULT);
-        RpgCraft.getSpellRegistry().clean(this);
-        RpgCraft.getMetamorphRegistry().removeDracthyr(this);
         refreshStat();
         refreshCooldown();
         scoreboardCustom.refreshAll(this);
@@ -1058,6 +1126,8 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public void onDeath() {
+        RpgCraft.getSpellRegistry().clean(this);
+        RpgCraft.getMetamorphRegistry().clean(this);
         modifiers.values().removeIf(modifier -> {
             if (modifier.getDuration() == 0) {
                 modifier.cancel();
@@ -1072,21 +1142,22 @@ public final class PlayerCustom implements LivingEntityCustom {
     public void onJoin() {
         if (getLevel() < 1) setLevel(1);
         setHealthMax(getLevel() * HEALTHBYLEVEL_DEFAULT);
-        RpgCraft.getMetamorphRegistry().removeDracthyr(this);
+        RpgCraft.getMetamorphRegistry().clean(this);
         refreshStat();
         refreshCooldown();
         scoreboardCustom.refreshAll(this);
         refreshSkin();
+        refreshScale();
         greeting();
     }
 
     @Override
     public void onQuit() {
         RpgCraft.getSpellRegistry().clean(this);
+        RpgCraft.getMetamorphRegistry().clean(this);
         modifiers.values().forEach(modifier -> {
             modifier.cancel();
         });
-        RpgCraft.getSpellRegistry().clean(this);
         deleteGroup();
         farewell();
     }

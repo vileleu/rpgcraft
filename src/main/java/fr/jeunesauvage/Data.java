@@ -150,6 +150,7 @@ public class Data {
 	*/
 
 	public static String toBase64(ItemStack item) {
+		if (item == null) return "";
 	    try {
 	        YamlConfiguration	config = new YamlConfiguration();
 	        config.set("item", item);
@@ -162,6 +163,7 @@ public class Data {
 	}
 
 	public static ItemStack fromBase64(String base64) {
+		if (base64 == null || base64.isEmpty()) return null;
 	    try {
 	        String				yaml = new String(Base64.getDecoder().decode(base64));
 	        YamlConfiguration	config = new YamlConfiguration();
