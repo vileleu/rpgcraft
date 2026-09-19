@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
@@ -15,17 +16,20 @@ import org.bukkit.scheduler.BukkitTask;
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveequipment.SaveEquipment;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.spell.SpellRegistry;
 import fr.jeunesauvage.sound.SoundManager;
+import net.citizensnpcs.api.trait.trait.Equipment;
+import net.citizensnpcs.api.trait.trait.Equipment.EquipmentSlot;
 
 public class MetamorphRegistry {
 	private final Map<UUID, Map<StatType, Integer>>			statsDracthyr = new HashMap<>();
@@ -73,18 +77,30 @@ public class MetamorphRegistry {
 		ItemCustomRegistry	itemCustomRegistry = RpgCraft.getItemCustomRegistry();
 		Armor				wings = itemCustomRegistry.getArmor("ender_dragon_wings");
 		Weapon				claw = itemCustomRegistry.getWeapon("claw_lightning");
-		EntityEquipment		equipment = launcher.getEquipment();
-		ItemStack			chest = equipment.getChestplate();
-		ItemStack			hand = equipment.getItemInMainHand();
-		ItemStack			offhand = equipment.getItemInOffHand();
-		launcher.saveEquipment(SaveEquipment.CHEST, chest);
-		launcher.saveEquipment(SaveEquipment.HAND, hand);
-		launcher.saveEquipment(SaveEquipment.OFFHAND, offhand);
-		Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+		ItemStack			chest = null;
+		ItemStack			hand = null;
+		ItemStack			offhand = null;
+		if (launcher instanceof NPCCustom npcCustom) {
+			Equipment	equipment = npcCustom.getNPC().getOrAddTrait(Equipment.class);
+			chest = equipment.get(EquipmentSlot.CHESTPLATE);
+			hand = equipment.get(EquipmentSlot.HAND);
+			offhand = equipment.get(EquipmentSlot.OFF_HAND);
+			equipment.set(EquipmentSlot.CHESTPLATE, wings.getItemClone());
+			equipment.set(EquipmentSlot.HAND, claw.getItemClone());
+			equipment.set(EquipmentSlot.OFF_HAND, claw.getItemClone());
+		}
+		else {
+			EntityEquipment	equipment = launcher.getEquipment();
+			chest = equipment.getChestplate();
+			hand = equipment.getItemInMainHand();
+			offhand = equipment.getItemInOffHand();
 			equipment.setChestplate(wings.getItemClone());
 			equipment.setItemInMainHand(claw.getItemClone());
 			equipment.setItemInOffHand(claw.getItemClone());
-		}, 5L);
+		}
+		launcher.saveEquipment(SaveEquipment.CHEST, (chest != null ? chest : new ItemStack(Material.AIR)));
+		launcher.saveEquipment(SaveEquipment.HAND, (hand != null ? hand : new ItemStack(Material.AIR)));
+		launcher.saveEquipment(SaveEquipment.OFFHAND, (offhand != null ? offhand : new ItemStack(Material.AIR)));
 	}
 
 	public void unequipDracthyr(LivingEntityCustom launcher) {
@@ -95,10 +111,20 @@ public class MetamorphRegistry {
 		ItemStack						hand = savedEquipment.get(SaveEquipment.HAND);
 		ItemStack						offhand = savedEquipment.get(SaveEquipment.OFFHAND);
 		launcher.deleteSavedEquipment();
-		EntityEquipment	equipment = launcher.getEquipment();
-		equipment.setChestplate(chest);
-		equipment.setItemInMainHand(hand);
-		equipment.setItemInOffHand(offhand);
+		if (launcher instanceof NPCCustom npcCustom) {
+			Equipment	equipment = npcCustom.getNPC().getOrAddTrait(Equipment.class);
+			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				equipment.set(EquipmentSlot.CHESTPLATE, chest);
+				equipment.set(EquipmentSlot.HAND, hand);
+				equipment.set(EquipmentSlot.OFF_HAND, offhand);
+			}, 5L);
+		}
+		else {
+			EntityEquipment	equipment = launcher.getEquipment();
+			equipment.setChestplate(chest);
+			equipment.setItemInMainHand(hand);
+			equipment.setItemInOffHand(offhand);
+		}
 	}
 
 	public void removeDracthyr(LivingEntityCustom launcher) {
@@ -121,7 +147,7 @@ public class MetamorphRegistry {
 		// form
 		launcher.setMetamorph(FormType.UNKNOWN);
 		// sound
-		SoundManager.playSound(launcher, "spell_metamorph_end");
+		if (launcher.isPresent()) SoundManager.playSound(launcher, "spell_metamorph_end");
 	}
 
 	public boolean isDracthyr(LivingEntityCustom launcher) {

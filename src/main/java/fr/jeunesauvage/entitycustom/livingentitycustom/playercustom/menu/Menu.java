@@ -2,6 +2,7 @@ package fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -36,10 +37,10 @@ import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.armor.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.itemcustom.food.Food;
 import fr.jeunesauvage.itemcustom.potion.Potion;
 import fr.jeunesauvage.itemcustom.potion.PotionType;
 import fr.jeunesauvage.itemcustom.spell.Spell;
-import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.wesjd.anvilgui.AnvilGUI;
@@ -69,7 +70,8 @@ public class Menu {
         inv.setItem(14, createSlot(Material.WRITTEN_BOOK, "Team", "open_team"));
         inv.setItem(15, createSlot(Material.IRON_SWORD, "Items", "open_items"));
         inv.setItem(16, createSlot(Material.POTION, "Potions", "open_potions"));
-        inv.setItem(19, createSlot(Material.PUFFERFISH, "NPC", "open_npc"));
+        inv.setItem(19, createSlot(Material.COOKED_BEEF, "Foods", "open_foods"));
+        inv.setItem(20, createSlot(Material.PUFFERFISH, "NPC", "open_npc"));
         launcher.openInventory(inv);
     }
 
@@ -939,6 +941,19 @@ public class Menu {
         return list;
     }
 
+    public void openFoodsMenu() {
+        MenuHolder  holder = new MenuHolder();
+        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Foods"));
+        holder.setInventory(inv);
+        inv.setItem(BACK_SLOT, createBack("back_main"));
+        Collection<Food>  foods = RpgCraft.getItemCustomRegistry().getFoods().values();
+        int i = 9;
+        for (Food food: foods) {
+            inv.setItem(i++, createFood(food));
+        }
+        launcher.openInventory(inv);
+    }
+
     public void openNPCMenu() {
         MenuHolder  holder = new MenuHolder();
         Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu NPC"));
@@ -1319,6 +1334,15 @@ public class Menu {
         return item;
     }
 
+    private ItemStack createFood(Food food) {
+        ItemStack               item = food.getItemClone();
+        ItemMeta				meta = item.getItemMeta();
+		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
+        Data.setString(pdc, KEY_MENU, "get_food");
+        item.setItemMeta(meta);
+        return item;
+    }
+
     private ItemStack createClass(ClassType classType) {
         ItemStack               item = new ItemStack(Material.PAPER);
         ItemMeta				meta = item.getItemMeta();
@@ -1398,8 +1422,11 @@ public class Menu {
     }
 
     static public String getAction(ItemStack item) {
-        PersistentDataContainerView pdc = item.getPersistentDataContainer();
-        return Data.getString(pdc, Menu.getKeyMenu());
+        ItemMeta                meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        String  action = Data.getString(pdc, KEY_MENU);
+        Data.remove(pdc, KEY_MENU);
+        return action;
     }
 
     static public NamespacedKey getKeyMenu() {

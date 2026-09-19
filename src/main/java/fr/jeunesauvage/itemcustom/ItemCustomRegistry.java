@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
 
+import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
+import fr.jeunesauvage.itemcustom.food.Food;
 import fr.jeunesauvage.itemcustom.itembuilder.ItemBuilder;
 import fr.jeunesauvage.itemcustom.potion.Potion;
 import fr.jeunesauvage.itemcustom.spell.Spell;
@@ -21,6 +23,7 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
 	private final Map<String, Weapon>			weapons;
 	private final Map<String, Potion>			potions;
 	private final Map<String, Spell>			spells;
+	private final Map<String, Food>				foods;
 	private final Map<String, Usable>			usables;
 	private final Map<String, Consumable>		consumables;
 
@@ -32,8 +35,13 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
 		this.weapons = itemBuilder.getWeapon();
 		this.potions = itemBuilder.getPotion();
 		this.spells = itemBuilder.getSpell();
+		this.foods = itemBuilder.getFood();
 		this.usables = itemBuilder.getUsable();
 		this.consumables = itemBuilder.getConsumable();
+		int	count = 1;
+		for (Food food: foods.values()) {
+			RpgCraft.debug("food " + count++ + " = " + food.getIdentifier());
+		}
     }
 
     @Override
@@ -69,6 +77,10 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
 		return spells;
 	}
 
+	public Map<String, Food> getFoods() {
+		return foods;
+	}
+
     public Map<String, Usable> getUsables() {
         return usables;
     }
@@ -101,6 +113,10 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
 
 	public Spell getSpell(String identifier) {
 		return spells.get(identifier);
+	}
+
+	public Food getFood(String identifier) {
+		return foods.get(identifier);
 	}
 
 	public Usable getUsable(String identifier) {
@@ -147,6 +163,12 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
         String  identifier = ItemCustom.getIdentifier(item);
         if (identifier == null) return null;
 		return spells.get(identifier);
+	}
+
+	public Food getFood(ItemStack item) {
+        String  identifier = ItemCustom.getIdentifier(item);
+        if (identifier == null) return null;
+		return foods.get(identifier);
 	}
 
 	public Usable getUsable(ItemStack item) {

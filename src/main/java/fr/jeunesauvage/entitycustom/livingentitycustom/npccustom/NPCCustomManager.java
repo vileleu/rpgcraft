@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import net.citizensnpcs.api.event.DespawnReason;
 import net.citizensnpcs.api.event.NPCCreateEvent;
 import net.citizensnpcs.api.event.NPCDeathEvent;
 import net.citizensnpcs.api.event.NPCDespawnEvent;
@@ -32,6 +33,7 @@ public class NPCCustomManager implements Listener {
     public void onNPCCustomDespawn(NPCDespawnEvent e) {
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(e.getNPC().getUniqueId());
         if (npcCustom == null) return;
+        if (e.getReason() == DespawnReason.DEATH) return;
         npcCustom.onQuit();
     }
 

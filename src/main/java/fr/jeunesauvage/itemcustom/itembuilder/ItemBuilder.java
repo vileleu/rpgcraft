@@ -34,6 +34,8 @@ import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponMaterial;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.itemcustom.food.Food;
+import fr.jeunesauvage.itemcustom.food.FoodType;
 import fr.jeunesauvage.itemcustom.potion.Potion;
 import fr.jeunesauvage.itemcustom.potion.PotionType;
 import fr.jeunesauvage.itemcustom.spell.Spell;
@@ -87,6 +89,7 @@ public class ItemBuilder {
         buildEquipable();
         buildPotion();
         buildSpell();
+        buildFood();
     }
 
     // build Equipable (Armor + Weapon)
@@ -224,7 +227,7 @@ public class ItemBuilder {
         return nameSet.equals(newName);
 	}
 
-    // build Spell + Potion
+    // build Spell + Potion + Food
 
     private void buildPotion() {
         for (PotionType type: PotionType.values()) {
@@ -241,6 +244,12 @@ public class ItemBuilder {
                 String  name = type.getName() + "_" + rarity.getNumber();
                 items.put(name, new Spell(type, name, rarity, type.getLevel(rarity)));
             }
+        }
+    }
+
+    private void buildFood() {
+        for (FoodType type: FoodType.values()) {
+            items.put(type.getName(), new Food(type));
         }
     }
 
@@ -291,8 +300,17 @@ public class ItemBuilder {
     public Map<String, Spell> getSpell() {
         Map<String, Spell>   result = new HashMap<>();
         for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-            if (entry.getValue() instanceof Spell potion)
-                result.put(entry.getKey(), potion);
+            if (entry.getValue() instanceof Spell spell)
+                result.put(entry.getKey(), spell);
+        }
+        return result;
+    }
+
+    public Map<String, Food> getFood() {
+        Map<String, Food>   result = new HashMap<>();
+        for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
+            if (entry.getValue() instanceof Food food)
+                result.put(entry.getKey(), food);
         }
         return result;
     }

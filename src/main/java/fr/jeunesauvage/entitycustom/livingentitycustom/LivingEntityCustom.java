@@ -26,7 +26,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveequipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 
 public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCustom, NPCCustom, MobCustom {

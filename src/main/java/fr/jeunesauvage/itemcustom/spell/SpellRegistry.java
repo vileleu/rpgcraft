@@ -215,7 +215,7 @@ public class SpellRegistry {
 		if (direction.lengthSquared() < 1.0E-6) return;
 		else direction.normalize();
     	direction.setY(0.5);
-		if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(true);
+		// if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(true);
     	launcher.setVelocity(direction.multiply(1.5));
 		addLeap(launcher, rarity.getNumber());
     	SoundManager.playSound(launcher, "spell_leap");
@@ -249,7 +249,7 @@ public class SpellRegistry {
 		    @Override
 		    public void run() {
 				if (!isLanding(launcher)) return;
-				if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(false);
+				// if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(false);
 	    		Location	loc = launcher.getLocation();
 				double		radius = 6;
 				double 		damage = level * 4 + 2;

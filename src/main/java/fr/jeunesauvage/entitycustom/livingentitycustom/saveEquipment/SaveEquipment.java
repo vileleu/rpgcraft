@@ -1,4 +1,4 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment;
+package fr.jeunesauvage.entitycustom.livingentitycustom.saveequipment;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.EquipmentSlot;

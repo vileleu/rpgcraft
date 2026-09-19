@@ -38,7 +38,7 @@ public class FightTrait extends Trait {
 	public static final double			HEALTHBYLEVEL_DEFAULT = TemplateType.DEFAULT.getHealth(LEVEL_DEFAULT); // health
 	public static final double			DAMAGEBYLEVEL_DEFAULT = TemplateType.DEFAULT.getDamage(LEVEL_DEFAULT); // damage of attack
 	private static final double			PATROLRANGE_DEFAULT = 0;                                               // range of patrol
-	public static final double			AGGRORANGE_DEFAULT = 30;                                               // range of aggro
+	public static final double			AGGRORANGE_DEFAULT = 25;                                               // range of aggro
 	public static final double			CHASERANGE_DEFAULT = 60;                                               // range of chase
 	public static final double			ATTACKRANGERANGED_DEFAULT = 15;                                        // range of attack ranged
 	private static final double			ATTACKRANGECLOSE_DEFAULT = 2;                                          // range of attack close
@@ -120,7 +120,7 @@ public class FightTrait extends Trait {
     	this.tick = 0;
     	this.tickActive = 10;     // 0.5 seconds if active
     	this.tickUnactive = 80;   // 4 seconds if unactive
-    	this.rangeActive = 130;   // range where npc is active
+    	this.rangeActive = 100;   // range where npc is active
     	this.rangeActiveSquared = rangeActive * rangeActive;
 		this.fightData = null;
     	this.fightAI = null;

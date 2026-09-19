@@ -43,7 +43,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveequipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.silence.Silence;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
@@ -700,6 +700,7 @@ public final class MobCustom implements LivingEntityCustom {
     @EventHandler
     public void saveEquipment(SaveEquipment slot, ItemStack item) {
         PersistentDataContainer pdc = mob.getPersistentDataContainer();
+        if (Data.hasString(pdc, slot.getKey())) return;
         Data.setString(pdc, slot.getKey(), Data.toBase64(item));
     }
 

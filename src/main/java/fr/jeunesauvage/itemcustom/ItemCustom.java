@@ -62,6 +62,7 @@ public abstract class ItemCustom<T extends ItemCustomType> {
 		ItemMeta	meta = item.getItemMeta();
 		if (meta == null) return null;
 		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
-		return Data.getString(pdc, KEY_IDENTIFIER);
+		String	identifier = Data.getString(pdc, KEY_IDENTIFIER);
+		return identifier;
 	}
 }

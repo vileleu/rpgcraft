@@ -520,7 +520,6 @@ public class FightAI {
 		TemplateType	templateType = data.getTemplateType();
 		switch (templateType) {
 			case MURLOC_MRGL -> RpgCraft.getSpellRegistry().launchWater(npcCustom, target, data.getRarity());
-			case DEMON -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getRarity());
 			case ELEMENTAL_VOID -> RpgCraft.getSpellRegistry().demonChains(npcCustom, target, data.getRarity());
 			case ELEMENTAL_WIND -> RpgCraft.getSpellRegistry().launchWind(npcCustom, target, data.getRarity());
 			case ELEMENTAL_FIRE, PET_BRAISED -> RpgCraft.getSpellRegistry().launchFire(npcCustom, target, data.getRarity());
@@ -531,7 +530,7 @@ public class FightAI {
 				RpgCraft.getSpellRegistry().deadlyMagnet(npcCustom, data.getRarity());
 			}
 			case WHISPERER -> RpgCraft.getSpellRegistry().teleportWhisperer(npcCustom);
-			case LEAPER -> RpgCraft.getSpellRegistry().leap(npcCustom, target, data.getRarity());
+			case LEAPER -> RpgCraft.getSpellRegistry().charge(npcCustom, target, data.getRarity());
 			case FROZER -> {
 				Spellcaster	caster = (Spellcaster)npcCustom.getLivingEntity();
 				caster.setSpell(Spellcaster.Spell.WOLOLO);

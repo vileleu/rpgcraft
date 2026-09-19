@@ -30,6 +30,10 @@ public class Lore {
 		return Message.c(Component.translatable("spell.rpgcraft." + name), rarity.getColor());
 	}
 
+	public static Component nameFood(String name, Rarity rarity) {
+		return Message.c(Component.translatable("food.rpgcraft." + name), rarity.getColor());
+	}
+
 	public static Component type(ItemCustomType itemCustomType) {
 		TextColor	colorName = NamedTextColor.GRAY;
 		TextColor	colorValue = NamedTextColor.WHITE;

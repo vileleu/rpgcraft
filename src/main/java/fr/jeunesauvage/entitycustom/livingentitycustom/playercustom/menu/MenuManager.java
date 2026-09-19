@@ -29,7 +29,6 @@ public class MenuManager implements Listener {
             }
             ParseAction parseAction = new ParseAction(action);
             parseAction.parse();
-            RpgCraft.debug("parse: result = " + parseAction.getResult() + ", start = " + parseAction.getStart());
             switch (parseAction.getResult()) {
                 case "back_main" -> menu.openMainMenu();
                 case "back_stats" -> menu.openStatsMenu();
@@ -41,6 +40,7 @@ public class MenuManager implements Listener {
                 case "get_equipable" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
                 case "get_spell" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
                 case "get_potion" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
+                case "get_food" -> p.getInventory().addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
                 // stats + skills
                 case "open_stats" -> menu.openStatsMenu();
                 case "open_skills" -> menu.openSkillsMenu();
@@ -104,6 +104,8 @@ public class MenuManager implements Listener {
                 case "open_potion_mana" -> menu.openPotionsManaMenu();
                 case "open_potion_rage" -> menu.openPotionsRageMenu();
                 case "open_potion_energy" -> menu.openPotionsEnergyMenu();
+                // foods
+                case "open_foods" -> menu.openFoodsMenu();
             }
         }
     }

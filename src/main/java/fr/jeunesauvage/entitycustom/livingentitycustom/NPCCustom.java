@@ -46,7 +46,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveequipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
@@ -922,6 +922,7 @@ public final class NPCCustom implements LivingEntityCustom {
     @EventHandler
     public void saveEquipment(SaveEquipment slot, ItemStack item) {
         FightTrait  fightTrait = npc.getOrAddTrait(FightTrait.class);
+        if (fightTrait.hasData(slot.getKey())) return;
         fightTrait.addData(slot.getKey(), Data.toBase64(item));
     }
 

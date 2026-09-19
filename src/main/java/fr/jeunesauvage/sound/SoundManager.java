@@ -135,21 +135,21 @@ public class SoundManager implements Listener {
 	** fonctions statiques
 	*/
 
-    public static void playQuote(LivingEntityCustom livingEntityCustom, QuoteType quoteType) {
-        World   world = livingEntityCustom.getWorld();
+    public static void playQuote(LivingEntityCustom l, QuoteType quoteType) {
+        World   world = l.getWorld();
         if (world == null) return;
-        FormType                        formType = findFormType(livingEntityCustom.getFormType());
+        FormType                        formType = findFormType(l.getMetamorph() != FormType.UNKNOWN ? l.getMetamorph() : l.getFormType());
         Map<QuoteType, List<String>>    map = QUOTES.get(formType);
         if (map == null) return;
         List<String> list = map.get(quoteType);
         if (list == null || list.size() < 1) return;
-        world.playSound(livingEntityCustom.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.MASTER, 1.5f, 1f);
+        world.playSound(l.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.MASTER, 1.5f, 1f);
     }
 
-    public static void playSound(LivingEntityCustom livingEntityCustom, String soundName) {
-        World   world = livingEntityCustom.getWorld();
+    public static void playSound(LivingEntityCustom l, String soundName) {
+        World   world = l.getWorld();
         if (world == null) return;
-        world.playSound(livingEntityCustom.getLocation(), "sounds:" + soundName, SoundCategory.MASTER, 1.5f, 1f);
+        world.playSound(l.getLocation(), "sounds:" + soundName, SoundCategory.MASTER, 1.5f, 1f);
     }
 
     public static void playSound(Location loc, String soundName) {

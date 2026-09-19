@@ -61,7 +61,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.scoreboardcustom.ScoreboardCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.saveEquipment.SaveEquipment;
+import fr.jeunesauvage.entitycustom.livingentitycustom.saveequipment.SaveEquipment;
 import fr.jeunesauvage.entitycustom.livingentitycustom.silence.Silence;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
@@ -1026,6 +1026,7 @@ public final class PlayerCustom implements LivingEntityCustom {
     @EventHandler
     public void saveEquipment(SaveEquipment slot, ItemStack item) {
         PersistentDataContainer pdc = player.getPersistentDataContainer();
+        if (Data.hasString(pdc, slot.getKey())) return;
         Data.setString(pdc, slot.getKey(), Data.toBase64(item));
     }
 

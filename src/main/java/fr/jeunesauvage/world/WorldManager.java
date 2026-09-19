@@ -129,7 +129,7 @@ public class WorldManager implements Listener {
 	@EventHandler
 	public void onEntityCombust(EntityCombustEvent e) {
 		LivingEntityCustom	zombie = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(e.getEntity().getUniqueId());
-	    if (zombie.getRaceType() != RaceType.ZOMBIE) return;
+	    if (zombie == null || zombie.getRaceType() != RaceType.ZOMBIE) return;
 		e.setCancelled(true);
 	}
 

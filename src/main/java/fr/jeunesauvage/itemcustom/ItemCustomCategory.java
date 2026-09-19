@@ -4,5 +4,6 @@ public enum ItemCustomCategory {
 	WEAPON,
 	ARMOR,
 	SPELL,
-	POTION;
+	POTION,
+	FOOD;
 }

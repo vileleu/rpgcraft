@@ -27,7 +27,7 @@ public class Potion extends ItemCustom<PotionType> implements Consumable {
 
 	private void buildPotion() {
 		ItemMeta	meta = item.getItemMeta();
-		meta.displayName(Lore.nameSpell(name, rarity));
+		meta.displayName(Lore.namePotion(name, rarity));
         Data.setString(meta.getPersistentDataContainer(), KEY_IDENTIFIER, name);
 		// write lore
 		List<Component>	lore = new ArrayList<>();
