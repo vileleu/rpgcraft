@@ -115,4 +115,15 @@ public class Lore {
 		name = name.replaceAll("_\\d+$", "");
 		return Message.c(Component.translatable("description.rpgcraft").color(colorName).append(Component.text(" ")).append(Component.translatable("description.rpgcraft." + name).color(colorValue)));
 	}
+
+	public static List<Component> sell(int ingots, int nuggets) {
+		List<Component>	lore = new ArrayList<>();
+		lore.add(Message.c(
+			(Component.translatable("gold_ingots.rpgcraft").append(Component.text(": "))).color(NamedTextColor.WHITE)
+			.append(Component.text(String.valueOf(ingots)).color(NamedTextColor.GOLD))));
+		lore.add(Message.c(
+			(Component.translatable("gold_nuggets.rpgcraft").append(Component.text(": "))).color(NamedTextColor.WHITE)
+			.append(Component.text(String.valueOf(nuggets)).color(NamedTextColor.GOLD))));
+		return lore;
+	}
 }

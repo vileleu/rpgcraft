@@ -15,6 +15,7 @@ public class ItemCustomManager implements Listener {
         rpgCraft.getCommand("giveequipable").setExecutor(itemCustomCommand);
         rpgCraft.getCommand("givespell").setExecutor(itemCustomCommand);
         rpgCraft.getCommand("givepotion").setExecutor(itemCustomCommand);
+        rpgCraft.getCommand("givefood").setExecutor(itemCustomCommand);
 		// EquipableManager listener
 		EquipableManager	equipableManager = new EquipableManager();
 		rpgCraft.getServer().getPluginManager().registerEvents(equipableManager, rpgCraft);

@@ -26,9 +26,8 @@ public class PowerCustom {
     }
 
     public void setValue(double value) {
-        if (value < 0) this.value = 0;
-        else if (value > valueMax) this.value = valueMax;
-        else this.value = value;
+        value = Math.max(0, Math.min(valueMax, value));
+        this.value = value;
     }
 
     public double getValueMax() {
@@ -36,20 +35,19 @@ public class PowerCustom {
     }
 
     public void setValueMax(double valueMax) {
-        if (valueMax < 0) this.valueMax = 1;
-        else this.valueMax = valueMax;
+        this.valueMax = Math.max(1, valueMax);
     }
 
     public void increase(double amount) {
-        value = Math.min(valueMax, value + amount);
+        value = Math.max(0, Math.min(valueMax, value + amount));
     }
 
     public void decrease(double amount) {
-        value = Math.max(0, value - amount);
+        value = Math.max(0, Math.min(valueMax, value - amount));
     }
 
     public void increaseMax(double amount) {
-        valueMax = valueMax + amount;
+        valueMax = Math.max(1, valueMax + amount);
     }
 
     public void decreaseMax(double amount) {

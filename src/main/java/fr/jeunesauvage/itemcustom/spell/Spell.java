@@ -23,7 +23,6 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.bossbar.BossBarData;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
@@ -114,15 +113,10 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			playerCustom.sendActionBar(Message.cooldown(duration));
 			return false;
 		}
-		// check power
-		PowerCustom	power = playerCustom.getPowerCustom();
-		if (power == null) {
-			playerCustom.sendActionBar(Message.cantUse());
-			return false;
-		}
+		// cost
 		int	cost = type.getCost(rarity);
-		if (power.getValue() < cost) {
-			playerCustom.sendActionBar(Message.notEnough(power.getType()));
+		if (playerCustom.getPower() < cost) {
+			playerCustom.sendActionBar(Message.notEnough(playerCustom.getPowerCustom().getType()));
 			return false;
 		}
 		if (type.isCast()) {
@@ -131,7 +125,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		}
 		// can use
 		playerCustom.addCooldown(type.getMaterial(), type.getCooldown(rarity));
-		power.decrease(cost);
+		playerCustom.decreasePower(cost);
 		return true;
 	}
 
@@ -239,20 +233,15 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			playerCustom.sendActionBar(Message.cooldown(duration));
 			return false;
 		}
-		// check power
-		PowerCustom	power = playerCustom.getPowerCustom();
-		if (power == null) {
-			playerCustom.sendActionBar(Message.cantUse());
-			return false;
-		}
+		// cost
 		int	cost = type.getCost(rarity);
-		if (power.getValue() < cost) {
-			playerCustom.sendActionBar(Message.notEnough(power.getType()));
+		if (playerCustom.getPower() < cost) {
+			playerCustom.sendActionBar(Message.notEnough(playerCustom.getPowerCustom().getType()));
 			return false;
 		}
 		// can use
 		playerCustom.addCooldown(type.getMaterial(), type.getCooldown(rarity));
-		power.decrease(cost);
+		playerCustom.decreasePower(cost);
 		return true;
 	}
 

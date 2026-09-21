@@ -85,9 +85,11 @@ public class MetamorphRegistry {
 			chest = equipment.get(EquipmentSlot.CHESTPLATE);
 			hand = equipment.get(EquipmentSlot.HAND);
 			offhand = equipment.get(EquipmentSlot.OFF_HAND);
-			equipment.set(EquipmentSlot.CHESTPLATE, wings.getItemClone());
-			equipment.set(EquipmentSlot.HAND, claw.getItemClone());
-			equipment.set(EquipmentSlot.OFF_HAND, claw.getItemClone());
+			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
+				equipment.set(EquipmentSlot.CHESTPLATE, wings.getItemClone());
+				equipment.set(EquipmentSlot.HAND, claw.getItemClone());
+				equipment.set(EquipmentSlot.OFF_HAND, claw.getItemClone());
+			}, 5L);
 		}
 		else {
 			EntityEquipment	equipment = launcher.getEquipment();

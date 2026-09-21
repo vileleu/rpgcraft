@@ -17,6 +17,8 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.MobCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Menu;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menucommand.MenuCommand;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menusell.MenuSell;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
@@ -130,9 +132,15 @@ public class EntityCustomRegistry implements Iterable<EntityCustom> {
 
     // menu
 
-    public void addMenu(PlayerCustom launcher, LivingEntityCustom target) {
+    public void addMenuCommand(PlayerCustom launcher, LivingEntityCustom target) {
         if (launcher == null || target == null) return;
-        Menu    menu = new Menu(launcher, target);
+        MenuCommand menu = new MenuCommand(launcher, target);
+        menuMap.put(launcher.getPlayer().getUniqueId(), menu);
+    }
+
+    public void addMenuSell(PlayerCustom launcher) {
+        if (launcher == null) return;
+        MenuSell menu = new MenuSell(launcher);
         menuMap.put(launcher.getPlayer().getUniqueId(), menu);
     }
 

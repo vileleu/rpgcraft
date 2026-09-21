@@ -326,7 +326,7 @@ public class FightAI {
 			double	range = 2 + npcCustom.getWidth();
 			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < range * range) {
 				if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, closestWaypoint);
-				else navigator.cancelNavigation();
+				else setTargetGround(npcCustom, navigator, closestWaypoint);
 				lastTarget = null;
 				lastTargetLocation = null;
 				return 0;
@@ -360,7 +360,7 @@ public class FightAI {
 	private void setTargetFlight(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
 		if (targetLoc == null) return;
 		Location	npcLoc = npcCustom.getLocation();
-	    Vector direction = targetLoc.toVector().subtract(npcLoc.toVector());
+	    Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
 	    double distance = direction.length();
 	    if (distance < 3) return;
 	    direction.normalize().multiply(5);
@@ -369,12 +369,27 @@ public class FightAI {
 
 	private void setTargetGround(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
 		if (target == null) return;
-	    navigator.setTarget(target.getLocation());
+	    Location	npcLoc = npcCustom.getLocation();
+	    Location	targetLoc = target.getLocation();
+		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
+		if (direction.length() > 30) {
+	    	direction.normalize().multiply(5);
+			navigator.setTarget(npcLoc.clone().add(direction));
+		}
+		else
+	    	navigator.setTarget(target.getLocation());
 	}
 
 	private void setTargetGround(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
-		if (targetLoc == null) return;
-		navigator.setTarget(targetLoc);
+		if (target == null) return;
+	    Location	npcLoc = npcCustom.getLocation();
+		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
+		if (direction.length() > 30) {
+	    	direction.normalize().multiply(5);
+			navigator.setTarget(npcLoc.clone().add(direction));
+		}
+		else
+	    	navigator.setTarget(target.getLocation());
 	}
 
     public void flee(NPCCustom npcCustom, Navigator navigator) {

@@ -1,9 +1,9 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu;
+package fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menucommand;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class MenuHolder implements InventoryHolder {
+public class MenuCommandHolder implements InventoryHolder {
     private Inventory	inventory;
 
     @Override

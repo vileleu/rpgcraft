@@ -9,11 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.DragonFireball;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -235,16 +238,24 @@ public class LauncherManager implements Listener {
 		return -1;
 	}
 
-	// dragonfireball hit
+	// dragonfireball hit (staff dragonfireball)
 	@EventHandler
 	public void onDragonFireballHit(EnderDragonFireballHitEvent e) {
-		if (!(e.getEntity().getShooter() instanceof Player)) return;
-		e.getAreaEffectCloud().setDuration(40);
+		DragonFireball	dragonFireball = e.getEntity();
+		if (!(dragonFireball.getShooter() instanceof LivingEntity l)) return;
+		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+		if (launcher == null) return;
+		SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
+		if (!spellRegistry.isStaff(dragonFireball)) return;
+		AreaEffectCloud	areaEffectCloud = e.getAreaEffectCloud();
+		spellRegistry.setStaff(areaEffectCloud);
+		areaEffectCloud.setDuration(40);
 	}
 
-	// dragonfireball area hit
+	// dragonfireball area hit (staff dragonfireball)
 	@EventHandler(priority = EventPriority.LOW)
 	public void onDragonFireballArea(AreaEffectCloudApplyEvent e) {
+		if (!RpgCraft.getSpellRegistry().isStaff(e.getEntity())) return;
 		if (!(e.getEntity().getSource() instanceof LivingEntity l)) return;
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		LivingEntityCustom		launcher = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
@@ -253,7 +264,7 @@ public class LauncherManager implements Listener {
 		for (LivingEntity le: e.getAffectedEntities()) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(le.getUniqueId());
 			if (target == null || target.isGrouped(launcher)) continue;
-			target.damage(1, CombatDamage.MAGIC, launcher);
+			target.damage(launcher.getLevel() / 2 + 1, CombatDamage.MAGIC, launcher);
 		}
 	}
 
@@ -296,7 +307,7 @@ public class LauncherManager implements Listener {
 
 	// projectile
 	@EventHandler
-	public void onProjectileExplosion(ProjectileHitEvent e) {
+	public void onProjectileHit(ProjectileHitEvent e) {
 	    Projectile	projectile = e.getEntity();
 		if (!(projectile.getShooter() instanceof LivingEntity l)) return;
 		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
@@ -304,13 +315,29 @@ public class LauncherManager implements Listener {
 		SpellRegistry		spellRegistry = RpgCraft.getSpellRegistry();
 		UUID				uuid = launcher.getUUID();
 		Rarity				rarity = null;
-		// fireball
-		if ((rarity = spellRegistry.getFireballRarity(projectile)) != null) {
+		// staff snow
+		if (projectile instanceof Snowball && spellRegistry.isStaff(projectile)) {
 			Location	location = projectile.getLocation();
-			double		radius = (rarity.getNumber()) + 3;
+			double		radius = 2;
+			double 		damage = launcher.getLevel() / 2 + 1;
+			int			freezeTicks = 40;
+			spellRegistry.explosionIce(launcher, location, radius, damage, -30, freezeTicks);
+		}
+		// staff fireball
+		if (projectile instanceof SmallFireball && spellRegistry.isStaff(projectile)) {
+			Location	location = projectile.getLocation();
+			double		radius = 2;
+			double 		damage = launcher.getLevel() / 2 + 1;
+			int			fireTicks = 40;
+			spellRegistry.explosion(launcher, location, radius, damage, 0.5, fireTicks);
+		}
+		// fireball
+		else if ((rarity = spellRegistry.getFireballRarity(projectile)) != null) {
+			Location	location = projectile.getLocation();
+			double		radius = (rarity.getNumber()) + 4;
 			double 		damage = rarity.getNumber() * 3;
 			int			fireTicks = (rarity.getNumber() + 2) * 20;
-			spellRegistry.explosion(launcher, location, radius, damage, 1, fireTicks);
+			spellRegistry.explosionFire(launcher, location, radius, damage, 1, fireTicks);
 		}
 		// holybomb
 		else if (spellRegistry.hasHolyBomb(uuid) && spellRegistry.isStaff(projectile)) {
@@ -334,12 +361,14 @@ public class LauncherManager implements Listener {
 			int			fireTicks = (level + 1) * 20;
 			spellRegistry.explosion(launcher, center, radius, damage, 1, fireTicks);
 		}
+		// launch wind
 		else if ((rarity = spellRegistry.getWind(projectile)) != null) {
 			Location	center = projectile.getLocation();
 			double		radius = 6;
 			double 		damage = rarity.getNumber() * 5;
 			spellRegistry.explosionWind(launcher, center, radius, damage);
 		}
+		// demon chains
 		else if ((rarity = spellRegistry.getDemonChains(projectile)) != null) {
 			LivingEntityCustom	a = spellRegistry.findNearestFromLoc(launcher, projectile.getLocation());
 			if (a == null || !a.isPresent()) return;

@@ -38,6 +38,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Trident;
 import org.bukkit.entity.WindCharge;
 import org.bukkit.entity.WitherSkull;
@@ -68,7 +69,6 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.EquipableManager;
@@ -215,8 +215,8 @@ public class SpellRegistry {
 		if (direction.lengthSquared() < 1.0E-6) return;
 		else direction.normalize();
     	direction.setY(0.5);
-		// if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(true);
-    	launcher.setVelocity(direction.multiply(1.5));
+		if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(true);
+		launcher.setVelocity(direction.multiply(1.5));
 		addLeap(launcher, rarity.getNumber());
     	SoundManager.playSound(launcher, "spell_leap");
 		particleLeap(start);
@@ -246,10 +246,23 @@ public class SpellRegistry {
 		UUID	uuid = launcher.getUUID();
 		if (hasLeap(uuid)) return;
 		leap.put(uuid, new BukkitRunnable() {
+			double	y = 0.5;
 		    @Override
 		    public void run() {
+				if (launcher instanceof NPCCustom) {
+					y -= 0.1;
+					if (y > -0.5) {
+						Location			start = launcher.getEyeLocation();
+						LivingEntityCustom	target = launcher.getTarget();
+						Vector	direction = target != null ? target.getLocation().toVector().subtract(start.toVector()) : start.getDirection();
+						if (direction.lengthSquared() < 1.0E-6) return;
+						else direction.normalize();
+						direction.setY(y);
+						launcher.setVelocity(direction.multiply(1.5));
+					}
+				}
 				if (!isLanding(launcher)) return;
-				// if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(false);
+				if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(false);
 	    		Location	loc = launcher.getLocation();
 				double		radius = 6;
 				double 		damage = level * 4 + 2;
@@ -461,15 +474,14 @@ public class SpellRegistry {
 
 	public void manaThirst(LivingEntityCustom launcher, Rarity rarity) {
 		double	health = launcher.getHealth();
-		double	healthPercent = (38 - rarity.getNumber() * 3) / 100d;
+		double	healthPercent = (40 - rarity.getNumber() * 5) / 100d;
 		double	healthAmount = launcher.getHealthMax() * healthPercent;
 		launcher.setHealth(Math.max(1, health - healthAmount));
 		if (launcher instanceof PlayerCustom playerCustom) {
-			PowerCustom	power = playerCustom.getPowerCustom();
-			if (power == null) return;
-			double	powerPercent = (30 + rarity.getNumber() * 4) / 100d;
-			double	powerAmount = power.getValueMax() * powerPercent;
-			power.increase(Math.max(0, powerAmount));
+			if (playerCustom.getPowerCustom().getType() != PowerType.MANA) return;
+			double	powerPercent = (20 + rarity.getNumber() * 5) / 100d;
+			double	powerAmount = playerCustom.getPowerMax() * powerPercent;
+			playerCustom.increasePower(powerAmount);
 		}
 		SoundManager.playSound(launcher, "spell_manathirst");
 		particleManaThirst(launcher.getLocation());
@@ -768,8 +780,7 @@ public class SpellRegistry {
 					LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
 				    if (target == null || !launcher.isGrouped(target)) continue;
 					if (target instanceof PlayerCustom playerCustom) {
-						PowerCustom	power = playerCustom.getPowerCustom();
-						if (power != null && power.getType() == PowerType.MANA) power.increase(mana);
+						if (playerCustom.getPowerCustom().getType() == PowerType.MANA) playerCustom.increasePower(mana);
 					}
 					target.heal(heal);
 				}
@@ -891,7 +902,7 @@ public class SpellRegistry {
 		if (world == null) return;
 		double	radius = 4;
 		double 	damage = rarity.getNumber() * 3 + 3;
-		int		silence = (int)(rarity.getNumber() * 0.5 + 4);
+		int		silence = (int)(rarity.getNumber() + 4);
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
 			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
@@ -1320,7 +1331,7 @@ public class SpellRegistry {
 					double	explosionRadius = 8;
 					double	damage = rarity.getNumber() * 4;
 					int		freezeTicks = 40 + rarity.getNumber() * 20;
-					iceExplosion(launcher, center, explosionRadius, damage, freezeTicks);
+					explosionIce(launcher, center, explosionRadius, damage, -60, freezeTicks);
 					cancel();
 					return;
 				}
@@ -1344,49 +1355,6 @@ public class SpellRegistry {
 		    world.spawnParticle(Particle.SNOWFLAKE, particleLoc, 1, 0, 0, 0, 0);
 		}
 		world.spawnParticle(Particle.WHITE_ASH, center.clone().add(0, 0.1, 0), 2, 0.3, 0.05, 0.3, 0);
-	}
-
-	public void iceExplosion(LivingEntityCustom launcher, Location center, double radius, double damage, int freezeTicks) {
-	    World	world = center.getWorld();
-		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
-		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
-			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
-		    if (target == null || launcher.isGrouped(target)) continue;
-			if (!target.isBoss()) {
-				target.addStatModifier(StatSecondary.SPEED, -60, freezeTicks / 20);
-				target.setFreezeTicks(freezeTicks);
-			}
-			target.damage(damage, CombatDamage.MAGIC, launcher);
-	    }
-	    SoundManager.playSound(center, "spell_icetrap_hit");
-	    particleIceExplosion(radius, center);
-	}
-
-	private void particleIceExplosion(double radius, Location center) {
-		World	world = center.getWorld();
-   		ThreadLocalRandom	random = ThreadLocalRandom.current();
-		int					points = 256;
-		double				radiusSquared = radius * radius;
-    	for (int i = 0; i < points; i++) {
-    	    double x, y, z;
-    	    while (true) {
-    	        x = random.nextDouble(-radius, radius);
-    	        y = random.nextDouble(-radius, radius);
-    	        z = random.nextDouble(-radius, radius);
-    	        if ((x * x + y * y + z * z) <= radiusSquared)
-					break;
-    	    }
-    	    Location loc = center.clone().add(x, y, z);
-    		world.spawnParticle(Particle.SNOWFLAKE, loc, 1, 0, 0, 0, 0);
-    	}
-		radius /= 2;
-		for (int i = 0; i < 16; i++) {
-		    double currentAngle = (Math.PI * 2 * i / 16);
-		    double x = Math.cos(currentAngle) * radius;
-		    double z = Math.sin(currentAngle) * radius;
-		    Location particleLoc = center.clone().add(x, 0.05, z);
-		    world.spawnParticle(Particle.SWEEP_ATTACK, particleLoc, 1, 0, 0, 0, 0);
-		}
 	}
 
 	////////////////////////
@@ -1436,7 +1404,7 @@ public class SpellRegistry {
 	// launch staff
 	public void launchStaff(LivingEntityCustom launcher, LivingEntityCustom target, ItemStack item) {
 		switch (launcher.getClassType()) {
-			case PYROMANCER, GOD -> {
+			case PYROMANCER -> {
 	    		SmallFireball	smallFireball = launcher.launchProjectile(SmallFireball.class);
 	    		smallFireball.setGravity(false);
 				smallFireball.setVelocity(target != null ? target.getLocation().subtract(launcher.getEyeLocation()).toVector().normalize() : launcher.getEyeLocation().getDirection());
@@ -1450,9 +1418,27 @@ public class SpellRegistry {
 				SoundManager.playSound(launcher, "staff_shoot");
 				setStaff(dragonFireball);
 			}
+			case GOD -> {
+	    		Snowball	snowBall = launcher.launchProjectile(Snowball.class);
+	    		snowBall.setGravity(false);
+				snowBall.setVelocity(target != null ? target.getLocation().subtract(launcher.getEyeLocation()).toVector().normalize() : launcher.getEyeLocation().getDirection());
+				SoundManager.playSound(launcher, "staff_shoot");
+				setStaff(snowBall);
+			}
 			default -> {
-				double	damage = launcher.getHealthMax() * 0.9;
-				explosionFriendlyFire(launcher, launcher.getEyeLocation(), 6, damage, 2, 0);
+				switch (launcher.getName()) {
+					case "Mrgl The Oracle", "Palpoutine" -> {
+	    				Snowball	snowBall = launcher.launchProjectile(Snowball.class);
+	    				snowBall.setGravity(false);
+						snowBall.setVelocity(target != null ? target.getLocation().subtract(launcher.getEyeLocation()).toVector().normalize() : launcher.getEyeLocation().getDirection());
+						SoundManager.playSound(launcher, "staff_shoot");
+						setStaff(snowBall);
+					}
+					default -> {
+						double	damage = launcher.getHealthMax() * 0.9;
+						explosionFriendlyFire(launcher, launcher.getEyeLocation(), 6, damage, 2, 0);
+					}
+				}
 			}
 		}
 		if (launcher instanceof PlayerCustom playerCustom) damageLauncher(playerCustom, item);
@@ -2811,6 +2797,105 @@ public class SpellRegistry {
 	    world.playSound(center, Sound.ENTITY_GENERIC_EXPLODE, 1.5f, 1f);
 	    world.spawnParticle(Particle.EXPLOSION, center, 3);
 		world.spawnParticle(Particle.CLOUD, center, 40, 1.5, 1.5, 1.5, 0.1);
+	}
+
+	public void explosionFire(LivingEntityCustom launcher, Location center, double radius, double damage, double force, int fireticks) {
+	    World					world = center.getWorld();
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+	    for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+            if (target == null || launcher.isGrouped(target)) continue;
+			if (force > 0 && !target.isBoss()) {
+				Vector	direction = target.getLocation().toVector().subtract(center.toVector());
+				if (direction.lengthSquared() < 1.0E-6) direction = new Vector(0, 1, 0);
+				else direction.normalize();
+				double	resistance = 0;
+				AttributeInstance	instance = l.getAttribute(Attribute.GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE);
+				if (instance != null)
+					resistance = instance.getValue();
+	        	direction.multiply(force - (force * resistance));
+	        	direction.setY(direction.getY() + 0.3);
+				target.setVelocity(target.getVelocity().add(direction));
+			}
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+			if (fireticks > 0)
+				target.setFireTicks(fireticks);
+	    }
+	    SoundManager.playSound(center, "spell_fireball_hit");
+	    particleExplosionFire(radius, center);
+	}
+
+	private void particleExplosionFire(double radius, Location center) {
+		World	world = center.getWorld();
+   		ThreadLocalRandom	random = ThreadLocalRandom.current();
+		int					points = 256;
+		double				radiusSquared = radius * radius;
+    	for (int i = 0; i < points; i++) {
+    	    double x, y, z;
+    	    while (true) {
+    	        x = random.nextDouble(-radius, radius);
+    	        y = random.nextDouble(-radius, radius);
+    	        z = random.nextDouble(-radius, radius);
+    	        if ((x * x + y * y + z * z) <= radiusSquared)
+					break;
+    	    }
+    	    Location loc = center.clone().add(x, y, z);
+    		world.spawnParticle(Particle.FLAME, loc, 1, 0, 0, 0, 0);
+    	}
+		radius /= 2;
+		for (int i = 0; i < 16; i++) {
+		    double currentAngle = (Math.PI * 2 * i / 16);
+		    double x = Math.cos(currentAngle) * radius;
+		    double z = Math.sin(currentAngle) * radius;
+		    Location particleLoc = center.clone().add(x, 0.05, z);
+		    world.spawnParticle(Particle.SMOKE, particleLoc, 1, 0, 0, 0, 0);
+		}
+	}
+
+	public void explosionIce(LivingEntityCustom launcher, Location center, double radius, double damage, int slow, int freezeTicks) {
+	    World	world = center.getWorld();
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+		    if (target == null || launcher.isGrouped(target)) continue;
+			if (!target.isBoss()) {
+				target.addStatModifier(StatSecondary.SPEED, slow, freezeTicks / 20);
+				target.setFreezeTicks(freezeTicks);
+			}
+			target.damage(damage, CombatDamage.MAGIC, launcher);
+	    }
+		if (slow == -60)
+	    	SoundManager.playSound(center, "spell_icetrap_hit");
+		else
+			SoundManager.playSound(center, "spell_snowball_hit");
+	    particleExplosionIce(radius, center);
+	}
+
+	private void particleExplosionIce(double radius, Location center) {
+		World	world = center.getWorld();
+   		ThreadLocalRandom	random = ThreadLocalRandom.current();
+		int					points = 256;
+		double				radiusSquared = radius * radius;
+    	for (int i = 0; i < points; i++) {
+    	    double x, y, z;
+    	    while (true) {
+    	        x = random.nextDouble(-radius, radius);
+    	        y = random.nextDouble(-radius, radius);
+    	        z = random.nextDouble(-radius, radius);
+    	        if ((x * x + y * y + z * z) <= radiusSquared)
+					break;
+    	    }
+    	    Location loc = center.clone().add(x, y, z);
+    		world.spawnParticle(Particle.SNOWFLAKE, loc, 1, 0, 0, 0, 0);
+    	}
+		radius /= 2;
+		for (int i = 0; i < 16; i++) {
+		    double currentAngle = (Math.PI * 2 * i / 16);
+		    double x = Math.cos(currentAngle) * radius;
+		    double z = Math.sin(currentAngle) * radius;
+		    Location particleLoc = center.clone().add(x, 0.05, z);
+		    world.spawnParticle(Particle.SWEEP_ATTACK, particleLoc, 1, 0, 0, 0, 0);
+		}
 	}
 
 	public void explosionWind(LivingEntityCustom launcher, Location center, double radius, double damage) {

@@ -41,6 +41,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
+import io.papermc.paper.event.player.PlayerOpenSignEvent;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
@@ -192,7 +193,17 @@ public class WorldManager implements Listener {
     	}
 	}
 
-	// remove projectilesz + display
+	// cancel change on sign
+	@EventHandler
+	public void onSignOpen(PlayerOpenSignEvent e) {
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(e.getPlayer().getUniqueId());
+		if (playerCustom == null) return;
+		ItemStack	bedrock = playerCustom.getEquipment().getItemInOffHand();
+		if (bedrock != null && bedrock.getType() == Material.BEDROCK) return;
+	    e.setCancelled(true);
+	}
+
+	// remove projectiles + display
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent e) {
     	for (Entity entity : e.getChunk().getEntities()) {

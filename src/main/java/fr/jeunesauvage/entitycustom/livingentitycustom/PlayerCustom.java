@@ -297,12 +297,27 @@ public final class PlayerCustom implements LivingEntityCustom {
         player.openInventory(inventory);
     }
 
+    public void closeInventory() {
+        player.closeInventory();
+    }
+
+    public void addItem(ItemStack item) {
+        Map<Integer, ItemStack> leftover = player.getInventory().addItem(item);
+        for (ItemStack drop : leftover.values()) {
+            player.getWorld().dropItemNaturally(player.getLocation(), drop);
+        }
+    }
+
     public void showBossBar(BossBar bossBar) {
         player.showBossBar(bossBar);
     }
 
     public void hideBossBar(BossBar bossBar) {
         player.hideBossBar(bossBar);
+    }
+
+    public boolean isOp() {
+        return player.isOp();
     }
 
     public Player getPlayer() {
@@ -470,8 +485,18 @@ public final class PlayerCustom implements LivingEntityCustom {
         return power.getValue();
     }
 
+    public void increasePower(double amount) {
+        power.increase(amount);
+        scoreboardCustom.refreshPower(this);
+    }
+
+    public void decreasePower(double amount) {
+        power.decrease(amount);
+        scoreboardCustom.refreshPower(this);
+    }
+
     public void setPower(double amount) {
-        power.setValue(Math.max(0, amount));
+        power.setValue(amount);
         scoreboardCustom.refreshPower(this);
     }
 
@@ -479,10 +504,18 @@ public final class PlayerCustom implements LivingEntityCustom {
         return power.getValue();
     }
 
+    public void increasePowerMax(double amount) {
+        power.increaseMax(amount);
+        scoreboardCustom.refreshPower(this);
+    }
+
+    public void decreasePowerMax(double amount) {
+        power.decreaseMax(amount);
+        scoreboardCustom.refreshPower(this);
+    }
+
     public void setPowerMax(double amount) {
-        amount = Math.max(1, amount);
         power.setValueMax(amount);
-        if (getPower() > getPowerMax()) power.setValue(amount);
         scoreboardCustom.refreshPower(this);
     }
 

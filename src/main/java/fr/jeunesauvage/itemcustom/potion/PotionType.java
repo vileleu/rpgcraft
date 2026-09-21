@@ -62,7 +62,7 @@ public enum PotionType implements ItemCustomType {
 
 	@Override
 	public Component toComponent() {
-		return Component.text("type.rpgcraft.potion");
+		return Component.translatable("type.rpgcraft.potion");
 	}
 
 	public int getLevel(Rarity rarity) {

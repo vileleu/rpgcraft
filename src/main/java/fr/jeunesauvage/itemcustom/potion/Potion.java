@@ -11,7 +11,6 @@ import fr.jeunesauvage.Data;
 import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
@@ -88,23 +87,20 @@ public class Potion extends ItemCustom<PotionType> implements Consumable {
 	}
 
 	private void potionMana(PlayerCustom playerCustom) {
-		PowerCustom	power = playerCustom.getPowerCustom();
-		if (power == null || power.getType() != PowerType.MANA) return;
+		if (playerCustom.getPowerCustom().getType() != PowerType.MANA) return;
 		int	amount = 10 * rarity.getNumber();
-		power.increase(amount);
+		playerCustom.increasePower(amount);
 	}
 
 	private void potionRage(PlayerCustom playerCustom) {
-		PowerCustom	power = playerCustom.getPowerCustom();
-		if (power == null || power.getType() != PowerType.RAGE) return;
+		if (playerCustom.getPowerCustom().getType() != PowerType.RAGE) return;
 		int	amount = 10 * rarity.getNumber();
-		power.increase(amount);
+		playerCustom.increasePower(amount);
 	}
 
 	private void potionEnergy(PlayerCustom playerCustom) {
-		PowerCustom	power = playerCustom.getPowerCustom();
-		if (power == null || power.getType() != PowerType.ENERGY) return;
+		if (playerCustom.getPowerCustom().getType() != PowerType.ENERGY) return;
 		int	amount = 10 * rarity.getNumber();
-		power.increase(amount);
+		playerCustom.increasePower(amount);
 	}
 }

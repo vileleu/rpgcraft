@@ -39,7 +39,7 @@ public class FightTrait extends Trait {
 	public static final double			DAMAGEBYLEVEL_DEFAULT = TemplateType.DEFAULT.getDamage(LEVEL_DEFAULT); // damage of attack
 	private static final double			PATROLRANGE_DEFAULT = 0;                                               // range of patrol
 	public static final double			AGGRORANGE_DEFAULT = 25;                                               // range of aggro
-	public static final double			CHASERANGE_DEFAULT = 60;                                               // range of chase
+	public static final double			CHASERANGE_DEFAULT = 70;                                               // range of chase
 	public static final double			ATTACKRANGERANGED_DEFAULT = 15;                                        // range of attack ranged
 	private static final double			ATTACKRANGECLOSE_DEFAULT = 2;                                          // range of attack close
 	public static final float			ATTACKRATE_DEFAULT = TemplateType.DEFAULT.getAttackRate();             // time (in seconds) between each attack
@@ -139,6 +139,8 @@ public class FightTrait extends Trait {
 
 	@Override
 	public void onSpawn() {
+		// range
+		npc.getNavigator().getDefaultParameters().range((float)CHASERANGE_DEFAULT + 10);
 		// trait lookclose
 		LookClose	lookClose = npc.getOrAddTrait(LookClose.class);
 		lookClose.lookClose(true);

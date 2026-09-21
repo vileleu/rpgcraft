@@ -61,7 +61,7 @@ public class NPCBuilderRegistry {
 	    meta.displayName(Message.c("NPC Placer", NamedTextColor.DARK_GRAY));
 	    Data.setBoolean(meta.getPersistentDataContainer(), KEY_PLACER);
 	    head.setItemMeta(meta);
-        launcher.getInventory().addItem(head);
+        launcher.addItem(head);
 	}
 
 	// create npc by placer
@@ -354,7 +354,8 @@ public class NPCBuilderRegistry {
 			NPCCustom	npcCustom = entityCustomRegistry.getNPCCustom(npc.getUniqueId());
             Location	spawn = npcCustom.getRespawn();
 			if (spawn == null) continue;
-			npcCustom.spawn(spawn);
+			if (npcCustom.isPresent()) npcCustom.teleport(spawn);
+			else npcCustom.spawn(spawn);
             count++;
         }
 		launcher.sendMessage(Message.m("<green>" + count + " NPC spawned"));

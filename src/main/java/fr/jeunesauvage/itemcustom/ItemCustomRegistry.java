@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.bukkit.inventory.ItemStack;
 
-import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
@@ -38,10 +37,6 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
 		this.foods = itemBuilder.getFood();
 		this.usables = itemBuilder.getUsable();
 		this.consumables = itemBuilder.getConsumable();
-		int	count = 1;
-		for (Food food: foods.values()) {
-			RpgCraft.debug("food " + count++ + " = " + food.getIdentifier());
-		}
     }
 
     @Override

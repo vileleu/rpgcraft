@@ -81,11 +81,19 @@ commands:
     description: give item to player
     usage: /givepotion <player name> <item id>
     permission: rpgcraft.op
+  givefood:
+    description: give food to player
+    usage: /givefood <player name> <item id>
+    permission: rpgcraft.op
   # player command
   menu:
-    description: open menu
+    description: open menu command
     usage: /menu <player name/UUID>
     permission: rpgcraft.everyone
+  menusell:
+    description: open menu sell
+    usage: /menusell <player name>
+    permission: rpgcraft.op
   # sound command
   quote:
     description: play quote

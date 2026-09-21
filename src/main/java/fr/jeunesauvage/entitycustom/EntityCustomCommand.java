@@ -18,15 +18,15 @@ public class EntityCustomCommand implements CommandExecutor {
     // handle playercustom commands
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		switch (cmd.getName().toLowerCase()) {
-            case "menu":
-                return handleMenu(sender, args);
-		}
-		return false;
+		return switch (cmd.getName().toLowerCase()) {
+            case "menu" -> handleMenuCommand(sender, args);
+            case "menusell" -> handleMenuSell(sender, args);
+            default -> false;
+		};
     }
 
-    // open menu
-    private boolean handleMenu(CommandSender sender, String[] args) {
+    // open menu command
+    private boolean handleMenuCommand(CommandSender sender, String[] args) {
         if (!(sender instanceof Player p)) return true;
         if (args.length > 1) {
             sender.sendMessage(Message.m("<red>Usage: /menu <player name/UUID>"));
@@ -52,7 +52,27 @@ public class EntityCustomCommand implements CommandExecutor {
         }
         else
             target = launcher;
-        RpgCraft.getEntityCustomRegistry().addMenu(launcher, target);
+        RpgCraft.getEntityCustomRegistry().addMenuCommand(launcher, target);
+        return true;
+    }
+
+    // open menu sell
+    private boolean handleMenuSell(CommandSender sender, String[] args) {
+        if (args.length != 1) {
+            sender.sendMessage(Message.m("<red>Usage: /menusell <player name>"));
+            return true;
+        }
+        Player  p = Bukkit.getPlayer(args[0]);
+        if (p == null) {
+            sender.sendMessage(Message.m("<red>entity: <yellow>" + args[0] + "<red> is unknown"));
+            return true;
+        }
+        PlayerCustom        launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+        if (launcher == null) {
+            sender.sendMessage(Message.m("<red>launcher do not exist (CRITICAL ERROR)"));
+            return true;
+        }
+        RpgCraft.getEntityCustomRegistry().addMenuSell(launcher);
         return true;
     }
 }
