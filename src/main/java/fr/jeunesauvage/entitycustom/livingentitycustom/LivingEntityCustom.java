@@ -95,6 +95,7 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     void                            setTarget(LivingEntityCustom target);
     FormType                        getMetamorph();
     void                            setMetamorph(FormType formType);
+    boolean                         isOnGround();
 
     Stat                            getStat(StatType statType);
     Skill                           getSkill(SkillType skillType);

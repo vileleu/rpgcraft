@@ -57,6 +57,9 @@ public class WorldManager implements Listener {
 	    Material.LIME_STAINED_GLASS,
 	    Material.LIME_STAINED_GLASS_PANE
 	);
+	private static final Set<String> BUILDERS = Set.of(
+	    "JeuneSauvage"
+	);
 
 	public WorldManager() {
         WorldCommand   worldCommand = new WorldCommand(this);
@@ -138,16 +141,16 @@ public class WorldManager implements Listener {
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onBlockBreak(BlockBreakEvent e) {
 		Player	player = e.getPlayer();
-		if (player.getInventory().getItemInOffHand().getType() != Material.BEDROCK)
-	    	e.setCancelled(true);
+		if (canBuild(player)) return;
+	    e.setCancelled(true);
 	}
 
 	// cancel place block
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onBlockPlace(BlockPlaceEvent e) {
 		Player	player = e.getPlayer();
-		if (player.getInventory().getItemInOffHand().getType() != Material.BEDROCK)
-	    	e.setCancelled(true);
+		if (canBuild(player)) return;
+	    e.setCancelled(true);
 	}
 
 	// cancel empty bucket
@@ -155,9 +158,9 @@ public class WorldManager implements Listener {
 	public void onBucketEmpty(PlayerBucketEmptyEvent e) {
 		Player	player = e.getPlayer();
         Block	c = e.getBlockClicked();
+		if (canBuild(player)) return;
 		if (e.getBucket() == Material.LAVA_BUCKET && c.getType() == Material.NETHERRACK) return;
         if (c.getType() == Material.CAULDRON || c.getType() == Material.WATER_CAULDRON) return;
-		if (player.getInventory().getItemInOffHand().getType() == Material.BEDROCK) return;
 		e.setCancelled(true);
 	}
 
@@ -196,10 +199,8 @@ public class WorldManager implements Listener {
 	// cancel change on sign
 	@EventHandler
 	public void onSignOpen(PlayerOpenSignEvent e) {
-		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(e.getPlayer().getUniqueId());
-		if (playerCustom == null) return;
-		ItemStack	bedrock = playerCustom.getEquipment().getItemInOffHand();
-		if (bedrock != null && bedrock.getType() == Material.BEDROCK) return;
+		Player	player = e.getPlayer();
+		if (canBuild(player)) return;
 	    e.setCancelled(true);
 	}
 
@@ -230,4 +231,8 @@ public class WorldManager implements Listener {
 				npcCustom.delete();
         }
     }
+
+	private boolean canBuild(Player player) {
+		return (BUILDERS.contains(player.getName()) && player.getInventory().getItemInOffHand().getType() == Material.BEDROCK);
+	}
 }

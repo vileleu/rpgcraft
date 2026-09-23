@@ -7,7 +7,7 @@ public class ParseAction {
 	String	input;
 	int		number;
 
-	ParseAction(String input) {
+	public ParseAction(String input) {
 		this.input = input;
         this.number = 0;
 	}
@@ -30,6 +30,6 @@ public class ParseAction {
     }
 
     public int getStart() {
-        return number * (Menu.BIG_SLOT - 1);
+        return number * (MenuHolder.BIG_SLOT - 1);
     }
 }

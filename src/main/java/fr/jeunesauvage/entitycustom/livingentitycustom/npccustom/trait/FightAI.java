@@ -135,7 +135,7 @@ public class FightAI {
 		if (target == null && targetHide == null) {
 			if (npcCustom.isPet()) {
 				LivingEntityCustom	owner = data.getOwner();
-				npc.getNavigator().setTarget(owner != null ? owner.getLivingEntity() : null, false);
+				setTarget(npcCustom, npc.getNavigator(), owner);
 			}
 			else {
 				World	world = npcCustom.getWorld();
@@ -201,14 +201,8 @@ public class FightAI {
 			if (quote) quote = false;
 			// heal
 			npcCustom.heal(data.getHealth() / 10);
-			if (isFlightType(npcCustom)) {
-				setTargetFlight(npcCustom, navigator, closestWaypoint);
-				if (!inChase) return 0;
-			}
-			else {
-				if (!inChase) return 0;
-				navigator.cancelNavigation();
-			}
+			if (setTarget(npcCustom, navigator, closestWaypoint)) return 0;
+			if (!inChase) return 0;
 			// first no chase
 			inChase = false;
 			npc.getOrAddTrait(LookClose.class).lookClose(true);
@@ -221,13 +215,12 @@ public class FightAI {
 		// npc too far from waypoints (back to waypoints and full life)
 		if (closestWaypoint != null && npcCustom.getLocation().distanceSquared(closestWaypoint) > data.getChaseRangeSquared()) {
 			parameters.speedModifier(data.getSpeedCombat());
-			if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, closestWaypoint);
-			else setTargetGround(npcCustom, navigator, closestWaypoint);
+			setTarget(npcCustom, navigator, closestWaypoint);
 			inChase = false;
 			target = null;
 			lastTarget = null;
 			lastTargetLocation = null;
-			return 12; // 6 secondes
+			return 8; // 8 seconds
 		}
 		// first chase
 		if (!inChase) {
@@ -312,8 +305,7 @@ public class FightAI {
 			else {
 				if (parameters.speedModifier() != data.getSpeedCombat())
 					parameters.speedModifier(data.getSpeedCombat());
-				if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, target);
-				else setTargetGround(npcCustom, navigator, target);
+				setTarget(npcCustom, navigator, target);
 				lastTarget = target;
 				lastTargetLocation = target.getLocation();
 			}
@@ -325,71 +317,62 @@ public class FightAI {
 			// can't find target ()
 			double	range = 2 + npcCustom.getWidth();
 			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < range * range) {
-				if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, closestWaypoint);
-				else setTargetGround(npcCustom, navigator, closestWaypoint);
+				setTarget(npcCustom, navigator, closestWaypoint);
 				lastTarget = null;
 				lastTargetLocation = null;
 				return 0;
 			}
 			// go to last position of target
-			if (isFlightType(npcCustom)) setTargetFlight(npcCustom, navigator, lastTargetLocation);
-			else setTargetGround(npcCustom, navigator, lastTargetLocation);
+			setTarget(npcCustom, navigator, lastTargetLocation);
 			isStuck(npcCustom);
 		}
 		return 0;
 	}
 
+	/*
 	private boolean isFlightType(NPCCustom npcCustom) {
 		return switch (npcCustom.getType()) {
 			case BLAZE, BREEZE, WITHER -> true;
 			default -> false;
 		};
 	}
+	*/
 
-	private void setTargetFlight(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
-		if (target == null) return;
-	    Location	npcLoc = npcCustom.getLocation();
-	    Location	targetLoc = target.getLocation();
-	    Vector direction = targetLoc.toVector().subtract(npcLoc.toVector());
-	    double distance = direction.length();
-	    if (distance < 3) return;
-	    direction.normalize().multiply(5);
-		navigator.setTarget(npcLoc.clone().add(direction));
-	}
-
-	private void setTargetFlight(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
-		if (targetLoc == null) return;
-		Location	npcLoc = npcCustom.getLocation();
-	    Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
-	    double distance = direction.length();
-	    if (distance < 3) return;
-	    direction.normalize().multiply(5);
-		navigator.setTarget(npcLoc.clone().add(direction));
-	}
-
-	private void setTargetGround(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
-		if (target == null) return;
+	private boolean setTarget(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
+		if (target == null) return false;
 	    Location	npcLoc = npcCustom.getLocation();
 	    Location	targetLoc = target.getLocation();
 		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
-		if (direction.length() > 30) {
+		double		distanceSquared = direction.lengthSquared();
+	    if (distanceSquared < 3 * 3) {
+			navigator.cancelNavigation();
+			return false;
+		}
+		else if (distanceSquared > 5 * 5) {
 	    	direction.normalize().multiply(5);
 			navigator.setTarget(npcLoc.clone().add(direction));
 		}
 		else
 	    	navigator.setTarget(target.getLocation());
+		return true;
 	}
 
-	private void setTargetGround(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
-		if (target == null) return;
+	private boolean setTarget(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
+		if (target == null) return false;
 	    Location	npcLoc = npcCustom.getLocation();
 		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
-		if (direction.length() > 30) {
+		double		distanceSquared = direction.lengthSquared();
+	    if (distanceSquared < 3 * 3) {
+			navigator.cancelNavigation();
+			return false;
+		}
+		else if (distanceSquared > 5 * 5) {
 	    	direction.normalize().multiply(5);
 			navigator.setTarget(npcLoc.clone().add(direction));
 		}
 		else
 	    	navigator.setTarget(target.getLocation());
+		return true;
 	}
 
     public void flee(NPCCustom npcCustom, Navigator navigator) {

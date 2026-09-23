@@ -11,6 +11,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.google.common.collect.ArrayListMultimap;
@@ -101,5 +103,19 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 	@Override
 	public Component toComponent() {
         return Component.translatable("item.rpgcraft." + name);
+	}
+
+	public static double getDamagePercent(ItemStack equipable) {
+		ItemMeta	meta = equipable.getItemMeta();
+	    if (!(meta instanceof Damageable metaDamageable)) return 0;
+		double	damage = metaDamageable.getDamage();
+		return damage / equipable.getType().getMaxDurability();
+	}
+
+	public static void repair(ItemStack equipable) {
+		ItemMeta	meta = equipable.getItemMeta();
+	    if (!(meta instanceof Damageable metaDamageable)) return;
+		metaDamageable.setDamage(0);
+		equipable.setItemMeta(metaDamageable);
 	}
 }

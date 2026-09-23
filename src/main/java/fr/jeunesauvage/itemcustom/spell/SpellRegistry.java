@@ -59,6 +59,7 @@ import org.joml.Quaternionf;
 
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.DataTask;
+import fr.jeunesauvage.Pair;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.combat.CombatDamage;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
@@ -215,7 +216,6 @@ public class SpellRegistry {
 		if (direction.lengthSquared() < 1.0E-6) return;
 		else direction.normalize();
     	direction.setY(0.5);
-		if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(true);
 		launcher.setVelocity(direction.multiply(1.5));
 		addLeap(launcher, rarity.getNumber());
     	SoundManager.playSound(launcher, "spell_leap");
@@ -224,22 +224,6 @@ public class SpellRegistry {
 
 	private void particleLeap(Location loc) {
     	loc.getWorld().spawnParticle(Particle.CLOUD, loc, 30, 0.3, 0.3, 0.3, 0.05);
-	}
-
-	public boolean isLanding(LivingEntityCustom launcher) {
-    	BoundingBox	box = launcher.getBoundingBox();
-		if (box == null) return true;
-		World	    world = launcher.getWorld();
-		if (world == null) return true;
-    	double		y = box.getMinY() - 0.01;
-    	for (double x = box.getMinX(); x <= box.getMaxX(); x += 0.3) {
-    	    for (double z = box.getMinZ(); z <= box.getMaxZ(); z += 0.3) {
-    	        Block block = world.getBlockAt((int)Math.floor(x), (int)Math.floor(y), (int)Math.floor(z));
-    	        if (block.getType().isSolid())
-    	            return true;
-    	    }
-    	}
-    	return false;
 	}
 
 	public void addLeap(LivingEntityCustom launcher, int level) {
@@ -261,8 +245,7 @@ public class SpellRegistry {
 						launcher.setVelocity(direction.multiply(1.5));
 					}
 				}
-				if (!isLanding(launcher)) return;
-				if (launcher instanceof NPCCustom npcCustom) npcCustom.pauseNavigator(false);
+				if (!launcher.isOnGround()) return;
 	    		Location	loc = launcher.getLocation();
 				double		radius = 6;
 				double 		damage = level * 4 + 2;
@@ -900,8 +883,8 @@ public class SpellRegistry {
 	public void shadowWordExplosion(LivingEntityCustom launcher, Rarity rarity, Location center) {
 		World	    world = launcher.getWorld();
 		if (world == null) return;
-		double	radius = 4;
-		double 	damage = rarity.getNumber() * 3 + 3;
+		double	radius = 5;
+		double 	damage = rarity.getNumber() * 4 + 3;
 		int		silence = (int)(rarity.getNumber() + 4);
 		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
 		for (LivingEntity l : world.getNearbyLivingEntities(center, radius)) {

@@ -64,7 +64,7 @@ public class MetamorphRegistry {
 		tasks.put(uuid, new BukkitRunnable() {
 		    	@Override
 		    	public void run() {
-					if (!launcher.isPresent() || RpgCraft.getSpellRegistry().isLanding(launcher)) {
+					if (!launcher.isPresent() || launcher.isOnGround()) {
 						removeDracthyr(launcher);
 						cancel();
 					}

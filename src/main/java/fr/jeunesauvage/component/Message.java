@@ -92,7 +92,7 @@ public class Message {
         );
 	}
 
-	public static Component notEnough(PowerType type) {
+	public static Component notEnoughPower(PowerType type) {
 		return switch (type) {
 			case MANA -> c(
                 Component.translatable("message.rpgcraft.notenoughmana"),
@@ -161,6 +161,10 @@ public class Message {
 			    .append(Component.text("s")),
             NamedTextColor.RED
         );
+	}
+
+	public static Component notEnoughGold() {
+		return c(Component.translatable("message.rpgcraft.notenoughgold"), NamedTextColor.RED);
 	}
 
 	// npc

@@ -85,6 +85,7 @@ public class RpgCraft extends JavaPlugin {
     @Override
     public void onDisable() {
         worldManager.cleanEntities();
+        entityCustomRegistry.giveBackItemsMenus();
         getLogger().info("RpgCraft OFF");
     }
 

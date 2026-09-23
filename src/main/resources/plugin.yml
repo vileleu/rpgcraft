@@ -94,6 +94,10 @@ commands:
     description: open menu sell
     usage: /menusell <player name>
     permission: rpgcraft.op
+  menurepair:
+    description: open menu repair
+    usage: /menurepair <player name>
+    permission: rpgcraft.op
   # sound command
   quote:
     description: play quote

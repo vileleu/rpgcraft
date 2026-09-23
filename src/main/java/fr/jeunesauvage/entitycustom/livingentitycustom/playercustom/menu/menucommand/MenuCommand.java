@@ -10,6 +10,7 @@ import java.lang.Character;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -27,7 +28,8 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Ski
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Menu;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolder;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.ParseAction;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
@@ -45,9 +47,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.wesjd.anvilgui.AnvilGUI;
 
-public class MenuCommand implements Menu {
+public class MenuCommand implements MenuHolder {
     private final PlayerCustom          launcher;
     private final LivingEntityCustom    target;
+    private Inventory                   inventory = null;
 
     public MenuCommand(PlayerCustom launcher, LivingEntityCustom target) {
         this.launcher = launcher;
@@ -57,22 +60,20 @@ public class MenuCommand implements Menu {
 
     @Override
     public void open() {
-        MenuCommandHolder   holder = new MenuCommandHolder();
-        Inventory           inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("close"));
-        inv.setItem(10, createSlot(Material.FLETCHING_TABLE, "Stats", "open_stats"));
-        inv.setItem(11, createSlot(Material.CRAFTING_TABLE, "Skills", "open_skills"));
-        inv.setItem(12, createSlot(Material.PHANTOM_SPAWN_EGG, "Race", "open_race"));
-        inv.setItem(13, createSlot(Material.BLAZE_ROD, "Class", "open_class"));
-        inv.setItem(14, createSlot(Material.WRITTEN_BOOK, "Team", "open_team"));
+        this.inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu"));
+        inventory.setItem(BACK_SLOT, createBack("close"));
+        inventory.setItem(10, createSlot(Material.FLETCHING_TABLE, "Stats", "open_stats"));
+        inventory.setItem(11, createSlot(Material.CRAFTING_TABLE, "Skills", "open_skills"));
+        inventory.setItem(12, createSlot(Material.PHANTOM_SPAWN_EGG, "Race", "open_race"));
+        inventory.setItem(13, createSlot(Material.BLAZE_ROD, "Class", "open_class"));
+        inventory.setItem(14, createSlot(Material.WRITTEN_BOOK, "Team", "open_team"));
         if (launcher.isOp()) {
-            inv.setItem(15, createSlot(Material.IRON_SWORD, "Items", "open_items"));
-            inv.setItem(16, createSlot(Material.POTION, "Potions", "open_potions"));
-            inv.setItem(19, createSlot(Material.COOKED_BEEF, "Foods", "open_foods"));
-            inv.setItem(20, createSlot(Material.PUFFERFISH, "NPC", "open_npc"));
+            inventory.setItem(15, createSlot(Material.IRON_SWORD, "Items", "open_items"));
+            inventory.setItem(16, createSlot(Material.POTION, "Potions", "open_potions"));
+            inventory.setItem(19, createSlot(Material.COOKED_BEEF, "Foods", "open_foods"));
+            inventory.setItem(20, createSlot(Material.PUFFERFISH, "NPC", "open_npc"));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     @Override
@@ -80,18 +81,116 @@ public class MenuCommand implements Menu {
         launcher.closeInventory();
     }
 
-    public void openStats() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Stats"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
-        inv.setItem(11, createSlot(Material.GLOW_INK_SAC, "Print Primary", "print_stats_primary"));
-        inv.setItem(12, createSlot(Material.INK_SAC, "Print Secondary", "print_stats_secondary"));
-        if (launcher.isOp()) {
-            inv.setItem(13, createSlot(Material.GREEN_DYE, "Add", "add_stat"));
-            inv.setItem(14, createSlot(Material.RED_DYE, "Remove", "remove_stat"));
+    @Override
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public void onClick(InventoryClickEvent e) {
+        e.setCancelled(true);
+        ItemStack   clicked = e.getCurrentItem();
+        if (clicked == null || clicked.getType() == Material.AIR) return;
+        String  action = MenuHolder.getAction(clicked);
+        if (action == null) return;
+        ParseAction parseAction = new ParseAction(action);
+        parseAction.parse();
+        switch (parseAction.getResult()) {
+            case "back_main" -> open();
+            case "back_stats" -> openStats();
+            case "back_skills" -> openSkills();
+            case "back_class" -> openClass();
+            case "back_spell" -> openSpell();
+            case "back_items" -> openItems();
+            case "back_potions" -> openPotions();
+            case "get" -> launcher.addItem(RpgCraft.getItemCustomRegistry().getClone(clicked));
+            // stats + skills
+            case "open_stats" -> openStats();
+            case "open_skills" -> openSkills();
+            case "add_stat" -> openStatsAdd();
+            case "remove_stat" -> openStatsRemove();
+            case "add_skill" -> openSkillsAdd();
+            case "remove_skill" -> openSkillsRemove();
+            // race + class
+            case "open_race" -> openRace();
+            case "open_class" -> openClass();
+            case "change_race" -> openRaceChange();
+            case "change_class" -> openClassChange();
+            case "open_spell" -> openSpell();
+            case "open_pyromancer" -> openSpellPyromancer();
+            case "open_warrior" -> openSpellWarrior();
+            case "open_rogue" -> openSpellRogue();
+            case "open_priest" -> openSpellPriest();
+            case "open_dracthyr" -> openSpellDracthyr();
+            case "open_hunter" -> openSpellHunter();
+            case "open_team" -> openTeam();
+            case "add_team" -> openTeamAdd();
+            case "delete_team" -> openTeamDelete();
+            // npc
+            case "get_placer_npc" -> RpgCraft.getNPCBuilderRegistry().createMyNPCPlacer(launcher);
+            case "open_npc" -> openNPC();
+            case "create_npc" -> openCreateNPC();
+            case "patrol_npc" -> openPatrolNPC();
+            case "aggro_npc" -> openAggroNPC();
+            case "level_npc" -> openLevelNPC();
+            case "chase_npc" -> openChaseNPC();
+            case "boss_npc" -> openBossNPC();
+            case "equip_npc" -> openEquipNPC();
+            case "team_npc" -> openTeamNPC();
+            case "drop_npc" -> openDropNPC();
+            case "template_npc" -> openTemplateNPC();
+            case "spawn_npc" -> openSpawnNPC();
+            case "despawn_npc" -> openDespawnNPC();
+            case "delete_npc" -> openDeleteNPC();
+            // items
+            case "open_items" -> openItems();
+            case "open_claw" -> openClawsMenu(parseAction.getStart());
+            case "open_sword" -> openSwordsMenu(parseAction.getStart());
+            case "open_axe" -> openAxesMenu(parseAction.getStart());
+            case "open_pickaxe" -> openPickaxesMenu(parseAction.getStart());
+            case "open_hoe" -> openHoesMenu(parseAction.getStart());
+            case "open_shovel" -> openShovelsMenu(parseAction.getStart());
+            case "open_mace" -> openMacesMenu(parseAction.getStart());
+            case "open_bow" -> openBowsMenu(parseAction.getStart());
+            case "open_crossbow" -> openCrossbowsMenu(parseAction.getStart());
+            case "open_staff" -> openStaffsMenu(parseAction.getStart());
+            case "open_spellbook" -> openSpellbooksMenu(parseAction.getStart());
+            case "open_shield" -> openShieldsMenu(parseAction.getStart());
+            case "open_head" -> openHelmetsMenu(parseAction.getStart());
+            case "open_chest" -> openChestplatesMenu(parseAction.getStart());
+            case "open_legs" -> openLeggingsMenu(parseAction.getStart());
+            case "open_feet" -> openBootsMenu(parseAction.getStart());
+            case "open_elytra" -> openElytrasMenu(parseAction.getStart());
+            // potions
+            case "open_potions" -> openPotions();
+            case "open_potion_health" -> openPotionsHealth();
+            case "open_potion_mana" -> openPotionsMana();
+            case "open_potion_rage" -> openPotionsRage();
+            case "open_potion_energy" -> openPotionsEnergy();
+            // foods
+            case "open_foods" -> openFoods();
+            default -> close();
         }
-        launcher.openInventory(inv);
+    }
+
+    @Override
+    public void onClose() {
+        RpgCraft.getEntityCustomRegistry().deleteMenu(this);
+    }
+
+    @Override 
+    public void giveBackItems() {}
+
+    public void openStats() {
+        inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Stats"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
+        inventory.setItem(11, createSlot(Material.GLOW_INK_SAC, "Print Primary", "print_stats_primary"));
+        inventory.setItem(12, createSlot(Material.INK_SAC, "Print Secondary", "print_stats_secondary"));
+        if (launcher.isOp()) {
+            inventory.setItem(13, createSlot(Material.GREEN_DYE, "Add", "add_stat"));
+            inventory.setItem(14, createSlot(Material.RED_DYE, "Remove", "remove_stat"));
+        }
+        launcher.openInventory(inventory);
     }
 
     public void openStatsAdd() {
@@ -158,17 +257,15 @@ public class MenuCommand implements Menu {
     }
 
     public void openSkills() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Skills"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
-        inv.setItem(11, createSlot(Material.GLOW_INK_SAC, "Print Primary", "print_skills_primary"));
-        inv.setItem(12, createSlot(Material.INK_SAC, "Print Secondary", "print_skills_secondary"));
+        inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Skills"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
+        inventory.setItem(11, createSlot(Material.GLOW_INK_SAC, "Print Primary", "print_skills_primary"));
+        inventory.setItem(12, createSlot(Material.INK_SAC, "Print Secondary", "print_skills_secondary"));
         if (launcher.isOp()) {
-            inv.setItem(13, createSlot(Material.GREEN_DYE, "Add", "add_skill"));
-            inv.setItem(14, createSlot(Material.RED_DYE, "Remove", "remove_skill"));
+            inventory.setItem(13, createSlot(Material.GREEN_DYE, "Add", "add_skill"));
+            inventory.setItem(14, createSlot(Material.RED_DYE, "Remove", "remove_skill"));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSkillsAdd() {
@@ -235,14 +332,12 @@ public class MenuCommand implements Menu {
     }
 
     public void openRace() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Race"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
-        inv.setItem(11, createSlot(Material.PHANTOM_SPAWN_EGG, "Print", "print_race"));
+        inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Race"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
+        inventory.setItem(11, createSlot(Material.PHANTOM_SPAWN_EGG, "Print", "print_race"));
         if (launcher.isOp()) 
-            inv.setItem(12, createSlot(Material.PAPER, "Change", "change_race"));
-        launcher.openInventory(inv);
+            inventory.setItem(12, createSlot(Material.PAPER, "Change", "change_race"));
+        launcher.openInventory(inventory);
     }
 
     public void openRaceChange() {
@@ -269,16 +364,14 @@ public class MenuCommand implements Menu {
     }
 
     public void openClass() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Class"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
-        inv.setItem(11, createSlot(Material.BLAZE_ROD, "Print", "print_class"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Class"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
+        inventory.setItem(11, createSlot(Material.BLAZE_ROD, "Print", "print_class"));
         if (launcher.isOp()) {
-            inv.setItem(12, createSlot(Material.PAPER, "Change", "change_class"));
-            inv.setItem(13, createSlot(Material.BLAZE_POWDER, "Spell", "open_spell"));
+            inventory.setItem(12, createSlot(Material.PAPER, "Change", "change_class"));
+            inventory.setItem(13, createSlot(Material.BLAZE_POWDER, "Spell", "open_spell"));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openClassChange() {
@@ -305,95 +398,81 @@ public class MenuCommand implements Menu {
     }
 
     public void openSpell() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_class"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_class"));
         int i = 11;
         for (ClassType classType: ClassType.values()) {
             if (classType == ClassType.BEGGAR || classType == ClassType.GOD) continue;
-            inv.setItem(i, createClass(classType));
+            inventory.setItem(i, createClass(classType));
             i++;
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellPyromancer() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_spell"));
+        Inventory   inventory = Bukkit.createInventory(this, 36, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.PYROMANCER)) continue;
-            inv.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellWarrior() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_spell"));
+        Inventory   inventory = Bukkit.createInventory(this, 36, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.WARRIOR)) continue;
-            inv.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellRogue() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_spell"));
+        Inventory   inventory = Bukkit.createInventory(this, 36, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.ROGUE)) continue;
-            inv.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellPriest() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_spell"));
+        Inventory   inventory = Bukkit.createInventory(this, 36, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.PRIEST)) continue;
-            inv.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellDracthyr() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_spell"));
+        Inventory   inventory = Bukkit.createInventory(this, 36, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.DRACTHYR)) continue;
-            inv.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellHunter() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, 36, Component.text("Menu Spell"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_spell"));
+        Inventory   inventory = Bukkit.createInventory(this, 36, Component.text("Menu Spell"));
+        inventory.setItem(BACK_SLOT, createBack("back_spell"));
         Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
         for (Spell spell: spells.values()) {
             if (!spell.getType().getClassTypes().contains(ClassType.HUNTER)) continue;
-            inv.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     private int getSlotSpell(Rarity rarity, int level) {
@@ -444,16 +523,14 @@ public class MenuCommand implements Menu {
     }
 
     public void openTeam() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Team"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
-        inv.setItem(11, createSlot(Material.BOOK, "Print", "print_team"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Team"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
+        inventory.setItem(11, createSlot(Material.BOOK, "Print", "print_team"));
         if (launcher.isOp()) {
-            inv.setItem(12, createSlot(Material.PAPER, "Add Team", "add_team"));
-            inv.setItem(13, createSlot(Material.PAPER, "Delete Team", "delete_team"));
+            inventory.setItem(12, createSlot(Material.PAPER, "Add Team", "add_team"));
+            inventory.setItem(13, createSlot(Material.PAPER, "Delete Team", "delete_team"));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openTeamAdd() {
@@ -507,10 +584,8 @@ public class MenuCommand implements Menu {
     }
 
     public void openItems() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Items"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Items"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
         int i = 9;
         for (WeaponType weaponType: WeaponType.values()) {
             if (weaponType == WeaponType.HAND || weaponType == WeaponType.UNKNOWN) continue;
@@ -519,7 +594,7 @@ public class MenuCommand implements Menu {
             int     nb = 0;
             while (count > 0) {
                 if (i >= BIG_SLOT) return;
-                inv.setItem(i++, createSlot(weaponType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "open_" + name + (nb > 0 ? nb : "")));
+                inventory.setItem(i++, createSlot(weaponType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "open_" + name + (nb > 0 ? nb : "")));
                 nb++;
                 count -= BIG_SLOT - 1;
             }
@@ -534,12 +609,12 @@ public class MenuCommand implements Menu {
             int     nb = 0;
             while (count > 0) {
                 if (i >= BIG_SLOT) return;
-                inv.setItem(i++, createSlot(armorType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "open_" + name + (nb > 0 ? nb : "")));
+                inventory.setItem(i++, createSlot(armorType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1), "open_" + name + (nb > 0 ? nb : "")));
                 nb++;
                 count -= BIG_SLOT - 1;
             }
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     private int getEquipablesCount(ItemCustomType itemCustomType) {
@@ -652,289 +727,245 @@ public class MenuCommand implements Menu {
     }
 
     public void openClawsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Claws"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Claws"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.CLAW, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSwordsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Swords"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Swords"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.SWORD, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openAxesMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Axes"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Axes"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.AXE, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openPickaxesMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Pickaxes"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Pickaxes"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.PICKAXE, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openHoesMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Hoes"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Hoes"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.HOE, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openShovelsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Shovels"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Shovels"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.SHOVEL, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openMacesMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Maces"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Maces"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.MACE, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openBowsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Bows"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Bows"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.BOW, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openCrossbowsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Crossbows"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Crossbows"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.CROSSBOW, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openStaffsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Staffs"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Staffs"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.STAFF, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openSpellbooksMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Spellbooks"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Spellbooks"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.SPELLBOOK, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openShieldsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Shields"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Shields"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(WeaponType.SHIELD, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openHelmetsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Helmets"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Helmets"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(Material.NETHERITE_HELMET, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openChestplatesMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Chestplates"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Chestplates"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(Material.NETHERITE_CHESTPLATE, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openLeggingsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Leggings"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Leggings"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(Material.NETHERITE_LEGGINGS, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openBootsMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Boots"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Boots"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(Material.NETHERITE_BOOTS, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openElytrasMenu(int start) {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu Elytras"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_items"));
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Elytras"));
+        inventory.setItem(BACK_SLOT, createBack("back_items"));
         List<Equipable<?>>  equipables = getEquipablesList(ArmorType.ELYTRA, start);
         int                 i = 1;
         for (Equipable<?> equipable: equipables) {
-            inv.setItem(i++, createEquipable(equipable));
+            inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openPotions() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Potions"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
         int i = 10;
         for (PotionType potionType: PotionType.values()) {
             String  name = potionType.getName();
-            inv.setItem(i++, createSlot(potionType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1).replaceAll("_", " "), "open_" + name));
+            inventory.setItem(i++, createSlot(potionType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1).replaceAll("_", " "), "open_" + name));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openPotionsHealth() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Potions"));
+        inventory.setItem(BACK_SLOT, createBack("back_potions"));
         List<Potion>  potions = getPotionsList(PotionType.POTION_HEALTH);
         int i = 10;
         for (Potion potion: potions) {
-            inv.setItem(i++, createPotion(potion));
+            inventory.setItem(i++, createPotion(potion));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openPotionsMana() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Potions"));
+        inventory.setItem(BACK_SLOT, createBack("back_potions"));
         List<Potion>  potions = getPotionsList(PotionType.POTION_MANA);
         int i = 10;
         for (Potion potion: potions) {
-            inv.setItem(i++, createPotion(potion));
+            inventory.setItem(i++, createPotion(potion));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openPotionsRage() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Potions"));
+        inventory.setItem(BACK_SLOT, createBack("back_potions"));
         List<Potion>  potions = getPotionsList(PotionType.POTION_RAGE);
         int i = 10;
         for (Potion potion: potions) {
-            inv.setItem(i++, createPotion(potion));
+            inventory.setItem(i++, createPotion(potion));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openPotionsEnergy() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Potions"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_potions"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Potions"));
+        inventory.setItem(BACK_SLOT, createBack("back_potions"));
         List<Potion>  potions = getPotionsList(PotionType.POTION_ENERGY);
         int i = 10;
         for (Potion potion: potions) {
-            inv.setItem(i++, createPotion(potion));
+            inventory.setItem(i++, createPotion(potion));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     private List<Potion> getPotionsList(PotionType potionType) {
@@ -956,38 +987,34 @@ public class MenuCommand implements Menu {
     }
 
     public void openFoods() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, SMALL_SLOT, Component.text("Menu Foods"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
+        Inventory   inventory = Bukkit.createInventory(this, SMALL_SLOT, Component.text("Menu Foods"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
         Collection<Food>  foods = RpgCraft.getItemCustomRegistry().getFoods().values();
         int i = 9;
         for (Food food: foods) {
-            inv.setItem(i++, createFood(food));
+            inventory.setItem(i++, createFood(food));
         }
-        launcher.openInventory(inv);
+        launcher.openInventory(inventory);
     }
 
     public void openNPC() {
-        MenuCommandHolder  holder = new MenuCommandHolder();
-        Inventory   inv = Bukkit.createInventory(holder, BIG_SLOT, Component.text("Menu NPC"));
-        holder.setInventory(inv);
-        inv.setItem(BACK_SLOT, createBack("back_main"));
-        inv.setItem(10, createSlot(Material.PUFFERFISH, "Get Placer", "get_placer_npc"));
-        inv.setItem(11, createSlot(Material.SPAWNER, "Create NPC", "create_npc"));
-        inv.setItem(12, createSlot(Material.EXPERIENCE_BOTTLE, "Change Level", "level_npc"));
-        inv.setItem(13, createSlot(Material.STONE_STAIRS, "Change Patrol", "patrol_npc"));
-        inv.setItem(14, createSlot(Material.SPYGLASS, "Change Aggro", "aggro_npc"));
-        inv.setItem(15, createSlot(Material.STICK, "Change Chase", "chase_npc"));
-        inv.setItem(16, createSlot(Material.DRAGON_EGG, "Change Boss", "boss_npc"));
-        inv.setItem(19, createSlot(Material.IRON_CHESTPLATE, "Change Equip", "equip_npc"));
-        inv.setItem(20, createSlot(Material.RED_BANNER, "Change Team", "team_npc"));
-        inv.setItem(21, createSlot(Material.BREAD, "Change Drop", "drop_npc"));
-        inv.setItem(22, createSlot(Material.ELDER_GUARDIAN_SPAWN_EGG, "Change Template", "template_npc"));
-        inv.setItem(23, createSlot(Material.MELON_SLICE, "Spawn", "spawn_npc"));
-        inv.setItem(24, createSlot(Material.RED_BED, "Despawn", "despawn_npc"));
-        inv.setItem(25, createSlot(Material.DARK_OAK_DOOR, "Delete", "delete_npc"));
-        launcher.openInventory(inv);
+        Inventory   inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu NPC"));
+        inventory.setItem(BACK_SLOT, createBack("back_main"));
+        inventory.setItem(10, createSlot(Material.PUFFERFISH, "Get Placer", "get_placer_npc"));
+        inventory.setItem(11, createSlot(Material.SPAWNER, "Create NPC", "create_npc"));
+        inventory.setItem(12, createSlot(Material.EXPERIENCE_BOTTLE, "Change Level", "level_npc"));
+        inventory.setItem(13, createSlot(Material.STONE_STAIRS, "Change Patrol", "patrol_npc"));
+        inventory.setItem(14, createSlot(Material.SPYGLASS, "Change Aggro", "aggro_npc"));
+        inventory.setItem(15, createSlot(Material.STICK, "Change Chase", "chase_npc"));
+        inventory.setItem(16, createSlot(Material.DRAGON_EGG, "Change Boss", "boss_npc"));
+        inventory.setItem(19, createSlot(Material.IRON_CHESTPLATE, "Change Equip", "equip_npc"));
+        inventory.setItem(20, createSlot(Material.RED_BANNER, "Change Team", "team_npc"));
+        inventory.setItem(21, createSlot(Material.BREAD, "Change Drop", "drop_npc"));
+        inventory.setItem(22, createSlot(Material.ELDER_GUARDIAN_SPAWN_EGG, "Change Template", "template_npc"));
+        inventory.setItem(23, createSlot(Material.MELON_SLICE, "Spawn", "spawn_npc"));
+        inventory.setItem(24, createSlot(Material.RED_BED, "Despawn", "despawn_npc"));
+        inventory.setItem(25, createSlot(Material.DARK_OAK_DOOR, "Delete", "delete_npc"));
+        launcher.openInventory(inventory);
     }
 
     public void openCreateNPC() {

@@ -16,9 +16,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.MobCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Menu;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menucommand.MenuCommand;
-import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menusell.MenuSell;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolder;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
@@ -28,7 +26,7 @@ public class EntityCustomRegistry implements Iterable<EntityCustom> {
 	private final Map<UUID, PlayerCustom>       playersCustom = new HashMap<>();
 	private final Map<UUID, NPCCustom>			npcsCustom = new HashMap<>();
 	private final Map<UUID, MobCustom>          mobsCustom = new HashMap<>();
-    private final Map<UUID, Menu>               menuMap = new HashMap<>();
+    private final Set<MenuHolder>               menus = new HashSet<>();
 
     @Override
     public Iterator<EntityCustom> iterator() {
@@ -130,22 +128,20 @@ public class EntityCustomRegistry implements Iterable<EntityCustom> {
         unregister(entityCustom);
     }
 
-    // menu
+    // menus
 
-    public void addMenuCommand(PlayerCustom launcher, LivingEntityCustom target) {
-        if (launcher == null || target == null) return;
-        MenuCommand menu = new MenuCommand(launcher, target);
-        menuMap.put(launcher.getPlayer().getUniqueId(), menu);
+    public void addMenu(MenuHolder menuHolder) {
+        menus.add(menuHolder);
     }
 
-    public void addMenuSell(PlayerCustom launcher) {
-        if (launcher == null) return;
-        MenuSell menu = new MenuSell(launcher);
-        menuMap.put(launcher.getPlayer().getUniqueId(), menu);
+    public void deleteMenu(MenuHolder menuHolder) {
+        menus.remove(menuHolder);
     }
 
-    public Menu getMenu(PlayerCustom launcher) {
-        if (launcher == null) return null;
-        return menuMap.get(launcher.getUUID());
+    public void giveBackItemsMenus() {
+        Set<MenuHolder> copy = Set.copyOf(menus);
+        for (MenuHolder menuHolder: copy) {
+            menuHolder.giveBackItems();
+        }
     }
 }

@@ -16,6 +16,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -511,6 +512,7 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     public void decreasePowerMax(double amount) {
         power.decreaseMax(amount);
+
         scoreboardCustom.refreshPower(this);
     }
 
@@ -643,6 +645,23 @@ public final class PlayerCustom implements LivingEntityCustom {
         refreshSkin();
         refreshScale();
     }
+
+    @Override
+	public boolean isOnGround() {
+    	BoundingBox	box = getBoundingBox();
+		if (box == null) return false;
+		World	    world = getWorld();
+		if (world == null) return false;
+    	double		y = box.getMinY() - 0.01;
+    	for (double x = box.getMinX(); x <= box.getMaxX(); x += 0.3) {
+    	    for (double z = box.getMinZ(); z <= box.getMaxZ(); z += 0.3) {
+    	        Block block = world.getBlockAt((int)Math.floor(x), (int)Math.floor(y), (int)Math.floor(z));
+    	        if (block.getType().isSolid())
+    	            return true;
+    	    }
+    	}
+    	return false;
+	}
 
     @Override
     public ClassType getClassType() {

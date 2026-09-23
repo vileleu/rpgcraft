@@ -116,7 +116,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		// cost
 		int	cost = type.getCost(rarity);
 		if (playerCustom.getPower() < cost) {
-			playerCustom.sendActionBar(Message.notEnough(playerCustom.getPowerCustom().getType()));
+			playerCustom.sendActionBar(Message.notEnoughPower(playerCustom.getPowerCustom().getType()));
 			return false;
 		}
 		if (type.isCast()) {
@@ -236,7 +236,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		// cost
 		int	cost = type.getCost(rarity);
 		if (playerCustom.getPower() < cost) {
-			playerCustom.sendActionBar(Message.notEnough(playerCustom.getPowerCustom().getType()));
+			playerCustom.sendActionBar(Message.notEnoughPower(playerCustom.getPowerCustom().getType()));
 			return false;
 		}
 		// can use

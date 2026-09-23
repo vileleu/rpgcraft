@@ -39,6 +39,8 @@ public class NPCCustomManager implements Listener {
 
     @EventHandler
     public void onNPCCustomDeath(NPCDeathEvent e) {
+        e.setDroppedExp(0);
+        e.getDrops().clear();
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(e.getNPC().getUniqueId());
         if (npcCustom == null) return;
         npcCustom.onDeath();

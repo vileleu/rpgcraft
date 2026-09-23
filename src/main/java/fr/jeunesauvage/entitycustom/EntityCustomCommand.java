@@ -13,6 +13,9 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menucommand.MenuCommand;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menurepair.MenuRepair;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menusell.MenuSell;
 
 public class EntityCustomCommand implements CommandExecutor {
     // handle playercustom commands
@@ -21,6 +24,7 @@ public class EntityCustomCommand implements CommandExecutor {
 		return switch (cmd.getName().toLowerCase()) {
             case "menu" -> handleMenuCommand(sender, args);
             case "menusell" -> handleMenuSell(sender, args);
+            case "menurepair" -> handleMenuRepair(sender, args);
             default -> false;
 		};
     }
@@ -52,7 +56,11 @@ public class EntityCustomCommand implements CommandExecutor {
         }
         else
             target = launcher;
-        RpgCraft.getEntityCustomRegistry().addMenuCommand(launcher, target);
+        if (target == null) {
+            sender.sendMessage(Message.m("<red>target do not exist (CRITICAL ERROR)"));
+            return true;
+        }
+        RpgCraft.getEntityCustomRegistry().addMenu(new MenuCommand(launcher, target));
         return true;
     }
 
@@ -64,7 +72,7 @@ public class EntityCustomCommand implements CommandExecutor {
         }
         Player  p = Bukkit.getPlayer(args[0]);
         if (p == null) {
-            sender.sendMessage(Message.m("<red>entity: <yellow>" + args[0] + "<red> is unknown"));
+            sender.sendMessage(Message.m("<red>player: <yellow>" + args[0] + "<red> is unknown"));
             return true;
         }
         PlayerCustom        launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
@@ -72,7 +80,27 @@ public class EntityCustomCommand implements CommandExecutor {
             sender.sendMessage(Message.m("<red>launcher do not exist (CRITICAL ERROR)"));
             return true;
         }
-        RpgCraft.getEntityCustomRegistry().addMenuSell(launcher);
+        RpgCraft.getEntityCustomRegistry().addMenu(new MenuSell(launcher));
+        return true;
+    }
+
+    // open menu repair
+    private boolean handleMenuRepair(CommandSender sender, String[] args) {
+        if (args.length != 1) {
+            sender.sendMessage(Message.m("<red>Usage: /menurepair <player name>"));
+            return true;
+        }
+        Player  p = Bukkit.getPlayer(args[0]);
+        if (p == null) {
+            sender.sendMessage(Message.m("<red>player: <yellow>" + args[0] + "<red> is unknown"));
+            return true;
+        }
+        PlayerCustom        launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+        if (launcher == null) {
+            sender.sendMessage(Message.m("<red>launcher do not exist (CRITICAL ERROR)"));
+            return true;
+        }
+        RpgCraft.getEntityCustomRegistry().addMenu(new MenuRepair(launcher));
         return true;
     }
 }

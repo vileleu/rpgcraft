@@ -1,6 +1,9 @@
 package fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -8,14 +11,18 @@ import org.bukkit.persistence.PersistentDataContainer;
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.RpgCraft;
 
-public interface Menu {
+public interface MenuHolder extends InventoryHolder {
 	static public final NamespacedKey   KEY_MENU = new NamespacedKey(RpgCraft.name(), "menuid");
 	static public final int             BACK_SLOT = 0;
 	static public final int             SMALL_SLOT = 27;
 	static public final int             BIG_SLOT = 54;
 
-    void open();
-    void close();
+    void        open();
+    void        close();
+    Inventory   getInventory();
+    void        onClick(InventoryClickEvent e);
+    void        onClose();
+    void        giveBackItems();
 
     static public String getAction(ItemStack item) {
         if (item == null) return null;

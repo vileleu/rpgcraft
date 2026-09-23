@@ -116,7 +116,7 @@ public class Lore {
 		return Message.c(Component.translatable("description.rpgcraft").color(colorName).append(Component.text(" ")).append(Component.translatable("description.rpgcraft." + name).color(colorValue)));
 	}
 
-	public static List<Component> sell(int ingots, int nuggets) {
+	public static List<Component> gold(int ingots, int nuggets) {
 		List<Component>	lore = new ArrayList<>();
 		lore.add(Message.c(
 			(Component.translatable("gold_ingots.rpgcraft").append(Component.text(": "))).color(NamedTextColor.WHITE)

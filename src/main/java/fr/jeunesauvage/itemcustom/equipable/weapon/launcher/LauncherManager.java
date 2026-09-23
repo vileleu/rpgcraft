@@ -334,7 +334,7 @@ public class LauncherManager implements Listener {
 		// fireball
 		else if ((rarity = spellRegistry.getFireballRarity(projectile)) != null) {
 			Location	location = projectile.getLocation();
-			double		radius = (rarity.getNumber()) + 4;
+			double		radius = (rarity.getNumber()) + 2;
 			double 		damage = rarity.getNumber() * 3;
 			int			fireTicks = (rarity.getNumber() + 2) * 20;
 			spellRegistry.explosionFire(launcher, location, radius, damage, 1, fireTicks);
