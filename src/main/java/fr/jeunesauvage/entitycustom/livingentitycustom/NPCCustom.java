@@ -284,6 +284,7 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void teleport(Location location) {
+        if (location == null) return;
         LivingEntity l = getLivingEntity();
         if (l == null) return;
         l.teleport(location);
@@ -683,19 +684,21 @@ public final class NPCCustom implements LivingEntityCustom {
     }
 
     @Override
-    public boolean isFriend(LivingEntityCustom livingEntityCustom) {
-        if (livingEntityCustom == this) return true;
+    public boolean isFriend(LivingEntityCustom l) {
+        if (l == this) return true;
         // mark
-        if (livingEntityCustom instanceof PlayerCustom playerCustom && playerCustom.isMarked()) return false;
-        if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || (petUUID != null && petUUID.equals(livingEntityCustom.getUUID()))) return true;
+        if (l instanceof PlayerCustom playerCustom && playerCustom.isMarked()) return false;
+        if ((ownerUUID != null && ownerUUID.equals(l.getUUID())) || (petUUID != null && petUUID.equals(l.getUUID()))) return true;
         for (TeamType teamType: teams) {
-            if (livingEntityCustom.getTeams().contains(teamType)) return true;
+            if (l.getTeams().contains(teamType)) return true;
         }
         if (group == null) return false;
-        if (group.in(livingEntityCustom)) return true;
+        if (group.in(l)) return true;
         EntityCustomRegistry    entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
-        if (ownerUUID != null && group.in(entityCustomRegistry.getLivingEntityCustom(livingEntityCustom.getOwner()))) return true;
-        if (petUUID != null && group.in(entityCustomRegistry.getLivingEntityCustom(livingEntityCustom.getPet()))) return true;
+        if (l.isPet() && entityCustomRegistry.getLivingEntityCustom(l.getOwner()).isGrouped(this)) return true;
+        if (l.isOwner() && entityCustomRegistry.getLivingEntityCustom(l.getPet()).isGrouped(this)) return true;
+        if (isPet() && entityCustomRegistry.getLivingEntityCustom(getOwner()).isGrouped(this)) return true;
+        if (isOwner() && entityCustomRegistry.getLivingEntityCustom(getPet()).isGrouped(this)) return true;
         return false;
     }
 
@@ -962,9 +965,6 @@ public final class NPCCustom implements LivingEntityCustom {
         String      currentSkin = skinTrait.getSkinName();
         FormType    f = metamorph != FormType.UNKNOWN ? metamorph : formType;
         if (!f.getName().equals(currentSkin)) {
-            if (formType == FormType.TAUREN) {
-                RpgCraft.debug("refreshSkin()");
-            }
 		    SkinData	skinData = f.getFormTypeSkin().getSkinData();
 		    if (skinData != null)
 		    	skinTrait.setSkinPersistent(f.getName(), skinData.getSignature(), skinData.getValue());
@@ -999,9 +999,6 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void onSpawn() {
-        if (formType == FormType.TAUREN) {
-            RpgCraft.debug("|||||||||SPAWN|||||||||");
-        }
         if (metamorph == FormType.DRACTHYR_BLACK) RpgCraft.getMetamorphRegistry().equipDracthyr(this);
         else RpgCraft.getMetamorphRegistry().unequipDracthyr(this);
         // trait
@@ -1026,6 +1023,9 @@ public final class NPCCustom implements LivingEntityCustom {
             respawnTask = null;
         }
         greeting();
+        if (isPet()) {
+            RpgCraft.debug(getName() + " owner == " + RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(ownerUUID).getName());
+        }
     }
 
     @Override

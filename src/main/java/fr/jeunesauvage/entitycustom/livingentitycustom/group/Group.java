@@ -16,6 +16,8 @@ public class Group {
 	public boolean in(LivingEntityCustom livingEntityCustom) {
 		if (livingEntityCustom == null) return false;
 		UUID	uuid = livingEntityCustom.getUUID();
+		if (livingEntityCustom.getPet() == uuid1 || livingEntityCustom.getPet() == uuid2) return true;
+		if (livingEntityCustom.getOwner() == uuid1 || livingEntityCustom.getOwner() == uuid2) return true;
 		return (uuid == uuid1 || uuid == uuid2);
 	}
 

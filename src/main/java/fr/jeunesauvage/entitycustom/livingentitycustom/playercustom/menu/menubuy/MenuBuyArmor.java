@@ -56,7 +56,7 @@ public class MenuBuyArmor extends MenuHolderEquipable {
         inventory.setItem(BACK_SLOT, createBack("open"));
         Map<Equipable<?>, Gold> map = equipables.get(m);
         Armor                   last = null;
-        int                     i = 9;
+        int                     i = 0;
         for (Entry<Equipable<?>, Gold> e: map.entrySet()) {
             Armor   armor = (Armor)e.getKey();
             if (last != null && armor.getLevel() != last.getLevel()) i += (i % 9 != 0 ? 9 - i % 9 : 0);

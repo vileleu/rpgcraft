@@ -38,6 +38,7 @@ TODO:
  - ice_lord spell (launch ice sword + spawn small ice_elemental + freeze all nearby enemies entity)
  - skins (... + quotes for child orc)
  - delete ItemCustomCategory (useless)
+ - fix pet/owner
 - WORLD:
   - player can break mineral block
 - QUESTS:

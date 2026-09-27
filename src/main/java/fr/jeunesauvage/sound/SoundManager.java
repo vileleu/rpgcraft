@@ -32,7 +32,7 @@ public class SoundManager implements Listener {
                 QuoteType.ATTACK, List.of("dwarfiron_attack1", "dwarfiron_attack2", "dwarfiron_attack3", "dwarfiron_attack4", "dwarfiron_attack5", "dwarfiron_attack6", "dwarfiron_attack7", "dwarfiron_attack8", "dwarfiron_attack9"),
                 QuoteType.DEATH, List.of("dwarfiron_death1", "dwarfiron_death2", "dwarfiron_death3", "dwarfiron_death4", "dwarfiron_death5")
             )),
-            Map.entry(FormType.DWARFIRON_GUARD, Map.of(
+            Map.entry(FormType.IRON_GUARD, Map.of(
                 QuoteType.GREETING, List.of("dwarfiron_guard_greeting1", "dwarfiron_guard_greeting2", "dwarfiron_guard_greeting3", "dwarfiron_guard_greeting4", "dwarfiron_guard_greeting5", "dwarfiron_guard_greeting6"),
                 QuoteType.FAREWELL, List.of("dwarfiron_guard_greeting1", "dwarfiron_guard_greeting2", "dwarfiron_guard_greeting3", "dwarfiron_guard_greeting4", "dwarfiron_guard_greeting5", "dwarfiron_guard_greeting6"),
                 QuoteType.ATTACK, List.of("dwarfiron_guard_attack1", "dwarfiron_guard_attack2", "dwarfiron_guard_attack3", "dwarfiron_guard_attack4", "dwarfiron_guard_attack5", "dwarfiron_guard_attack6"),
@@ -177,7 +177,7 @@ public class SoundManager implements Listener {
             case HUMAN -> FormType.HUMAN;
             case HUMAN_PALPOUTINE, HUMAN_ROGUE -> FormType.HUMAN_ROGUE;
             case DWARFIRON, DWARFIRON_TRADER, DWARFIRON_BLACKSMITH, DWARFIRON_REDHEADBEARD, DWARFIRON_GUY, DWARFIRON_PYROMANCER, DWARFIRON_KING -> FormType.DWARFIRON;
-            case DWARFIRON_GUARD -> FormType.DWARFIRON_GUARD;
+            case IRON_GUARD -> FormType.IRON_GUARD;
             case MURLOC, MURLOC_ELITE, MURLOC_BOSS, MURLOC_NICE -> FormType.MURLOC;
             case ELFNIGHT, ILLIDAN, MALFURION -> FormType.ELFNIGHT;
             case ELFBLOOD -> FormType.ELFBLOOD;
@@ -192,7 +192,7 @@ public class SoundManager implements Listener {
                 DEMON, MAGMA_GOLEM, ELEMENTAL_VOID,              // demon
                 ORC_CHILD,                                       // child
                 ZOMBIE,                                          // zombie
-                ANIMAL,                                          // animal
+                KODO, ANIMAL,                                    // animal
                 UNKNOWN -> FormType.UNKNOWN;
         };
     }

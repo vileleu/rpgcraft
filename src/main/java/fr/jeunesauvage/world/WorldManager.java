@@ -20,6 +20,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.BlockSpreadEvent;
@@ -115,6 +116,12 @@ public class WorldManager implements Listener {
 		e.getView().setRepairCost(0);
     	ItemStack	right = e.getInventory().getItem(1);
     	if (right != null && right.getType() != Material.AIR) e.setResult(null);
+	}
+
+	// cancel creation of wither rose
+	@EventHandler
+	public void onWitherRoseForm(BlockFormEvent e) {
+	    if (e.getNewState().getType() == Material.WITHER_ROSE) e.setCancelled(true);
 	}
 
 	// cancel enchanting

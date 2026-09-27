@@ -68,6 +68,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.MobCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
@@ -1065,7 +1066,7 @@ public class SpellRegistry {
 	// metamorph
 
 	public void metamorph(LivingEntityCustom launcher, Rarity rarity) {
-		RpgCraft.getMetamorphRegistry().addDracthyr(launcher, rarity);
+		RpgCraft.getMetamorphRegistry().addDracthyr(launcher, rarity, FormType.DRACTHYR_BLACK);
 		particleMetamorph(launcher.getLocation());
 	}
 

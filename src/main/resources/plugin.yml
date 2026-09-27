@@ -114,6 +114,10 @@ commands:
     description: open menu buy food
     usage: /menubuyfood <player name>
     permission: rpgcraft.op
+  menubuyspell:
+    description: open menu buy spell
+    usage: /menubuyspell <player name>
+    permission: rpgcraft.op
   # sound command
   quote:
     description: play quote

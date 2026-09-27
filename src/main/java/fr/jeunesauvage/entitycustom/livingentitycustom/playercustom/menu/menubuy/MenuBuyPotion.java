@@ -44,8 +44,8 @@ public class MenuBuyPotion extends MenuHolder {
             if (potion.getRarity() == Rarity.LEGENDARY) continue;
             tmp.add(new Pair<Potion,Gold>(potion, getPrice(potion)));
         }
-        tmp.sort(Comparator.comparing((Pair<Potion, Gold> pair) -> pair.getFirst().getType())
-            .thenComparing(pair -> pair.getFirst().getRarity()));
+        tmp.sort(Comparator.comparing((Pair<Potion, Gold> pair) -> pair.getFirst().getRarity())
+            .thenComparingInt(pair -> pair.getFirst().getLevel()));
         for (Pair<Potion, Gold> pair: tmp) {
             toSell.put(pair.getFirst(), pair.getSecond());
         }
@@ -56,7 +56,7 @@ public class MenuBuyPotion extends MenuHolder {
         getPotionsToSell();
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("close"));
-        int     i = 9;
+        int     i = 0;
         Potion  last = null;
         for (Entry<Potion, Gold> e: toSell.entrySet()) {
             if (i >= inventory.getSize()) break;

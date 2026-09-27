@@ -109,7 +109,6 @@ public class FightTrait extends Trait {
     private final int					tickLoseAggro;
     private final int					tickUnactive;
     private int							loseAggro;
-    private Location					loseAggroLastLocation;
     private final double				rangeActive;
     private final double				rangeActiveSquared;
     private FightData					fightData;
@@ -124,7 +123,6 @@ public class FightTrait extends Trait {
     	this.tickLoseAggro = 20;  // 1 seconds if lose aggro
     	this.tickUnactive = 80;   // 4 seconds if unactive
 		this.loseAggro = 0;
-		this.loseAggroLastLocation = null;
     	this.rangeActive = 100;   // range where npc is active
     	this.rangeActiveSquared = rangeActive * rangeActive;
 		this.fightData = null;
@@ -205,21 +203,13 @@ public class FightTrait extends Trait {
 		NPCCustom	npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
 		if (npcCustom == null) return;
 		if (loseAggro > 0) {
-			Location	loc = npcCustom.getLocation();
-			if (loc.getBlockX() == loseAggroLastLocation.getBlockX()
-			&& loc.getBlockY() == loseAggroLastLocation.getBlockY()
-			&& loc.getBlockZ() == loseAggroLastLocation.getBlockZ()) {
-				resetSpawn(npcCustom);
-				loseAggro = 0;
-			}
 			if (--loseAggro <= 0) {
 				npc.getNavigator().getDefaultParameters().speedModifier(speed);
 				tick = tickActive;
-				loseAggroLastLocation = null;
 				return;
 			}
+			fightAI.setTarget(npcCustom, npcCustom.getRespawn());
 			tick = tickLoseAggro;
-			loseAggroLastLocation = npcCustom.getLocation();
 			return;
 		}
 		if (!isActive(npcCustom)) {
@@ -230,10 +220,7 @@ public class FightTrait extends Trait {
 		tick = tickActive;
 		fightAI.findTarget(npcCustom);
 		loseAggro = fightAI.attackTarget(npcCustom);
-		if (loseAggro > 0) {
-			tick = tickLoseAggro;
-			loseAggroLastLocation = npcCustom.getLocation();
-		}
+		if (loseAggro > 0) tick = tickLoseAggro;
     }
 
 	private boolean isActive(NPCCustom npcCustom) {

@@ -31,7 +31,7 @@ public enum FormType {
 	ORC_FOREST("orc_forest", 0.9, FormTypeSkin.ORC_FOREST),
     ORC_FATHER("orc_father", 0.9, FormTypeSkin.ORC_FATHER),
     ORC_MOTHER("orc_mother", 0.9, FormTypeSkin.ORC_MOTHER),
-    ORC_CHILD("orc_child", 0.6, FormTypeSkin.ORC_CHILD),
+    ORC_CHILD("orc_child", 0.5, FormTypeSkin.ORC_CHILD),
     ORC_FUMELEBITUME("fumelebitume", 0.9, FormTypeSkin.ORC_FUMELEBITUME),
 	// human
     HUMAN("human", 0.9, FormTypeSkin.HUMAN),
@@ -44,7 +44,7 @@ public enum FormType {
     DWARFIRON_REDHEADBEARD("dwarfiron_redheadbeard", 0.7, FormTypeSkin.DWARFIRON_REDHEADBEARD),
     DWARFIRON_GUY("dwarfiron_guy", 0.7, FormTypeSkin.DWARFIRON_GUY),
     DWARFIRON_KING("dwarfiron_king", 0.7, FormTypeSkin.DWARFIRON_KING),
-    DWARFIRON_GUARD("dwarfiron_guard", 1.4, FormTypeSkin.DWARFIRON_GUARD),
+    IRON_GUARD("iron_guard", 1.4, FormTypeSkin.IRON_GUARD),
     DWARFIRON_PYROMANCER("dwarfiron_pyromancer", 0.7, FormTypeSkin.DWARFIRON_PYROMANCER),
 	// elfnight
     ELFNIGHT("elfnight", 1, FormTypeSkin.ELFNIGHT),
@@ -87,9 +87,10 @@ public enum FormType {
     MAGMA_GOLEM("magla_golem", 1.2, FormTypeSkin.MAGMA_GOLEM),
 	ELEMENTAL_VOID("elemental_void", 1.5, FormTypeSkin.ELEMENTAL_VOID),
 	// others
+	KODO("kodo", 1, FormTypeSkin.KODO),
 	ANIMAL("animal", 1, FormTypeSkin.ANIMAL),
 	DRACTHYR_BLACK("dracthyr_black", 1.4, FormTypeSkin.DRACTHYR_BLACK),
-	DRACTHYR_RED("dracthyr_red", 1.4, FormTypeSkin.DRACTHYR_RED);
+	DRACTHYR_RED("dracthyr_red", 1.6, FormTypeSkin.DRACTHYR_RED);
 
     static public final NamespacedKey   KEY = new NamespacedKey(RpgCraft.name(), "form");
 	private final String				name;

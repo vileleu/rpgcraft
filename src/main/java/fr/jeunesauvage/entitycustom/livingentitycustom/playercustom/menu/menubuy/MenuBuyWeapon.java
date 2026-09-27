@@ -54,7 +54,7 @@ public class MenuBuyWeapon extends MenuHolderEquipable {
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("open"));
         Map<Equipable<?>, Gold> map = equipables.get(m);
-        int                     i = 9;
+        int                     i = 0;
         for (Entry<Equipable<?>, Gold> e: map.entrySet()) {
             Weapon   weapon = (Weapon)e.getKey();
             if (i >= inventory.getSize()) break;

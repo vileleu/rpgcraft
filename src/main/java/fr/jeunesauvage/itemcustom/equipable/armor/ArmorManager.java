@@ -9,14 +9,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
+import fr.jeunesauvage.itemcustom.equipable.Equipable;
 
 public class ArmorManager implements Listener {
 	// armor equip
@@ -34,7 +33,7 @@ public class ArmorManager implements Listener {
 			inv.setItem(slot, null);
 			world.dropItem(playerCustom.getLocation(), armor);
 		}
-		else if (isSameArmor(e.getOldItem(), e.getNewItem())) return;
+		else if (Equipable.isSameItem(e.getOldItem(), e.getNewItem())) return;
 		playerCustom.refreshStat();
 	}
 
@@ -45,17 +44,5 @@ public class ArmorManager implements Listener {
 		ClassType		classPlayer = playerCustom.getClassType();
 		if (classTypes.contains(ClassType.BEGGAR) || classPlayer == ClassType.GOD) return true;
 		return classTypes.contains(classPlayer);
-	}
-
-	private boolean isSameArmor(ItemStack a, ItemStack b) {
-	    if (a == null || b == null) return false;
-	    if (a.getType() != b.getType()) return false;
-	    ItemMeta	metaA = a.getItemMeta();
-	    ItemMeta	metaB = b.getItemMeta();
-	    if (metaA == null && metaB == null) return true;
-	    if (metaA == null || metaB == null) return false;
-	    if (metaA instanceof Damageable) ((Damageable)metaA).setDamage(0);
-	    if (metaB instanceof Damageable) ((Damageable)metaB).setDamage(0);
-	    return metaA.equals(metaB);
 	}
 }

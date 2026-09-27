@@ -22,42 +22,47 @@ import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Gold;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolder;
-import fr.jeunesauvage.itemcustom.food.Food;
+import fr.jeunesauvage.itemcustom.spell.Spell;
 import fr.jeunesauvage.sound.SoundManager;
 import net.kyori.adventure.text.Component;
 
-public class MenuBuyFood extends MenuHolder {
-    private final Map<Food, Gold> toSell = new LinkedHashMap<>();
+public class MenuBuySpell extends MenuHolder {
+    private final Map<Spell, Gold> toSell = new LinkedHashMap<>();
 
-    public MenuBuyFood(PlayerCustom launcher) {
+    public MenuBuySpell(PlayerCustom launcher) {
         super(launcher);
-        this.inventory = Bukkit.createInventory(this, INVENTORY_SIZE, Component.text("Menu Potion"));
+        this.inventory = Bukkit.createInventory(this, INVENTORY_SIZE, Component.text("Menu Spell"));
         open();
     }
 
-    private void getFoodsToSell() {
+    private void getSpellsToSell() {
         toSell.clear();
-        Collection<Food>          foods = RpgCraft.getItemCustomRegistry().getFoods().values();
-        List<Pair<Food, Gold>>    tmp = new ArrayList<>();
-        for (Food food: foods) {
-            tmp.add(new Pair<Food,Gold>(food, getPrice(food)));
+        Collection<Spell>          spells = RpgCraft.getItemCustomRegistry().getSpells().values();
+        List<Pair<Spell, Gold>>    tmp = new ArrayList<>();
+        for (Spell spell: spells) {
+            if (!spell.getType().getClassTypes().contains(launcher.getClassType())) continue;
+            tmp.add(new Pair<Spell,Gold>(spell, getPrice(spell)));
         }
-        tmp.sort(Comparator.comparing(pair -> pair.getFirst().getType()));
-        for (Pair<Food, Gold> pair: tmp) {
+        tmp.sort(Comparator.comparing((Pair<Spell, Gold> pair) -> pair.getFirst().getRarity())
+            .thenComparingInt(pair -> pair.getFirst().getLevel()));
+        for (Pair<Spell, Gold> pair: tmp) {
             toSell.put(pair.getFirst(), pair.getSecond());
         }
     }
 
     @Override
     public void open() {
-        getFoodsToSell();
+        getSpellsToSell();
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("close"));
         int     i = 0;
-        for (Entry<Food, Gold> e: toSell.entrySet()) {
+        Spell  last = null;
+        for (Entry<Spell, Gold> e: toSell.entrySet()) {
             if (i >= inventory.getSize()) break;
-            Food  food = e.getKey();
-            inventory.setItem(i++, createFoodSlot(food, e.getValue(), "buy"));
+            Spell  spell = e.getKey();
+            if (last != null && spell.getType() != last.getType()) i++;
+            inventory.setItem(i++, createSpellSlot(spell, e.getValue(), "buy"));
+            last = spell;
         }
         launcher.openInventory(inventory);
     }
@@ -71,8 +76,8 @@ public class MenuBuyFood extends MenuHolder {
         if (action == null) return;
         switch (action) {
             case "buy" -> {
-                Food food = RpgCraft.getItemCustomRegistry().getFood(clicked);
-                buy(food);
+                Spell spell = RpgCraft.getItemCustomRegistry().getSpell(clicked);
+                buy(spell);
             }
             default -> {
                 close();
@@ -86,39 +91,25 @@ public class MenuBuyFood extends MenuHolder {
         RpgCraft.getEntityCustomRegistry().deleteMenu(this);
     }
 
-    public void buy(Food food) {
-        if (!launcher.takeGoldInInventory(toSell.get(food))) {
+    public void buy(Spell spell) {
+        if (!launcher.takeGoldInInventory(toSell.get(spell))) {
             SoundManager.playSound(launcher, "error");
             return;
         }
-        launcher.addItem(food.getItemClone());
+        launcher.addItem(spell.getItemClone());
         SoundManager.playSound(launcher, "buy");
     }
 
-    private Gold getPrice(Food food) {
-        int nuggets = switch (food.getType()) {
-            case GOLDEN_CARROT -> 18;
-            case RABBIT_STEW -> 16;
-            case COOKED_BEEF -> 12;
-            case COOKED_SALMON -> 12;
-            case COOKED_CHICKEN -> 12;
-            case MUSHROOM_STEW -> 8;
-            case COOKED_RABBIT -> 8;
-            case BAKED_POTATO -> 6;
-            case CARROT -> 5;
-            case APPLE -> 4;
-            case POTATO -> 3;
-            case BREAD -> 3;
-            case SALMON -> 3;
-            case COOKIE -> 2;
-        };
+    private Gold getPrice(Spell spell) {
+        int halfLevel = spell.getLevel() / 2;
+        int nuggets = halfLevel + (halfLevel * spell.getRarity().getNumber());
         Gold    price = new Gold();
         price.fromNuggetsToGold(nuggets);
         return price;
     }
 
-    private ItemStack createFoodSlot(Food food, Gold price, String action) {
-        ItemStack				item = food.getItemClone();
+    private ItemStack createSpellSlot(Spell spell, Gold price, String action) {
+        ItemStack				item = spell.getItemClone();
         ItemMeta				meta = item.getItemMeta();
 		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
         Data.setString(pdc, KEY_MENU, action);

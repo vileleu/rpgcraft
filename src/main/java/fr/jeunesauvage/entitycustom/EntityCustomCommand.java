@@ -16,6 +16,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menubuy.MenuBuyArmor;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menubuy.MenuBuyFood;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menubuy.MenuBuyPotion;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menubuy.MenuBuySpell;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menubuy.MenuBuyWeapon;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menucommand.MenuCommand;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menurepair.MenuRepair;
@@ -34,6 +35,7 @@ public class EntityCustomCommand implements CommandExecutor {
             case "menubuyarmor" -> handleMenuBuyArmor(sender, args);
             case "menubuypotion" -> handleMenuBuyPotion(sender, args);
             case "menubuyfood" -> handleMenuBuyFood(sender, args);
+            case "menubuyspell" -> handleMenuBuySpell(sender, args);
             default -> false;
 		};
     }
@@ -206,6 +208,26 @@ public class EntityCustomCommand implements CommandExecutor {
             return true;
         }
         RpgCraft.getEntityCustomRegistry().addMenu(new MenuBuyFood(launcher));
+        return true;
+    }
+
+    // open menu buy spell
+    private boolean handleMenuBuySpell(CommandSender sender, String[] args) {
+        if (args.length != 1) {
+            sender.sendMessage(Message.m("<red>Usage: /menubuyspell <player name>"));
+            return true;
+        }
+        Player  p = Bukkit.getPlayer(args[0]);
+        if (p == null) {
+            sender.sendMessage(Message.m("<red>player: <yellow>" + args[0] + "<red> is unknown"));
+            return true;
+        }
+        PlayerCustom        launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+        if (launcher == null) {
+            sender.sendMessage(Message.m("<red>launcher do not exist (CRITICAL ERROR)"));
+            return true;
+        }
+        RpgCraft.getEntityCustomRegistry().addMenu(new MenuBuySpell(launcher));
         return true;
     }
 }

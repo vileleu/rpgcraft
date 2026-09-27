@@ -34,7 +34,6 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.ParseAc
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.PotionType;
-import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
@@ -98,18 +97,63 @@ public class MenuCommand extends MenuHolder {
             case "remove_stat" -> openStatsRemove();
             case "add_skill" -> openSkillsAdd();
             case "remove_skill" -> openSkillsRemove();
-            // race + class
+            // race
             case "change_race" -> openRaceChange();
+            case "change_tauren" -> raceChange(RaceType.TAUREN);
+            case "change_orc" -> raceChange(RaceType.ORC);
+            case "change_dwarf" -> raceChange(RaceType.DWARF);
+            case "change_human" -> raceChange(RaceType.HUMAN);
+            case "change_dwarfiron" -> raceChange(RaceType.DWARFIRON);
+            case "change_iron_guard" -> raceChange(RaceType.IRON_GUARD);
+            case "change_elfnight" -> raceChange(RaceType.ELFNIGHT);
+            case "change_elfblood" -> raceChange(RaceType.ELFBLOOD);
+            case "change_murloc" -> raceChange(RaceType.MURLOC);
+            case "change_necromancer" -> raceChange(RaceType.NECROMANCER);
+            // class
             case "change_class" -> openClassChange();
+            case "change_beggar" -> classChange(ClassType.BEGGAR);
+            case "change_pyromancer" -> classChange(ClassType.PYROMANCER);
+            case "change_priest" -> classChange(ClassType.PRIEST);
+            case "change_rogue" -> classChange(ClassType.ROGUE);
+            case "change_hunter" -> classChange(ClassType.HUNTER);
+            case "change_dracthyr" -> classChange(ClassType.DRACTHYR);
+            case "change_warrior" -> classChange(ClassType.WARRIOR);
+            case "change_god" -> classChange(ClassType.GOD);
+            // spell
             case "open_pyromancer" -> openSpell(ClassType.PYROMANCER);
-            case "open_warrior" -> openSpell(ClassType.WARRIOR);
-            case "open_rogue" -> openSpell(ClassType.ROGUE);
             case "open_priest" -> openSpell(ClassType.PRIEST);
-            case "open_dracthyr" -> openSpell(ClassType.DRACTHYR);
+            case "open_rogue" -> openSpell(ClassType.ROGUE);
             case "open_hunter" -> openSpell(ClassType.HUNTER);
+            case "open_dracthyr" -> openSpell(ClassType.DRACTHYR);
+            case "open_warrior" -> openSpell(ClassType.WARRIOR);
+            // team
             case "open_team" -> openTeam();
             case "add_team" -> openTeamAdd();
+	        case "add_player" -> teamAdd(TeamType.PLAYER);
+	        case "add_horde" -> teamAdd(TeamType.HORDE);
+	        case "add_alliance" -> teamAdd(TeamType.ALLIANCE);
+	        case "add_murloc" -> teamAdd(TeamType.MURLOC);
+	        case "add_desert" -> teamAdd(TeamType.DESERT);
+	        case "add_black" -> teamAdd(TeamType.BLACK);
+	        case "add_forest" -> teamAdd(TeamType.FOREST);
+	        case "add_ice" -> teamAdd(TeamType.ICE);
+	        case "add_necro" -> teamAdd(TeamType.NECRO);
+	        case "add_spider" -> teamAdd(TeamType.SPIDER);
+	        case "add_elemental" -> teamAdd(TeamType.ELEMENTAL);
+	        case "add_demon" -> teamAdd(TeamType.DEMON);
             case "delete_team" -> openTeamDelete();
+	        case "delete_player" -> teamDelete(TeamType.PLAYER);
+	        case "delete_horde" -> teamDelete(TeamType.HORDE);
+	        case "delete_alliance" -> teamDelete(TeamType.ALLIANCE);
+	        case "delete_murloc" -> teamDelete(TeamType.MURLOC);
+	        case "delete_desert" -> teamDelete(TeamType.DESERT);
+	        case "delete_black" -> teamDelete(TeamType.BLACK);
+	        case "delete_forest" -> teamDelete(TeamType.FOREST);
+	        case "delete_ice" -> teamDelete(TeamType.ICE);
+	        case "delete_necro" -> teamDelete(TeamType.NECRO);
+	        case "delete_spider" -> teamDelete(TeamType.SPIDER);
+	        case "delete_elemental" -> teamDelete(TeamType.ELEMENTAL);
+	        case "delete_demon" -> teamDelete(TeamType.DEMON);
             // npc
             case "get_placer_npc" -> RpgCraft.getNPCBuilderRegistry().createMyNPCPlacer(launcher);
             case "open_npc" -> openNPC();
@@ -151,6 +195,9 @@ public class MenuCommand extends MenuHolder {
             case "open_potion_energy" -> openPotions(PotionType.POTION_ENERGY);
             // foods
             case "open_foods" -> openFoods();
+            case "print_stats_primary", "print_stats_secondary",
+                "print_skills_primary", "print_skills_secondary",
+                "print_race", "print_class", "print_team" -> {}
             default -> close();
         }
     }
@@ -169,7 +216,6 @@ public class MenuCommand extends MenuHolder {
             inventory.setItem(2, createSlot(Material.GREEN_DYE, "Add", "add_stat"));
             inventory.setItem(3, createSlot(Material.RED_DYE, "Remove", "remove_stat"));
         }
-        launcher.openInventory(inventory);
     }
 
     public void openStatsAdd() {
@@ -181,6 +227,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openStats();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -199,6 +246,7 @@ public class MenuCommand extends MenuHolder {
                     target.addStatModifier(statType, value, duration);
                     launcher.sendMessage(Message.c("Stat Added!", NamedTextColor.GREEN));
                     openStats();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -215,6 +263,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openStats();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -228,6 +277,7 @@ public class MenuCommand extends MenuHolder {
                     target.deleteModifier(id);
                     launcher.sendMessage(Message.c("Stat Deleted!", NamedTextColor.RED));
                     openStats();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -244,7 +294,6 @@ public class MenuCommand extends MenuHolder {
             inventory.setItem(2, createSlot(Material.GREEN_DYE, "Add", "add_skill"));
             inventory.setItem(3, createSlot(Material.RED_DYE, "Remove", "remove_skill"));
         }
-        launcher.openInventory(inventory);
     }
 
     public void openSkillsAdd() {
@@ -256,6 +305,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openSkills();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -274,6 +324,7 @@ public class MenuCommand extends MenuHolder {
                     target.addSkillModifier(skillType, value, duration);
                     launcher.sendMessage(Message.c("Skill Added!", NamedTextColor.GREEN));
                     openSkills();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -290,6 +341,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openSkills();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -303,6 +355,7 @@ public class MenuCommand extends MenuHolder {
                     target.deleteModifier(id);
                     launcher.sendMessage(Message.c("Skill Removed!", NamedTextColor.RED));
                     openSkills();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -316,30 +369,24 @@ public class MenuCommand extends MenuHolder {
         inventory.setItem(0, createSlot(Material.PHANTOM_SPAWN_EGG, "Print", "print_race"));
         if (launcher.isOp()) 
             inventory.setItem(1, createSlot(Material.PAPER, "Change", "change_race"));
-        launcher.openInventory(inventory);
     }
 
     public void openRaceChange() {
-        new AnvilGUI.Builder()
-            .plugin(RpgCraft.instance())
-            .title("Menu Race Change")
-            .text("race")
-            .itemLeft(new ItemStack(Material.PAPER))
-            .onClick((slot, stateSnapshot) -> {
-                if (slot == AnvilGUI.Slot.INPUT_LEFT) {
-                    openRace();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                else if (slot == AnvilGUI.Slot.OUTPUT) {
-                    String  text = stateSnapshot.getText().toLowerCase();
-                    target.setRaceType(RaceType.fromString(text));
-                    launcher.sendMessage(Message.c("Race Modified!", NamedTextColor.GREEN));
-                    openRace();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                return Collections.emptyList();
-            })
-        .open(launcher.getPlayer());
+        clearInventory();
+        inventory.setItem(BACK_SLOT, createBack("open_race"));
+        int i = 0;
+        for (RaceType raceType: RaceType.values()) {
+            if (!raceType.isPlayable()) continue;
+            inventory.setItem(i++, createSlot(Material.PHANTOM_SPAWN_EGG, raceType.getName(), "change_" + raceType.getName()));
+        }
+    }
+
+    public void raceChange(RaceType raceType) {
+        target.setRaceType(raceType);
+        launcher.sendMessage(Message.c("Race Modified!", NamedTextColor.GREEN));
+        if (target != launcher && target instanceof PlayerCustom playerCustom)
+            playerCustom.sendMessage(Message.c("Race Modified!", NamedTextColor.GREEN));
+        openRaceChange();
     }
 
     public void openClass() {
@@ -350,30 +397,23 @@ public class MenuCommand extends MenuHolder {
             inventory.setItem(1, createSlot(Material.PAPER, "Change", "change_class"));
             inventory.setItem(2, createSlot(Material.BLAZE_POWDER, "Spell", "open_spell"));
         }
-        launcher.openInventory(inventory);
     }
 
     public void openClassChange() {
-        new AnvilGUI.Builder()
-            .plugin(RpgCraft.instance())
-            .title("Menu Class Change")
-            .text("class")
-            .itemLeft(new ItemStack(Material.PAPER))
-            .onClick((slot, stateSnapshot) -> {
-                if (slot == AnvilGUI.Slot.INPUT_LEFT) {
-                    openClass();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                else if (slot == AnvilGUI.Slot.OUTPUT) {
-                    String  text = stateSnapshot.getText().toLowerCase();
-                    target.setClassType(ClassType.fromString(text));
-                    launcher.sendMessage(Message.c("Class Modified!", NamedTextColor.GREEN));
-                    openClass();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                return Collections.emptyList();
-            })
-        .open(launcher.getPlayer());
+        clearInventory();
+        inventory.setItem(BACK_SLOT, createBack("open_class"));
+        int i = 0;
+        for (ClassType classType: ClassType.values()) {
+            inventory.setItem(i++, createSlot(Material.PAPER, classType.getName(), "change_" + classType.getName()));
+        }
+    }
+
+    public void classChange(ClassType classType) {
+        target.setClassType(classType);
+        launcher.sendMessage(Message.c("Class Modified!", NamedTextColor.GREEN));
+        if (target != launcher && target instanceof PlayerCustom playerCustom)
+            playerCustom.sendMessage(Message.c("Class Modified!", NamedTextColor.GREEN));
+        openClassChange();
     }
 
     public void openSpell() {
@@ -382,68 +422,32 @@ public class MenuCommand extends MenuHolder {
         int i = 0;
         for (ClassType classType: ClassType.values()) {
             if (classType == ClassType.BEGGAR || classType == ClassType.GOD) continue;
-            inventory.setItem(i, createSpellClass(classType));
-            i++;
+            inventory.setItem(i++, createSpellClass(classType));
         }
-        launcher.openInventory(inventory);
     }
 
     public void openSpell(ClassType classType) {
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("open_spell"));
-        Map<String, Spell>  spells = RpgCraft.getItemCustomRegistry().getSpells();
-        for (Spell spell: spells.values()) {
-            if (!spell.getType().getClassTypes().contains(classType)) continue;
-            inventory.setItem(getSlotSpell(spell.getRarity(), spell.getLevel()), createSpell(spell));
+        List<Spell>  spells = getSpellList(classType);
+        int         i = 0;
+        Spell       last = null;
+        for (Spell spell: spells) {
+            if (last != null && spell.getType() != last.getType()) i += (i % 9 != 0 ? 9 - i % 9 : 0);
+            inventory.setItem(i++, createSpell(spell));
+            last = spell;
         }
-        launcher.openInventory(inventory);
     }
 
-    private int getSlotSpell(Rarity rarity, int level) {
-        return switch (rarity) {
-            case POOR -> switch (level) {
-                case 10 -> 11;
-                case 15 -> 20;
-                case 20 -> 29;
-                case 25 -> 38;
-                default -> INVENTORY_SIZE - 1;
-            };
-            case COMMON -> switch (level) {
-                case 15 -> 12;
-                case 20 -> 21;
-                case 25 -> 30;
-                case 30 -> 39;
-                default -> INVENTORY_SIZE - 1;
-            };
-            case UNCOMMON -> switch (level) {
-                case 20 -> 13;
-                case 25 -> 22;
-                case 30 -> 31;
-                case 35 -> 40;
-                default -> INVENTORY_SIZE - 1;
-            };
-            case RARE -> switch (level) {
-                case 25 -> 14;
-                case 30 -> 23;
-                case 35 -> 32;
-                case 40 -> 41;
-                default -> INVENTORY_SIZE - 1;
-            };
-            case EPIC -> switch (level) {
-                case 30 -> 15;
-                case 35 -> 24;
-                case 40 -> 33;
-                case 45 -> 42;
-                default -> INVENTORY_SIZE - 1;
-            };
-            case LEGENDARY -> switch (level) {
-                case 35 -> 16;
-                case 40 -> 25;
-                case 45 -> 34;
-                case 50 -> 43;
-                default -> INVENTORY_SIZE - 1;
-            };
-        };
+    private List<Spell> getSpellList(ClassType classType) {
+        List<Spell> list = new ArrayList<>();
+        for (Spell spell: RpgCraft.getItemCustomRegistry().getSpells().values()) {
+            if (!spell.getType().getClassTypes().contains(classType)) continue;
+            list.add(spell);
+        }
+        list.sort(Comparator.comparing((Spell spell) -> spell.getType())
+            .thenComparing(spell -> spell.getRarity()));
+        return list;
     }
 
     public void openTeam() {
@@ -454,57 +458,36 @@ public class MenuCommand extends MenuHolder {
             inventory.setItem(1, createSlot(Material.PAPER, "Add Team", "add_team"));
             inventory.setItem(2, createSlot(Material.PAPER, "Delete Team", "delete_team"));
         }
-        launcher.openInventory(inventory);
     }
 
     public void openTeamAdd() {
-        new AnvilGUI.Builder()
-            .plugin(RpgCraft.instance())
-            .title("Menu Team Add")
-            .text("team")
-            .itemLeft(new ItemStack(Material.PAPER))
-            .onClick((slot, stateSnapshot) -> {
-                if (slot == AnvilGUI.Slot.INPUT_LEFT) {
-                    openTeam();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                else if (slot == AnvilGUI.Slot.OUTPUT) {
-                    String      text = stateSnapshot.getText().toLowerCase();
-                    TeamType    teamType = TeamType.fromString(text);
-                    if (teamType == null) return Collections.emptyList();
-                    target.addTeam(teamType);
-                    launcher.sendMessage(Message.c("Team Added!", NamedTextColor.GREEN));
-                    openTeam();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                return Collections.emptyList();
-            })
-        .open(launcher.getPlayer());
+        inventory.setItem(BACK_SLOT, createBack("open_team"));
+        int i = 0;
+        for (TeamType teamType: TeamType.values()) {
+            inventory.setItem(i++, createSlot(Material.PAPER, teamType.getName(), "add_" + teamType.getName()));
+        }
+    }
+
+    public void teamAdd(TeamType teamType) {
+        target.addTeam(teamType);
+        launcher.sendMessage(Message.c("Team Added!", NamedTextColor.GREEN));
+        if (target != launcher && target instanceof PlayerCustom playerCustom)
+            playerCustom.sendMessage(Message.c("Team Added!", NamedTextColor.GREEN));
     }
 
     public void openTeamDelete() {
-        new AnvilGUI.Builder()
-            .plugin(RpgCraft.instance())
-            .title("Menu Team Delete")
-            .text("team")
-            .itemLeft(new ItemStack(Material.PAPER))
-            .onClick((slot, stateSnapshot) -> {
-                if (slot == AnvilGUI.Slot.INPUT_LEFT) {
-                    openTeam();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                else if (slot == AnvilGUI.Slot.OUTPUT) {
-                    String  text = stateSnapshot.getText().toLowerCase();
-                    TeamType    teamType = TeamType.fromString(text);
-                    if (teamType == null) return Collections.emptyList();
-                    target.deleteTeam(teamType);
-                    launcher.sendMessage(Message.c("Team Deleted!", NamedTextColor.YELLOW));
-                    openTeam();
-                    return Collections.singletonList(AnvilGUI.ResponseAction.close());
-                }
-                return Collections.emptyList();
-            })
-        .open(launcher.getPlayer());
+        inventory.setItem(BACK_SLOT, createBack("open_team"));
+        int i = 0;
+        for (TeamType teamType: TeamType.values()) {
+            inventory.setItem(i++, createSlot(Material.PAPER, teamType.getName(), "delete_" + teamType.getName()));
+        }
+    }
+
+    public void teamDelete(TeamType teamType) {
+        target.deleteTeam(teamType);
+        launcher.sendMessage(Message.c("Team Deleted!", NamedTextColor.YELLOW));
+        if (target != launcher && target instanceof PlayerCustom playerCustom)
+            playerCustom.sendMessage(Message.c("Team Deleted!", NamedTextColor.YELLOW));
     }
 
     public void openItems() {
@@ -523,7 +506,6 @@ public class MenuCommand extends MenuHolder {
                 count -= INVENTORY_SIZE - 1;
             }
         }
-        launcher.openInventory(inventory);
     }
 
     private List<EquipableMaterial> getEquipableTypeList() {
@@ -555,7 +537,6 @@ public class MenuCommand extends MenuHolder {
             if (i == BACK_SLOT) break;
             inventory.setItem(i++, createEquipable(equipable));
         }
-        launcher.openInventory(inventory);
     }
 
     private List<Equipable<?>> getEquipablesList(EquipableMaterial equipableMaterial, int start) {
@@ -578,7 +559,6 @@ public class MenuCommand extends MenuHolder {
             String  name = potionType.getName();
             inventory.setItem(i++, createSlot(potionType.getMaterial(), Character.toUpperCase(name.charAt(0)) + name.substring(1).replaceAll("_", " "), "open_" + name));
         }
-        launcher.openInventory(inventory);
     }
 
     public void openPotions(PotionType potionType) {
@@ -589,7 +569,6 @@ public class MenuCommand extends MenuHolder {
         for (Potion potion: potions) {
             inventory.setItem(i++, createPotion(potion));
         }
-        launcher.openInventory(inventory);
     }
 
     private List<Potion> getPotionsList(PotionType potionType) {
@@ -610,7 +589,6 @@ public class MenuCommand extends MenuHolder {
         for (Food food: foods) {
             inventory.setItem(i++, createFood(food));
         }
-        launcher.openInventory(inventory);
     }
 
     private List<Food> getFoodsList() {
@@ -636,7 +614,6 @@ public class MenuCommand extends MenuHolder {
         inventory.setItem(11, createSlot(Material.MELON_SLICE, "Spawn", "spawn_npc"));
         inventory.setItem(12, createSlot(Material.RED_BED, "Despawn", "despawn_npc"));
         inventory.setItem(13, createSlot(Material.DARK_OAK_DOOR, "Delete", "delete_npc"));
-        launcher.openInventory(inventory);
     }
 
     public void openCreateNPC() {
@@ -648,6 +625,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -667,6 +645,7 @@ public class MenuCommand extends MenuHolder {
                     TemplateType    templateType = TemplateType.fromString(text[0]);
                     RpgCraft.getNPCBuilderRegistry().createMyNPC(launcher, templateType, levelMin, levelMax);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -683,6 +662,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -697,6 +677,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = String.join(" ", Arrays.copyOfRange(text, 1, text.length));
                     RpgCraft.getNPCBuilderRegistry().changeLevel(launcher, npcName, level);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -713,6 +694,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -727,6 +709,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = String.join(" ", Arrays.copyOfRange(text, 1, text.length));
                     RpgCraft.getNPCBuilderRegistry().changePatrolRange(launcher, npcName, patrolRange);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -743,6 +726,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -757,6 +741,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = String.join(" ", Arrays.copyOfRange(text, 1, text.length));
                     RpgCraft.getNPCBuilderRegistry().changeAggroRange(launcher, npcName, aggroRange);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -773,6 +758,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -787,6 +773,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = String.join(" ", Arrays.copyOfRange(text, 1, text.length));
                     RpgCraft.getNPCBuilderRegistry().changeChaseRange(launcher, npcName, chaseRange);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -803,6 +790,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -811,6 +799,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = String.join(" ", Arrays.copyOfRange(text, 1, text.length));
                     RpgCraft.getNPCBuilderRegistry().changeBoss(launcher, npcName, isBoss);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -827,6 +816,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -834,6 +824,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = text;
                     RpgCraft.getNPCBuilderRegistry().changeEquipement(launcher, npcName, launcher.getInventory().getItemInMainHand());
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -850,6 +841,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -859,6 +851,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = String.join(" ", Arrays.copyOfRange(text, 2, text.length));
                     RpgCraft.getNPCBuilderRegistry().changeTeam(launcher, npcName, action, teamType);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -875,10 +868,12 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -895,6 +890,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -903,6 +899,7 @@ public class MenuCommand extends MenuHolder {
                     String          npcName = String.join(" ", Arrays.copyOfRange(text, 1, text.length));
                     RpgCraft.getNPCBuilderRegistry().changeTemplate(launcher, npcName, templateType);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -919,6 +916,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -926,6 +924,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = text;
                     RpgCraft.getNPCBuilderRegistry().spawn(launcher, npcName);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -942,6 +941,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -949,6 +949,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = text;
                     RpgCraft.getNPCBuilderRegistry().despawn(launcher, npcName);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -965,6 +966,7 @@ public class MenuCommand extends MenuHolder {
             .onClick((slot, stateSnapshot) -> {
                 if (slot == AnvilGUI.Slot.INPUT_LEFT) {
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 else if (slot == AnvilGUI.Slot.OUTPUT) {
@@ -972,6 +974,7 @@ public class MenuCommand extends MenuHolder {
                     String      npcName = text;
                     RpgCraft.getNPCBuilderRegistry().delete(launcher, npcName);
                     openNPC();
+                    openInventory();
                     return Collections.singletonList(AnvilGUI.ResponseAction.close());
                 }
                 return Collections.emptyList();
@@ -1060,6 +1063,10 @@ public class MenuCommand extends MenuHolder {
             meta.lore(Lore.classType(target.getClassType()));
         item.setItemMeta(meta);
         return item;
+    }
+
+    private void openInventory() {
+        launcher.openInventory(inventory);
     }
 
     public boolean isPresent() {

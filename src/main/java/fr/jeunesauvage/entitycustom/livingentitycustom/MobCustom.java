@@ -469,19 +469,21 @@ public final class MobCustom implements LivingEntityCustom {
     }
 
     @Override
-    public boolean isFriend(LivingEntityCustom livingEntityCustom) {
-        if (livingEntityCustom == this) return true;
+    public boolean isFriend(LivingEntityCustom l) {
+        if (l == this) return true;
         // mark
-        if (livingEntityCustom instanceof PlayerCustom playerCustom && playerCustom.isMarked()) return false;
-        if ((ownerUUID != null && ownerUUID.equals(livingEntityCustom.getUUID())) || (petUUID != null && petUUID.equals(livingEntityCustom.getUUID()))) return true;
+        if (l instanceof PlayerCustom playerCustom && playerCustom.isMarked()) return false;
+        if ((ownerUUID != null && ownerUUID.equals(l.getUUID())) || (petUUID != null && petUUID.equals(l.getUUID()))) return true;
         for (TeamType teamType: teams) {
-            if (livingEntityCustom.getTeams().contains(teamType)) return true;
+            if (l.getTeams().contains(teamType)) return true;
         }
         if (group == null) return false;
-        if (group.in(livingEntityCustom)) return true;
+        if (group.in(l)) return true;
         EntityCustomRegistry    entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
-        if (ownerUUID != null && group.in(entityCustomRegistry.getLivingEntityCustom(livingEntityCustom.getOwner()))) return true;
-        if (petUUID != null && group.in(entityCustomRegistry.getLivingEntityCustom(livingEntityCustom.getPet()))) return true;
+        if (l.isPet() && entityCustomRegistry.getLivingEntityCustom(l.getOwner()).isGrouped(this)) return true;
+        if (l.isOwner() && entityCustomRegistry.getLivingEntityCustom(l.getPet()).isGrouped(this)) return true;
+        if (isPet() && entityCustomRegistry.getLivingEntityCustom(getOwner()).isGrouped(this)) return true;
+        if (isOwner() && entityCustomRegistry.getLivingEntityCustom(getPet()).isGrouped(this)) return true;
         return false;
     }
 

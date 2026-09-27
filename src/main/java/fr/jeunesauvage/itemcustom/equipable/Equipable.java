@@ -110,6 +110,18 @@ public abstract class Equipable<T extends EquipableType> extends ItemCustom<T> {
         return Component.translatable("item.rpgcraft." + name);
 	}
 
+	public static boolean isSameItem(ItemStack a, ItemStack b) {
+	    if (a == null || b == null) return false;
+	    if (a.getType() != b.getType()) return false;
+	    ItemMeta	metaA = a.getItemMeta();
+	    ItemMeta	metaB = b.getItemMeta();
+	    if (metaA == null && metaB == null) return true;
+	    if (metaA == null || metaB == null) return false;
+	    if (metaA instanceof Damageable) ((Damageable)metaA).setDamage(0);
+	    if (metaB instanceof Damageable) ((Damageable)metaB).setDamage(0);
+	    return metaA.equals(metaB);
+	}
+
 	public static double getDamagePercent(ItemStack equipable) {
 		ItemMeta	meta = equipable.getItemMeta();
 	    if (!(meta instanceof Damageable metaDamageable)) return 0;

@@ -71,10 +71,9 @@ public class FightAI {
 		this.nextSpellRanged = 0;
 		this.nextSpellRangedBoss = 0;
 		this.quote = false;
-		this.nextStuckRate = 2;
+		this.nextStuckRate = 6;
 		this.nextStuck = 0;
 		this.lastLocation = npc.getStoredLocation();
-		this.lastLocation.setY(0);
 		Waypoints			waypoints = npc.getOrAddTrait(Waypoints.class);
 		WaypointProvider	provider = waypoints.getCurrentProvider();
 		if (provider instanceof LinearWaypointProvider linear) {
@@ -133,10 +132,7 @@ public class FightAI {
     		}
 		}
 		if (target == null && targetHide == null) {
-			if (npcCustom.isPet()) {
-				LivingEntityCustom	owner = data.getOwner();
-				setTarget(npcCustom, npc.getNavigator(), owner);
-			}
+			if (npcCustom.isPet()) setTarget(npcCustom, data.getOwner());
 			else {
 				World	world = npcCustom.getWorld();
 				if (world == null) return;
@@ -196,12 +192,13 @@ public class FightAI {
 		Navigator			navigator = npc.getNavigator();
 		NavigatorParameters	parameters = navigator.getDefaultParameters();
 		Location			closestWaypoint = findClosestWaypoint(npcCustom);
+		isFreeze(npcCustom);
 		// no target
 		if (target == null && targetHide == null) {
 			if (quote) quote = false;
 			// heal
 			npcCustom.heal(data.getHealth() / 10);
-			if (setTarget(npcCustom, navigator, closestWaypoint)) return 0;
+			if (setTarget(npcCustom, closestWaypoint)) return 0;
 			if (!inChase) return 0;
 			// first no chase
 			inChase = false;
@@ -212,11 +209,9 @@ public class FightAI {
 			lastTargetLocation = null;
 			return 0;
 		}
-		isFreeze(npcCustom);
 		// npc too far from waypoints (back to waypoints and full life)
 		if (closestWaypoint != null && npcCustom.getLocation().distanceSquared(closestWaypoint) > data.getChaseRangeSquared()) {
 			parameters.speedModifier(data.getSpeedCombat());
-			setTarget(npcCustom, navigator, closestWaypoint);
 			inChase = false;
 			target = null;
 			lastTarget = null;
@@ -306,7 +301,7 @@ public class FightAI {
 			else {
 				if (parameters.speedModifier() != data.getSpeedCombat())
 					parameters.speedModifier(data.getSpeedCombat());
-				setTarget(npcCustom, navigator, target);
+				setTarget(npcCustom, target);
 				lastTarget = target;
 				lastTargetLocation = target.getLocation();
 			}
@@ -317,13 +312,13 @@ public class FightAI {
 			// can't find target ()
 			double	range = 2 + npcCustom.getWidth();
 			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < range * range) {
-				setTarget(npcCustom, navigator, closestWaypoint);
+				setTarget(npcCustom, closestWaypoint);
 				lastTarget = null;
 				lastTargetLocation = null;
 				return 0;
 			}
 			// go to last position of target
-			setTarget(npcCustom, navigator, lastTargetLocation);
+			setTarget(npcCustom, lastTargetLocation);
 		}
 		return 0;
 	}
@@ -337,40 +332,24 @@ public class FightAI {
 	}
 	*/
 
-	private boolean setTarget(NPCCustom npcCustom, Navigator navigator, LivingEntityCustom target) {
-		if (target == null) return false;
-	    Location	npcLoc = npcCustom.getLocation();
-	    Location	targetLoc = target.getLocation();
-		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
-		double		distanceSquared = direction.lengthSquared();
-	    if (distanceSquared < 3 * 3) {
-			navigator.cancelNavigation();
-			return false;
-		}
-		else if (distanceSquared > 5 * 5) {
-	    	direction.normalize().multiply(5);
-			navigator.setTarget(npcLoc.clone().add(direction));
-		}
-		else
-	    	navigator.setTarget(target.getLocation());
-		return true;
+	public boolean setTarget(NPCCustom npcCustom, LivingEntityCustom target) {
+	    return setTarget(npcCustom, target.getLocation());
 	}
 
-	private boolean setTarget(NPCCustom npcCustom, Navigator navigator, Location targetLoc) {
+	public boolean setTarget(NPCCustom npcCustom, Location targetLoc) {
 		if (target == null) return false;
+		Navigator	navigator = npc.getNavigator();
 	    Location	npcLoc = npcCustom.getLocation();
 		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
 		double		distanceSquared = direction.lengthSquared();
-	    if (distanceSquared < 3 * 3) {
+	    if (distanceSquared < 2 * 2) {
 			navigator.cancelNavigation();
 			return false;
 		}
-		else if (distanceSquared > 5 * 5) {
-	    	direction.normalize().multiply(5);
+		else {
+	    	direction.normalize().multiply(3);
 			navigator.setTarget(npcLoc.clone().add(direction));
 		}
-		else
-	    	navigator.setTarget(target.getLocation());
 		return true;
 	}
 
@@ -384,14 +363,19 @@ public class FightAI {
 
 	// check if npc is stuck
 	private void isFreeze(NPCCustom npcCustom) {
-		Location	start = npcCustom.getEyeLocation().clone();
-		start.setY(0);
 		int			now = Bukkit.getCurrentTick();
 		if (now >= nextStuck) {
-			if (start.equals(lastLocation)) {
-				npcCustom.teleport(npcCustom.getRespawn());
+			Location	l = npcCustom.getEyeLocation();
+			if (l.getBlockX() == lastLocation.getBlockX() && l.getBlockY() == lastLocation.getBlockY() && l.getBlockZ() == lastLocation.getBlockZ()) {
+				Location	respawn = npcCustom.getRespawn();
+				if (respawn != null && l.distanceSquared(respawn) >= 2) {
+					respawn = respawn.clone();
+					respawn.setYaw(l.getYaw());
+					respawn.setPitch(l.getPitch());
+					npcCustom.teleport(respawn);
+				}
 			}
-			lastLocation = start;
+			lastLocation = l;
 			nextStuck = now + nextStuckRate * 20;
 		}
 	}

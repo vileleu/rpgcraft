@@ -35,11 +35,11 @@ public class MetamorphRegistry {
 	private final Map<UUID, Map<StatType, Integer>>			statsDracthyr = new HashMap<>();
 	private final Map<UUID, BukkitTask>						tasks = new HashMap<>();
 
-	public void addDracthyr(LivingEntityCustom launcher, Rarity rarity) {
+	public void addDracthyr(LivingEntityCustom launcher, Rarity rarity, FormType formType) {
 		if (launcher.getType() != EntityType.PLAYER) return;
 		if (isDracthyr(launcher)) return;
 		UUID	uuid = launcher.getUUID();
-		launcher.setMetamorph(FormType.DRACTHYR_BLACK);
+		launcher.setMetamorph(formType);
 		// stats
 		Map<StatType, Integer>	map = statsDracthyr.computeIfAbsent(uuid, id -> new HashMap<>());
 		int						agility = rarity.getNumber() * 10;
@@ -75,8 +75,8 @@ public class MetamorphRegistry {
 
 	public void equipDracthyr(LivingEntityCustom launcher) {
 		ItemCustomRegistry	itemCustomRegistry = RpgCraft.getItemCustomRegistry();
-		Armor				wings = itemCustomRegistry.getArmor("ender_dragon_wings");
-		Weapon				claw = itemCustomRegistry.getWeapon("claw_lightning");
+		Armor				wings = (launcher.getMetamorph() == FormType.DRACTHYR_BLACK ? itemCustomRegistry.getArmor("ender_dragon_wings") : itemCustomRegistry.getArmor("splendid_elytra"));
+		Weapon				claw = (launcher.getMetamorph() == FormType.DRACTHYR_BLACK ? itemCustomRegistry.getWeapon("claw_lightning") : itemCustomRegistry.getWeapon("claw_fire"));
 		ItemStack			chest = null;
 		ItemStack			hand = null;
 		ItemStack			offhand = null;
@@ -100,6 +100,7 @@ public class MetamorphRegistry {
 			equipment.setItemInMainHand(claw.getItemClone());
 			equipment.setItemInOffHand(claw.getItemClone());
 		}
+		if (!launcher.getSavedEquipment().isEmpty()) return;
 		launcher.saveEquipment(SaveEquipment.CHEST, (chest != null ? chest : new ItemStack(Material.AIR)));
 		launcher.saveEquipment(SaveEquipment.HAND, (hand != null ? hand : new ItemStack(Material.AIR)));
 		launcher.saveEquipment(SaveEquipment.OFFHAND, (offhand != null ? offhand : new ItemStack(Material.AIR)));
@@ -115,6 +116,9 @@ public class MetamorphRegistry {
 		launcher.deleteSavedEquipment();
 		if (launcher instanceof NPCCustom npcCustom) {
 			Equipment	equipment = npcCustom.getNPC().getOrAddTrait(Equipment.class);
+			equipment.set(EquipmentSlot.CHESTPLATE, chest);
+			equipment.set(EquipmentSlot.HAND, hand);
+			equipment.set(EquipmentSlot.OFF_HAND, offhand);
 			Bukkit.getScheduler().runTaskLater(RpgCraft.instance(), () -> {
 				equipment.set(EquipmentSlot.CHESTPLATE, chest);
 				equipment.set(EquipmentSlot.HAND, hand);
@@ -131,7 +135,7 @@ public class MetamorphRegistry {
 
 	public void removeDracthyr(LivingEntityCustom launcher) {
 		if (launcher.getType() != EntityType.PLAYER) return;
-		if (launcher.getMetamorph() != FormType.DRACTHYR_BLACK) return;
+		if (launcher.getMetamorph() == FormType.UNKNOWN) return;
 		UUID					uuid = launcher.getUUID();
 		// stats
 		Map<StatType, Integer>	map = statsDracthyr.get(uuid);
@@ -153,7 +157,7 @@ public class MetamorphRegistry {
 	}
 
 	public boolean isDracthyr(LivingEntityCustom launcher) {
-		return launcher.getMetamorph() == FormType.DRACTHYR_BLACK;
+		return launcher.getMetamorph() != FormType.UNKNOWN;
 	}
 
 	public void clean(LivingEntityCustom launcher) {
