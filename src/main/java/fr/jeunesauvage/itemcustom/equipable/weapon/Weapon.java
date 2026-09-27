@@ -9,6 +9,7 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
+import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.itembuilder.EquipableStat;
 import fr.jeunesauvage.itemcustom.usable.Usable;

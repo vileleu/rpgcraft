@@ -1,7 +1,10 @@
 package fr.jeunesauvage.itemcustom;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import org.bukkit.inventory.ItemStack;
 
@@ -16,6 +19,8 @@ import fr.jeunesauvage.itemcustom.spell.Spell;
 import fr.jeunesauvage.itemcustom.usable.Usable;
 
 public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
+	public static final Set<WeaponType>			NON_DROPPABLE_WEAPONS = Set.of(WeaponType.HAND, WeaponType.CLAW, WeaponType.SPELLBOOK, WeaponType.UNKNOWN);
+	public static final Set<ArmorType>			NON_DROPPABLE_ARMORS = Set.of(ArmorType.ELYTRA, ArmorType.UNKNOWN);
 	private final Map<String, ItemCustom<?>>	itemCustoms;
 	private final Map<String, Equipable<?>>		equipables;
 	private final Map<String, Armor>			armors;
@@ -60,8 +65,26 @@ public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
         return armors;
     }
 
+    public Map<String, Armor> getArmorsDroppable() {
+		Map<String, Armor>	armorsDroppable = new HashMap<>();
+		for (Entry<String, Armor> e: armors.entrySet()) {
+			if (NON_DROPPABLE_ARMORS.contains(e.getValue().getType())) continue;
+			armorsDroppable.put(e.getKey(), e.getValue());
+		}
+        return armorsDroppable;
+    }
+
     public Map<String, Weapon> getWeapons() {
         return weapons;
+    }
+
+    public Map<String, Weapon> getWeaponsDroppable() {
+		Map<String, Weapon>	weaponsDroppable = new HashMap<>();
+		for (Entry<String, Weapon> e: weapons.entrySet()) {
+			if (NON_DROPPABLE_WEAPONS.contains(e.getValue().getType())) continue;
+			weaponsDroppable.put(e.getKey(), e.getValue());
+		}
+        return weaponsDroppable;
     }
 
     public Map<String, Potion> getPotions() {

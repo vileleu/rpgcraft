@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -18,37 +17,27 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Gold;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolder;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
+import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.sound.SoundManager;
 import net.kyori.adventure.text.Component;
 
-public class MenuSell implements MenuHolder {
+public class MenuSell extends MenuHolder {
     private static final int        SELL_SLOT = 8;
-    private final PlayerCustom      launcher;
-    private Inventory               inventory = null;
     private final Gold              gold = new Gold();
     private final Gold              lastGold = new Gold();
 
     public MenuSell(PlayerCustom launcher) {
-        this.launcher = launcher;
+        super(launcher);
+        this.inventory = Bukkit.createInventory(this, INVENTORY_SIZE, Component.text("Menu Potion"));
         open();
     }
 
     @Override
     public void open() {
-        inventory = Bukkit.createInventory(this, BIG_SLOT, Component.text("Menu Sell"));
+        clearInventory();
         inventory.setItem(BACK_SLOT, createBack("close"));
         inventory.setItem(SELL_SLOT, createSellSlot(Material.GOLD_INGOT, "Sell", "sell"));
         launcher.openInventory(inventory);
-    }
-
-    @Override
-    public void close() {
-        launcher.closeInventory();
-    }
-
-    @Override
-    public Inventory getInventory() {
-        return inventory;
     }
 
     @Override
@@ -57,7 +46,7 @@ public class MenuSell implements MenuHolder {
         ItemStack   cursor = e.getCursor();
         String      action = null;
         if ((current == null || current.getType() == Material.AIR) && (cursor == null || cursor.getType() == Material.AIR)) return;
-        if (current != null && current.getType() != Material.AIR) action = MenuHolder.getAction(current);
+        if (current != null && current.getType() != Material.AIR) action = getAction(current);
         Player          p = (Player)e.getWhoClicked();
         PlayerCustom    playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
         if (playerCustom == null) return;
@@ -78,16 +67,6 @@ public class MenuSell implements MenuHolder {
     public void onClose() {
         giveBackItems();
         RpgCraft.getEntityCustomRegistry().deleteMenu(this);
-    }
-
-    @Override 
-    public void giveBackItems() {
-        for (int i = 0; i < BIG_SLOT; i++) {
-            if (i == BACK_SLOT || i == SELL_SLOT) continue;
-            ItemStack   item = inventory.getItem(i);
-            if (item == null || item.getType() == Material.AIR) continue;
-            launcher.addItem(item);
-        }
     }
 
     public void sell() {
@@ -113,19 +92,31 @@ public class MenuSell implements MenuHolder {
         Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> {
             gold.reset();
             ItemCustomRegistry  itemCustomRegistry = RpgCraft.getItemCustomRegistry();
-            for (int i = 0; i < BIG_SLOT; i++) {
+            for (int i = 0; i < INVENTORY_SIZE; i++) {
                 if (i == BACK_SLOT || i == SELL_SLOT) continue;
                 ItemStack   item = inventory.getItem(i);
                 if (item == null || item.getType() == Material.AIR) continue;
                 ItemCustom<?>   itemCustom = itemCustomRegistry.getItemCustom(item);
                 if (itemCustom == null) continue;
-                switch (itemCustom.getRarity()) {
-                    case POOR -> gold.increaseNuggets(3);
-                    case COMMON -> gold.increaseNuggets(6);
-                    case UNCOMMON -> gold.increaseIngots(1);
-                    case RARE -> gold.increaseIngots(4);
-                    case EPIC -> gold.increaseIngots(10);
-                    case LEGENDARY -> gold.increaseIngots(50);
+                if (itemCustom instanceof Equipable) {
+                    switch (itemCustom.getRarity()) {
+                        case POOR -> gold.increaseNuggets(2);
+                        case COMMON -> gold.increaseNuggets(5);
+                        case UNCOMMON -> gold.increaseIngots(1);
+                        case RARE -> gold.increaseIngots(4);
+                        case EPIC -> gold.increaseIngots(10);
+                        case LEGENDARY -> gold.increaseIngots(50);
+                    }
+                }
+                else {
+                    switch (itemCustom.getRarity()) {
+                        case POOR -> gold.increaseNuggets(1);
+                        case COMMON -> gold.increaseNuggets(2);
+                        case UNCOMMON -> gold.increaseNuggets(4);
+                        case RARE -> gold.increaseIngots(1);
+                        case EPIC -> gold.increaseIngots(2);
+                        case LEGENDARY -> gold.increaseIngots(5);
+                    }
                 }
             }
             if (!gold.equals(lastGold)) {
@@ -154,19 +145,9 @@ public class MenuSell implements MenuHolder {
         return item;
     }
 
-    private ItemStack createBack(String action) {
-        ItemStack				item = new ItemStack(Material.ARROW);
-        ItemMeta				meta = item.getItemMeta();
-		PersistentDataContainer	pdc = meta.getPersistentDataContainer();
-        meta.displayName(Message.c(Component.text("Back")));
-        Data.setString(pdc, KEY_MENU, action);
-        item.setItemMeta(meta);
-        return item;
-    }
-
     private void deleteItems() {
         ItemCustomRegistry  itemCustomRegistry = RpgCraft.getItemCustomRegistry();
-        for (int i = 0; i < BIG_SLOT; i++) {
+        for (int i = 0; i < INVENTORY_SIZE; i++) {
             if (i == BACK_SLOT || i == SELL_SLOT) continue;
             ItemStack   item = inventory.getItem(i);
             if (item == null || item.getType() == Material.AIR) continue;

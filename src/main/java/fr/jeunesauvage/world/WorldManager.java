@@ -58,7 +58,7 @@ public class WorldManager implements Listener {
 	    Material.LIME_STAINED_GLASS_PANE
 	);
 	private static final Set<String> BUILDERS = Set.of(
-	    "JeuneSauvage"
+	    "JeuneSauvage", "casentluc", "guipogrosscouye"
 	);
 
 	public WorldManager() {

@@ -59,4 +59,12 @@ public enum Rarity {
 		}
 		return POOR;
     }
+
+    public static Rarity fromString(String s) {
+		for (Rarity type: Rarity.values()) {
+			if (type.getName().equals(s))
+        		return type;
+		}
+		return POOR;
+    }
 }

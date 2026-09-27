@@ -11,6 +11,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomType;
 import fr.jeunesauvage.itemcustom.Rarity;
+import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -38,6 +39,12 @@ public class Lore {
 		TextColor	colorName = NamedTextColor.GRAY;
 		TextColor	colorValue = NamedTextColor.WHITE;
 		return Message.c(Component.translatable("type.rpgcraft").color(colorName).append(Component.text(" ")).append(itemCustomType.toComponent().color(colorValue)));
+	}
+
+	public static Component equipableMaterial(EquipableMaterial equipableMaterial) {
+		TextColor	colorName = NamedTextColor.GRAY;
+		TextColor	colorValue = NamedTextColor.WHITE;
+		return Message.c(Component.translatable("type.rpgcraft").color(colorName).append(Component.text(" ")).append(equipableMaterial.toComponent().color(colorValue)));
 	}
 
 	public static Component rarity(Rarity rarity) {

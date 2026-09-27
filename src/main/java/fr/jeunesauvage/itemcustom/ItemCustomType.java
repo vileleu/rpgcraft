@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import net.kyori.adventure.text.Component;
 
-public interface ItemCustomType {
+public sealed interface ItemCustomType permits EquipableType, SpellType, PotionType, FoodType {
 	String				getName();
 	Set<ClassType>		getClassTypes();
 	Material			getMaterial();

@@ -13,6 +13,7 @@ public enum TeamType {
 	DESERT("desert"),
 	BLACK("black"),
 	FOREST("forest"),
+	ICE("ice"),
 	NECRO("necro"),
 	SPIDER("spider"),
 	ELEMENTAL("elemental"),

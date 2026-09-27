@@ -1,4 +1,4 @@
-package fr.jeunesauvage.itemcustom.potion;
+package fr.jeunesauvage.itemcustom;
 
 import java.util.Set;
 
@@ -6,9 +6,6 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
-import fr.jeunesauvage.itemcustom.ItemCustomType;
-import fr.jeunesauvage.itemcustom.Rarity;
 import net.kyori.adventure.text.Component;
 
 public enum PotionType implements ItemCustomType {

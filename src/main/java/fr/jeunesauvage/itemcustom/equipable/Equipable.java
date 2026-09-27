@@ -22,14 +22,13 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.itemcustom.EquipableType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
-import fr.jeunesauvage.itemcustom.ItemCustomType;
-import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.itembuilder.EquipableStat;
 import net.kyori.adventure.text.Component;
 
-public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> {
+public abstract class Equipable<T extends EquipableType> extends ItemCustom<T> {
 	protected Map<StatPrimary, Integer>		statsPrimary = new HashMap<>();
 	protected Map<StatSecondary, Integer>	statsSecondary = new HashMap<>();
 
@@ -71,8 +70,8 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 					valueSecondary--;
 				valueSecondary *= rarity.getNumber();
 				if (slot == StatSecondary.PHYSICAL_ARMOR || slot == StatSecondary.SPELL_ARMOR) {
-					if (type instanceof ArmorType armorType) {
-						switch (armorType.getArmorMaterial()) {
+					if (getEquipableMaterial() instanceof ArmorMaterial armorMaterial) {
+						switch (armorMaterial) {
 							case LEATHER -> valueSecondary *= 2;
 							case MAIL -> valueSecondary *= 3;
 							case PLATE -> valueSecondary *= 5;
@@ -90,6 +89,12 @@ public abstract class Equipable<T extends ItemCustomType> extends ItemCustom<T> 
 		meta.lore(lore);
         meta.setCustomModelData(customModelData);
         item.setItemMeta(meta);
+	}
+
+	public EquipableMaterial getEquipableMaterial() {
+		return switch (type) {
+			case EquipableType equipableType -> equipableType.getEquipableMaterial();
+		};
 	}
 
 	public Map<StatPrimary, Integer> getStatsPrimary() {

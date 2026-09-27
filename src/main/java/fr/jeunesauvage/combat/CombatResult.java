@@ -2,7 +2,7 @@ package fr.jeunesauvage.combat;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.itemcustom.WeaponType;
 
 public class CombatResult {
 	CombatDamage	combatDamage;

@@ -2,7 +2,7 @@ package fr.jeunesauvage.combat;
 
 import java.util.Set;
 
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
+import fr.jeunesauvage.itemcustom.WeaponType;
 
 public enum CombatType {
 	CLOSE("close", Set.of(WeaponType.CLAW, WeaponType.AXE, WeaponType.HAND, WeaponType.HOE, WeaponType.MACE, WeaponType.PICKAXE, WeaponType.SHOVEL, WeaponType.SWORD, WeaponType.TRIDENT)),

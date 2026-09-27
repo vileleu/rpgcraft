@@ -32,6 +32,10 @@ public class EntityCustomManager implements Listener {
         rpgCraft.getCommand("menu").setExecutor(entityCustomCommand);
         rpgCraft.getCommand("menusell").setExecutor(entityCustomCommand);
         rpgCraft.getCommand("menurepair").setExecutor(entityCustomCommand);
+        rpgCraft.getCommand("menubuyweapon").setExecutor(entityCustomCommand);
+        rpgCraft.getCommand("menubuyarmor").setExecutor(entityCustomCommand);
+        rpgCraft.getCommand("menubuypotion").setExecutor(entityCustomCommand);
+        rpgCraft.getCommand("menubuyfood").setExecutor(entityCustomCommand);
         // group commands
         GroupCommand	groupCommand = new GroupCommand();
         rpgCraft.getCommand("group").setExecutor(groupCommand);

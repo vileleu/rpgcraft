@@ -41,7 +41,7 @@ public class ArmorManager implements Listener {
 	private boolean canWear(PlayerCustom playerCustom, ItemStack item) {
 		Armor	armor = RpgCraft.getItemCustomRegistry().getArmor(item);
 		if (armor == null) return true;
-		Set<ClassType>	classTypes = armor.getType().getArmorMaterial().getClassTypes();
+		Set<ClassType>	classTypes = armor.getType().getEquipableMaterial().getClassTypes();
 		ClassType		classPlayer = playerCustom.getClassType();
 		if (classTypes.contains(ClassType.BEGGAR) || classPlayer == ClassType.GOD) return true;
 		return classTypes.contains(classPlayer);

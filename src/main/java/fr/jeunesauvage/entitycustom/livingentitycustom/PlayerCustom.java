@@ -2,6 +2,7 @@ package fr.jeunesauvage.entitycustom.livingentitycustom;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -58,6 +59,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.bossbar.BossBarData;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.bossbar.TargetData;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.cooldown.Cooldown;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Gold;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.scoreboardcustom.ScoreboardCustom;
@@ -85,6 +87,7 @@ import net.skinsrestorer.api.storage.SkinStorage;
 
 public final class PlayerCustom implements LivingEntityCustom {
     private static final NamespacedKey              KEY_MARK = new NamespacedKey(RpgCraft.name(), "mark");
+    private static final int                        TIME_MARK = 60;
 	public static final double	                    HEALTHBYLEVEL_DEFAULT = 5;
 	public static final double	                    RANGETARGET_DEFAULT = 60; // blocks
 	public static final long	                    TIMETARGET_DEFAULT = 200; // ticks
@@ -238,10 +241,10 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     public void addMark() {
         mark.cancel();
-        mark.setData(System.currentTimeMillis() + (60 * 1000l));
+        mark.setData(System.currentTimeMillis() + (TIME_MARK * 1000l));
         mark.setTask(new BukkitRunnable() {
 		        int     seconds = 0;
-			    int     secondsMax = 60;
+			    int     secondsMax = TIME_MARK;
                 long    end = mark.getData();
 		        @Override
 		        public void run() {
@@ -305,8 +308,90 @@ public final class PlayerCustom implements LivingEntityCustom {
     public void addItem(ItemStack item) {
         Map<Integer, ItemStack> leftover = player.getInventory().addItem(item);
         for (ItemStack drop : leftover.values()) {
-            player.getWorld().dropItemNaturally(player.getLocation(), drop);
+            getWorld().dropItemNaturally(getEyeLocation(), drop);
         }
+    }
+
+    public boolean takeGoldInInventory(Gold price) {
+        Gold                        goldInInventory = new Gold();
+        Set<Integer>                setIngots = new HashSet<>();
+        Set<Integer>                setNuggets = new HashSet<>();
+        PlayerInventory             inv = getInventory();
+        ItemStack[]                 contents = inv.getContents();
+        ItemStack                   item = null;
+        // all inventory
+        for (int i = 0; i < contents.length; i++) {
+            item = contents[i];
+            if (item == null) continue;
+            else if (item.getType() == Material.GOLD_INGOT) {
+                int amount = item.getAmount();
+                setIngots.add(i);
+                goldInInventory.increaseIngots(amount);
+            }
+            else if (item.getType() == Material.GOLD_NUGGET) {
+                int amount = item.getAmount();
+                setNuggets.add(i);
+                goldInInventory.increaseNuggets(amount);
+            }
+        }
+        // offhand
+        item = inv.getItemInOffHand();
+        if (item != null) {
+            if (item.getType() == Material.GOLD_INGOT) {
+                int amount = item.getAmount();
+                setIngots.add(40);
+                goldInInventory.increaseIngots(amount);
+            }
+            else if (item.getType() == Material.GOLD_NUGGET) {
+                int amount = item.getAmount();
+                setNuggets.add(40);
+                goldInInventory.increaseNuggets(amount);
+            }
+        }
+        if (!goldInInventory.isHigherOrEqual(price)) return false;
+        price.convertInNuggets();
+        Iterator<Integer>   it = setNuggets.iterator();
+        while (it.hasNext()) {
+            if (price.isEmpty()) break;
+            int i = it.next();
+            item = inv.getItem(i);
+            if (item == null) continue;
+            int decreaseNuggets = Math.min(price.getNuggets(), item.getAmount());
+            price.decreaseNuggets(decreaseNuggets);
+            goldInInventory.decreaseNuggets(decreaseNuggets);
+            int newAmount = item.getAmount() - decreaseNuggets;
+            item.setAmount(newAmount);
+            if (newAmount <= 0) {
+                inv.setItem(i, item);
+                it.remove();
+            }
+        }
+        int toAdd = 0;
+        it = setIngots.iterator();
+        while (it.hasNext()) {
+            toAdd = 0;
+            if (price.isEmpty()) break;
+            int i = it.next();
+            item = inv.getItem(i);
+            if (item == null) continue;
+            int newPriceNuggets = price.getNuggets();
+            int left = newPriceNuggets % 9;
+            if (left != 0) {
+                toAdd = 9 - left;
+                newPriceNuggets += toAdd;
+            }
+            int decreaseIngots = Math.min(newPriceNuggets / 9, item.getAmount());
+            price.decreaseNuggets(decreaseIngots * 9);
+            goldInInventory.decreaseIngots(decreaseIngots);
+            int newAmount = item.getAmount() - decreaseIngots;
+            item.setAmount(newAmount);
+            if (newAmount <= 0) {
+                inv.setItem(i, item);
+                it.remove();
+            }
+        }
+        if (toAdd > 0) addItem(new ItemStack(Material.GOLD_NUGGET, toAdd));
+        return true;
     }
 
     public void showBossBar(BossBar bossBar) {

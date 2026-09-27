@@ -30,6 +30,6 @@ public class ParseAction {
     }
 
     public int getStart() {
-        return number * (MenuHolder.BIG_SLOT - 1);
+        return number * (MenuHolder.INVENTORY_SIZE - 1);
     }
 }

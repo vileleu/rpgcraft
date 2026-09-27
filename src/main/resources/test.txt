@@ -35,18 +35,12 @@ EyeOfEnder
 TODO:
 - NPC:
  - necromancer spell (spawn skeletons + ...)
- - menu food
- - menu consumable
- - menu repair/sell
- - skins (mercenary orc)
- - mannequin
+ - ice_lord spell (launch ice sword + spawn small ice_elemental + freeze all nearby enemies entity)
+ - skins (... + quotes for child orc)
+ - delete ItemCustomCategory (useless)
 - WORLD:
   - player can break mineral block
 - QUESTS:
-
-- TESTS:
- - stealth
-
 
 "Default"
 "Tauren"

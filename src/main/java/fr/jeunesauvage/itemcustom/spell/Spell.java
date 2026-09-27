@@ -27,6 +27,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.Rarity;
+import fr.jeunesauvage.itemcustom.SpellType;
 import fr.jeunesauvage.itemcustom.usable.Usable;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;

@@ -110,6 +110,13 @@ public class SoundPacket extends PacketAdapter {
                 SoundType.ATTACK, List.of("zombie_attack1", "zombie_attack2", "zombie_attack3", "zombie_attack4"),
                 SoundType.STEP, List.of("zombie_step1", "zombie_step2", "zombie_step3", "zombie_step4"),
                 SoundType.DEATH, List.of("zombie_death1")
+            )),
+            Map.entry(FormType.ICE_LORD, Map.of(
+                SoundType.AMBIENT, List.of("ice_lord_ambient1", "ice_lord_ambient2", "ice_lord_ambient3", "ice_lord_ambient4", "ice_lord_ambient5", "ice_lord_ambient6", "ice_lord_ambient7", "ice_lord_ambient8", "ice_lord_ambient9", "ice_lord_ambient10"),
+                SoundType.HURT, List.of("ice_lord_hurt1", "ice_lord_hurt2", "ice_lord_hurt3", "ice_lord_hurt4"),
+                SoundType.ATTACK, List.of("ice_lord_attack1", "ice_lord_attack2", "ice_lord_attack3", "ice_lord_attack4", "ice_lord_attack5", "ice_lord_attack6", "ice_lord_attack7"),
+                SoundType.STEP, List.of("ice_lord_step1", "ice_lord_step2", "ice_lord_step3", "ice_lord_step4", "ice_lord_step5", "ice_lord_step6", "ice_lord_step7", "ice_lord_step8", "ice_lord_step9", "ice_lord_step10", "ice_lord_step11", "ice_lord_step12", "ice_lord_step13", "ice_lord_step14", "ice_lord_step15", "ice_lord_step16", "ice_lord_step17", "ice_lord_step18", "ice_lord_step19", "ice_lord_step20"),
+                SoundType.DEATH, List.of("ice_lord_death1", "ice_lord_death2", "ice_lord_death3", "ice_lord_death4")
             )));
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_AMBIENT, Sound.ENTITY_SPIDER_AMBIENT);
         WOLF_TO_SPIDER.put(Sound.ENTITY_WOLF_DEATH,   Sound.ENTITY_SPIDER_DEATH);
@@ -289,7 +296,7 @@ public class SoundPacket extends PacketAdapter {
 			.filter(en -> en instanceof Zombie).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
 		if (closestZombie.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestZombie.get().getUniqueId());
-        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.ZOMBIE) return;
+        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.PEST_SKELETON) return;
         e.setCancelled(true);
         if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.5) return;
         playSoundToPlayer(player, loc, soundType, FormType.ZOMBIE);

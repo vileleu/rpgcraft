@@ -26,8 +26,8 @@ import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
+import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import net.citizensnpcs.api.ai.Navigator;
 import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.npc.NPC;
@@ -212,6 +212,7 @@ public class FightAI {
 			lastTargetLocation = null;
 			return 0;
 		}
+		isFreeze(npcCustom);
 		// npc too far from waypoints (back to waypoints and full life)
 		if (closestWaypoint != null && npcCustom.getLocation().distanceSquared(closestWaypoint) > data.getChaseRangeSquared()) {
 			parameters.speedModifier(data.getSpeedCombat());
@@ -309,7 +310,6 @@ public class FightAI {
 				lastTarget = target;
 				lastTargetLocation = target.getLocation();
 			}
-			isStuck(npcCustom);
 		}
 		// target is not visible
 		else {
@@ -324,7 +324,6 @@ public class FightAI {
 			}
 			// go to last position of target
 			setTarget(npcCustom, navigator, lastTargetLocation);
-			isStuck(npcCustom);
 		}
 		return 0;
 	}
@@ -375,7 +374,7 @@ public class FightAI {
 		return true;
 	}
 
-    public void flee(NPCCustom npcCustom, Navigator navigator) {
+    private void flee(NPCCustom npcCustom, Navigator navigator) {
         LivingEntity npcEntity = npcCustom.getLivingEntity();
         if (npcEntity == null || target == null) return;
         Vector		awayDirection = npcEntity.getLocation().subtract(target.getLocation()).toVector().normalize();
@@ -384,15 +383,13 @@ public class FightAI {
     }
 
 	// check if npc is stuck
-	public void isStuck(NPCCustom npcCustom) {
+	private void isFreeze(NPCCustom npcCustom) {
 		Location	start = npcCustom.getEyeLocation().clone();
 		start.setY(0);
 		int			now = Bukkit.getCurrentTick();
 		if (now >= nextStuck) {
-			if (start.distanceSquared(lastLocation) < 2) {
-				Location	targetLoc = target != null ? target.getLocation() : lastTargetLocation;
-				Vector	direction = targetLoc.toVector().subtract(start.toVector()).normalize();
-				npcCustom.setVelocity(npcCustom.getVelocity().add(direction.multiply(1).setY(0.5)));
+			if (start.equals(lastLocation)) {
+				npcCustom.teleport(npcCustom.getRespawn());
 			}
 			lastLocation = start;
 			nextStuck = now + nextStuckRate * 20;

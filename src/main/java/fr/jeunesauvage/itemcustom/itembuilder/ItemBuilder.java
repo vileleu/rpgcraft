@@ -23,23 +23,23 @@ import org.bukkit.Material;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.itemcustom.ArmorType;
+import fr.jeunesauvage.itemcustom.FoodType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
+import fr.jeunesauvage.itemcustom.PotionType;
 import fr.jeunesauvage.itemcustom.Rarity;
+import fr.jeunesauvage.itemcustom.SpellType;
+import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
+import fr.jeunesauvage.itemcustom.equipable.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
+import fr.jeunesauvage.itemcustom.equipable.WeaponMaterial;
 import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
-import fr.jeunesauvage.itemcustom.equipable.armor.ArmorMaterial;
-import fr.jeunesauvage.itemcustom.equipable.armor.ArmorType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponMaterial;
-import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponType;
 import fr.jeunesauvage.itemcustom.food.Food;
-import fr.jeunesauvage.itemcustom.food.FoodType;
 import fr.jeunesauvage.itemcustom.potion.Potion;
-import fr.jeunesauvage.itemcustom.potion.PotionType;
 import fr.jeunesauvage.itemcustom.spell.Spell;
-import fr.jeunesauvage.itemcustom.spell.SpellType;
 import fr.jeunesauvage.itemcustom.usable.Usable;
 
 public class ItemBuilder {
@@ -194,7 +194,7 @@ public class ItemBuilder {
         if (material == Material.ELYTRA)
             return ArmorType.ELYTRA;
         for (ArmorType type: ArmorType.values()) {
-            if (type.getArmorMaterial() == armorMaterial && type.getMaterial() == material)
+            if (type.getEquipableMaterial() == armorMaterial && type.getMaterial() == material)
                 return type;
         }
         return null;
@@ -211,7 +211,7 @@ public class ItemBuilder {
 
     private WeaponType getWeaponType(WeaponMaterial weaponMaterial) {
         for (WeaponType type: WeaponType.values()) {
-            if (type.getWeaponMaterial() == weaponMaterial)
+            if (type.getEquipableMaterial() == weaponMaterial)
                 return type;
         }
         return null;
@@ -264,7 +264,7 @@ public class ItemBuilder {
     public Map<String, Equipable<?>> getEquipable() {
         Map<String, Equipable<?>>   result = new HashMap<>();
         for (Entry<String, ItemCustom<?>> entry: items.entrySet()) {
-            if (entry.getValue() instanceof Equipable<?> equipable)
+            if (entry.getValue() instanceof Equipable equipable)
                 result.put(entry.getKey(), equipable);
         }
         return result;

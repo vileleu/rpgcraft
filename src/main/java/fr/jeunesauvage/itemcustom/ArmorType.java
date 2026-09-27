@@ -1,15 +1,15 @@
-package fr.jeunesauvage.itemcustom.equipable.armor;
+package fr.jeunesauvage.itemcustom;
 
 import java.util.Set;
 
 import org.bukkit.Material;
 
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
-import fr.jeunesauvage.itemcustom.ItemCustomType;
+import fr.jeunesauvage.itemcustom.equipable.ArmorMaterial;
+import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 import net.kyori.adventure.text.Component;
 
-public enum ArmorType implements ItemCustomType {
+public enum ArmorType implements EquipableType {
     CLOTH_HEAD("cloth_head", Material.NETHERITE_HELMET, ArmorMaterial.CLOTH),
     CLOTH_CHEST("cloth_chest", Material.NETHERITE_CHESTPLATE, ArmorMaterial.CLOTH),
     CLOTH_LEGS("cloth_legs", Material.NETHERITE_LEGGINGS, ArmorMaterial.CLOTH),
@@ -26,7 +26,7 @@ public enum ArmorType implements ItemCustomType {
     PLATE_CHEST("plate_chest", Material.NETHERITE_CHESTPLATE, ArmorMaterial.PLATE),
     PLATE_LEGS("plate_legs", Material.NETHERITE_LEGGINGS, ArmorMaterial.PLATE),
     PLATE_FEET("plate_feet", Material.NETHERITE_BOOTS, ArmorMaterial.PLATE),
-    ELYTRA("elytra", Material.ELYTRA, ArmorMaterial.LEATHER),
+    ELYTRA("elytra", Material.ELYTRA, ArmorMaterial.ELYTRA),
     UNKNOWN("unknown", Material.AIR, ArmorMaterial.UNKNOWN);
 
     private final String        name;
@@ -44,7 +44,8 @@ public enum ArmorType implements ItemCustomType {
         return name;
     }
 
-    public ArmorMaterial getArmorMaterial() {
+    @Override 
+    public EquipableMaterial getEquipableMaterial() {
         return armorMaterial;
     }
 
@@ -70,11 +71,11 @@ public enum ArmorType implements ItemCustomType {
 
     public static ItemCustomType fromString(String name) {
         if (name == null)
-            return null;
+            return UNKNOWN;
 		for (ArmorType type: ArmorType.values()) {
 			if (type.getName().equals(name))
         		return type;
 		}
-		return null;
+		return UNKNOWN;
     }
 }

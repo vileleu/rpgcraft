@@ -10,6 +10,7 @@ import fr.jeunesauvage.Data;
 import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.itemcustom.FoodType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.Rarity;

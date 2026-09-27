@@ -98,6 +98,22 @@ commands:
     description: open menu repair
     usage: /menurepair <player name>
     permission: rpgcraft.op
+  menubuyweapon:
+    description: open menu buy weapon
+    usage: /menubuyweapon <player name> <level> <rarity>
+    permission: rpgcraft.op
+  menubuyarmor:
+    description: open menu buy armor
+    usage: /menubuyarmor <player name> <level> <rarity>
+    permission: rpgcraft.op
+  menubuypotion:
+    description: open menu buy potion
+    usage: /menubuypotion <player name>
+    permission: rpgcraft.op
+  menubuyfood:
+    description: open menu buy food
+    usage: /menubuyfood <player name>
+    permission: rpgcraft.op
   # sound command
   quote:
     description: play quote

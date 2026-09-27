@@ -32,6 +32,7 @@ public enum FormType {
     ORC_FATHER("orc_father", 0.9, FormTypeSkin.ORC_FATHER),
     ORC_MOTHER("orc_mother", 0.9, FormTypeSkin.ORC_MOTHER),
     ORC_CHILD("orc_child", 0.6, FormTypeSkin.ORC_CHILD),
+    ORC_FUMELEBITUME("fumelebitume", 0.9, FormTypeSkin.ORC_FUMELEBITUME),
 	// human
     HUMAN("human", 0.9, FormTypeSkin.HUMAN),
     HUMAN_ROGUE("human_rogue", 0.9, FormTypeSkin.HUMAN_ROGUE),
@@ -77,7 +78,10 @@ public enum FormType {
 	// forest
 	LEAPER("leaper", 1.2, FormTypeSkin.LEAPER),
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
+	// ice
 	FROZER("frozer", 2, FormTypeSkin.FROZER),
+	ICE_LORD("ice_lord", 3, FormTypeSkin.ICE_LORD),
+	ICE_ARCHER("ice_archer", 0.9, FormTypeSkin.ICE_ARCHER),
 	// demon
 	DEMON("demon", 1.2, FormTypeSkin.DEMON),
     MAGMA_GOLEM("magla_golem", 1.2, FormTypeSkin.MAGMA_GOLEM),

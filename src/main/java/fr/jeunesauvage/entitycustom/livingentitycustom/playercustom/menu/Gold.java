@@ -47,6 +47,29 @@ public class Gold {
         return nuggets;
     }
 
+    public void multiply(int n) {
+        ingots = Math.max(1, ingots / n);
+        nuggets = Math.max(1, nuggets / n);
+    }
+
+    public void divide(int n) {
+        ingots *= 2;
+        nuggets *= 2;
+    }
+
+    public void fromNuggetsToGold(int n) {
+        while (n > 8) {
+            ingots++;
+            n -= 9;
+        }
+        nuggets = n;
+    }
+
+    public void convertInNuggets() {
+        nuggets += ingots * 9;
+        ingots = 0;
+    }
+
     public void copy(Gold gold) {
         ingots = gold.ingots;
         nuggets = gold.nuggets;
