@@ -52,8 +52,9 @@ public class FightAI {
     private int						nextSpellRanged;
     private int						nextSpellRangedBoss;
 	private boolean					quote;
-	private int						nextStuckRate;
 	private int						nextStuck;
+	private int						nextStuckRate;
+	private int						nextStuckCount;
 	private Location				lastLocation;
 
     FightAI(NPC npc, FightData fightData) {
@@ -71,8 +72,9 @@ public class FightAI {
 		this.nextSpellRanged = 0;
 		this.nextSpellRangedBoss = 0;
 		this.quote = false;
-		this.nextStuckRate = 6;
 		this.nextStuck = 0;
+		this.nextStuckRate = 1;
+		this.nextStuckCount = 0;
 		this.lastLocation = npc.getStoredLocation();
 		Waypoints			waypoints = npc.getOrAddTrait(Waypoints.class);
 		WaypointProvider	provider = waypoints.getCurrentProvider();
@@ -132,7 +134,7 @@ public class FightAI {
     		}
 		}
 		if (target == null && targetHide == null) {
-			if (npcCustom.isPet()) setTarget(npcCustom, data.getOwner());
+			if (npcCustom.isPet()) FightTrait.setTarget(npcCustom, data.getOwner());
 			else {
 				World	world = npcCustom.getWorld();
 				if (world == null) return;
@@ -198,8 +200,8 @@ public class FightAI {
 			if (quote) quote = false;
 			// heal
 			npcCustom.heal(data.getHealth() / 10);
-			if (setTarget(npcCustom, closestWaypoint)) return 0;
 			if (!inChase) return 0;
+			if (FightTrait.setTarget(npcCustom, closestWaypoint)) return 0;
 			// first no chase
 			inChase = false;
 			npc.getOrAddTrait(LookClose.class).lookClose(true);
@@ -301,7 +303,7 @@ public class FightAI {
 			else {
 				if (parameters.speedModifier() != data.getSpeedCombat())
 					parameters.speedModifier(data.getSpeedCombat());
-				setTarget(npcCustom, target);
+				FightTrait.setTarget(npcCustom, target);
 				lastTarget = target;
 				lastTargetLocation = target.getLocation();
 			}
@@ -312,45 +314,15 @@ public class FightAI {
 			// can't find target ()
 			double	range = 2 + npcCustom.getWidth();
 			if (npcCustom.getLocation().distanceSquared(lastTargetLocation) < range * range) {
-				setTarget(npcCustom, closestWaypoint);
+				FightTrait.setTarget(npcCustom, closestWaypoint);
 				lastTarget = null;
 				lastTargetLocation = null;
 				return 0;
 			}
 			// go to last position of target
-			setTarget(npcCustom, lastTargetLocation);
+			FightTrait.setTarget(npcCustom, lastTargetLocation);
 		}
 		return 0;
-	}
-
-	/*
-	private boolean isFlightType(NPCCustom npcCustom) {
-		return switch (npcCustom.getType()) {
-			case BLAZE, BREEZE, WITHER -> true;
-			default -> false;
-		};
-	}
-	*/
-
-	public boolean setTarget(NPCCustom npcCustom, LivingEntityCustom target) {
-	    return setTarget(npcCustom, target.getLocation());
-	}
-
-	public boolean setTarget(NPCCustom npcCustom, Location targetLoc) {
-		if (target == null) return false;
-		Navigator	navigator = npc.getNavigator();
-	    Location	npcLoc = npcCustom.getLocation();
-		Vector 		direction = targetLoc.toVector().subtract(npcLoc.toVector());
-		double		distanceSquared = direction.lengthSquared();
-	    if (distanceSquared < 2 * 2) {
-			navigator.cancelNavigation();
-			return false;
-		}
-		else {
-	    	direction.normalize().multiply(3);
-			navigator.setTarget(npcLoc.clone().add(direction));
-		}
-		return true;
 	}
 
     private void flee(NPCCustom npcCustom, Navigator navigator) {
@@ -358,7 +330,7 @@ public class FightAI {
         if (npcEntity == null || target == null) return;
         Vector		awayDirection = npcEntity.getLocation().subtract(target.getLocation()).toVector().normalize();
         Location	fleeTarget = npcEntity.getLocation().add(awayDirection.multiply(8));
-        navigator.setTarget(fleeTarget);
+        FightTrait.setTarget(npcCustom, fleeTarget);
     }
 
 	// check if npc is stuck
@@ -366,15 +338,20 @@ public class FightAI {
 		int			now = Bukkit.getCurrentTick();
 		if (now >= nextStuck) {
 			Location	l = npcCustom.getEyeLocation();
-			if (l.getBlockX() == lastLocation.getBlockX() && l.getBlockY() == lastLocation.getBlockY() && l.getBlockZ() == lastLocation.getBlockZ()) {
-				Location	respawn = npcCustom.getRespawn();
-				if (respawn != null && l.distanceSquared(respawn) >= 2) {
-					respawn = respawn.clone();
-					respawn.setYaw(l.getYaw());
-					respawn.setPitch(l.getPitch());
-					npcCustom.teleport(respawn);
+			if (l.getX() == lastLocation.getX() && l.getY() == lastLocation.getY() && l.getY() == lastLocation.getY()) {
+				nextStuckCount++;
+				if (nextStuckCount == 6) {
+					Location	respawn = npcCustom.getRespawn();
+					if (respawn != null && l.distanceSquared(respawn) >= 2 * 2) {
+						respawn = respawn.clone();
+						respawn.setYaw(l.getYaw());
+						respawn.setPitch(l.getPitch());
+						npcCustom.teleport(respawn);
+					}
 				}
 			}
+			else
+				nextStuckCount = 0;
 			lastLocation = l;
 			nextStuck = now + nextStuckRate * 20;
 		}

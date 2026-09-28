@@ -13,7 +13,8 @@ import org.bukkit.inventory.ItemStack;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
+import fr.jeunesauvage.itemcustom.WeaponType;
+import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.itemcustom.spell.SpellRegistry;
 
 public class UsableManager implements Listener {
@@ -27,8 +28,13 @@ public class UsableManager implements Listener {
 		if (item == null) return;
 		Usable			usable = RpgCraft.getItemCustomRegistry().getUsable(item);
 		if (usable == null) return;
-		if (usable.getCategory() != ItemCustomCategory.WEAPON)
-			e.setCancelled(true);
+		if (usable instanceof Weapon w &&
+			(w.getType() == WeaponType.BOW ||
+			w.getType() == WeaponType.CROSSBOW ||
+			w.getType() == WeaponType.STAFF ||
+			w.getType() == WeaponType.SPELLBOOK
+		)) return;
+		e.setCancelled(true);
 		if (!usable.canUse(playerCustom, e.getHand())) return;
 		usable.use(playerCustom, e.getHand());
 	}
@@ -39,12 +45,10 @@ public class UsableManager implements Listener {
 		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
 		if (playerCustom == null) return;
 		ItemStack	item = playerCustom.getEquipment().getItemInMainHand();
-		if (item != null) {
-			Usable	usable = RpgCraft.getItemCustomRegistry().getUsable(item);
-			if (usable == null) return;
-			if (usable.getCategory() != ItemCustomCategory.WEAPON)
-				e.setCancelled(true);
-		}
+		if (item == null) return;
+		Usable	usable = RpgCraft.getItemCustomRegistry().getUsable(item);
+		if (usable == null) return;
+		e.setCancelled(true);
 	}
 
 	// cancel damage fall on leap + cancel stealth for all damage

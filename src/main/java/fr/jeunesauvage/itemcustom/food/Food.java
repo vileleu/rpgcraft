@@ -12,7 +12,6 @@ import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.itemcustom.FoodType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
 import net.kyori.adventure.text.Component;
@@ -36,11 +35,6 @@ public class Food extends ItemCustom<FoodType> implements Consumable {
 			lore.add(Lore.classType(type.getClassTypes()));
 		meta.lore(lore);
         item.setItemMeta(meta);
-	}
-
-	@Override
-	public ItemCustomCategory getCategory() {
-		return type.getCategory();
 	}
 
 	@Override

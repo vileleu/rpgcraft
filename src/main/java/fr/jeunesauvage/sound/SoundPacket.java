@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
+import org.bukkit.entity.Blaze;
 import org.bukkit.entity.Evoker;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -33,7 +34,6 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 
 public class SoundPacket extends PacketAdapter {
     private static final Map<FormType, Map<SoundType, List<String>>>    SOUNDS;
@@ -172,8 +172,23 @@ public class SoundPacket extends PacketAdapter {
         Player          player = e.getPlayer();
     	World			world = player.getWorld();
         Location	    loc = getLocation(packet, world);
-        e.setCancelled(true);
-        playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_FIRE);
+		Optional<LivingEntity>		closestBlaze = world.getNearbyLivingEntities(loc, 1).stream()
+			.filter(en -> en instanceof Blaze).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
+		if (closestBlaze.isEmpty()) return;
+        NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestBlaze.get().getUniqueId());
+        if (npcCustom == null) return;
+        switch (npcCustom.getFormType()) {
+            case ELEMENTAL_FIRE -> {
+                e.setCancelled(true);
+                if (soundType == SoundType.STEP && ThreadLocalRandom.current().nextDouble() > 0.2) return;
+                playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_FIRE);
+            }
+            case ICE_LORD -> {
+                e.setCancelled(true);
+                playSoundToPlayer(player, loc, soundType, FormType.ICE_LORD);
+            }
+            default -> {}
+        }
 	}
 
     // replace spider sounds
@@ -189,7 +204,7 @@ public class SoundPacket extends PacketAdapter {
 		if (closestSpider.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestSpider.get().getUniqueId());
         if (npcCustom == null) return;
-        switch (npcCustom.getTemplateType()) {
+        switch (npcCustom.getFormType()) {
             case TARENTULA -> {
                 e.setCancelled(true);
                 if (soundType == SoundType.STEP && ThreadLocalRandom.current().nextDouble() > 0.2) return;
@@ -216,7 +231,7 @@ public class SoundPacket extends PacketAdapter {
 		if (closestEvoker.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestEvoker.get().getUniqueId());
         if (npcCustom == null) return;
-        switch (npcCustom.getTemplateType()) {
+        switch (npcCustom.getFormType()) {
             case WHISPERER -> {
                 e.setCancelled(true);
                 if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.2) return;
@@ -243,7 +258,7 @@ public class SoundPacket extends PacketAdapter {
 			.filter(en -> en instanceof Ravager).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
 		if (closestRavager.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestRavager.get().getUniqueId());
-        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.LEAPER) return;
+        if (npcCustom == null || npcCustom.getFormType() != FormType.LEAPER) return;
         e.setCancelled(true);
         playSoundToPlayer(player, loc, soundType, FormType.LEAPER);
 	}
@@ -260,7 +275,7 @@ public class SoundPacket extends PacketAdapter {
 			.filter(en -> en instanceof WitherSkeleton).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
 		if (closestWitherSkeleton.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestWitherSkeleton.get().getUniqueId());
-        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.DEMON) return;
+        if (npcCustom == null || npcCustom.getFormType() != FormType.DEMON) return;
         e.setCancelled(true);
         if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.2) return;
         playSoundToPlayer(player, loc, soundType, FormType.DEMON);
@@ -278,7 +293,7 @@ public class SoundPacket extends PacketAdapter {
 			.filter(en -> en instanceof Wither).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
 		if (closestWither.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestWither.get().getUniqueId());
-        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.ELEMENTAL_VOID) return;
+        if (npcCustom == null || npcCustom.getFormType() != FormType.ELEMENTAL_VOID) return;
         e.setCancelled(true);
         if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.2) return;
         playSoundToPlayer(player, loc, soundType, FormType.ELEMENTAL_VOID);
@@ -296,7 +311,7 @@ public class SoundPacket extends PacketAdapter {
 			.filter(en -> en instanceof Zombie).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
 		if (closestZombie.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestZombie.get().getUniqueId());
-        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.PEST_SKELETON) return;
+        if (npcCustom == null || npcCustom.getFormType() != FormType.ZOMBIE) return;
         e.setCancelled(true);
         if (soundType == SoundType.AMBIENT && ThreadLocalRandom.current().nextDouble() > 0.5) return;
         playSoundToPlayer(player, loc, soundType, FormType.ZOMBIE);
@@ -319,7 +334,7 @@ public class SoundPacket extends PacketAdapter {
 			.filter(en -> en instanceof Wolf).min(Comparator.comparingDouble(en-> en.getLocation().distanceSquared(loc)));
 		if (closestWolf.isEmpty()) return;
         NPCCustom   npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(closestWolf.get().getUniqueId());
-        if (npcCustom == null || npcCustom.getTemplateType() != TemplateType.SMALL_SPIDER) return;
+        if (npcCustom == null || npcCustom.getFormType() != FormType.SMALL_SPIDER) return;
         Sound	replacement = WOLF_TO_SPIDER.get(sound);
         if (replacement == null) {
             e.setCancelled(true);

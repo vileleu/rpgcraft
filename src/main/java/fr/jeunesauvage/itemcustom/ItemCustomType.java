@@ -11,6 +11,5 @@ public sealed interface ItemCustomType permits EquipableType, SpellType, PotionT
 	String				getName();
 	Set<ClassType>		getClassTypes();
 	Material			getMaterial();
-	ItemCustomCategory	getCategory();
 	Component			toComponent();
 }

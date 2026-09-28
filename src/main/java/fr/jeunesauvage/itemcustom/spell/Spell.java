@@ -25,7 +25,6 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.bossbar.BossBarData;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.SpellType;
 import fr.jeunesauvage.itemcustom.usable.Usable;
@@ -60,11 +59,6 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 	}
 
 	// override
-
-	@Override
-	public ItemCustomCategory getCategory() {
-		return type.getCategory();
-	}
 
 	@Override
 	public Material	getMaterial() {

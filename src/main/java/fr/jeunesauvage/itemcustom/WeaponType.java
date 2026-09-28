@@ -55,11 +55,6 @@ public enum WeaponType implements EquipableType {
     }
 
     @Override
-    public ItemCustomCategory getCategory() {
-        return ItemCustomCategory.WEAPON;
-    }
-
-    @Override
     public Component toComponent() {
         return weaponMaterial.toComponent();
     }

@@ -5,17 +5,22 @@ import net.citizensnpcs.api.ai.GoalSelector;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Location;
 
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
+import fr.jeunesauvage.world.WorldManager;
 
 import java.util.Random;
 
 public class GoalPatrol implements Goal {
+	private final NPCCustom	npcCustom;
 	private final NPC npc;
 	private final Location center;
 	private final double radius;
 	private final Random random = new Random();
 
 	public GoalPatrol(NPC npc, double radius) {
+		this.npcCustom = RpgCraft.getEntityCustomRegistry().getNPCCustom(npc.getUniqueId());
 		this.npc = npc;
 		Location	respawn = npc.getOrAddTrait(FightTrait.class).getRespawn();
 		if (respawn != null)
@@ -27,8 +32,7 @@ public class GoalPatrol implements Goal {
 
 	@Override
 	public boolean shouldExecute(GoalSelector selector) {
-		if (!npc.isSpawned()) return false;
-		return !npc.getOrAddTrait(FightTrait.class).getFightAI().inChase();
+		return npcCustom.isPresent() && !npc.getOrAddTrait(FightTrait.class).getFightAI().inChase();
 	}
 
 	@Override
@@ -39,7 +43,9 @@ public class GoalPatrol implements Goal {
 		double x = center.getX() + Math.cos(angle) * distance;
 		double z = center.getZ() + Math.sin(angle) * distance;
 		Location target = new Location(center.getWorld(), x, center.getY(), z);
-		npc.getNavigator().setTarget(target);
+		int	y = WorldManager.getHighestSolidBlockY(target, target.getBlockY()) + 1;
+		if (y < target.getBlockY()) target.setY(y);
+		FightTrait.setTarget(npcCustom, target);
 	}
 
 	@Override

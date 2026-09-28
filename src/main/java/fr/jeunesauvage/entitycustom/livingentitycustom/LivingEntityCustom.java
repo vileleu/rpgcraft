@@ -78,10 +78,12 @@ public sealed interface LivingEntityCustom extends EntityCustom permits PlayerCu
     void                            setLevel(int level);
 
     boolean                         isBoss();
-    UUID                            getOwner();
-    void                            setOwner(LivingEntityCustom livingEntityCustom); // never use (use setPet() instead)
+    UUID                            getOwnerUUID();
+    LivingEntityCustom              getOwner();
+    void                            setOwner(LivingEntityCustom livingEntityCustom);
     boolean                         isPet();
-    UUID                            getPet();
+    UUID                            getPetUUID();
+    LivingEntityCustom              getPet();
     void                            setPet(LivingEntityCustom livingEntityCustom);
     boolean                         isOwner();
     boolean                         isFriend(LivingEntityCustom livingEntityCustom);

@@ -74,11 +74,6 @@ public enum SpellType implements ItemCustomType {
 	}
 
     @Override
-    public ItemCustomCategory getCategory() {
-        return ItemCustomCategory.SPELL;
-    }
-
-    @Override
     public Component toComponent() {
         return Component.translatable("type.rpgcraft.spell");
     }

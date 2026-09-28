@@ -80,7 +80,7 @@ public enum FormType {
 	WHISPERER("whisperer", 1, FormTypeSkin.WHISPERER),
 	// ice
 	FROZER("frozer", 2, FormTypeSkin.FROZER),
-	ICE_LORD("ice_lord", 3, FormTypeSkin.ICE_LORD),
+	ICE_LORD("ice_lord", 2, FormTypeSkin.ICE_LORD),
 	ICE_ARCHER("ice_archer", 0.9, FormTypeSkin.ICE_ARCHER),
 	// demon
 	DEMON("demon", 1.2, FormTypeSkin.DEMON),

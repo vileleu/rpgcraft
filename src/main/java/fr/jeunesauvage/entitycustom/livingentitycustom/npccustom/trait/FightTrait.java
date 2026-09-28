@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
@@ -26,6 +27,8 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.goal.GoalPatrol
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
+import net.citizensnpcs.api.ai.Navigator;
+import net.citizensnpcs.api.ai.NavigatorParameters;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.persistence.Persist;
 import net.citizensnpcs.api.trait.Trait;
@@ -142,8 +145,13 @@ public class FightTrait extends Trait {
 
 	@Override
 	public void onSpawn() {
+		NavigatorParameters	defaultParameters = npc.getNavigator().getDefaultParameters();
 		// range
-		npc.getNavigator().getDefaultParameters().range((float)CHASERANGE_DEFAULT + 10);
+		defaultParameters.range((float)CHASERANGE_DEFAULT + 10);
+		// path
+		defaultParameters.distanceMargin(1).pathDistanceMargin(1);
+		// speed
+		defaultParameters.speedModifier(speed);
 		// trait lookclose
 		LookClose	lookClose = npc.getOrAddTrait(LookClose.class);
 		lookClose.lookClose(true);
@@ -208,7 +216,7 @@ public class FightTrait extends Trait {
 				tick = tickActive;
 				return;
 			}
-			fightAI.setTarget(npcCustom, npcCustom.getRespawn());
+			setTarget(npcCustom, npcCustom.getRespawn());
 			tick = tickLoseAggro;
 			return;
 		}
@@ -428,7 +436,6 @@ public class FightTrait extends Trait {
 		AttributeInstance	attributeInstance = livingNPC.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 		if (attributeInstance != null)
 			attributeInstance.setBaseValue(health);
-		livingNPC.setHealth(health);
 	}
 
 	public double getDamage() {
@@ -610,5 +617,30 @@ public class FightTrait extends Trait {
 	public boolean haveTarget() {
 		if (fightAI == null) return false;
 		return fightAI.getTarget() == null && fightAI.getTargetHide() == null;
+	}
+
+	public static boolean setTarget(NPCCustom npcCustom, LivingEntityCustom target) {
+		Location	targetLoc = (target != null ? target.getLocation() : null);
+	    return setTarget(npcCustom, targetLoc);
+	}
+
+	public static boolean setTarget(NPCCustom npcCustom, Location targetLoc) {
+		Navigator	navigator = npcCustom.getNPC().getNavigator();
+		if (targetLoc == null) {
+			navigator.cancelNavigation();
+			return false;
+		}
+	    Location	start = npcCustom.getLocation();
+		Vector 		direction = targetLoc.toVector().subtract(start.toVector());
+		double		distanceSquared = direction.lengthSquared();
+	    if (distanceSquared < 2 * 2) {
+			navigator.cancelNavigation();
+			return false;
+		}
+		else {
+	    	direction.normalize().multiply(4);
+			navigator.setTarget(start.clone().add(direction));
+		}
+		return true;
 	}
 }

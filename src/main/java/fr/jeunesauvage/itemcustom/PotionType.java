@@ -52,11 +52,6 @@ public enum PotionType implements ItemCustomType {
 		return classTypes;
 	}
 
-    @Override
-    public ItemCustomCategory getCategory() {
-        return ItemCustomCategory.POTION;
-    }
-
 	@Override
 	public Component toComponent() {
 		return Component.translatable("type.rpgcraft.potion");

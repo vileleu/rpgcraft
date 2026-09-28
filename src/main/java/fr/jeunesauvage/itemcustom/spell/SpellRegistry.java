@@ -76,6 +76,7 @@ import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.EquipableManager;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.sound.SoundManager;
+import fr.jeunesauvage.world.WorldManager;
 import io.papermc.paper.persistence.PersistentDataContainerView;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
@@ -411,9 +412,8 @@ public class SpellRegistry {
     	    }
     	    nextLoc = checkLoc.clone();
     	}
-		int	y = getHighestSolidBlockY(world, nextLoc.getBlockX(), nextLoc.getBlockZ(), nextLoc.getBlockY()) + 1;
-		if (y < startLoc.getY())
-    		nextLoc.setY(y);
+		int	y = WorldManager.getHighestSolidBlockY(nextLoc, nextLoc.getBlockY()) + 1;
+		if (y < startLoc.getY()) nextLoc.setY(y);
     	SoundManager.playSound(launcher, "spell_teleportation");
 		particleTeleport(startLoc);
 		launcher.setVelocity(new Vector(0,0,0));
@@ -422,16 +422,6 @@ public class SpellRegistry {
 		SoundManager.playSound(launcher, "spell_teleportation");
 		particleTeleport(nextLoc);
     }
-
-	private int getHighestSolidBlockY(World world, int x, int z, int maxY) {
-	    maxY = Math.min(maxY, world.getMaxHeight() - 1);
-	    for (int y = maxY; y >= world.getMinHeight(); y--) {
-	        Block block = world.getBlockAt(x, y, z);
-	        if (block.getType().isSolid())
-	            return y;
-	    }
-	    return world.getMinHeight();
-	}
 
 	private void particleTeleport(Location loc) {
 		World	world = loc.getWorld();
@@ -1225,6 +1215,7 @@ public class SpellRegistry {
 		pet.setLevel(launcher.getLevel());
 		pet.setTemplate(templateType);
 		pets.put(uuid, pet);
+		pet.setOwner(launcher);
 		launcher.setPet(pet);
 		pet.spawn(launcher.getLocation());
 	}
@@ -1566,6 +1557,7 @@ public class SpellRegistry {
 		braised.setLevel(launcher.getLevel());
 		braised.setTemplate(templateType);
 		braiseds.put(uuid, braised);
+		braised.setOwner(launcher);
 		launcher.setPet(braised);
 		braised.spawn(launcher.getLocation());
 	}
@@ -2270,7 +2262,7 @@ public class SpellRegistry {
 
 	private Location adjustFang(World world, Location start) {
 		Location	result = start.clone();
-		int	y = getHighestSolidBlockY(world, start.getBlockX(), start.getBlockZ(), start.getBlockY());
+		int	y = WorldManager.getHighestSolidBlockY(start, start.getBlockY());
 		if (y < start.getY())
     		result.setY(y);
     	return result;
@@ -2308,9 +2300,8 @@ public class SpellRegistry {
     }
 
     private Location findSafeY(World world, Location start, Location candidate) {
-		int	y = getHighestSolidBlockY(world, candidate.getBlockX(), candidate.getBlockZ(), candidate.getBlockY()) + 1;
-		if (y < start.getY())
-    		candidate.setY(y);
+		int	y = WorldManager.getHighestSolidBlockY(candidate, candidate.getBlockY()) + 1;
+		if (y < start.getY()) candidate.setY(y);
         Block		feet = candidate.getBlock();
         Block		head = candidate.clone().add(0, 1, 0).getBlock();
         Block		ground = candidate.clone().add(0, -1, 0).getBlock();

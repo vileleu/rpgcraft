@@ -45,6 +45,7 @@ public class FightData {
 	    this.speed = fightTrait.getSpeed();
 	    this.speedCombat = fightTrait.getSpeedCombat();
 		this.ownerUUID = fightTrait.getOwnerUUID();
+		this.petUUID = fightTrait.getPetUUID();
 	}
 
 	public TemplateType getTemplateType() {

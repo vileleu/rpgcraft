@@ -13,7 +13,6 @@ import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.PotionType;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.consumable.Consumable;
@@ -41,11 +40,6 @@ public class Potion extends ItemCustom<PotionType> implements Consumable {
 		if (meta instanceof PotionMeta potionMeta)
 		    potionMeta.setColor(type.getColor());
         item.setItemMeta(meta);
-	}
-
-	@Override
-	public ItemCustomCategory getCategory() {
-		return type.getCategory();
 	}
 
 	@Override

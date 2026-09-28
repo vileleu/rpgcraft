@@ -6,7 +6,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 
@@ -21,6 +20,8 @@ public class CombatManager implements Listener {
 		}
 		// mark
 		if (combat.getDamager() instanceof PlayerCustom p && p.isFriend(combat.getTarget())) p.addMark();
+		else if (combat.getDamager().isPet() && combat.getDamager().getOwner() instanceof PlayerCustom p && p.isFriend(combat.getTarget())) p.addMark();
+		else if (combat.getDamager().isOwner() && combat.getDamager().getPet() instanceof PlayerCustom p && p.isFriend(combat.getTarget())) p.addMark();
 		CombatResult	result = new CombatResult(e.getDamage(), combat);
 		// damage is unmodifiable
 		if (combat.getTarget().damageIsUnmodifiable() != true) {
@@ -36,11 +37,10 @@ public class CombatManager implements Listener {
 			result = combat.applySpell(result);
 			RpgCraft.debug("after amount: " + result.getAmount());
 		}
-		LivingEntityCustom	target = combat.getTarget();
 		// aggro npc
-		if (target instanceof NPCCustom npcCustom) npcCustom.addAggro(combat.getDamager(), result.getAmount() + 5);
-		if (target.isOwner()) {
-			NPCCustom	pet = RpgCraft.getEntityCustomRegistry().getNPCCustom(target.getPet());
+		if (combat.getTarget() instanceof NPCCustom npcCustom) npcCustom.addAggro(combat.getDamager(), result.getAmount() + 5);
+		if (combat.getTarget().isOwner()) {
+			NPCCustom	pet = RpgCraft.getEntityCustomRegistry().getNPCCustom(combat.getTarget().getPetUUID());
 			if (pet != null) pet.addAggro(combat.getDamager(), result.getAmount() + 5);
 		}
 		e.setDamage(result.getAmount());

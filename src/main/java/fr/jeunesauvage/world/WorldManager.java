@@ -28,6 +28,7 @@ import org.bukkit.event.enchantment.EnchantItemEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -122,6 +123,11 @@ public class WorldManager implements Listener {
 	@EventHandler
 	public void onWitherRoseForm(BlockFormEvent e) {
 	    if (e.getNewState().getType() == Material.WITHER_ROSE) e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onWitherRoseSpawn(ItemSpawnEvent e) {
+	    if (e.getEntity().getItemStack().getType() == Material.WITHER_ROSE) e.setCancelled(true);
 	}
 
 	// cancel enchanting
@@ -241,5 +247,16 @@ public class WorldManager implements Listener {
 
 	private boolean canBuild(Player player) {
 		return (BUILDERS.contains(player.getName()) && player.getInventory().getItemInOffHand().getType() == Material.BEDROCK);
+	}
+
+	public static int getHighestSolidBlockY(Location loc, int maxY) {
+		World	world = loc.getWorld();
+	    maxY = Math.min(maxY, world.getMaxHeight() - 1);
+	    for (int y = maxY; y >= world.getMinHeight(); y--) {
+	        Block block = world.getBlockAt(loc.getBlockX(), y, loc.getBlockZ());
+	        if (block.getType().isSolid())
+	            return y;
+	    }
+	    return world.getMinHeight();
 	}
 }

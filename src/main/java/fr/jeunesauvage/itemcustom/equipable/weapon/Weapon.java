@@ -8,7 +8,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.itemcustom.ItemCustomCategory;
 import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.itembuilder.EquipableStat;
@@ -17,11 +16,6 @@ import fr.jeunesauvage.itemcustom.usable.Usable;
 public class Weapon extends Equipable<WeaponType> implements Usable {
 	public Weapon(String name, WeaponType type, EquipableStat equipableStat, int customModelData) {
 		super(name, equipableStat, type, customModelData);
-	}
-
-	@Override
-	public ItemCustomCategory getCategory() {
-		return type.getCategory();
 	}
 
 	@Override
@@ -56,7 +50,7 @@ public class Weapon extends Equipable<WeaponType> implements Usable {
 				"beenest_hamaxe_axe" -> switchHamaxe(playerCustom, slot);
 			// flap with claw
 			case "claw_lightning" -> flap(playerCustom, slot);
-			default -> {return;}
+			default -> {}
 		}
 	}
 

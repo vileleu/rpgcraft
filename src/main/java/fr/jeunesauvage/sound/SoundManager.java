@@ -77,6 +77,12 @@ public class SoundManager implements Listener {
                 QuoteType.ATTACK, List.of("orc_female_attack1", "orc_female_attack2", "orc_female_attack3", "orc_female_attack4", "orc_female_attack5", "orc_female_attack6"),
                 QuoteType.DEATH, List.of("orc_female_death1", "orc_female_death2", "orc_female_death3", "orc_female_death4", "orc_female_death5", "orc_female_death6", "orc_female_death7")
             )),
+            Map.entry(FormType.ORC_CHILD, Map.of(
+                QuoteType.GREETING, List.of("orc_child_greeting1", "orc_child_greeting2", "orc_child_greeting3", "orc_child_greeting4", "orc_child_greeting5"),
+                QuoteType.FAREWELL, List.of("orc_child_farewell1", "orc_child_farewell2", "orc_child_farewell3", "orc_child_farewell4", "orc_child_farewell5"),
+                QuoteType.ATTACK, List.of("orc_child_attack1"),
+                QuoteType.DEATH, List.of("orc_child_death1")
+            )),
             Map.entry(FormType.ORC_FUMELEBITUME, Map.of(
                 QuoteType.GREETING, List.of("fumelebitume_greeting1", "fumelebitume_greeting2", "fumelebitume_greeting3", "fumelebitume_greeting4", "fumelebitume_greeting5"),
                 QuoteType.FAREWELL, List.of("fumelebitume_farewell1", "fumelebitume_farewell2", "fumelebitume_farewell3", "fumelebitume_farewell4", "fumelebitume_farewell5"),
@@ -171,6 +177,7 @@ public class SoundManager implements Listener {
             case TAUREN, TAUREN_GUARD, TAUREN_SHAMAN_BLUE, TAUREN_SHAMAN_RED, TAUREN_KING -> FormType.TAUREN;
             case TAUREN_DESERT, TAUREN_BLACK -> FormType.TAUREN_DESERT;
             case ORC, ORC_DEMON, ORC_GUARD, ORC_TRADER, ORC_FATHER, ORC_FOREST -> FormType.ORC;
+            case ORC_CHILD -> FormType.ORC_CHILD;
             case ORC_FUMELEBITUME -> FormType.ORC_FUMELEBITUME;
             case ORC_FEMALE, ORC_MOTHER -> FormType.ORC_FEMALE;
             case DWARF, DWARF_GUARD, DWARF_TRADER, DWARF_REDHEAD, DWARF_HUNTER, DWARF_KING -> FormType.DWARF;
@@ -190,7 +197,6 @@ public class SoundManager implements Listener {
                 LEAPER, WHISPERER,                               // forest
                 ICE_LORD, ICE_ARCHER, FROZER,                    // ice
                 DEMON, MAGMA_GOLEM, ELEMENTAL_VOID,              // demon
-                ORC_CHILD,                                       // child
                 ZOMBIE,                                          // zombie
                 KODO, ANIMAL,                                    // animal
                 UNKNOWN -> FormType.UNKNOWN;

@@ -60,11 +60,6 @@ public enum ArmorType implements EquipableType {
     }
 
     @Override
-    public ItemCustomCategory getCategory() {
-        return ItemCustomCategory.ARMOR;
-    }
-
-    @Override
     public Component toComponent() {
         return armorMaterial.toComponent();
     }

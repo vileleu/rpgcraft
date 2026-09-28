@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -43,5 +44,17 @@ public class ConsumableManager implements Listener {
 		if (duration == 0) return;
 		e.setCancelled(true);
 		playerCustom.sendActionBar(Message.cooldown(duration));
+	}
+
+	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = false)
+	public void onInteractEntity(PlayerInteractEntityEvent e) {
+		Player			p = e.getPlayer();
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+		ItemStack	item = playerCustom.getEquipment().getItemInMainHand();
+		if (item == null) return;
+		Consumable	consumable = RpgCraft.getItemCustomRegistry().getConsumable(item);
+		if (consumable == null) return;
+		e.setCancelled(true);
 	}
 }

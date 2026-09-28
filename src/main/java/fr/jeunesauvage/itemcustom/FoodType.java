@@ -54,11 +54,6 @@ public enum FoodType implements ItemCustomType {
 	}
 
     @Override
-    public ItemCustomCategory getCategory() {
-        return ItemCustomCategory.FOOD;
-    }
-
-    @Override
     public Set<ClassType> getClassTypes() {
         return classTypes;
     }
