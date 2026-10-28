@@ -1,0 +1,2212 @@
+{
+  "adamantium_impervium": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ar": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "axebreaker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "bard": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "battle": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "beehive": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "beenest": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "black_spot": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "blastbreaker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "boom_town": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "cauldron": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "champion": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "climber": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "cloaked_skull": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "combat": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "leather"
+  },
+  "command_block": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "creed": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "crucuble": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "plate"
+  },
+  "cyklopps": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "dark": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "dragon": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "dragonmaster": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "mail"
+  },
+  "dragonsbane": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 4,
+    "level": 40,
+    "type": "mail"
+  },
+  "dragonslayer": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "mail"
+  },
+  "droid": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "drowned_king": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ellegaard": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ember": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "emerald": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ender": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ender_defender": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ender_dragon": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "plate"
+  },
+  "entertainer": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "evocation": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "fireforged": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "fox": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "fred": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "frost": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "full_metal": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "gabriel": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ghostly": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "glow_squid": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "goat": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "golden_apple": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "golden_goliath": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "grim": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "guard": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "heavy": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 4,
+    "level": 40,
+    "type": "plate"
+  },
+  "hero": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "highland": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "hungriest_horror": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 5,
+    "level": 50,
+    "type": "mail"
+  },
+  "hungry_horror": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ill": {
+    "statsPrimary": [
+      "stamina",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 5,
+    "level": 50,
+    "type": "cloth"
+  },
+  "ivor": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "jack_o": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "journey": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "lava_infused": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "lava_warrior": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "living_vines": {
+    "statsPrimary": [
+      "stamina",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 4,
+    "level": 40,
+    "type": "cloth"
+  },
+  "mage": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "magnus": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "mc": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "mega": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "mega_x": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "mystery": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "nameless": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "necromancer": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "netherwalker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ninja": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 5,
+    "level": 50,
+    "type": "leather"
+  },
+  "norroen": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 5,
+    "level": 50,
+    "type": "plate"
+  },
+  "ocelot": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "opulent": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ore": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "pama": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "petra": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "phantom": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "phantom_ranger": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "piglin": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "pirate": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "plate": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "poisonous_potato": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "portal_buster": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "prismarine": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "proud": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "red_rascal": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "redstone_riot": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "redstonia": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "renegade": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "rgb_ranger": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "robot": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "romeo": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "root_rot": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "royal": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ruby": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "ruby_turtle": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "arcanite"
+  },
+  "sakura": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "scarecrow": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "scarlet": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "scuba": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "arcanite"
+  },
+  "shadow_walker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "shaman": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "shield_of_infinity": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "shogun": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "shulker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "skelly": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "snow": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "soren": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "soul": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "souldancer": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "space": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "spelunker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "spider": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "spleef": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "splendid": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "spooky": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "spooky_gourdian": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "spriggan": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "sprout": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "squid": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "stalwart": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "star_shield": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "strider": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "sweet_tooth": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "swordbreaker": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "teleportation": {
+    "statsPrimary": [
+      "stamina",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "cloth"
+  },
+  "thief": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "tim": {
+    "statsPrimary": [
+      "stamina",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 6,
+    "level": 60,
+    "type": "cloth"
+  },
+  "titans_shroud": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 5,
+    "level": 50,
+    "type": "plate"
+  },
+  "tower": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "trial": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "troubadour": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "turtle": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "unstable": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "vemi": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "verdant": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "vortex": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "wither": {
+    "statsPrimary": [
+      "stamina",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 5,
+    "level": 50,
+    "type": "cloth"
+  },
+  "wolf": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  },
+  "xara": {
+    "statsPrimary": [
+      "stamina",
+      "strength",
+      "agility",
+      "spirit",
+      "intellect"
+    ],
+    "statsSecondary": [
+      "spell_armor",
+      "physical_armor"
+    ],
+    "rarity": 1,
+    "level": 1,
+    "type": "cloth"
+  }
+}

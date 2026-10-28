@@ -1,0 +1,89 @@
+agility = chance_crit + dodge
+intellect = damage_spell + chance_crit + mana_max
+spirit = health_regen + mana_regen
+stamina = defense + health_max
+strength = damage_physical + jump_strength
+
+trident wip:
+mjolnir²
+golden_shuriken_of_ice²
+jack_the_trident²
+dinnerbone²
+gungnir ?
+
+legendary (60) set:
+warrior == crucuble
+hunter == dragonmaster / dragonslayer
+rogue == combat
+dracthyr == ender_dragon
+pyromancer == teleportation
+priest == tim
+
+epic (50) set:
+warrior == titans_shroud
+hunter == hungriest_horror
+rogue == ninja
+dracthyr == hero
+pyromancer == ill
+priest == wither
+
+rare (40) set:
+warrior == heavy
+hunter == dragonsbane
+rogue == 
+dracthyr ==
+pyromancer == living_vines
+priest ==
+
+Projectiles:
+
+Arrow
+SpectralArrow
+TippedArrow
+Trident
+Snowball
+Egg
+EnderPearl
+ExperienceBottle
+SplashPotion
+LingeringPotion
+Fireball
+SmallFireball
+DragonFireball
+WitherSkull
+ShulkerBullet
+LlamaSpit
+Firework
+WindCharge
+EyeOfEnder
+
+TODO:
+- NPC:
+ - necromancer spell (spawn skeletons + ...)
+ - ice_lord spell (launch ice sword + spawn small ice_elemental + freeze all nearby enemies entity)
+ - skins (orc mercenary)
+ - itemcustom = heritage && projectilecustom
+ - drops
+
+- WORLD:
+  - player can break mineral block
+
+- QUESTS:
+ - 1 / talk to a classmaster
+// sorrows
+ - 2 / kill 10 swmap murloc + 5 elite murloc
+ - 3 / kill mrgl the oracle
+// desert
+ - 4 / kill 10 scorpions
+ - 5 / kill 5 desert rogue + 1 desert tauren
+// thousand mountains
+ - 6 / kill 10 elemental wind
+ - 7 / kill 5 black tauren
+ - 8 / kill palpoutine
+// eberor
+ - 9 / talk to nolan + talk to thragg
+ - 10 / get jack'honey in lava
+// tarentula lair
+ - 11 / kill 5 big spider
+ - 12 / kill tarentula
+ - 13 / escort tony to safe place

@@ -1,0 +1,27 @@
+{
+    "BOW": {
+        "staff_basic_wooden": 0,
+        "staff_bermundes_hermit": 0,
+        "staff_black_snake": 0,
+        "staff_divine": 0,
+        "staff_goblin_witch": 0,
+        "staff_golden_crook": 0,
+        "staff_holy_celtic": 0,
+        "staff_lich": 0,
+        "staff_night": 0,
+        "staff_northgate_guardian": 0,
+        "staff_olwen": 0,
+        "staff_sagrada_winged": 0,
+        "staff_unholy_wisdom": 0
+    },
+    "CROSSBOW":{
+        "spellbook_blades_of_war": 0,
+        "spellbook_hellow": 0,
+        "spellbook_braised": 0,
+        "spellbook_majestica": 0
+    },
+    "NETHERITE_SWORD":{
+        "claw_fire": 0,
+        "claw_lightning": 0
+    }
+}

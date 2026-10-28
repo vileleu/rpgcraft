@@ -1,0 +1,273 @@
+package fr.jeunesauvage.combat;
+
+import java.util.UUID;
+
+import org.bukkit.Location;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EvokerFangs;
+import org.bukkit.entity.Firework;
+import org.bukkit.entity.FishHook;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.LlamaSpit;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ShulkerBullet;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.ThrowableProjectile;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Vector;
+
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.itemcustom.Rarity;
+import fr.jeunesauvage.itemcustom.WeaponType;
+import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
+import fr.jeunesauvage.itemcustom.spell.SpellRegistry;
+
+
+public class Combat {
+	private final LivingEntityCustom	target;
+	private final LivingEntityCustom	damager;
+	private final CombatType			combatType;
+	private final WeaponType			weaponType;
+	private final CombatDamage			combatDamage;
+	private final Location				attackLocation;
+
+	/*
+	** init
+	*/
+
+	private Combat(LivingEntityCustom target, LivingEntityCustom damager, DamageSource source) {
+		this.target = target;
+		this.damager = damager;
+		this.combatType = initCombatType(source);
+		this.weaponType = initWeaponType(source);
+		this.combatDamage = initCombatDamage(source);
+		this.attackLocation = source.getDirectEntity().getLocation();
+	}
+
+	private CombatType initCombatType(DamageSource source) {
+		DamageType	d = source.getDamageType();
+		if (d == DamageType.MOB_ATTACK || d == DamageType.MOB_ATTACK_NO_AGGRO || d == DamageType.PLAYER_ATTACK || d == DamageType.SPEAR) {
+			// target for player
+			if (damager.isSneaking() && damager instanceof PlayerCustom && d == DamageType.PLAYER_ATTACK) damager.setTarget(target);
+	        return CombatType.CLOSE;
+		}
+	    else if (source.getDirectEntity() instanceof Projectile)
+	        return CombatType.RANGE;
+	    else
+			return CombatType.UNKNOWN;
+	}
+
+	private WeaponType initWeaponType(DamageSource source) {
+	    if (combatType == CombatType.CLOSE) {
+			ItemStack	item = damager.getEquipment().getItemInMainHand();
+			if (item == null) return WeaponType.HAND;
+			Weapon		weapon = RpgCraft.getItemCustomRegistry().getWeapon(item);
+			if (weapon == null) return WeaponType.HAND;
+			return switch (weapon.getType()) {
+				case BOW -> WeaponType.HAND;
+				case CROSSBOW -> WeaponType.HAND;
+				case STAFF -> WeaponType.HAND;
+				case SPELLBOOK -> WeaponType.HAND;
+				case SHIELD -> WeaponType.HAND;
+				default -> weapon.getType();
+			};
+		}
+	    else if (combatType == CombatType.RANGE) {
+			SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
+			if (spellRegistry.isBow(source.getDirectEntity()))
+				return WeaponType.BOW;
+			else if (spellRegistry.isCrossBow(source.getDirectEntity()))
+				return WeaponType.CROSSBOW;
+			else if (spellRegistry.isStaff(source.getDirectEntity()))
+				return WeaponType.STAFF;
+			else if (spellRegistry.isSpellBook(source.getDirectEntity()))
+				return WeaponType.SPELLBOOK;
+			else if (source.getDamageType() == DamageType.TRIDENT)
+				return WeaponType.TRIDENT;
+		}
+		return WeaponType.UNKNOWN;
+	}
+
+	private CombatDamage initCombatDamage(DamageSource source) {
+	    return switch (weaponType) {
+	        case AXE, BOW, CLAW, CROSSBOW, HAND, HOE, MACE, PICKAXE, SHOVEL, SWORD, TRIDENT, SPEAR, SHEARS -> CombatDamage.PHYSICAL;
+			default -> {
+				yield switch (source.getDirectEntity()) {
+					case AbstractArrow _, ThrowableProjectile _,FishHook _,LlamaSpit _,ShulkerBullet _,Firework _ -> CombatDamage.PHYSICAL;
+					default -> CombatDamage.MAGIC;
+				};
+			}
+		};
+	}
+
+	/*
+	** combat
+	*/
+
+	// apply resistance from target
+	public CombatResult applyBonusTarget(CombatResult result) {
+		if (isFrontalAttack()) result.setBlocking(target.isBlocking());
+		result = combatDamage.applyStatTarget(target, result);
+		if (weaponType != WeaponType.UNKNOWN) result = combatDamage.applySkillTarget(target, result);
+		return result;
+	}
+
+	// apply resistance from damager
+	public CombatResult applyBonusDamager(CombatResult result) {
+		result = combatDamage.applyStatDamager(damager, result);
+		if (weaponType != WeaponType.UNKNOWN) result = combatDamage.applySkillDamager(damager, this, result);
+		return result;
+	}
+
+	// apply spell
+	public CombatResult applySpell(CombatResult result) {
+		SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
+		UUID	uuidTarget = target.getUUID();
+		// holyshield (immune to physical damage + reflect damage to random ennemy)
+		// duration = 8 seconds
+		if (spellRegistry.hasHolyShield(uuidTarget) && combatDamage == CombatDamage.PHYSICAL) {
+			int	level = spellRegistry.getHolyShield(uuidTarget);
+			spellRegistry.holyShieldHit(target, Rarity.fromInt(level), result.getAmount());
+			result.setAmount(0);
+		}
+		// strikeback (create damage area at each hit, 1 time by second)
+		if (result.getAmount() > 0 && spellRegistry.canUseStrikeBack(uuidTarget)) {
+			int	level = spellRegistry.getStrikeBack(uuidTarget);
+			spellRegistry.strikeBackHit(target, Rarity.fromInt(level));
+		}
+		if (result.getAmount() <= 0) {
+			result.setAmount(0);
+			result.setCancelled(true);
+		}
+		UUID	uuidDamager = damager.getUUID();
+		// kneebreaker (-30% speed)
+		// duration = 2 seconds + rarity number
+		if (combatType == CombatType.CLOSE && spellRegistry.hasKneeBreaker(uuidDamager)) {
+			int	duration = 4 + spellRegistry.removeKneeBreaker(uuidDamager);
+			// need damage and target != boss
+			if (result.getAmount() > 0 && !target.isBoss()) target.addStatModifier(StatSecondary.SPEED, -40, duration);
+		}
+		// stealth (remove stealth if attack)
+		if (spellRegistry.hasStealth(uuidDamager)) {
+			if (result.getAmount() > 0) spellRegistry.removeStealth(damager);
+		}
+		// coldblood (100% chance to critical + poison wither)
+		// duration = 4 seconds + rarity number
+		if (combatType == CombatType.CLOSE && spellRegistry.hasColdBlood(uuidDamager)) {
+			int	duration = 4 + spellRegistry.removeColdBlood(uuidDamager);
+			// need damage
+			if (result.getAmount() > 0) {
+				if (!result.isCritical()) {
+					result.setCritical(true);
+					result.increaseAmount(result.getAmount());
+				}
+				LivingEntity	l = target.getLivingEntity();
+				if (l != null) l.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, duration * 20, 2, false, true, false));
+			}
+		}
+		return result;
+	}
+
+	// print damage above target
+	public void printDamage(CombatResult result) {
+		combatDamage.printDamage(target, result);
+	}
+
+	private boolean isFrontalAttack() {
+		if (combatDamage != CombatDamage.PHYSICAL) return false;
+	    Vector	toSource = attackLocation.toVector().subtract(target.getLocation().toVector());
+	    toSource.setY(0);
+	    if (toSource.lengthSquared() < 1.0E-6) return true;
+	    toSource.normalize();
+	    Vector	facing = target.getLocation().getDirection();
+	    facing.setY(0);
+	    if (facing.lengthSquared() < 1.0E-6) return true;
+	    facing.normalize();
+	    double dot = facing.dot(toSource);
+	    return dot >= 0;
+	}
+
+	/*
+	** getter + setter
+	*/
+
+	public LivingEntityCustom getTarget() {
+		return target;
+	}
+
+	public LivingEntityCustom getDamager() {
+		return damager;
+	}
+
+	public CombatType getCombatType() {
+		return combatType;
+	}
+
+	public CombatDamage getCombatDamage() {
+		return combatDamage;
+	}
+
+	public WeaponType getWeaponType() {
+		return weaponType;
+	}
+
+	/*
+	** static
+	*/
+
+	public static Combat buildCombat(EntityDamageByEntityEvent e) {
+		if (!(e.getEntity() instanceof LivingEntity target)) return null;
+    	DamageSource	source = e.getDamageSource();
+    	LivingEntity 	damager = resolveDamager(source);
+    	if (damager == null) return null;
+		LivingEntityCustom	combatantTarget = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(target.getUniqueId());
+		LivingEntityCustom	combatantDamager = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(damager.getUniqueId());
+		if (combatantTarget == null || combatantDamager == null) return null;
+		return new Combat(combatantTarget, combatantDamager, source);
+	}
+
+	private static LivingEntity resolveDamager(DamageSource source) {
+		// cancel vanilla evoker fangs
+    	if (source.getDirectEntity() instanceof EvokerFangs) return null;
+	    Entity causingEntity = source.getCausingEntity();
+	    if (causingEntity == null) return null;
+	    // direct
+	    if (causingEntity instanceof LivingEntity livingEntity) return livingEntity;
+	    // projectiles
+	    if (causingEntity instanceof Projectile projectile) {
+	        ProjectileSource shooter = projectile.getShooter();
+	        if (shooter instanceof LivingEntity livingEntity) return livingEntity;
+	        return null;
+	    }
+	    // evokerfangs
+	    if (causingEntity instanceof EvokerFangs fangs) {
+			return fangs.getOwner();
+		}
+	    // areaeffectcloud
+	    if (causingEntity instanceof AreaEffectCloud cloud) {
+	        ProjectileSource sourceEntity = cloud.getSource();
+	        if (sourceEntity instanceof LivingEntity livingEntity) return livingEntity;
+	        return null;
+		}
+	    // TNT
+	    if (causingEntity instanceof TNTPrimed tnt) {
+	        Entity sourceEntity = tnt.getSource();
+	        if (sourceEntity instanceof LivingEntity livingEntity) {
+	            return livingEntity;
+	        }
+	        return null;
+	    }
+	    return null;
+	}
+}

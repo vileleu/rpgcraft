@@ -1,0 +1,214 @@
+{
+    "bow/staff_basic_wooden": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "rarity": 1,
+        "level": 2,
+        "type": "staff"
+    },
+    "bow/staff_bermundes_hermit": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 2,
+        "level": 7,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_black_snake": {
+        "statsPrimary": [
+            "intellect",
+            "stamina"
+        ],
+        "rarity": 3,
+        "level": 12,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_divine": {
+        "statsPrimary":  [
+            "intellect",
+            "spirit"
+        ],
+        "rarity": 6,
+        "level": 60,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_goblin_witch": {
+        "statsPrimary": [
+            "intellect",
+            "agility"
+        ],
+        "rarity": 5,
+        "level": 58,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_golden_crook": {
+        "statsPrimary": [
+            "intellect",
+            "strength"
+        ],
+        "rarity": 2,
+        "level": 17,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_holy_celtic": {
+        "statsPrimary": [
+            "intellect",
+            "stamina"
+        ],
+        "rarity": 3,
+        "level": 38,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_lich": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 3,
+        "level": 33,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_night": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 3,
+        "level": 28,
+        "statsSecondary":  [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_northgate_guardian": {
+        "statsPrimary": [
+            "intellect",
+            "stamina"
+        ],
+        "rarity": 2,
+        "level": 23,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_olwen": {
+        "statsPrimary": [
+            "intellect",
+            "agility"
+        ],
+        "rarity": 2,
+        "level": 43,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_sagrada_winged": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 2,
+        "level": 48,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_unholy_wisdom": {
+        "statsPrimary": [
+            "intellect",
+            "spirit"
+        ],
+        "rarity": 3,
+        "level": 53,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "crossbow/spellbook_blades_of_war": {
+        "statsPrimary": [
+            "strength",
+            "agility"
+        ],
+        "rarity": 4,
+        "level": 30,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "spellbook"
+    },
+    "crossbow/spellbook_hellow": {
+        "statsPrimary": [
+            "intellect",
+            "agility"
+        ],
+        "rarity": 5,
+        "level": 50,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "spellbook"
+    },
+    "crossbow/spellbook_braised": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 3,
+        "level": 10,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "spellbook"
+    },
+    "crossbow/spellbook_majestica": {
+        "statsPrimary": [
+            "intellect",
+            "spirit"
+        ],
+        "rarity": 6,
+        "level": 60,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "spellbook"
+    },
+    "netherite_sword/claw_fire": {
+        "statsPrimary": [],
+        "rarity": 2,
+        "level": 1,
+        "statsSecondary": [],
+        "type": "claw"
+    },
+    "netherite_sword/claw_lightning": {
+        "statsPrimary": [],
+        "rarity": 2,
+        "level": 1,
+        "statsSecondary": [],
+        "type": "claw"
+    }
+}

@@ -1,0 +1,440 @@
+package fr.jeunesauvage.itemcustom.equipable.weapon.launcher;
+
+import java.util.Collections;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.DragonFireball;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.Trident;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.CrossbowMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import com.destroystokyo.paper.event.entity.EnderDragonFireballHitEvent;
+
+import fr.jeunesauvage.Data;
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.combat.CombatDamage;
+import fr.jeunesauvage.component.Message;
+import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.itemcustom.Rarity;
+import fr.jeunesauvage.itemcustom.WeaponType;
+import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
+import fr.jeunesauvage.itemcustom.spell.SpellRegistry;
+import net.kyori.adventure.text.Component;
+
+public class LauncherManager implements Listener {
+	private static final float			FORCENEED_DEFAULT = 2f;
+	private static final NamespacedKey	KEY_SAVEITEM = new NamespacedKey(RpgCraft.name(), "saveitem");
+	private static final NamespacedKey	KEY_SAVESLOT = new NamespacedKey(RpgCraft.name(), "saveslot");
+	private static final NamespacedKey	KEY_FALSEARROW = new NamespacedKey(RpgCraft.name(), "arrow");
+	private static final int			SLOT_SAVEITEM = 35;
+
+	// use staff or spellbook
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+	public void onRightClickStaff(PlayerInteractEvent e) {
+		Action	action = e.getAction();
+	    if (!action.isRightClick()) return;
+	    Player			p = e.getPlayer();
+		PlayerCustom	launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (launcher == null) return;
+	    ItemStack	item = e.getItem();
+	    if (item == null) return;
+		Weapon		weapon = RpgCraft.getItemCustomRegistry().getWeapon(item);
+		if (weapon == null || (weapon.getType() != WeaponType.STAFF && weapon.getType() != WeaponType.SPELLBOOK)) return;
+		if (Data.hasString(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVEITEM) || Data.hasInteger(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVESLOT))
+			return;
+		// launch spellbook
+		if (weapon.getType() == WeaponType.SPELLBOOK) {
+			CrossbowMeta	meta = (CrossbowMeta)item.getItemMeta();
+			if (meta.hasChargedProjectiles()) {
+				RpgCraft.getSpellRegistry().launchSpellBook(launcher, null, item);
+				CrossbowMeta	updatedMeta = (CrossbowMeta)item.getItemMeta();
+				updatedMeta.setChargedProjectiles(Collections.emptyList());
+				item.setItemMeta(updatedMeta);
+				e.setCancelled(true);
+				return;
+			}
+		}
+		// charge + shoot for launchers
+		int	start = allowVanillaCharge(launcher, action);
+		charge(launcher, item, start);
+	}
+
+	// allow charge vanilla from bow and crossbow
+	private int allowVanillaCharge(PlayerCustom launcher, Action action) {
+		PlayerInventory	inv = launcher.getInventory();
+		if (hasArrow(inv))
+			replaceArrow(launcher);
+		else {
+			ItemStack	falseArrow = new ItemStack(Material.ARROW);
+			falseArrow.editMeta(meta -> Data.setBoolean(meta.getPersistentDataContainer(), KEY_FALSEARROW));
+			int			slot = findSlot(inv);
+			if (slot == -1) {
+				String	base64 = Data.toBase64(inv.getItem(SLOT_SAVEITEM));
+				Data.setString(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVEITEM, base64);
+				inv.setItem(SLOT_SAVEITEM, falseArrow);
+			}
+			else {
+				Data.setInteger(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVESLOT, slot + 1);
+				inv.setItem(slot, falseArrow);
+			}
+			if (action == Action.RIGHT_CLICK_BLOCK) return 5;
+		}
+		return 0;
+	}
+
+	// stop charge vanilla from bow and crossbow
+	private void stopVanillaCharge(PlayerCustom launcher) {
+		PlayerInventory	inv = launcher.getInventory();
+		ItemStack	itemSaved = null;
+		String		base64 = Data.getString(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVEITEM);
+		if (base64 != null) {
+			Data.remove(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVEITEM);
+			itemSaved = Data.fromBase64(base64);
+			inv.setItem(SLOT_SAVEITEM, itemSaved);
+			return;
+		}
+		int	slot = Data.getInteger(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVESLOT);
+		if (slot > 0 && slot < 37) {
+			Data.remove(launcher.getLivingEntity().getPersistentDataContainer(), KEY_SAVESLOT);
+			inv.setItem(slot - 1, null);
+			return;
+		}
+	}
+
+	// cancel click on arrow and barrier
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+	public void onInventoryClick(InventoryClickEvent e) {
+	    if (!(e.getWhoClicked() instanceof Player p)) return;
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+        if (playerCustom == null) return;
+		ItemStack	current = e.getCurrentItem();
+		if (current == null || (!isBarrier(current) && !isFalseArrow(current))) return;
+		e.setCancelled(true);
+	}
+
+	// reset item saved
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		Player			p = e.getPlayer();
+		PlayerCustom	launcher = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (launcher == null) return;
+		giveBackArrow(launcher);
+		PersistentDataContainer	pdc = p.getPersistentDataContainer();
+		String					base64 = Data.getString(pdc, KEY_SAVEITEM);
+		if (base64 == null) return;
+		ItemStack	item = Data.fromBase64(base64);
+		Data.remove(pdc, KEY_SAVEITEM);
+		launcher.getInventory().setItem(SLOT_SAVEITEM, item);
+	}
+
+	// create custom charge
+	private void charge(PlayerCustom launcher, ItemStack item, long start) {
+		World	world	= launcher.getWorld();
+		if (world == null) {
+			giveBackArrow(launcher);
+			return;
+		}
+		new BukkitRunnable() {
+		    float	ticks = 0f;
+			boolean	sound = false;
+			float	forceNeed = Math.max(FORCENEED_DEFAULT - ((float)StatSecondary.CAST_SPEED.getAmount(launcher)), 0.5f);
+		    @Override
+		    public void run() {
+	    		float	force = ticks / 20;
+				if (!sound && force >= forceNeed) {
+					sound = true;
+					world.playSound(launcher.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+				}
+		    	if (!launcher.isPresent()) {
+					giveBackArrow(launcher);
+		    	    cancel();
+					return;
+		    	}
+		    	if (launcher.isHandRaised()) {
+					if (ticks == 0) stopVanillaCharge(launcher);
+					ticks++;
+					return;
+				}
+				// launch
+				if (force >= forceNeed) {
+					// staff
+					if (item.getType() == Material.BOW) {
+						RpgCraft.getSpellRegistry().launchStaff(launcher, null, item);
+					}
+					// spellbook
+					else if (item.getType() == Material.CROSSBOW) {
+						CrossbowMeta	metaSpellBook = (CrossbowMeta)item.getItemMeta();
+						ItemStack		projectile = new ItemStack(Material.ARROW);
+						ItemMeta		metaProjectile = projectile.getItemMeta();
+						metaProjectile.displayName(Message.c(Component.translatable("item.rpgcraft.spellbook_projectile")));
+						projectile.setItemMeta(metaProjectile);
+						metaSpellBook.addChargedProjectile(projectile);
+						item.setItemMeta(metaSpellBook);
+					}
+				}
+				giveBackArrow(launcher);
+		        cancel();
+		    }
+		}.runTaskTimer(RpgCraft.instance(), start, 1L);
+	}
+
+	// replace arrow in inventory
+	private void replaceArrow(PlayerCustom launcher) {
+		Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> {
+			PlayerInventory	inv = launcher.getInventory();
+			ItemStack[]		contents = inv.getContents();
+    		for (int i = 0; i < contents.length; i++) {
+				ItemStack	item = contents[i];
+    		    if (!isArrow(item)) continue;
+				String		base64 = Data.toBase64(item);
+				ItemStack	barrier = new ItemStack(Material.BARRIER);
+				ItemMeta	meta = barrier.getItemMeta();
+				Data.setString(meta.getPersistentDataContainer(), KEY_SAVEITEM, base64);
+				barrier.setItemMeta(meta);
+				inv.setItem(i, barrier);
+			}
+		});
+	}
+
+	// give back arrow in inventory
+	private void giveBackArrow(PlayerCustom launcher) {
+		stopVanillaCharge(launcher);
+		PlayerInventory	inv = launcher.getInventory();
+		ItemStack[]		contents = inv.getContents();
+    	for (int i = 0; i < contents.length; i++) {
+			ItemStack	barrier = contents[i];
+    	    if (!isBarrier(barrier)) continue;
+			ItemMeta				meta = barrier.getItemMeta();
+			PersistentDataContainer	pdc = meta.getPersistentDataContainer();
+			String					base64 = Data.getString(pdc, KEY_SAVEITEM);
+			if (base64 != null) {
+				ItemStack	arrow = Data.fromBase64(base64);
+				inv.setItem(i, arrow);
+			}
+			else
+				inv.setItem(i, null);
+		}
+	}
+
+	private boolean hasArrow(PlayerInventory inventory) {
+    	for (ItemStack item: inventory.getContents()) {
+    	    if (isArrow(item)) return true;
+    	}
+    	return isArrow(inventory.getItemInOffHand());
+	}
+
+	private boolean isArrow(ItemStack item) {
+	    if (item == null) return false;
+	    Material	material = item.getType();
+	    return material == Material.ARROW || material == Material.SPECTRAL_ARROW || material == Material.TIPPED_ARROW;
+	}
+
+	private boolean isBarrier(ItemStack item) {
+	    if (item == null || item.getType() != Material.BARRIER) return false;
+		return Data.hasString(item.getPersistentDataContainer(), KEY_SAVEITEM);
+	}
+
+	private boolean isFalseArrow(ItemStack item) {
+	    if (item == null || item.getType() != Material.ARROW) return false;
+		return Data.hasBoolean(item.getPersistentDataContainer(), KEY_FALSEARROW);
+	}
+
+	private int findSlot(PlayerInventory inventory) {
+		ItemStack[]	contents = inventory.getStorageContents();
+    	for (int i = 9; i < contents.length; i++) {
+    	    if (contents[i] == null || contents[i].getType().isAir())
+				return i;
+    	}
+		return -1;
+	}
+
+	// dragonfireball hit (staff dragonfireball)
+	@EventHandler
+	public void onDragonFireballHit(EnderDragonFireballHitEvent e) {
+		DragonFireball	dragonFireball = e.getEntity();
+		if (!(dragonFireball.getShooter() instanceof LivingEntity l)) return;
+		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+		if (launcher == null) return;
+		SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
+		if (!spellRegistry.isStaff(dragonFireball)) return;
+		AreaEffectCloud	areaEffectCloud = e.getAreaEffectCloud();
+		spellRegistry.setStaff(areaEffectCloud);
+		areaEffectCloud.setDuration(40);
+	}
+
+	// dragonfireball area hit (staff dragonfireball)
+	@EventHandler(priority = EventPriority.LOW)
+	public void onDragonFireballArea(AreaEffectCloudApplyEvent e) {
+		if (!RpgCraft.getSpellRegistry().isStaff(e.getEntity())) return;
+		if (!(e.getEntity().getSource() instanceof LivingEntity l)) return;
+		EntityCustomRegistry	entityCustomRegistry = RpgCraft.getEntityCustomRegistry();
+		LivingEntityCustom		launcher = entityCustomRegistry.getLivingEntityCustom(l.getUniqueId());
+		if (launcher == null) return;
+		e.setCancelled(true);
+		for (LivingEntity le: e.getAffectedEntities()) {
+			LivingEntityCustom	target = entityCustomRegistry.getLivingEntityCustom(le.getUniqueId());
+			if (target == null || target.isGrouped(launcher)) continue;
+			target.damage(launcher.getLevel() / 2 + 1, CombatDamage.MAGIC, launcher);
+		}
+	}
+
+	// use staffs for all livingentitycustom
+	@EventHandler
+	public void onShoot(EntityShootBowEvent e) {
+		LivingEntity		l = e.getEntity();
+		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+		if (launcher == null) return;
+		ItemStack		item = e.getBow();
+		if (item == null) return;
+		Weapon	weapon = RpgCraft.getItemCustomRegistry().getWeapon(item);
+		if (weapon == null) return;
+		Entity	projectile = e.getProjectile();
+		switch (weapon.getType()) {
+			case BOW -> RpgCraft.getSpellRegistry().setBow(projectile);
+			case CROSSBOW -> RpgCraft.getSpellRegistry().setCrossBow(projectile);
+			case STAFF -> {
+				e.setCancelled(true);
+				if (!(launcher instanceof PlayerCustom)) RpgCraft.getSpellRegistry().launchStaff(launcher, launcher.getTarget(), item);
+			}
+			case SPELLBOOK -> {
+				e.setCancelled(true);
+				if (!(launcher instanceof PlayerCustom)) RpgCraft.getSpellRegistry().launchSpellBook(launcher, null, item);
+			}
+			default -> {}
+		}
+	}
+
+	// cancel destruction on explosion
+	@EventHandler
+	public void onExplosion(EntityExplodeEvent e) {
+		e.blockList().clear();
+		if (!(e.getEntity() instanceof Projectile projectile)) return;
+		SpellRegistry	spellRegistry = RpgCraft.getSpellRegistry();
+	    if (spellRegistry.isFireball(projectile) || spellRegistry.isShadowWord(projectile) || spellRegistry.isDemonChains(projectile))
+    		e.setCancelled(true);
+	}
+
+	// projectile
+	@EventHandler
+	public void onProjectileHit(ProjectileHitEvent e) {
+	    Projectile	projectile = e.getEntity();
+		if (!(projectile.getShooter() instanceof LivingEntity l)) return;
+		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+		if (launcher == null) return;
+		SpellRegistry		spellRegistry = RpgCraft.getSpellRegistry();
+		UUID				uuid = launcher.getUUID();
+		Rarity				rarity = null;
+		// staff snow
+		if (projectile instanceof Snowball && spellRegistry.isStaff(projectile)) {
+			Location	location = projectile.getLocation();
+			double		radius = 2;
+			double 		damage = launcher.getLevel() / 2 + 1;
+			int			freezeTicks = 40;
+			spellRegistry.explosionIce(launcher, location, radius, damage, -30, freezeTicks);
+		}
+		// staff fireball
+		if (projectile instanceof SmallFireball && spellRegistry.isStaff(projectile)) {
+			Location	location = projectile.getLocation();
+			double		radius = 2;
+			double 		damage = launcher.getLevel() / 2 + 1;
+			int			fireTicks = 40;
+			spellRegistry.explosion(launcher, location, radius, damage, 0.5, fireTicks);
+		}
+		// fireball
+		else if ((rarity = spellRegistry.getFireballRarity(projectile)) != null) {
+			Location	location = projectile.getLocation();
+			double		radius = (rarity.getNumber()) + 2;
+			double 		damage = rarity.getNumber() * 3;
+			int			fireTicks = (rarity.getNumber() + 2) * 20;
+			spellRegistry.explosionFire(launcher, location, radius, damage, 1, fireTicks);
+		}
+		// holybomb
+		else if (spellRegistry.hasHolyBomb(uuid) && spellRegistry.isStaff(projectile)) {
+			int		level = spellRegistry.removeHolyBomb(uuid);
+			if (projectile instanceof SmallFireball smallFireball)
+				smallFireball.setIsIncendiary(false);
+			spellRegistry.holyBombExplosion(launcher, projectile.getLocation(), Rarity.fromInt(level));
+		}
+		// shadowword
+		else if ((rarity = spellRegistry.getShadowWordRarity(projectile)) != null) {
+			Location	center = projectile.getLocation();
+			spellRegistry.shadowWordExplosion(launcher, rarity, center);
+		}
+		// explosive shot
+		else if (spellRegistry.hasExplosiveShot(uuid) && (spellRegistry.isBow(projectile) || spellRegistry.isCrossBow(projectile))) {
+			int	level = spellRegistry.removeExplosiveShot(uuid);
+			if (level == 0) return;
+			Location	center = projectile.getLocation();
+			double		radius = 4;
+			double 		damage = level * 3;
+			int			fireTicks = (level + 1) * 20;
+			spellRegistry.explosion(launcher, center, radius, damage, 1, fireTicks);
+		}
+		// launch wind
+		else if ((rarity = spellRegistry.getWind(projectile)) != null) {
+			Location	center = projectile.getLocation();
+			double		radius = 6;
+			double 		damage = rarity.getNumber() * 5;
+			spellRegistry.explosionWind(launcher, center, radius, damage);
+		}
+		// demon chains
+		else if ((rarity = spellRegistry.getDemonChains(projectile)) != null) {
+			LivingEntityCustom	a = spellRegistry.findNearestFromLoc(launcher, projectile.getLocation());
+			if (a == null || !a.isPresent()) return;
+			LivingEntityCustom	b = spellRegistry.findNearestFromEntity(launcher, a);
+			if (b == null || !b.isPresent()) return;
+			spellRegistry.demonChainsAttract(launcher, a, b);
+		}
+		else
+			return;
+		projectile.remove();
+		e.setCancelled(true);
+	}
+
+	// apply CEM for trident
+	@EventHandler
+	public void launchTrident(ProjectileLaunchEvent e) {
+		if (!(e.getEntity() instanceof Trident trident)) return;
+		if (!(trident.getShooter() instanceof LivingEntity l)) return;
+		LivingEntityCustom	launcher = RpgCraft.getEntityCustomRegistry().getLivingEntityCustom(l.getUniqueId());
+		if (launcher == null) return;
+		Weapon	weapon = RpgCraft.getItemCustomRegistry().getWeapon(launcher.getEquipment().getItemInMainHand());
+		if (weapon == null || weapon.getType() != WeaponType.TRIDENT) {
+			weapon = RpgCraft.getItemCustomRegistry().getWeapon(launcher.getEquipment().getItemInOffHand());
+			if (weapon == null || weapon.getType() != WeaponType.TRIDENT) return;
+		}
+		trident.customName(Component.text(weapon.getIdentifier()));
+	}
+}

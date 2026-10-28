@@ -1,0 +1,207 @@
+package fr.jeunesauvage.sound;
+
+import java.util.Map;
+import java.util.List;
+import java.util.Random;
+
+import org.bukkit.Location;
+import org.bukkit.SoundCategory;
+import org.bukkit.World;
+import org.bukkit.event.Listener;
+
+import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
+
+public class SoundManager implements Listener {
+    private final static Map<FormType, Map<QuoteType, List<String>>>    QUOTES;
+
+    static {
+        QUOTES = Map.ofEntries(
+            // dwarf
+            Map.entry(FormType.DWARF, Map.of(
+                QuoteType.GREETING, List.of("dwarf_greeting1", "dwarf_greeting2", "dwarf_greeting3", "dwarf_greeting4", "dwarf_greeting5", "dwarf_greeting6"),
+                QuoteType.FAREWELL, List.of("dwarf_farewell1", "dwarf_farewell2", "dwarf_farewell3", "dwarf_farewell4"),
+                QuoteType.ATTACK, List.of("dwarf_attack1", "dwarf_attack2", "dwarf_attack3", "dwarf_attack4"),
+                QuoteType.DEATH, List.of("dwarf_death1", "dwarf_death2", "dwarf_death3", "dwarf_death4", "dwarf_death5")
+            )),
+            // dwarfiron
+            Map.entry(FormType.DWARFIRON, Map.of(
+                QuoteType.GREETING, List.of("dwarfiron_greeting1", "dwarfiron_greeting2", "dwarfiron_greeting3", "dwarfiron_greeting4", "dwarfiron_greeting5", "dwarfiron_greeting6"),
+                QuoteType.FAREWELL, List.of("dwarfiron_farewell1", "dwarfiron_farewell2", "dwarfiron_farewell3", "dwarfiron_farewell4", "dwarfiron_farewell5", "dwarfiron_farewell6", "dwarfiron_farewell7"),
+                QuoteType.ATTACK, List.of("dwarfiron_attack1", "dwarfiron_attack2", "dwarfiron_attack3", "dwarfiron_attack4", "dwarfiron_attack5", "dwarfiron_attack6", "dwarfiron_attack7", "dwarfiron_attack8", "dwarfiron_attack9"),
+                QuoteType.DEATH, List.of("dwarfiron_death1", "dwarfiron_death2", "dwarfiron_death3", "dwarfiron_death4", "dwarfiron_death5")
+            )),
+            Map.entry(FormType.IRON_GUARD, Map.of(
+                QuoteType.GREETING, List.of("dwarfiron_guard_greeting1", "dwarfiron_guard_greeting2", "dwarfiron_guard_greeting3", "dwarfiron_guard_greeting4", "dwarfiron_guard_greeting5", "dwarfiron_guard_greeting6"),
+                QuoteType.FAREWELL, List.of("dwarfiron_guard_greeting1", "dwarfiron_guard_greeting2", "dwarfiron_guard_greeting3", "dwarfiron_guard_greeting4", "dwarfiron_guard_greeting5", "dwarfiron_guard_greeting6"),
+                QuoteType.ATTACK, List.of("dwarfiron_guard_attack1", "dwarfiron_guard_attack2", "dwarfiron_guard_attack3", "dwarfiron_guard_attack4", "dwarfiron_guard_attack5", "dwarfiron_guard_attack6"),
+                QuoteType.DEATH, List.of("dwarfiron_guard_death1", "dwarfiron_guard_death2", "dwarfiron_guard_death3")
+            )),
+            // human
+            Map.entry(FormType.HUMAN, Map.of(
+                QuoteType.GREETING, List.of("human_greeting1", "human_greeting2", "human_greeting3", "human_greeting4", "human_greeting5"),
+                QuoteType.FAREWELL, List.of("human_farewell1", "human_farewell2", "human_farewell3", "human_farewell4", "human_farewell5"),
+                QuoteType.ATTACK, List.of("human_attack1", "human_attack2", "human_attack3", "human_attack4", "human_attack5", "human_attack6"),
+                QuoteType.DEATH, List.of("human_death1", "human_death2", "human_death3", "human_death4", "human_death5", "human_death6")
+            )),
+            Map.entry(FormType.HUMAN_ROGUE, Map.of(
+                QuoteType.GREETING, List.of("human_evil_greeting1", "human_evil_greeting2", "human_evil_greeting3", "human_evil_greeting4", "human_evil_greeting5"),
+                QuoteType.FAREWELL, List.of("human_evil_farewell1", "human_evil_farewell2", "human_evil_farewell3", "human_evil_farewell4", "human_evil_farewell5"),
+                QuoteType.ATTACK, List.of("human_evil_attack1", "human_evil_attack2", "human_evil_attack3", "human_evil_attack4", "human_evil_attack5", "human_evil_attack6"),
+                QuoteType.DEATH, List.of("human_evil_death1", "human_evil_death2", "human_evil_death3", "human_evil_death4", "human_evil_death5", "human_evil_death6")
+            )),
+            // tauren
+            Map.entry(FormType.TAUREN, Map.of(
+                QuoteType.GREETING, List.of("tauren_greeting1", "tauren_greeting2", "tauren_greeting3", "tauren_greeting4", "tauren_greeting5", "tauren_greeting6"),
+                QuoteType.FAREWELL, List.of("tauren_farewell1", "tauren_farewell2", "tauren_farewell3", "tauren_farewell4", "tauren_farewell5"),
+                QuoteType.ATTACK, List.of("tauren_attack1", "tauren_attack2", "tauren_attack3", "tauren_attack4"),
+                QuoteType.DEATH, List.of("tauren_death1", "tauren_death2", "tauren_death3", "tauren_death4", "tauren_death5")
+            )),
+            Map.entry(FormType.TAUREN_DESERT, Map.of(
+                QuoteType.GREETING, List.of("tauren_evil_greeting1", "tauren_evil_greeting2", "tauren_evil_greeting3"),
+                QuoteType.FAREWELL, List.of("tauren_evil_farewell1", "tauren_evil_farewell2", "tauren_evil_farewell3"),
+                QuoteType.ATTACK, List.of("tauren_evil_attack1", "tauren_evil_attack2", "tauren_evil_attack3", "tauren_evil_attack4", "tauren_evil_attack5", "tauren_evil_attack6"),
+                QuoteType.DEATH, List.of("tauren_evil_death1", "tauren_evil_death2", "tauren_evil_death3", "tauren_evil_death4", "tauren_evil_death5")
+            )),
+            // orc
+            Map.entry(FormType.ORC, Map.of(
+                QuoteType.GREETING, List.of("orc_greeting1", "orc_greeting2", "orc_greeting3", "orc_greeting4", "orc_greeting5", "orc_greeting6"),
+                QuoteType.FAREWELL, List.of("orc_farewell1", "orc_farewell2", "orc_farewell3", "orc_farewell4", "orc_farewell5"),
+                QuoteType.ATTACK, List.of("orc_attack1", "orc_attack2", "orc_attack3", "orc_attack4", "orc_attack5"),
+                QuoteType.DEATH, List.of("orc_death1", "orc_death2", "orc_death3", "orc_death4", "orc_death5", "orc_death6")
+            )),
+            Map.entry(FormType.ORC_FEMALE, Map.of(
+                QuoteType.GREETING, List.of("orc_female_greeting1", "orc_female_greeting2", "orc_female_greeting3", "orc_female_greeting4"),
+                QuoteType.FAREWELL, List.of("orc_female_farewell1", "orc_female_farewell2", "orc_female_farewell3", "orc_female_farewell4", "orc_female_farewell5"),
+                QuoteType.ATTACK, List.of("orc_female_attack1", "orc_female_attack2", "orc_female_attack3", "orc_female_attack4", "orc_female_attack5", "orc_female_attack6"),
+                QuoteType.DEATH, List.of("orc_female_death1", "orc_female_death2", "orc_female_death3", "orc_female_death4", "orc_female_death5", "orc_female_death6", "orc_female_death7")
+            )),
+            Map.entry(FormType.ORC_CHILD, Map.of(
+                QuoteType.GREETING, List.of("orc_child_greeting1", "orc_child_greeting2", "orc_child_greeting3", "orc_child_greeting4", "orc_child_greeting5"),
+                QuoteType.FAREWELL, List.of("orc_child_farewell1", "orc_child_farewell2", "orc_child_farewell3", "orc_child_farewell4", "orc_child_farewell5"),
+                QuoteType.ATTACK, List.of("orc_child_attack1"),
+                QuoteType.DEATH, List.of("orc_child_death1")
+            )),
+            Map.entry(FormType.ORC_FUMELEBITUME, Map.of(
+                QuoteType.GREETING, List.of("fumelebitume_greeting1", "fumelebitume_greeting2", "fumelebitume_greeting3", "fumelebitume_greeting4", "fumelebitume_greeting5"),
+                QuoteType.FAREWELL, List.of("fumelebitume_farewell1", "fumelebitume_farewell2", "fumelebitume_farewell3", "fumelebitume_farewell4", "fumelebitume_farewell5"),
+                QuoteType.ATTACK, List.of("fumelebitume_attack1", "fumelebitume_attack2", "fumelebitume_attack3", "fumelebitume_attack4", "fumelebitume_attack5", "fumelebitume_attack6", "fumelebitume_attack7"),
+                QuoteType.DEATH, List.of("fumelebitume_death1", "fumelebitume_death2", "fumelebitume_death3", "fumelebitume_death4", "fumelebitume_death5")
+            )),
+            // elfnight
+            Map.entry(FormType.ELFNIGHT, Map.of(
+                QuoteType.GREETING, List.of("elfnight_greeting1", "elfnight_greeting2", "elfnight_greeting3", "elfnight_greeting4", "elfnight_greeting5", "elfnight_greeting6", "elfnight_greeting7", "elfnight_greeting8"),
+                QuoteType.FAREWELL, List.of("elfnight_farewell1", "elfnight_farewell2", "elfnight_farewell3", "elfnight_farewell4", "elfnight_farewell5", "elfnight_farewell6"),
+                QuoteType.ATTACK, List.of("elfnight_attack1", "elfnight_attack2", "elfnight_attack3"),
+                QuoteType.DEATH, List.of("elfnight_death1", "elfnight_death2", "elfnight_death3", "elfnight_death4", "elfnight_death5", "elfnight_death6", "elfnight_death7")
+            )),
+            // elfblood
+            Map.entry(FormType.ELFBLOOD, Map.of(
+                QuoteType.GREETING, List.of("elfblood_greeting1", "elfblood_greeting2", "elfblood_greeting3", "elfblood_greeting4", "elfblood_greeting5", "elfblood_greeting6"),
+                QuoteType.FAREWELL, List.of("elfblood_farewell1", "elfblood_farewell2", "elfblood_farewell3", "elfblood_farewell4", "elfblood_farewell5", "elfblood_farewell6"),
+                QuoteType.ATTACK, List.of("elfblood_attack1", "elfblood_attack2", "elfblood_attack3", "elfblood_attack4", "elfblood_attack5"),
+                QuoteType.DEATH, List.of("elfblood_death1", "elfblood_death2", "elfblood_death3", "elfblood_death4", "elfblood_death5", "elfblood_death6", "elfblood_death7", "elfblood_death8")
+            )),
+            // murloc
+            Map.entry(FormType.MURLOC, Map.of(
+                QuoteType.GREETING, List.of("murloc_greeting1", "murloc_greeting2", "murloc_greeting3"),
+                QuoteType.FAREWELL, List.of("murloc_farewell1", "murloc_farewell2", "murloc_farewell3"),
+                QuoteType.ATTACK, List.of("murloc_attack1", "murloc_attack2", "murloc_attack3", "murloc_attack4"),
+                QuoteType.DEATH, List.of("murloc_death1")
+            )),
+            // necromancer
+            Map.entry(FormType.NECROMANCER, Map.of(
+                QuoteType.GREETING, List.of("necromancer_greeting1", "necromancer_greeting2", "necromancer_greeting3", "necromancer_greeting4", "necromancer_greeting5", "necromancer_greeting6", "necromancer_greeting7"),
+                QuoteType.FAREWELL, List.of("necromancer_farewell1", "necromancer_farewell2", "necromancer_farewell3", "necromancer_farewell4"),
+                QuoteType.ATTACK, List.of("necromancer_attack1", "necromancer_attack2", "necromancer_attack3", "necromancer_attack4", "necromancer_attack5"),
+                QuoteType.DEATH, List.of("necromancer_death1", "necromancer_death2", "necromancer_death3", "necromancer_death4", "necromancer_death5")
+            )),
+            Map.entry(FormType.NECROMANCER_SKELETON, Map.of(
+                QuoteType.GREETING, List.of("necromancer_skeleton_greeting1", "necromancer_skeleton_greeting2", "necromancer_skeleton_greeting3"),
+                QuoteType.FAREWELL, List.of("necromancer_skeleton_farewell1", "necromancer_skeleton_farewell2", "necromancer_skeleton_farewell3"),
+                QuoteType.ATTACK, List.of("necromancer_skeleton_attack1", "necromancer_skeleton_attack2", "necromancer_skeleton_attack3", "necromancer_skeleton_attack4", "necromancer_skeleton_attack5", "necromancer_skeleton_attack6", "necromancer_skeleton_attack7", "necromancer_skeleton_attack8", "necromancer_skeleton_attack9", "necromancer_skeleton_attack10"),
+                QuoteType.DEATH, List.of("necromancer_skeleton_death1", "necromancer_skeleton_death2", "necromancer_skeleton_death3", "necromancer_skeleton_death4", "necromancer_skeleton_death5")
+            )),
+            // dracthyr
+            Map.entry(FormType.DRACTHYR_BLACK, Map.of(
+                QuoteType.GREETING, List.of("dracthyr_greeting1", "dracthyr_greeting2", "dracthyr_greeting3", "dracthyr_greeting4", "dracthyr_greeting5", "dracthyr_greeting6", "dracthyr_greeting7"),
+                QuoteType.FAREWELL, List.of("dracthyr_farewell1", "dracthyr_farewell2", "dracthyr_farewell3", "dracthyr_farewell4", "dracthyr_farewell5", "dracthyr_farewell6", "dracthyr_farewell7"),
+                QuoteType.ATTACK, List.of("dracthyr_attack1", "dracthyr_attack2", "dracthyr_attack3", "dracthyr_attack4", "dracthyr_attack5", "dracthyr_attack6", "dracthyr_attack7", "dracthyr_attack8", "dracthyr_attack9"),
+                QuoteType.DEATH, List.of("dracthyr_death1", "dracthyr_death2", "dracthyr_death3", "dracthyr_death4", "dracthyr_death5", "dracthyr_death6", "dracthyr_death7", "dracthyr_death8", "dracthyr_death9", "dracthyr_death10")
+            ))
+        );
+    }
+
+    public SoundManager() {
+        RpgCraft    rpgCraft = RpgCraft.instance();
+        SoundCommand   soundCommand = new SoundCommand();
+        rpgCraft.getCommand("quote").setExecutor(soundCommand);
+        rpgCraft.getCommand("quotegreeting").setExecutor(soundCommand);
+        rpgCraft.getCommand("quotefarewell").setExecutor(soundCommand);
+        rpgCraft.getCommand("quoteattack").setExecutor(soundCommand);
+        rpgCraft.getCommand("quotedeath").setExecutor(soundCommand);
+    }
+    
+	/*
+	** fonctions statiques
+	*/
+
+    public static void playQuote(LivingEntityCustom l, QuoteType quoteType) {
+        World   world = l.getWorld();
+        if (world == null) return;
+        FormType                        formType = findFormType(l.getMetamorph() != FormType.UNKNOWN ? l.getMetamorph() : l.getFormType());
+        Map<QuoteType, List<String>>    map = QUOTES.get(formType);
+        if (map == null) return;
+        List<String> list = map.get(quoteType);
+        if (list == null || list.size() < 1) return;
+        world.playSound(l.getLocation(), "sounds:" + list.get((new Random()).nextInt(list.size())), SoundCategory.MASTER, 1.5f, 1f);
+    }
+
+    public static void playSound(LivingEntityCustom l, String soundName) {
+        World   world = l.getWorld();
+        if (world == null) return;
+        world.playSound(l.getLocation(), "sounds:" + soundName, SoundCategory.MASTER, 1.5f, 1f);
+    }
+
+    public static void playSound(Location loc, String soundName) {
+        loc.getWorld().playSound(loc, "sounds:" + soundName, SoundCategory.MASTER, 1.5f, 1f);
+    }
+
+    public static void playMusic(Location loc, String soundName) {
+        loc.getWorld().playSound(loc, "sounds:" + soundName, SoundCategory.MUSIC, 4f, 1f);
+    }
+
+    private static FormType findFormType(FormType formType) {
+        return switch (formType) {
+            case TAUREN, TAUREN_GUARD, TAUREN_SHAMAN_BLUE, TAUREN_SHAMAN_RED, TAUREN_KING -> FormType.TAUREN;
+            case TAUREN_DESERT, TAUREN_BLACK -> FormType.TAUREN_DESERT;
+            case ORC, ORC_DEMON, ORC_GUARD, ORC_TRADER, ORC_FATHER, ORC_FOREST -> FormType.ORC;
+            case ORC_CHILD -> FormType.ORC_CHILD;
+            case ORC_FUMELEBITUME -> FormType.ORC_FUMELEBITUME;
+            case ORC_FEMALE, ORC_MOTHER -> FormType.ORC_FEMALE;
+            case DWARF, DWARF_GUARD, DWARF_TRADER, DWARF_REDHEAD, DWARF_HUNTER, DWARF_KING -> FormType.DWARF;
+            case HUMAN -> FormType.HUMAN;
+            case HUMAN_PALPOUTINE, HUMAN_ROGUE -> FormType.HUMAN_ROGUE;
+            case DWARFIRON, DWARFIRON_TRADER, DWARFIRON_BLACKSMITH, DWARFIRON_REDHEADBEARD, DWARFIRON_GUY, DWARFIRON_PYROMANCER, DWARFIRON_KING -> FormType.DWARFIRON;
+            case IRON_GUARD -> FormType.IRON_GUARD;
+            case MURLOC, MURLOC_ELITE, MURLOC_BOSS, MURLOC_NICE -> FormType.MURLOC;
+            case ELFNIGHT, ILLIDAN, MALFURION -> FormType.ELFNIGHT;
+            case ELFBLOOD -> FormType.ELFBLOOD;
+            case NECROMANCER, NECROMANCER_FACELESS, NECROMANCER_SKELETAL, NECROMANCER_SKELETAL_GREY -> FormType.NECROMANCER;
+            case NECROMANCER_SKELETON -> FormType.NECROMANCER_SKELETON;
+            case DRACTHYR_BLACK, DRACTHYR_RED -> FormType.DRACTHYR_BLACK;
+            case ELEMENTAL_FIRE, ELEMENTAL_WIND, REDSTONE_GOLEM,  // elemental
+                SMALL_SPIDER, SPIDER, BIG_SPIDER, TARENTULA,      // spider
+                SCORPION,                                         // scorpion
+                LEAPER, WHISPERER,                                // forest
+                ICE_LORD, FROZER, FROST_LEAPER,                   // ice
+                DEMON, SWORD_CURSED, MAGMA_GOLEM, ELEMENTAL_VOID, // demon
+                SKELETON,                                         // skeleton
+                ZOMBIE,                                           // zombie
+                KODO, ANIMAL,                                     // animal
+                UNKNOWN -> FormType.UNKNOWN;
+        };
+    }
+}
+
