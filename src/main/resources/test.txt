@@ -4,14 +4,16 @@ spirit = health_regen + mana_regen
 stamina = defense + health_max
 strength = damage_physical + jump_strength
 
-trident wip:
-mjolnir²
-golden_shuriken_of_ice²
-jack_the_trident²
-dinnerbone²
-gungnir ?
+trident height:
+abyssal + 25%
+asgore + 25%
+shuriken, shuriken2 - 25%
+mjolnir - 25%
+mohgwyn + 25%
+trident, dinnerbone + 25%
+steel ball - 50%
 
-legendary (60) set:
+epic (60) set:
 warrior == crucuble
 hunter == dragonmaster / dragonslayer
 rogue == combat
@@ -30,10 +32,18 @@ priest == wither
 rare (40) set:
 warrior == heavy
 hunter == dragonsbane
-rogue == 
-dracthyr ==
+rogue == scarlet
+dracthyr == journey
 pyromancer == living_vines
-priest ==
+priest == entertainer
+
+uncommon (30) set:
+warrior == 
+hunter == 
+rogue == blastbreaker
+dracthyr == 
+pyromancer == 
+priest == 
 
 Projectiles:
 
@@ -59,6 +69,7 @@ EyeOfEnder
 
 TODO:
 - NPC:
+ - fall damage % health
  - necromancer spell (spawn skeletons + ...)
  - ice_lord spell (launch ice sword + spawn small ice_elemental + freeze all nearby enemies entity)
  - skins (orc mercenary)

@@ -10,20 +10,20 @@ import net.kyori.adventure.text.Component;
 
 public enum FoodType implements ItemCustomType {
 	// potion
-    COOKIE("cookie", Material.COOKIE, Color.WHITE, null, 10),
-    SALMON("salmon", Material.SALMON, Color.WHITE, null, 10),
-    BREAD("bread", Material.BREAD, Color.WHITE, null, 10),
-    POTATO("potato", Material.POTATO, Color.WHITE, null, 10),
-    APPLE("apple", Material.APPLE, Color.WHITE, null, 10),
-    CARROT("carrot", Material.CARROT, Color.WHITE, null, 10),
-    BAKED_POTATO("baked_potato", Material.BAKED_POTATO, Color.WHITE, null, 10),
-    COOKED_RABBIT("cooked_rabbit", Material.COOKED_RABBIT, Color.WHITE, null, 10),
-    MUSHROOM_STEW("mushroom_stew", Material.MUSHROOM_STEW, Color.WHITE, null, 10),
-    COOKED_CHICKEN("cooked_chicken", Material.COOKED_CHICKEN, Color.WHITE, null, 10),
-    COOKED_SALMON("cooked_salmon", Material.COOKED_SALMON, Color.WHITE, null, 10),
-    COOKED_BEEF("cooked_beef", Material.COOKED_BEEF, Color.WHITE, null, 10),
-    RABBIT_STEW("rabbit_stew", Material.RABBIT_STEW, Color.WHITE, null, 10),
-    GOLDEN_CARROT("golden_carrot", Material.GOLDEN_CARROT, Color.WHITE, null, 10);
+    COOKIE("cookie", Material.COOKIE, Color.WHITE, Set.of(), 10),
+    SALMON("salmon", Material.SALMON, Color.WHITE, Set.of(), 10),
+    BREAD("bread", Material.BREAD, Color.WHITE, Set.of(), 10),
+    POTATO("potato", Material.POTATO, Color.WHITE, Set.of(), 10),
+    APPLE("apple", Material.APPLE, Color.WHITE, Set.of(), 10),
+    CARROT("carrot", Material.CARROT, Color.WHITE, Set.of(), 10),
+    BAKED_POTATO("baked_potato", Material.BAKED_POTATO, Color.WHITE, Set.of(), 10),
+    COOKED_RABBIT("cooked_rabbit", Material.COOKED_RABBIT, Color.WHITE, Set.of(), 10),
+    MUSHROOM_STEW("mushroom_stew", Material.MUSHROOM_STEW, Color.WHITE, Set.of(), 10),
+    COOKED_CHICKEN("cooked_chicken", Material.COOKED_CHICKEN, Color.WHITE, Set.of(), 10),
+    COOKED_SALMON("cooked_salmon", Material.COOKED_SALMON, Color.WHITE, Set.of(), 10),
+    COOKED_BEEF("cooked_beef", Material.COOKED_BEEF, Color.WHITE, Set.of(), 10),
+    RABBIT_STEW("rabbit_stew", Material.RABBIT_STEW, Color.WHITE, Set.of(), 10),
+    GOLDEN_CARROT("golden_carrot", Material.GOLDEN_CARROT, Color.WHITE, Set.of(), 10);
 
 	private final String			name;
 	private final Material			material;

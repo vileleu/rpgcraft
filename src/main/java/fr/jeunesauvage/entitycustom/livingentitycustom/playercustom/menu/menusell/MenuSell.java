@@ -98,24 +98,25 @@ public class MenuSell extends MenuHolder {
                 if (item == null || item.getType() == Material.AIR) continue;
                 ItemCustom<?>   itemCustom = itemCustomRegistry.getItemCustom(item);
                 if (itemCustom == null) continue;
+                int amount = item.getAmount();
                 if (itemCustom instanceof Equipable) {
                     switch (itemCustom.getRarity()) {
-                        case POOR -> gold.increaseNuggets(2);
-                        case COMMON -> gold.increaseNuggets(5);
-                        case UNCOMMON -> gold.increaseIngots(1);
-                        case RARE -> gold.increaseIngots(4);
-                        case EPIC -> gold.increaseIngots(10);
-                        case LEGENDARY -> gold.increaseIngots(50);
+                        case POOR -> gold.increaseNuggets(2 * amount);
+                        case COMMON -> gold.increaseNuggets(5 * amount);
+                        case UNCOMMON -> gold.increaseIngots(1 * amount);
+                        case RARE -> gold.increaseIngots(4 * amount);
+                        case EPIC -> gold.increaseIngots(10 * amount);
+                        case LEGENDARY -> gold.increaseIngots(50 * amount);
                     }
                 }
                 else {
                     switch (itemCustom.getRarity()) {
-                        case POOR -> gold.increaseNuggets(1);
-                        case COMMON -> gold.increaseNuggets(2);
-                        case UNCOMMON -> gold.increaseNuggets(4);
-                        case RARE -> gold.increaseIngots(1);
-                        case EPIC -> gold.increaseIngots(2);
-                        case LEGENDARY -> gold.increaseIngots(5);
+                        case POOR -> gold.increaseNuggets(1 * amount);
+                        case COMMON -> gold.increaseNuggets(2 * amount);
+                        case UNCOMMON -> gold.increaseNuggets(4 * amount);
+                        case RARE -> gold.increaseIngots(1 * amount);
+                        case EPIC -> gold.increaseIngots(2 * amount);
+                        case LEGENDARY -> gold.increaseIngots(5 * amount);
                     }
                 }
             }

@@ -20,7 +20,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeModifier;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.goal.BehaviorPatrol;
@@ -640,10 +640,12 @@ public class FightTrait extends Trait {
 		}
 		else {
 	    	direction.normalize();
-			Location	destination = start.clone().add(direction.multiply(3));
+			Location	destination = start.clone().add(direction.multiply(2));
+			if (navigator.isPaused())
+				navigator.setPaused(false);
 			if (((npcCustom.getMetamorph() != null && npcCustom.getMetamorph().getScale() >= 2) || npcCustom.getFormType().getScale() >= 2) && start.getBlockY() != destination.getBlockY()) {
-				Vector	jump = new Vector(direction.getBlockX(), 0.6, direction.getBlockZ()).multiply(0.4);
-				navigator.cancelNavigation();
+				navigator.setPaused(true);
+				Vector	jump = new Vector(direction.getBlockX(), 0.6, direction.getBlockZ()).multiply(0.5);
 				npcCustom.setVelocity(npcCustom.getVelocity().add(jump));
 			}
 			else

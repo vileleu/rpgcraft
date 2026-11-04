@@ -44,9 +44,9 @@ public class MenuBuyPotion extends MenuHolder {
             if (potion.getRarity() == Rarity.LEGENDARY) continue;
             tmp.add(new Pair<Potion,Gold>(potion, getPrice(potion)));
         }
-        tmp.sort(Comparator.comparing((Pair<Potion, Gold> pair) -> pair.getFirst().getRarity())
-            .thenComparingInt(pair -> pair.getFirst().getLevel())
-            .thenComparingInt(pair -> pair.getFirst().getIdentifier().hashCode()));
+        tmp.sort(Comparator.comparingInt((Pair<Potion, Gold> pair) -> pair.getFirst().getLevel())
+            .thenComparing(pair -> pair.getFirst().getRarity())
+            .thenComparing(pair -> pair.getFirst().getIdentifier()));
         for (Pair<Potion, Gold> pair: tmp) {
             toSell.put(pair.getFirst(), pair.getSecond());
         }
@@ -60,9 +60,10 @@ public class MenuBuyPotion extends MenuHolder {
         int     i = 0;
         Potion  last = null;
         for (Entry<Potion, Gold> e: toSell.entrySet()) {
-            if (i >= inventory.getSize()) break;
+            if (i >= BACK_SLOT) break;
             Potion  potion = e.getKey();
-            if (last != null && potion.getType() != last.getType()) i++;
+            if (last != null && potion.getType() != last.getType()) i += (i % 9 != 0 ? 9 - i % 9 : 0);
+            if (i >= BACK_SLOT) break;
             inventory.setItem(i++, createPotionSlot(potion, e.getValue(), "buy"));
             last = potion;
         }
@@ -81,9 +82,7 @@ public class MenuBuyPotion extends MenuHolder {
                 Potion potion = RpgCraft.getItemCustomRegistry().getPotion(clicked);
                 buy(potion);
             }
-            default -> {
-                close();
-            }
+            default -> close();
         }
     }
 

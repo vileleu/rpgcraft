@@ -1,15 +1,15 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill;
+package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
 import org.bukkit.NamespacedKey;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeCategory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum SkillSecondary implements SkillType {
     ENCHANT("enchant"),
-    SMELT("smelt");
+    BLACKSMITH("blacksmith"),
+    MINER("miner");
 
     private final String    name;
     private final NamespacedKey key;

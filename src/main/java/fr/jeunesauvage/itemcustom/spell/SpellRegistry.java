@@ -67,7 +67,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.MobCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
@@ -110,6 +110,7 @@ public class SpellRegistry {
 	private final Map<UUID, DataTask<Integer>>		strikeBack = new HashMap<>();
 	private final Map<UUID, Boolean>				canUseStrikeback = new HashMap<>();
 	private final Map<UUID, Integer>				explosiveShot = new HashMap<>();
+	private final Map<UUID, String>					choseHearthstone = new HashMap<>();
     private final Set<UUID> 						demonChains = new HashSet<>();
 	private final Map<UUID, NPCCustom>				pets = new HashMap<>();
 	private final Map<UUID, Pair<Integer, Integer>>	cloudFrozers = new HashMap<>();
@@ -1330,6 +1331,45 @@ public class SpellRegistry {
 		world.spawnParticle(Particle.WHITE_ASH, center.clone().add(0, 0.1, 0), 2, 0.3, 0.05, 0.3, 0);
 	}
 
+	/////////////////////
+	///*     ALL     *///
+	/////////////////////
+	
+	public void choseHearthstone(PlayerCustom launcher, String action) {
+		if (action == null) return;
+		choseHearthstone.put(launcher.getUUID(), action);
+	}
+
+	public boolean hasHearthstone(PlayerCustom launcher) {
+		return choseHearthstone.containsKey(launcher.getUUID());
+	}
+
+	public void deleteHearthstone(PlayerCustom launcher) {
+		choseHearthstone.remove(launcher.getUUID());
+	}
+	
+	public void hearthstone(LivingEntityCustom launcher) {
+		String	action = choseHearthstone.get(launcher.getUUID());
+		switch (action) {
+			case null -> {}
+			case "thunderbluff" -> {
+				SoundManager.playSound(launcher, "spell_hearthstone");
+				launcher.teleport(WorldManager.THUNDERBLUFF);
+				SoundManager.playSound(launcher, "spell_hearthstone");
+			}
+			case "ally" -> {
+				LivingEntityCustom	ally = launcher.getAlly();
+				if (ally != null) {
+					SoundManager.playSound(launcher, "spell_hearthstone");
+					launcher.teleport(ally.getLocation());
+					SoundManager.playSound(launcher, "spell_hearthstone");
+				}
+			}
+			default -> {}
+		}
+		choseHearthstone.remove(launcher.getUUID());
+	}
+
 	////////////////////////
 	///* RANGED WEAPONS *///
 	////////////////////////
@@ -1535,7 +1575,11 @@ public class SpellRegistry {
 		else
 			attackPet(launcher, pet);
 		SoundManager.playSound(launcher, "staff_shoot");
-		particlePet(launcher.getLocation());
+		particleBraised(launcher.getLocation());
+	}
+
+	private void particleBraised(Location loc) {
+		loc.getWorld().spawnParticle(Particle.FLAME, loc, 40, 0.5, 0.5, 0.5, 0.05);
 	}
 
 	public boolean hasBraised(UUID uuid) {
@@ -2169,7 +2213,7 @@ public class SpellRegistry {
 		addNPCTemporary(clone);
     }
 
-	// fangs
+	// fang
 
 	public void fang(LivingEntityCustom launcher, LivingEntityCustom target, Rarity rarity) {
         World world = launcher.getWorld();
@@ -2200,7 +2244,7 @@ public class SpellRegistry {
 						cancel();
 						return;
 					}
-					particleFang(angle, t.getLocation().add(0, t.getHeight() + 2, 0));
+					particleFang(angle, t.getLocation().add(0, t.getHeight() / 2, 0));
 					ticks += 10;
 					angle += 0.2;
 					if (ticks >= ticksMax) {
@@ -2416,7 +2460,7 @@ public class SpellRegistry {
 		}
 	}
 
-	// fangs
+	// fang frozer
 
 	public void fangFrozer(LivingEntityCustom launcher, Rarity rarity) {
         World world = launcher.getWorld();
@@ -2455,7 +2499,7 @@ public class SpellRegistry {
 							cancel();
 							return;
 						}
-						particleFangsFrozer(angle, t1.getLocation().add(0, t1.getHeight() + 2, 0));
+						particleFangFrozer(angle, t1.getLocation().add(0, t1.getHeight() / 2, 0));
 						ticks += 10;
 						angle += 0.2;
 						if (ticks >= ticksMax) cancel();
@@ -2466,7 +2510,7 @@ public class SpellRegistry {
 		}
 	}
 
-	private void particleFangsFrozer(double angle, Location center) {
+	private void particleFangFrozer(double angle, Location center) {
 		World	world = center.getWorld();
         double	radius = 0.5;
         for (int i = 0; i < 16; i++) {

@@ -20,9 +20,9 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -170,14 +170,14 @@ public enum CombatDamage {
 			playerCustom.sendMessage(Message.increaseSkill(skill));
 			return;
 		}
-		// 13%
-		else if (diff >= 10 && random % 8 == 0) {
+		// 20%
+		else if (diff >= 10 && random % 5 == 0) {
 			skill.increase(1);
 			playerCustom.sendMessage(Message.increaseSkill(skill));
 			return;
 		}
-		// 8%
-		else if (diff >= 5 && random % 12 == 0) {
+		// 17%
+		else if (diff >= 5 && random % 6 == 0) {
 			skill.increase(1);
 			playerCustom.sendMessage(Message.increaseSkill(skill));
 			return;

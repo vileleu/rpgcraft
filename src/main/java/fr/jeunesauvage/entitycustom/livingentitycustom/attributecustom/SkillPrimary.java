@@ -1,9 +1,8 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill;
+package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
 import org.bukkit.NamespacedKey;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeCategory;
 import fr.jeunesauvage.itemcustom.WeaponType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;

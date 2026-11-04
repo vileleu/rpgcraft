@@ -1,6 +1,5 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat;
+package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeCategory;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

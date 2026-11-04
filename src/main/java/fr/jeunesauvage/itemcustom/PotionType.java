@@ -10,10 +10,10 @@ import net.kyori.adventure.text.Component;
 
 public enum PotionType implements ItemCustomType {
 	// potion
-    POTION_HEALTH("potion_health", Material.POTION, Color.RED, null, 0, 10, 30),
-    POTION_MANA("potion_mana", Material.POTION, Color.BLUE, null, 0, 10, 30),
-    POTION_RAGE("potion_rage", Material.POTION, Color.RED, null, 0, 10, 30),
-	POTION_ENERGY("potion_energy", Material.POTION, Color.YELLOW, null, 0, 10, 30);
+    POTION_HEALTH("potion_health", Material.POTION, Color.RED, Set.of(), 0, 10, 30),
+    POTION_MANA("potion_mana", Material.POTION, Color.BLUE, Set.of(), 0, 10, 30),
+    POTION_RAGE("potion_rage", Material.POTION, Color.RED, Set.of(), 0, 10, 30),
+	POTION_ENERGY("potion_energy", Material.POTION, Color.YELLOW, Set.of(), 0, 10, 30);
 
 	private final String			name;
 	private final Set<ClassType>	classTypes;

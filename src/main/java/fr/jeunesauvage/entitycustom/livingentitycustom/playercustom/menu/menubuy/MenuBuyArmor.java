@@ -21,6 +21,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHol
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
+import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
 import fr.jeunesauvage.sound.SoundManager;
 import net.kyori.adventure.text.Component;
@@ -43,25 +44,28 @@ public class MenuBuyArmor extends MenuHolderEquipable {
             if (isInRangeLevel(armor.getLevel()) && isSameOrLowerRarity(armor.getRarity()))
                 tmp.add(new Pair<Armor,Gold>(armor, getPrice(armor)));
         }
-        tmp.sort(Comparator.comparing((Pair<Armor, Gold> pair) -> pair.getFirst().getRarity())
-            .thenComparingInt(pair -> pair.getFirst().getLevel())
-            .thenComparingInt(pair -> pair.getFirst().getIdentifier().hashCode()));
+        tmp.sort(Comparator.comparingInt((Pair<Armor, Gold> pair) -> pair.getFirst().getLevel())
+            .thenComparing(pair -> pair.getFirst().getRarity())
+            .thenComparing(pair -> pair.getFirst().getSet() != null ? pair.getFirst().getSet() : "")
+            .thenComparing(pair -> pair.getFirst().getIdentifier()));
         for (Pair<Armor, Gold> pair: tmp) {
             Armor   armor = pair.getFirst();
             equipables.computeIfAbsent(armor.getType().getEquipableMaterial(), type -> new LinkedHashMap<>()).put(armor, pair.getSecond());
         }
     }
 
-    protected void open(ArmorMaterial m) {
+    @Override
+    protected void open(EquipableMaterial m) {
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("open"));
         Map<Equipable<?>, Gold> map = equipables.get(m);
         Armor                   last = null;
         int                     i = 0;
         for (Entry<Equipable<?>, Gold> e: map.entrySet()) {
+            if (i >= BACK_SLOT) break;
             Armor   armor = (Armor)e.getKey();
-            if (last != null && armor.getLevel() != last.getLevel()) i += (i % 9 != 0 ? 9 - i % 9 : 0);
-            if (i >= inventory.getSize()) break;
+            if (last != null && !armor.getSet().equals(last.getSet())) i += (i % 9 != 0 ? 9 - i % 9 : 0);
+            if (i >= BACK_SLOT) break;
             inventory.setItem(i++, createEquipableSlot(armor, e.getValue(), "buy"));
             last = armor;
         }
@@ -80,13 +84,13 @@ public class MenuBuyArmor extends MenuHolderEquipable {
             case "open_leather" -> open(ArmorMaterial.LEATHER);
             case "open_mail" -> open(ArmorMaterial.MAIL);
             case "open_plate" -> open(ArmorMaterial.PLATE);
+            case "open_turtle" -> open(ArmorMaterial.TURTLE);
+            case "open_arcanite" -> open(ArmorMaterial.ARCANITE);
             case "buy" -> {
                 Armor armor = RpgCraft.getItemCustomRegistry().getArmor(clicked);
                 buy(armor);
             }
-            default -> {
-                close();
-            }
+            default -> close();
         }
     }
 
@@ -118,10 +122,12 @@ public class MenuBuyArmor extends MenuHolderEquipable {
             case PLATE_CHEST -> 22;
             case PLATE_LEGS -> 20;
             case PLATE_FEET -> 15;
+            case TURTLE_HEAD -> 30;
             case ARCANITE_HEAD -> 100;
             case ELYTRA -> 0;
             case UNKNOWN -> 0;
         };
+        nuggets += (nuggets != 0 ? armor.getLevel() : 0);
         Rarity  rarity = armor.getRarity();
         nuggets *= Math.pow(rarity.getNumber(), Math.max(1, rarity.getNumber() - 2));
         Gold    price = new Gold();

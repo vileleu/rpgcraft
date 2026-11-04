@@ -20,6 +20,7 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Gold;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolderEquipable;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
+import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 import fr.jeunesauvage.itemcustom.equipable.WeaponMaterial;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import fr.jeunesauvage.sound.SoundManager;
@@ -34,7 +35,7 @@ public class MenuBuyWeapon extends MenuHolderEquipable {
     }
 
     @Override 
-    protected  void getEquipables() {
+    protected void getEquipables() {
         clearEquipables();
         Collection<Weapon>          weapons = RpgCraft.getItemCustomRegistry().getWeaponsDroppable().values();
         List<Pair<Weapon, Gold>>    tmp = new ArrayList<>();
@@ -42,23 +43,24 @@ public class MenuBuyWeapon extends MenuHolderEquipable {
             if (isInRangeLevel(weapon.getLevel()) && isSameOrLowerRarity(weapon.getRarity()))
                 tmp.add(new Pair<Weapon,Gold>(weapon, getPrice(weapon)));
         }
-        tmp.sort(Comparator.comparing((Pair<Weapon, Gold> pair) -> pair.getFirst().getRarity())
-            .thenComparingInt(pair -> pair.getFirst().getLevel())
-            .thenComparingInt(pair -> pair.getFirst().getIdentifier().hashCode()));
+        tmp.sort(Comparator.comparingInt((Pair<Weapon, Gold> pair) -> pair.getFirst().getLevel())
+            .thenComparing(pair -> pair.getFirst().getRarity())
+            .thenComparing(pair -> pair.getFirst().getIdentifier()));
         for (Pair<Weapon, Gold> pair: tmp) {
             Weapon   weapon = pair.getFirst();
             equipables.computeIfAbsent(weapon.getType().getEquipableMaterial(), type -> new LinkedHashMap<>()).put(weapon, pair.getSecond());
         }
     }
 
-    protected void open(WeaponMaterial m) {
+    @Override
+    protected void open(EquipableMaterial m) {
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("open"));
         Map<Equipable<?>, Gold> map = equipables.get(m);
         int                     i = 0;
         for (Entry<Equipable<?>, Gold> e: map.entrySet()) {
+            if (i >= BACK_SLOT) break;
             Weapon   weapon = (Weapon)e.getKey();
-            if (i >= inventory.getSize()) break;
             inventory.setItem(i++, createEquipableSlot(weapon, e.getValue(), "buy"));
         }
     }
@@ -79,6 +81,8 @@ public class MenuBuyWeapon extends MenuHolderEquipable {
             case "open_hoe" -> open(WeaponMaterial.HOE);
             case "open_shovel" -> open(WeaponMaterial.SHOVEL);
             case "open_trident" -> open(WeaponMaterial.TRIDENT);
+            case "open_shears" -> open(WeaponMaterial.SHEARS);
+            case "open_spear" -> open(WeaponMaterial.SPEAR);
             case "open_mace" -> open(WeaponMaterial.MACE);
             case "open_bow" -> open(WeaponMaterial.BOW);
             case "open_crossbow" -> open(WeaponMaterial.CROSSBOW);
@@ -89,9 +93,7 @@ public class MenuBuyWeapon extends MenuHolderEquipable {
                 Weapon weapon = RpgCraft.getItemCustomRegistry().getWeapon(clicked);
                 buy(weapon);
             }
-            default -> {
-                close();
-            }
+            default -> close();
         }
     }
 
@@ -124,6 +126,7 @@ public class MenuBuyWeapon extends MenuHolderEquipable {
             case SHIELD -> 15;
             case UNKNOWN -> 0;
         };
+        nuggets += (nuggets != 0 ? weapon.getLevel() : 0);
         Rarity  rarity = weapon.getRarity();
         nuggets *= Math.pow(rarity.getNumber(), Math.max(1, rarity.getNumber() - 2));
         Gold    price = new Gold();

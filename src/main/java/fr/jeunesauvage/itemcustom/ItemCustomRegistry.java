@@ -21,7 +21,7 @@ import fr.jeunesauvage.itemcustom.spell.Spell;
 import fr.jeunesauvage.itemcustom.usable.Usable;
 
 public class ItemCustomRegistry implements Iterable<ItemCustom<?>> {
-	public static final Set<WeaponType>			NON_DROPPABLE_WEAPONS = Set.of(WeaponType.HAND, WeaponType.CLAW, WeaponType.TRIDENT, WeaponType.SPELLBOOK, WeaponType.UNKNOWN);
+	public static final Set<WeaponType>			NON_DROPPABLE_WEAPONS = Set.of(WeaponType.HAND, WeaponType.CLAW, WeaponType.SPELLBOOK, WeaponType.UNKNOWN);
 	public static final Set<ArmorType>			NON_DROPPABLE_ARMORS = Set.of(ArmorType.ARCANITE_HEAD, ArmorType.ELYTRA, ArmorType.UNKNOWN);
 	public static NamespacedKey					DEFAULT_CLAW = new NamespacedKey(RpgCraft.name(), "netherite_sword/claw_lightning");
 	public static NamespacedKey					DEFAULT_STAFF = new NamespacedKey(RpgCraft.name(), "bow/staff_basic_wooden");;

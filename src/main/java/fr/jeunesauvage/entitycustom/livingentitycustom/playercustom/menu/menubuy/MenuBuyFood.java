@@ -55,7 +55,7 @@ public class MenuBuyFood extends MenuHolder {
         inventory.setItem(BACK_SLOT, createBack("close"));
         int     i = 0;
         for (Entry<Food, Gold> e: toSell.entrySet()) {
-            if (i >= inventory.getSize()) break;
+            if (i >= BACK_SLOT) break;
             Food  food = e.getKey();
             inventory.setItem(i++, createFoodSlot(food, e.getValue(), "buy"));
         }
@@ -74,9 +74,7 @@ public class MenuBuyFood extends MenuHolder {
                 Food food = RpgCraft.getItemCustomRegistry().getFood(clicked);
                 buy(food);
             }
-            default -> {
-                close();
-            }
+            default -> close();
         }
     }
 

@@ -4,8 +4,8 @@ import org.bukkit.Location;
 
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;

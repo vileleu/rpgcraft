@@ -131,17 +131,14 @@
     "statsPrimary": [
       "stamina",
       "strength",
-      "agility",
-      "spirit",
-      "intellect"
+      "agility"
     ],
     "statsSecondary": [
-      "spell_armor",
       "physical_armor"
     ],
-    "rarity": 1,
-    "level": 1,
-    "type": "cloth"
+    "rarity": 3,
+    "level": 30,
+    "type": "leather"
   },
   "boom_town": {
     "statsPrimary": [
@@ -511,17 +508,14 @@
   "entertainer": {
     "statsPrimary": [
       "stamina",
-      "strength",
-      "agility",
       "spirit",
       "intellect"
     ],
     "statsSecondary": [
-      "spell_armor",
-      "physical_armor"
+      "spell_armor"
     ],
-    "rarity": 1,
-    "level": 1,
+    "rarity": 4,
+    "level": 40,
     "type": "cloth"
   },
   "evocation": {
@@ -878,7 +872,6 @@
     "statsPrimary": [
       "stamina",
       "strength",
-      "agility",
       "spirit",
       "intellect"
     ],
@@ -886,9 +879,9 @@
       "spell_armor",
       "physical_armor"
     ],
-    "rarity": 1,
-    "level": 1,
-    "type": "cloth"
+    "rarity": 4,
+    "level": 40,
+    "type": "plate"
   },
   "lava_infused": {
     "statsPrimary": [
@@ -1508,7 +1501,7 @@
     ],
     "rarity": 1,
     "level": 1,
-    "type": "arcanite"
+    "type": "turtle"
   },
   "sakura": {
     "statsPrimary": [
@@ -1546,17 +1539,15 @@
     "statsPrimary": [
       "stamina",
       "strength",
-      "agility",
-      "spirit",
-      "intellect"
+      "agility"
     ],
     "statsSecondary": [
       "spell_armor",
       "physical_armor"
     ],
-    "rarity": 1,
-    "level": 1,
-    "type": "cloth"
+    "rarity": 4,
+    "level": 40,
+    "type": "leather"
   },
   "scuba": {
     "statsPrimary": [
@@ -1572,7 +1563,7 @@
     ],
     "rarity": 1,
     "level": 1,
-    "type": "arcanite"
+    "type": "turtle"
   },
   "shadow_walker": {
     "statsPrimary": [

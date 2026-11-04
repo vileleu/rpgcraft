@@ -31,8 +31,8 @@ public class Food extends ItemCustom<FoodType> implements Consumable {
 		lore.add(Lore.type(type));
 		lore.add(Lore.rarity(rarity));
 		lore.add(Lore.level(level));
-		if (type.getClassTypes() != null)
-			lore.add(Lore.classType(type.getClassTypes()));
+		Component	classTypes = Lore.classType(type.getClassTypes());
+		if (classTypes != null) lore.add(classTypes);
 		meta.lore(lore);
         item.setItemMeta(meta);
 	}

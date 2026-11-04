@@ -70,12 +70,16 @@ public class NPCBuilderRegistry {
 			launcher.sendMessage(Message.m("<red>template is invalid"));
 			return;
 		}
-		if (levelMin <= 0 || levelMin > LivingEntityCustom.LEVEL_MAX) {
+		if (levelMin < 0 || levelMin > LivingEntityCustom.LEVEL_MAX) {
 			launcher.sendMessage(Message.m("<red>levelMin is invalid"));
 			return;
 		}
-		if (levelMax <= 0 || levelMax > LivingEntityCustom.LEVEL_MAX) {
+		if (levelMax < 0 || levelMax > LivingEntityCustom.LEVEL_MAX) {
 			launcher.sendMessage(Message.m("<red>levelMax is invalid"));
+			return;
+		}
+		if ((levelMin == 0 && levelMin != levelMax) || (levelMax == 0 && levelMax != levelMin)) {
+			launcher.sendMessage(Message.m("<red>level 0 must be alone"));
 			return;
 		}
         Set<Location>   set = placers.get(launcher.getUUID());
@@ -112,7 +116,7 @@ public class NPCBuilderRegistry {
 			launcher.sendMessage(Message.m("<red>npcName is invalid"));
 			return;
 		}
-		if (level <= 0 || level > LivingEntityCustom.LEVEL_MAX) {
+		if (level < 0 || level > LivingEntityCustom.LEVEL_MAX) {
 			launcher.sendMessage(Message.m("<red>level is invalid"));
 			return;
 		}

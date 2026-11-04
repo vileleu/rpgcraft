@@ -44,14 +44,14 @@ import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeModifier;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillSecondary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.Stat;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.SkinData;
@@ -87,6 +87,8 @@ import net.skinsrestorer.api.storage.SkinStorage;
 
 public final class PlayerCustom implements LivingEntityCustom {
     private static final NamespacedKey              KEY_MARK = new NamespacedKey(RpgCraft.name(), "mark");
+    private static final NamespacedKey              KEY_HEALTH = new NamespacedKey(RpgCraft.name(), "health");
+    private static final NamespacedKey              KEY_POWER = new NamespacedKey(RpgCraft.name(), "power");
     private static final int                        TIME_MARK = 60;
 	public static final double	                    HEALTHBYLEVEL_DEFAULT = 5;
 	public static final double	                    RANGETARGET_DEFAULT = 60; // blocks
@@ -111,6 +113,7 @@ public final class PlayerCustom implements LivingEntityCustom {
     private final ScoreboardCustom                  scoreboardCustom;
 	private final TargetData                        targetData;
 	private final DataTask<Long>                    mark;
+    boolean                                         attackCooldown;
 
     public PlayerCustom(Player player) {
         this.player = player;
@@ -271,6 +274,7 @@ public final class PlayerCustom implements LivingEntityCustom {
     public void deleteMark() {
         mark.setData(0l);
         mark.cancel();
+        Data.remove(player.getPersistentDataContainer(), KEY_MARK);
     }
 
     public void sendMessage(Component component) {
@@ -312,7 +316,8 @@ public final class PlayerCustom implements LivingEntityCustom {
         }
     }
 
-    public boolean takeGoldInInventory(Gold price) {
+    public boolean takeGoldInInventory(Gold p) {
+        Gold                        price = new Gold(p);
         Gold                        goldInInventory = new Gold();
         Set<Integer>                setIngots = new HashSet<>();
         Set<Integer>                setNuggets = new HashSet<>();
@@ -331,20 +336,6 @@ public final class PlayerCustom implements LivingEntityCustom {
             else if (item.getType() == Material.GOLD_NUGGET) {
                 int amount = item.getAmount();
                 setNuggets.add(i);
-                goldInInventory.increaseNuggets(amount);
-            }
-        }
-        // offhand
-        item = inv.getItemInOffHand();
-        if (item != null) {
-            if (item.getType() == Material.GOLD_INGOT) {
-                int amount = item.getAmount();
-                setIngots.add(40);
-                goldInInventory.increaseIngots(amount);
-            }
-            else if (item.getType() == Material.GOLD_NUGGET) {
-                int amount = item.getAmount();
-                setNuggets.add(40);
                 goldInInventory.increaseNuggets(amount);
             }
         }
@@ -424,6 +415,21 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     public boolean hasPotionEffect(PotionEffectType potionEffectType) {
         return player.hasPotionEffect(potionEffectType);
+    }
+
+    public boolean isEnchanter() {
+        Skill   enchant = skills.get(SkillSecondary.ENCHANT);
+        return enchant.getValue() + enchant.getValueModifier() > 0;
+    }
+
+    public boolean isBlackSmith() {
+        Skill   blacksmith = skills.get(SkillSecondary.BLACKSMITH);
+        return blacksmith.getValue() + blacksmith.getValueModifier() > 0;
+    }
+
+    public boolean isMiner() {
+        Skill   miner = skills.get(SkillSecondary.MINER);
+        return miner.getValue() + miner.getValueModifier() > 0;
     }
 
     @Override
@@ -519,7 +525,11 @@ public final class PlayerCustom implements LivingEntityCustom {
 
     @Override
     public boolean attackIsInCooldown() {
-        return player.getAttackCooldown() != 1f;
+        return attackCooldown;
+    }
+
+    public void setAttackIsInCooldown(boolean attackCooldown) {
+        this.attackCooldown = attackCooldown;
     }
 
     @Override
@@ -1051,7 +1061,10 @@ public final class PlayerCustom implements LivingEntityCustom {
     public void deleteModifier(int id) {
         AttributeModifier   attributeModifier = modifiers.get(id);
         if (attributeModifier == null) return;
-        stats.get(attributeModifier.getType()).decreaseModifier(attributeModifier.getValue());
+        switch (attributeModifier.getType()) {
+            case StatType statType -> stats.get(statType).decreaseModifier(attributeModifier.getValue());
+            case SkillType skillType -> skills.get(skillType).decreaseModifier(attributeModifier.getValue());
+        }
         PersistentDataContainer pdc = player.getPersistentDataContainer();
         Data.remove(pdc, attributeModifier.getKeyValue());
         Data.remove(pdc, attributeModifier.getKeyEnd());
@@ -1290,6 +1303,7 @@ public final class PlayerCustom implements LivingEntityCustom {
             }
             return false;
         });
+        RpgCraft.getDropRegistry().drop(this);
 		death();
     }
 
@@ -1304,10 +1318,24 @@ public final class PlayerCustom implements LivingEntityCustom {
         refreshSkin();
         refreshScale();
         greeting();
+        getSaveHealthAndPower();
+    }
+
+    private void getSaveHealthAndPower() {
+        Bukkit.getScheduler().runTask(RpgCraft.instance(), () -> {
+            double  h = Data.getDouble(player.getPersistentDataContainer(), KEY_HEALTH);
+            double  p = Data.getDouble(player.getPersistentDataContainer(), KEY_POWER);
+            setHealth(Math.max(h, 1));
+            setPower(p);
+            Data.remove(player.getPersistentDataContainer(), KEY_HEALTH);
+            Data.remove(player.getPersistentDataContainer(), KEY_POWER);
+        });
     }
 
     @Override
     public void onQuit() {
+        Data.setDouble(player.getPersistentDataContainer(), KEY_HEALTH, player.getHealth());
+        Data.setDouble(player.getPersistentDataContainer(), KEY_POWER, power.getValue());
         RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().clean(this);
         modifiers.values().forEach(modifier -> {

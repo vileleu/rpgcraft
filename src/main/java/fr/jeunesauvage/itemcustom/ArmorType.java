@@ -26,7 +26,8 @@ public enum ArmorType implements EquipableType {
     PLATE_CHEST("plate_chest", Material.NETHERITE_CHESTPLATE, ArmorMaterial.PLATE),
     PLATE_LEGS("plate_legs", Material.NETHERITE_LEGGINGS, ArmorMaterial.PLATE),
     PLATE_FEET("plate_feet", Material.NETHERITE_BOOTS, ArmorMaterial.PLATE),
-    ARCANITE_HEAD("arcanite_head", Material.TURTLE_HELMET, ArmorMaterial.ARCANITE),
+    TURTLE_HEAD("turtle_head", Material.TURTLE_HELMET, ArmorMaterial.TURTLE),
+    ARCANITE_HEAD("arcanite_head", Material.CARVED_PUMPKIN, ArmorMaterial.ARCANITE),
     ELYTRA("elytra", Material.ELYTRA, ArmorMaterial.ELYTRA),
     UNKNOWN("unknown", Material.AIR, ArmorMaterial.UNKNOWN);
 

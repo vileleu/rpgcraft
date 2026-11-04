@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Bukkit;
 import org.bukkit.EntityEffect;
@@ -32,14 +31,14 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.combat.CombatDamage;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeModifier;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillSecondary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.Stat;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.group.Group;
@@ -76,7 +75,7 @@ public final class MobCustom implements LivingEntityCustom {
 
     public MobCustom(Mob mob) {
         this.mob = mob;
-        level = ThreadLocalRandom.current().nextInt(1, LivingEntityCustom.LEVEL_MAX + 1);
+        level = RpgCraft.getEntityCustomRegistry().getAverageLevel();
         this.silence = new Silence(mob);
         loadStats();
         loadSkills();
@@ -617,7 +616,10 @@ public final class MobCustom implements LivingEntityCustom {
     public void deleteModifier(int id) {
         AttributeModifier   attributeModifier = modifiers.get(id);
         if (attributeModifier == null) return;
-        stats.get(attributeModifier.getType()).decreaseModifier(attributeModifier.getValue());
+        switch (attributeModifier.getType()) {
+            case StatType statType -> stats.get(statType).decreaseModifier(attributeModifier.getValue());
+            case SkillType skillType -> skills.get(skillType).decreaseModifier(attributeModifier.getValue());
+        }
         modifiers.remove(id, attributeModifier);
         refreshStat();
     }
@@ -790,6 +792,7 @@ public final class MobCustom implements LivingEntityCustom {
         modifiers.values().forEach(modifier -> {
             modifier.cancel();
         });
+        RpgCraft.getDropRegistry().drop(this);
         death();
     }
 

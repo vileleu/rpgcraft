@@ -10,35 +10,38 @@ import net.kyori.adventure.text.Component;
 
 public enum SpellType implements ItemCustomType {
 	// warrior
-    KNEE_BREAKER("knee_breaker", Material.PRISMARINE_SHARD, Set.of(ClassType.WARRIOR), null, 10, 5, 20, 0, 20, 0, false, 0f),
-    WHIRLWIND("whirlwind", Material.NAUTILUS_SHELL, Set.of(ClassType.WARRIOR), null, 15, 5, 10, -1, 40, 0, false, 0f),
-    LEAP("leap", Material.REDSTONE, Set.of(ClassType.WARRIOR), null, 20, 5, 30, 0, 30, 0, false, 0f),
-	DEADLY_MAGNET("deadly_magnet", Material.HEAVY_CORE, Set.of(ClassType.WARRIOR), null, 25, 5, 20, 0, 50, 0, false, 0f),
+    KNEE_BREAKER("knee_breaker", Material.PRISMARINE_SHARD, Set.of(ClassType.WARRIOR), Set.of(), 10, 5, 20, 0, 20, 0, false, 0f),
+    WHIRLWIND("whirlwind", Material.NAUTILUS_SHELL, Set.of(ClassType.WARRIOR), Set.of(), 15, 5, 10, -1, 40, 0, false, 0f),
+    LEAP("leap", Material.REDSTONE, Set.of(ClassType.WARRIOR), Set.of(), 20, 5, 30, 0, 30, 0, false, 0f),
+	DEADLY_MAGNET("deadly_magnet", Material.HEAVY_CORE, Set.of(ClassType.WARRIOR), Set.of(), 25, 5, 20, 0, 50, 0, false, 0f),
 	// pyromancer
-	FIREBALL("fireball", Material.FIRE_CHARGE, Set.of(ClassType.PYROMANCER), null, 10, 5, 10, -1, 30, 0, true, 2f),
-	TELEPORT("teleport", Material.ENDER_PEARL, Set.of(ClassType.PYROMANCER), null, 15, 5, 10, 0, 20, 0, false, 0f),
-	MANA_THIRST("mana_thirst", Material.AMETHYST_SHARD, Set.of(ClassType.PYROMANCER), null, 20, 5, 30, 0, 0, 0, false, 0f),
-	FLAME_NOVA("flame_nova", Material.BLAZE_POWDER, Set.of(ClassType.PYROMANCER), null, 25, 5, 25, -2, 60, 0, false, 0f),
+	FIREBALL("fireball", Material.FIRE_CHARGE, Set.of(ClassType.PYROMANCER), Set.of(), 10, 5, 10, -1, 30, 0, true, 2f),
+	TELEPORT("teleport", Material.ENDER_PEARL, Set.of(ClassType.PYROMANCER), Set.of(), 15, 5, 10, 0, 20, 0, false, 0f),
+	MANA_THIRST("mana_thirst", Material.AMETHYST_SHARD, Set.of(ClassType.PYROMANCER), Set.of(), 20, 5, 30, 0, 0, 0, false, 0f),
+	FLAME_NOVA("flame_nova", Material.BLAZE_POWDER, Set.of(ClassType.PYROMANCER), Set.of(), 25, 5, 25, -2, 60, 0, false, 0f),
 	// rogue
-	STEALTH("stealth", Material.GLOWSTONE_DUST, Set.of(ClassType.ROGUE), null, 10, 5, 10, 0, 30, 0, false, 0f),
-	ESCAPE("escape", Material.GHAST_TEAR, Set.of(ClassType.ROGUE), null, 15, 5, 40, -1, 50, 0, false, 0f),
-	SPRINT("sprint", Material.FEATHER, Set.of(ClassType.ROGUE), null, 20, 5, 30, -2, 40, 0, false, 0f),
-	COLDBLOOD("coldblood", Material.SPIDER_EYE, Set.of(ClassType.ROGUE), null, 25, 5, 20, -2, 50, 0, false, 0f),
+	STEALTH("stealth", Material.GLOWSTONE_DUST, Set.of(ClassType.ROGUE), Set.of(), 10, 5, 10, 0, 30, 0, false, 0f),
+	ESCAPE("escape", Material.GHAST_TEAR, Set.of(ClassType.ROGUE), Set.of(), 15, 5, 40, -1, 50, 0, false, 0f),
+	SPRINT("sprint", Material.FEATHER, Set.of(ClassType.ROGUE), Set.of(), 20, 5, 30, -2, 40, 0, false, 0f),
+	COLDBLOOD("coldblood", Material.SPIDER_EYE, Set.of(ClassType.ROGUE), Set.of(), 25, 5, 20, -2, 50, 0, false, 0f),
 	// priest
-	HOLY_BOMB("holy_bomb", Material.MAGMA_CREAM, Set.of(ClassType.PRIEST), null, 10, 5, 10, -1, 20, -1, false, 0f),
-	HOLY_LAND("holy_land", Material.NETHER_STAR, Set.of(ClassType.PRIEST), null, 15, 5, 40, -2, 50, 0, true, 2f),
-	HOLY_SHIELD("holy_shield", Material.HONEYCOMB, Set.of(ClassType.PRIEST), null, 20, 5, 30, 0, 30, 0, false, 0f),
-	SHADOW_WORD("shadow_word", Material.WITHER_ROSE, Set.of(ClassType.PRIEST), null, 25, 5, 20, -1, 60, 0, true, 2f),
+	HOLY_BOMB("holy_bomb", Material.MAGMA_CREAM, Set.of(ClassType.PRIEST), Set.of(), 10, 5, 10, -1, 20, -1, false, 0f),
+	HOLY_LAND("holy_land", Material.NETHER_STAR, Set.of(ClassType.PRIEST), Set.of(), 15, 5, 40, -2, 50, 0, true, 2f),
+	HOLY_SHIELD("holy_shield", Material.HONEYCOMB, Set.of(ClassType.PRIEST), Set.of(), 20, 5, 30, 0, 30, 0, false, 0f),
+	SHADOW_WORD("shadow_word", Material.WITHER_ROSE, Set.of(ClassType.PRIEST), Set.of(), 25, 5, 20, -1, 60, 0, true, 2f),
 	// dracthyr
-	DRAGON_BREATH("dragon_breath", Material.WIND_CHARGE, Set.of(ClassType.DRACTHYR), null, 10, 5, 20, -1, 40, -1, false, 0f),
-	DRAGON_SKIN("dragon_skin", Material.LEATHER, Set.of(ClassType.DRACTHYR), null, 15, 5, 30, 0, 50, 0, true, 2f),
-	METAMORPH("metamorph", Material.DRAGON_BREATH, Set.of(ClassType.DRACTHYR), null, 20, 5, 120, 0, 100, 0, true, 1f),
-	STRIKE_BACK("strike_back", Material.HEART_OF_THE_SEA, Set.of(ClassType.DRACTHYR), null, 25, 5, 40, -2, 60, 0, false, 0f),
+	DRAGON_BREATH("dragon_breath", Material.WIND_CHARGE, Set.of(ClassType.DRACTHYR), Set.of(), 10, 5, 20, -1, 40, -1, false, 0f),
+	DRAGON_SKIN("dragon_skin", Material.LEATHER, Set.of(ClassType.DRACTHYR), Set.of(), 15, 5, 30, 0, 50, 0, true, 2f),
+	METAMORPH("metamorph", Material.DRAGON_BREATH, Set.of(ClassType.DRACTHYR), Set.of(), 20, 5, 120, 0, 100, 0, true, 1f),
+	STRIKE_BACK("strike_back", Material.HEART_OF_THE_SEA, Set.of(ClassType.DRACTHYR), Set.of(), 25, 5, 40, -2, 60, 0, false, 0f),
 	// hunter
-	EXPLOSIVE_SHOT("explosive_shot", Material.GUNPOWDER, Set.of(ClassType.HUNTER), null, 10, 5, 20, -1, 30, -1, false, 0f),
-	PET("pet", Material.BONE, Set.of(ClassType.HUNTER), null, 15, 5, 10, 0, 60, 0, true, 4f),
-	HUNT("hunt", Material.COMPASS, Set.of(ClassType.HUNTER), null, 20, 5, 60, 0, 20, 0, false, 0f),
-	ICE_TRAP("ice_trap", Material.POWDER_SNOW_BUCKET, Set.of(ClassType.HUNTER), null, 25, 5, 42, -2, 50, 0, true, 2f);
+	EXPLOSIVE_SHOT("explosive_shot", Material.GUNPOWDER, Set.of(ClassType.HUNTER), Set.of(), 10, 5, 20, -1, 30, -1, false, 0f),
+	PET("pet", Material.BONE, Set.of(ClassType.HUNTER), Set.of(), 15, 5, 10, 0, 60, 0, true, 4f),
+	HUNT("hunt", Material.COMPASS, Set.of(ClassType.HUNTER), Set.of(), 20, 5, 60, 0, 20, 0, false, 0f),
+	ICE_TRAP("ice_trap", Material.POWDER_SNOW_BUCKET, Set.of(ClassType.HUNTER), Set.of(), 25, 5, 42, -2, 50, 0, true, 2f),
+	// all
+	HEARTHSTONE("hearthstone", Material.SLIME_BALL, Set.of(), Set.of(), 1, 0, 600, 0, 0, 0, true, 10f);
+	// god
 
 	private final String			name;
 	private final Material			material;

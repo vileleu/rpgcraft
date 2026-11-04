@@ -8,11 +8,7 @@ import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.Stat;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 

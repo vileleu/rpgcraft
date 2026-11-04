@@ -15,6 +15,7 @@ import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.armor.ArmorManager;
 import fr.jeunesauvage.itemcustom.equipable.weapon.WeaponManager;
+import net.citizensnpcs.api.CitizensAPI;
 
 public class EquipableManager implements Listener {
 	public EquipableManager() {
@@ -49,8 +50,7 @@ public class EquipableManager implements Listener {
 	// handle durability of Equipable
 	@EventHandler
 	public void onEquipableDamage(PlayerItemDamageEvent e) {
-		Player	player = e.getPlayer();
-		if (player.hasMetadata("NPC")) {
+		if (CitizensAPI.getNPCRegistry().isNPC(e.getPlayer())) {
 			e.setCancelled(true);
 			return;
 		}

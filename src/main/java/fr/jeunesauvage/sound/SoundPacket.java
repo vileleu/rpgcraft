@@ -9,6 +9,8 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
@@ -137,29 +139,31 @@ public class SoundPacket extends PacketAdapter {
         PacketContainer packet = e.getPacket();
         Sound sound = packet.getSoundEffects().read(0);
         if (sound == null) return;
-        String	soundName = sound.toString();
-        if (soundName.startsWith("ENTITY_WOLF_")) {
+        NamespacedKey   key = Registry.SOUNDS.getKey(sound);
+        if (key == null || !key.getNamespace().equals("minecraft")) return;
+        String  soundName = key.getKey();
+        if (soundName.startsWith("entity.wolf")) {
     		handleWolf(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_BLAZE_")) {
+        else if (soundName.startsWith("entity.blaze")) {
     		handleBlaze(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_SPIDER_")) {
+        else if (soundName.startsWith("entity.spider")) {
     		handleSpider(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_EVOKER_")) {
+        else if (soundName.startsWith("entity.evoker")) {
     		handleEvoker(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_RAVAGER_")) {
+        else if (soundName.startsWith("entity.ravager")) {
     		handleRavager(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_WITHER_SKELETON_")) {
+        else if (soundName.startsWith("entity.wither_skeleton")) {
     		handleWitherSkeleton(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_WITHER_")) {
+        else if (soundName.startsWith("entity.wither")) {
     		handleWither(e, sound);
 		}
-        else if (soundName.startsWith("ENTITY_ZOMBIE_")) {
+        else if (soundName.startsWith("entity.zombie")) {
     		handleZombie(e, sound);
 		}
     }

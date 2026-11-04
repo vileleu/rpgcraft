@@ -1,8 +1,6 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill;
+package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
 import org.bukkit.NamespacedKey;
-
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeType;
 
 public sealed interface SkillType extends AttributeType permits SkillPrimary, SkillSecondary {
 	NamespacedKey	getKey();

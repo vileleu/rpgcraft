@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.World;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,9 +22,10 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.bossbar.BossBarData;
+import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.menuhearthstone.MenuHearthstone;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.itemcustom.ItemCustom;
 import fr.jeunesauvage.itemcustom.Rarity;
@@ -48,10 +51,10 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		lore.add(Lore.type(type));
 		lore.add(Lore.rarity(rarity));
 		lore.add(Lore.level(level));
-		if (type.getRaceTypes() != null)
-			lore.add(Lore.raceType(type.getRaceTypes()));
-		if (type.getClassTypes() != null)
-			lore.add(Lore.classType(type.getClassTypes()));
+		Component	raceTypes = Lore.raceType(type.getRaceTypes());
+		if (raceTypes != null) lore.add(raceTypes);
+		Component	classTypes = Lore.classType(type.getClassTypes());
+		if (classTypes != null) lore.add(classTypes);
 		lore.add(Lore.cost(type.getCost(rarity)));
 		lore.add(Lore.description(name));
 		meta.lore(lore);
@@ -78,7 +81,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		// check race
 		RaceType		playerRace = playerCustom.getRaceType();
 		Set<RaceType>	raceTypes = type.getRaceTypes();
-		if (raceTypes != null && !raceTypes.contains(playerRace)) {
+		if (!raceTypes.isEmpty() && !raceTypes.contains(playerRace)) {
 			playerCustom.sendActionBar(Message.cantUse());
 			return false;
 		}
@@ -92,7 +95,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			return true;
 		}
 		Set<ClassType>	classTypes = type.getClassTypes();
-		if (classTypes != null && !classTypes.contains(playerClass)) {
+		if (!classTypes.isEmpty() && !type.getClassTypes().contains(playerClass)) {
 			playerCustom.sendActionBar(Message.cantUse());
 			return false;
 		}
@@ -159,12 +162,17 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			case SpellType.PET -> spellRegistry.pet(playerCustom, rarity);
 			case SpellType.HUNT -> spellRegistry.hunt(playerCustom, rarity);
 			case SpellType.ICE_TRAP -> spellRegistry.iceTrap(playerCustom, rarity);
-			default -> {ret = false;}
+			// all
+			case SpellType.HEARTHSTONE -> spellRegistry.hearthstone(playerCustom);
 		}
 		return ret;
 	}
 
 	private void startCast(PlayerCustom playerCustom, EquipmentSlot slot) {
+		if (type == SpellType.HEARTHSTONE && !RpgCraft.getSpellRegistry().hasHearthstone(playerCustom)) {
+			RpgCraft.getEntityCustomRegistry().addMenu(new MenuHearthstone(playerCustom, this, slot));
+			return;
+		}
 		cleanBossBar(playerCustom);
 		Component	component = Message.c(Component.translatable("spell.rpgcraft.casting"));
 		BossBar		bar = BossBar.bossBar(
@@ -179,6 +187,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 			Location	last = playerCustom.getLocation();
 			float		max = type.getCastTime() - (type.getCastTime() * (float)StatSecondary.CAST_SPEED.getAmount(playerCustom));
 		    int			ticks = 0;
+			double		angle = 0;
 		    @Override
 		    public void run() {
 				if (max <= 0) {
@@ -189,14 +198,17 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 				}
 				now = playerCustom.getLocation();
 				if (ticks >= 5 && (now.getX() != last.getX() || now.getY() != last.getY() || now.getZ() != last.getZ())) {
+					if (type == SpellType.HEARTHSTONE) RpgCraft.getSpellRegistry().deleteHearthstone(playerCustom);
 					cleanBossBar(playerCustom);
 					return;
 				}
+				particleCast(angle, playerCustom.getLocation().add(0, playerCustom.getHeight() + 0.5, 0));
 				float	start = ticks / 10f;
 				float	progress = Math.min(1f, start / max);
 				bar.progress(progress);
 				last = now;
 				ticks++;
+				angle += 0.2;
 				if (progress >= 1) {
 					cleanBossBar(playerCustom);
 					if (!castCanUse(playerCustom)) return;
@@ -208,11 +220,23 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		bossBars.put(playerCustom.getUUID(), bossBarData);
 	}
 
+	private void particleCast(double angle, Location center) {
+		World	world = center.getWorld();
+        double	radius = 0.5;
+        for (int i = 0; i < 16; i++) {
+            double currentAngle = angle + (Math.PI * 2 * i / 8);
+            double x = Math.cos(currentAngle) * radius;
+            double z = Math.sin(currentAngle) * radius;
+            Location particleLoc = center.clone().add(x, 0, z);
+            world.spawnParticle(Particle.COMPOSTER, particleLoc, 1, 0, 0, 0, 0);
+        }
+	}
+
 	private boolean castCanUse(PlayerCustom playerCustom) {
 		// check race
 		RaceType		playerRace = playerCustom.getRaceType();
 		Set<RaceType>	raceTypes = type.getRaceTypes();
-		if (raceTypes != null && !raceTypes.contains(playerRace)) {
+		if (!raceTypes.isEmpty() && !raceTypes.contains(playerRace)) {
 			playerCustom.sendActionBar(Message.cantUse());
 			return false;
 		}
@@ -220,7 +244,7 @@ public class Spell extends ItemCustom<SpellType> implements Usable {
 		ClassType		playerClass = playerCustom.getClassType();
 		if (playerClass == ClassType.GOD) return true;
 		Set<ClassType>	classTypes = type.getClassTypes();
-		if (classTypes != null && !classTypes.contains(playerClass)) {
+		if (!classTypes.isEmpty() && !type.getClassTypes().contains(playerClass)) {
 			playerCustom.sendActionBar(Message.cantUse());
 			return false;
 		}

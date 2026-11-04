@@ -1,5 +1,7 @@
 package fr.jeunesauvage.itemcustom.equipable.weapon;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import fr.jeunesauvage.RpgCraft;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.itemcustom.equipable.weapon.launcher.LauncherManager;
 
@@ -33,7 +36,7 @@ public class WeaponManager implements Listener {
 	    int			newSlot = e.getNewSlot();
 		ItemStack	previousItem = player.getInventory().getItem(previousSlot);
 		ItemStack	newItem = player.getInventory().getItem(newSlot);
-		if (isWeaponCustom(previousItem) || isWeaponCustom(newItem))
+		if (isWeapon(previousItem) || isWeapon(newItem))
 			playerCustom.refreshStat();
 	}
 
@@ -45,7 +48,7 @@ public class WeaponManager implements Listener {
 		if (playerCustom == null) return;
 	    ItemStack	hand = e.getMainHandItem();
 	    ItemStack	offhand = e.getOffHandItem();
-		if (isWeaponCustom(hand) || isWeaponCustom(offhand))
+		if (isWeapon(hand) || isWeapon(offhand))
 			playerCustom.refreshStat();
 	}
 
@@ -58,8 +61,8 @@ public class WeaponManager implements Listener {
 		if (playerCustom == null) return;
 	    ItemStack 	current = e.getCurrentItem();
 	    ItemStack 	cursor = e.getCursor();
-		current = (isWeaponCustom(current) ? current : null);
-		cursor = (isWeaponCustom(cursor) ? cursor : null);
+		current = (isWeapon(current) ? current : null);
+		cursor = (isWeapon(cursor) ? cursor : null);
 		if (current == null && cursor == null) return;
 		PlayerInventory	inv = player.getInventory();
 		ClickType		typeClick = e.getClick();
@@ -84,18 +87,27 @@ public class WeaponManager implements Listener {
 		}
 	}
 
+	private boolean isWeapon(ItemStack item) {
+		return RpgCraft.getItemCustomRegistry().getWeapon(item) != null;
+	}
+
 	// weapon pickup
 	@EventHandler
 	public void onWeaponPickup(EntityPickupItemEvent e) {
 	    if (!(e.getEntity() instanceof Player player)) return;
 		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(player.getUniqueId());
 		if (playerCustom == null) return;
-	    if (isWeaponCustom(e.getItem().getItemStack()))
-			playerCustom.refreshStat();
-	}
-
-	public boolean isWeaponCustom(ItemStack item) {
-		if (item == null) return false;
-		return RpgCraft.getItemCustomRegistry().getWeapon(item) != null;
+		ItemStack	item = e.getItem().getItemStack();
+		boolean		isWeapon = isWeapon(item);
+		LivingEntityCustom	ally = playerCustom.getAlly();
+		if (ally != null && ally instanceof PlayerCustom allyPlayer && allyPlayer.getLocation().distanceSquared(playerCustom.getLocation()) <= 20) {
+			if (ThreadLocalRandom.current().nextBoolean()) {
+				allyPlayer.addItem(item.clone());
+				if (isWeapon) allyPlayer.refreshStat();
+				e.setCancelled(true);
+				return;
+			}
+		}
+		if (isWeapon) playerCustom.refreshStat();
 	}
 }

@@ -10,6 +10,7 @@ import com.comphenix.protocol.ProtocolManager;
 import fr.jeunesauvage.combat.CombatManager;
 import fr.jeunesauvage.entitycustom.EntityCustomManager;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
+import fr.jeunesauvage.entitycustom.livingentitycustom.drop.DropRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.metamorph.MetamorphRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.npcbuilder.NPCBuilderRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.trait.FightTrait;
@@ -36,6 +37,7 @@ public class RpgCraft extends JavaPlugin {
     private SpellRegistry           spellRegistry;
     private MetamorphRegistry       metamorphRegistry;
     private NPCBuilderRegistry      npcBuilderRegistry;
+    private DropRegistry            dropRegistry;
     private WorldManager            worldManager;
 
     @Override
@@ -59,6 +61,8 @@ public class RpgCraft extends JavaPlugin {
         this.metamorphRegistry = new MetamorphRegistry();
         // npc builder registry
         this.npcBuilderRegistry = new NPCBuilderRegistry();
+        // drop registry
+        this.dropRegistry = new DropRegistry();
         // entity custom manager
         EntityCustomManager entityCustomManager = new EntityCustomManager();
         getServer().getPluginManager().registerEvents(entityCustomManager, this);
@@ -133,6 +137,10 @@ public class RpgCraft extends JavaPlugin {
 
     public static NPCBuilderRegistry getNPCBuilderRegistry() {
         return INSTANCE.npcBuilderRegistry;
+    }
+
+    public static DropRegistry getDropRegistry() {
+        return INSTANCE.dropRegistry;
     }
 
     public static void debug(String message) {

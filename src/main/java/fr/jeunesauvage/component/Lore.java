@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
@@ -75,6 +75,7 @@ public class Lore {
 	}
 
 	public static Component classType(Set<ClassType> classTypes) {
+		if (classTypes.isEmpty() || classTypes == null) return null;
 		TextColor	colorName = NamedTextColor.GRAY;
 		Component	component = Component.translatable("class.rpgcraft").color(colorName);
 		for (ClassType classType: classTypes) {
@@ -86,6 +87,7 @@ public class Lore {
 
 	public static List<Component> classType(ClassType classType) {
 		List<Component>	lore = new ArrayList<>();
+		if (classType == null) return lore;
 		TextColor		colorName = NamedTextColor.GRAY;
 		Component		component = Component.translatable("class.rpgcraft").color(colorName).append(Component.text(" ")).append(classType.toComponent());
 		lore.add(Message.c(component));
@@ -93,6 +95,7 @@ public class Lore {
 	}
 
 	public static Component raceType(Set<RaceType> raceTypes) {
+		if (raceTypes.isEmpty() || raceTypes == null) return null;
 		TextColor	colorName = NamedTextColor.GRAY;
 		Component	component = Component.translatable("race.rpgcraft").color(colorName);
 		for (RaceType raceType: raceTypes) {

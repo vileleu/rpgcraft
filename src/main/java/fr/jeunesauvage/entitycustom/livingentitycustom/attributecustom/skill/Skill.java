@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
 
 public class Skill implements AttributeCustom {
 	private final Player	player;

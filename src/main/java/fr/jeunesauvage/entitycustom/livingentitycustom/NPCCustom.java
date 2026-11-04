@@ -32,14 +32,14 @@ import fr.jeunesauvage.combat.CombatDamage;
 import fr.jeunesauvage.entitycustom.EntityCustomRegistry;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeModifier;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillSecondary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.Stat;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.FormType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.formcustom.SkinData;
@@ -78,6 +78,7 @@ public final class NPCCustom implements LivingEntityCustom {
     private boolean                                 damageIsUnmodifiable = false;
     private Group                                   group = null;
     private boolean                                 isDying = false;
+    private boolean                                 adaptlevel = false;
 
     public NPCCustom(NPC npc) {
         this.npc = npc;
@@ -603,17 +604,28 @@ public final class NPCCustom implements LivingEntityCustom {
 
     @Override
     public void setLevel(int level) {
+        if (level == 0) {
+            adaptlevel = true;
+            level = RpgCraft.getEntityCustomRegistry().getAverageLevel();
+        }
+        else adaptlevel = false;
         this.level = level;
         FightTrait      fightTrait = getFightTrait();
         TemplateType    templateType = fightTrait.getTemplateType();
         setHealthMax(templateType.getHealth(level));
         fightTrait.setLevel(level);
+        loadStats(templateType);
+        loadSkills();
+        /*
         modifiers.values().forEach(modifier -> {
             modifier.cancel();
         });
-        loadStats(templateType);
-        loadSkills();
         loadModifiers();
+        */
+    }
+
+    public boolean adaptlevel() {
+        return adaptlevel;
     }
 
     @Override
@@ -814,7 +826,10 @@ public final class NPCCustom implements LivingEntityCustom {
     public void deleteModifier(int id) {
         AttributeModifier   attributeModifier = modifiers.get(id);
         if (attributeModifier == null) return;
-        stats.get(attributeModifier.getType()).decreaseModifier(attributeModifier.getValue());
+        switch (attributeModifier.getType()) {
+            case StatType statType -> stats.get(statType).decreaseModifier(attributeModifier.getValue());
+            case SkillType skillType -> skills.get(skillType).decreaseModifier(attributeModifier.getValue());
+        }
         getFightTrait().deleteModifier(id);
         modifiers.remove(id, attributeModifier);
         refreshStat();
@@ -1062,6 +1077,7 @@ public final class NPCCustom implements LivingEntityCustom {
 		}
         RpgCraft.getSpellRegistry().clean(this);
         RpgCraft.getMetamorphRegistry().clean(this);
+        RpgCraft.getDropRegistry().drop(this);
         death();
         isDying = false;
     }

@@ -1,6 +1,7 @@
 package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat;
 
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 
 public class Stat implements AttributeCustom {
 	private StatType	type;

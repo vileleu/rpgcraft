@@ -1,10 +1,8 @@
 package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
 import net.kyori.adventure.text.Component;
 
-public interface AttributeType {
+public sealed interface AttributeType permits StatType, SkillType {
 	AttributeCategory	getCategory();
 	String				getName();
 	Component			toComponent();

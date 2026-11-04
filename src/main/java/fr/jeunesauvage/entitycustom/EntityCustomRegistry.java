@@ -144,4 +144,19 @@ public class EntityCustomRegistry implements Iterable<EntityCustom> {
             menuHolder.giveBackItems();
         }
     }
+
+    public void refreshAverageLevel() {
+        int level = getAverageLevel();
+        for (NPCCustom npcCustom: npcsCustom.values()) {
+            if (npcCustom.adaptlevel()) npcCustom.setLevel(npcCustom.isBoss() ? level + 5 : level);
+        }
+    }
+
+    public int getAverageLevel() {
+        int result = 0;
+        for (PlayerCustom playerCustom: playersCustom.values()) {
+            result += playerCustom.getLevel();
+        }
+        return (result / playersCustom.size());
+    }
 }

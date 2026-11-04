@@ -20,8 +20,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 
 import fr.jeunesauvage.RpgCraft;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatPrimary;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatPrimary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
 import fr.jeunesauvage.itemcustom.ArmorType;
 import fr.jeunesauvage.itemcustom.FoodType;
 import fr.jeunesauvage.itemcustom.ItemCustom;

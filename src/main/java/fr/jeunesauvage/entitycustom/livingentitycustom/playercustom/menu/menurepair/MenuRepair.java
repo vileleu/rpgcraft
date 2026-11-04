@@ -97,15 +97,16 @@ public class MenuRepair extends MenuHolder {
                 if (item == null || item.getType() == Material.AIR) continue;
                 Equipable<?>   equipable = itemCustomRegistry.getEquipable(item);
                 if (equipable == null) continue;
+                int     amount = item.getAmount();
                 double  damagePercent = Equipable.getDamagePercent(item);
                 if (damagePercent == 0) continue;
                 switch (equipable.getRarity()) {
-                    case POOR -> price.increaseNuggets((int)Math.ceil(3 * damagePercent));
-                    case COMMON -> price.increaseNuggets((int)Math.ceil(6 * damagePercent));
-                    case UNCOMMON -> price.increaseNuggets((int)Math.ceil(9 * damagePercent));
-                    case RARE -> price.increaseIngots((int)Math.ceil(3 * damagePercent));
-                    case EPIC -> price.increaseIngots((int)Math.ceil(8 * damagePercent));
-                    case LEGENDARY -> price.increaseIngots((int)Math.ceil(20 * damagePercent));
+                    case POOR -> price.increaseNuggets((int)Math.ceil(3 * damagePercent) * amount);
+                    case COMMON -> price.increaseNuggets((int)Math.ceil(6 * damagePercent) * amount);
+                    case UNCOMMON -> price.increaseNuggets((int)Math.ceil(9 * damagePercent) * amount);
+                    case RARE -> price.increaseIngots((int)Math.ceil(3 * damagePercent) * amount);
+                    case EPIC -> price.increaseIngots((int)Math.ceil(8 * damagePercent) * amount);
+                    case LEGENDARY -> price.increaseIngots((int)Math.ceil(20 * damagePercent) * amount);
                 }
             }
             if (!price.equals(lastPrice)) {

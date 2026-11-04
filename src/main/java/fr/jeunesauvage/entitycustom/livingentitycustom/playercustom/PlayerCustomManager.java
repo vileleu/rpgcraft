@@ -5,8 +5,10 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.NamespacedKey;
+import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,9 +34,10 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.powercustom.PowerType;
+import net.citizensnpcs.api.CitizensAPI;
 
 public class PlayerCustomManager implements Listener {
 	// health + mana + energy
@@ -58,6 +61,7 @@ public class PlayerCustomManager implements Listener {
 		PlayerCustom    playerCustom = RpgCraft.getEntityCustomRegistry().createPlayerCustom(e.getPlayer());
         playerCustom.onJoin();
 		printKeys(e.getPlayer());
+		RpgCraft.getEntityCustomRegistry().refreshAverageLevel();
 	}
 
 	private void printKeys(Player player) {
@@ -75,6 +79,7 @@ public class PlayerCustomManager implements Listener {
 		if (playerCustom == null) return;
         playerCustom.onQuit();
         RpgCraft.getEntityCustomRegistry().deleteEntityCustom(playerCustom);
+		RpgCraft.getEntityCustomRegistry().refreshAverageLevel();
 	}
 
 	@EventHandler
@@ -122,10 +127,12 @@ public class PlayerCustomManager implements Listener {
 		int			newLevel = e.getNewLevel();
 		if (newLevel < 1) {
 			p.setLevel(1);
+			RpgCraft.getEntityCustomRegistry().refreshAverageLevel();
 			return;
 		}
 		else if (newLevel > LivingEntityCustom.LEVEL_MAX) {
 			p.setLevel(LivingEntityCustom.LEVEL_MAX);
+			RpgCraft.getEntityCustomRegistry().refreshAverageLevel();
 			return;
 		}
 		ClassType		classType = playerCustom.getClassType();
@@ -133,7 +140,30 @@ public class PlayerCustomManager implements Listener {
 			p.setExp(0);
 			p.setLevel(1);
 		}
-		else if (newLevel == LivingEntityCustom.LEVEL_MAX) Bukkit.getServer().broadcast(Message.levelMax(playerCustom));
+		else if (newLevel == LivingEntityCustom.LEVEL_MAX) {
+			Bukkit.getServer().broadcast(Message.levelMax(playerCustom));
+			for (Player c : Bukkit.getOnlinePlayers()) {
+    			c.playSound(c.getLocation(), "sounds:level60", SoundCategory.PLAYERS, 1.0f, 1.0f);
+			}
+		}
+		RpgCraft.getEntityCustomRegistry().refreshAverageLevel();
+	}
+
+	// NPC player cancel pickup experience
+	// player share xp with ally
+	@EventHandler
+	public void onPickupExperience(PlayerPickupExperienceEvent e) {
+		Player	p = e.getPlayer();
+		if (CitizensAPI.getNPCRegistry().isNPC(p)) e.setCancelled(true);
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+		LivingEntityCustom	ally = playerCustom.getAlly();
+		if (ally != null && ally instanceof PlayerCustom allyPlayer) {
+			ExperienceOrb	experienceOrb = e.getExperienceOrb();
+			int	xp = experienceOrb.getExperience() / 2 + 1;
+			experienceOrb.setExperience(xp);
+			allyPlayer.getPlayer().giveExp(xp);
+		}
 	}
 
 	// player damage
@@ -152,12 +182,6 @@ public class PlayerCustomManager implements Listener {
 		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
 		if (playerCustom == null) return;
 		playerCustom.getScoreboardCustom().refreshHealth(playerCustom);
-	}
-
-	// NPC player cancel pickup experience
-	@EventHandler
-	public void onPickupExperience(PlayerPickupExperienceEvent e) {
-		if (e.getPlayer().hasMetadata("NPC")) e.setCancelled(true);
 	}
 
 	// catch target

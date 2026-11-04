@@ -6,11 +6,13 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Display;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -29,10 +31,15 @@ import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.PrepareAnvilEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.FurnaceInventory;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,27 +48,32 @@ import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.NPCCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.Skill;
 import fr.jeunesauvage.entitycustom.livingentitycustom.npccustom.template.TemplateType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
+import fr.jeunesauvage.itemcustom.WeaponType;
+import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
 import io.papermc.paper.event.player.PlayerOpenSignEvent;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 
 public class WorldManager implements Listener {
-	private static final Set<Material> INFINIBURN = EnumSet.of(
+	private static final Set<Material>	INFINIBURN = EnumSet.of(
 	    Material.NETHERRACK,
 	    Material.MAGMA_BLOCK,
 	    Material.SOUL_SAND,
 	    Material.SOUL_SOIL,
 	    Material.COAL_BLOCK
 	);
-	private static final Set<Material> POISON = EnumSet.of(
+	private static final Set<Material>	POISON = EnumSet.of(
 	    Material.LIME_STAINED_GLASS,
 	    Material.LIME_STAINED_GLASS_PANE
 	);
-	private static final Set<String> BUILDERS = Set.of(
+	private static final Set<String>	BUILDERS = Set.of(
 	    "JeuneSauvage", "casentluc", "guipogrosscouye"
 	);
+	public static final Location		THUNDERBLUFF = new Location(Bukkit.getWorld("world"), -4, 145, 0);
 
 	public WorldManager() {
         WorldCommand   worldCommand = new WorldCommand(this);
@@ -115,8 +127,46 @@ public class WorldManager implements Listener {
 	@EventHandler
 	public void onPrepareAnvil(PrepareAnvilEvent e) {
 		e.getView().setRepairCost(0);
-    	ItemStack	right = e.getInventory().getItem(1);
-    	if (right != null && right.getType() != Material.AIR) e.setResult(null);
+    	HumanEntity human = e.getView().getPlayer();
+    	if (human instanceof Player player) {
+			PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(player.getUniqueId());
+			if (playerCustom == null) return;
+			AnvilInventory	inv = e.getInventory();
+			if (isRepair(inv) && !playerCustom.isBlackSmith()) e.setResult(null);
+			else if (inv.getSecondItem().getType() == Material.ENCHANTED_BOOK) {
+				Weapon	weapon = RpgCraft.getItemCustomRegistry().getWeapon(inv.getFirstItem());
+				if (weapon != null && (weapon.getType() == WeaponType.STAFF || weapon.getType() == WeaponType.SPELLBOOK)) e.setResult(null);
+				else if (!playerCustom.isEnchanter()) e.setResult(null);
+			}
+			else if (inv.getSecondItem().getType() != Material.AIR) e.setResult(null);
+    	}
+	}
+
+	private boolean isRepair(AnvilInventory inv) {
+    	if (!(inv.getFirstItem().getItemMeta() instanceof Damageable before)) return false;
+    	if (!(inv.getResult().getItemMeta() instanceof Damageable after)) return false;
+    	return after.getDamage() < before.getDamage();
+	}
+
+	// cancel smelt in furnace
+	@EventHandler
+	public void onClick(InventoryClickEvent e) {
+	    if (!(e.getView().getTopInventory() instanceof FurnaceInventory)) return;
+		if (!(e.getWhoClicked() instanceof Player p)) return;
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+		if (playerCustom.isMiner()) return;
+	    e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onDrag(InventoryDragEvent e) {
+	    if (!(e.getView().getTopInventory() instanceof FurnaceInventory)) return;
+		if (!(e.getWhoClicked() instanceof Player p)) return;
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+		if (playerCustom.isMiner()) return;
+	    e.setCancelled(true);
 	}
 
 	// cancel creation of wither rose
@@ -133,7 +183,12 @@ public class WorldManager implements Listener {
 	// cancel enchanting
 	@EventHandler
 	public void onPrepareItemEnchant(PrepareItemEnchantEvent e) {
-	    e.setCancelled(true);
+		Weapon	weapon = RpgCraft.getItemCustomRegistry().getWeapon(e.getItem());
+		if (weapon != null && (weapon.getType() == WeaponType.STAFF || weapon.getType() == WeaponType.SPELLBOOK)) e.setCancelled(true);
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(e.getEnchanter().getUniqueId());
+		if (playerCustom == null) return;
+		Skill	enchant = playerCustom.getSkill(SkillSecondary.ENCHANT);
+		if (enchant.getValue() + enchant.getValueModifier() <= 0) e.setCancelled(true);
 	}
 
 	// cancel level cost
@@ -150,12 +205,20 @@ public class WorldManager implements Listener {
 		e.setCancelled(true);
 	}
 
-	// cancel break block
+	// cancel break block (except ore for miners)
 	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
 	public void onBlockBreak(BlockBreakEvent e) {
-		Player	player = e.getPlayer();
-		if (canBuild(player)) return;
+		Player	p = e.getPlayer();
+		if (canBuild(p)) return;
+		PlayerCustom	playerCustom = RpgCraft.getEntityCustomRegistry().getPlayerCustom(p.getUniqueId());
+		if (playerCustom == null) return;
+		if (isOre(e.getBlock().getType()) && playerCustom.isMiner() && hasPickaxeInHands(playerCustom)) return;
 	    e.setCancelled(true);
+	}
+
+	private boolean hasPickaxeInHands(PlayerCustom playerCustom) {
+		PlayerInventory	inv = playerCustom.getInventory();
+		return Tag.ITEMS_PICKAXES.isTagged(inv.getItemInMainHand().getType()) || Tag.ITEMS_PICKAXES.isTagged(inv.getItemInOffHand().getType());
 	}
 
 	// cancel place block
@@ -262,5 +325,19 @@ public class WorldManager implements Listener {
 	    }
 		result++;
 	    return (result < maxY ? loc.clone().set(loc.getBlockX(), result, loc.getBlockZ()) : loc);
+	}
+
+	public static boolean isOre(Material type) {
+	    return Tag.COAL_ORES.isTagged(type)
+	        || Tag.IRON_ORES.isTagged(type)
+	        || Tag.COPPER_ORES.isTagged(type)
+	        || Tag.GOLD_ORES.isTagged(type)
+	        || Tag.REDSTONE_ORES.isTagged(type)
+	        || Tag.LAPIS_ORES.isTagged(type)
+	        || Tag.DIAMOND_ORES.isTagged(type)
+	        || Tag.EMERALD_ORES.isTagged(type)
+	        || type == Material.NETHER_QUARTZ_ORE
+	        || type == Material.NETHER_GOLD_ORE
+	        || type == Material.ANCIENT_DEBRIS;
 	}
 }

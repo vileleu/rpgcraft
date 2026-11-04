@@ -683,7 +683,7 @@
     "level": 1,
     "type": "bow"
   },
-  "bow/jeb": {
+  "bow/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -3056,7 +3056,7 @@
     "level": 1,
     "type": "crossbow"
   },
-  "crossbow/jeb": {
+  "crossbow/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -5364,7 +5364,7 @@
     "level": 1,
     "type": "mace"
   },
-  "mace/jeb": {
+  "mace/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -7775,7 +7775,7 @@
     "level": 1,
     "type": "axe"
   },
-  "netherite_axe/jeb": {
+  "netherite_axe/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -9462,7 +9462,7 @@
     "level": 1,
     "type": "hoe"
   },
-  "netherite_hoe/jeb": {
+  "netherite_hoe/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -10701,7 +10701,7 @@
     "level": 1,
     "type": "pickaxe"
   },
-  "netherite_pickaxe/jeb": {
+  "netherite_pickaxe/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -11812,7 +11812,7 @@
     "level": 1,
     "type": "shovel"
   },
-  "netherite_shovel/jeb": {
+  "netherite_shovel/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -12702,7 +12702,7 @@
     "level": 1,
     "type": "spear"
   },
-  "netherite_spear/jeb": {
+  "netherite_spear/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -16172,7 +16172,7 @@
     "level": 1,
     "type": "sword"
   },
-  "netherite_sword/jeb": {
+  "netherite_sword/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -20144,7 +20144,7 @@
     "level": 1,
     "type": "sword"
   },
-  "shears/jeb": {
+  "shears/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",
@@ -22875,7 +22875,7 @@
     "level": 1,
     "type": "trident"
   },
-  "trident/jeb": {
+  "trident/jeb_": {
     "statsPrimary": [
       "stamina",
       "strength",

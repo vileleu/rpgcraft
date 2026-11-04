@@ -8,13 +8,14 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import net.kyori.adventure.text.Component;
 
 public enum ArmorMaterial implements EquipableMaterial {
-    CLOTH("cloth", Material.STRING, Set.of(ClassType.BEGGAR)),
+    CLOTH("cloth", Material.STRING, Set.of()),
     LEATHER("leather", Material.LEATHER, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.ROGUE, ClassType.WARRIOR)),
 	MAIL("mail", Material.IRON_CHAIN, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.WARRIOR)),
     PLATE("plate", Material.ANVIL, Set.of(ClassType.DRACTHYR, ClassType.WARRIOR)),
-    ARCANITE("arcanite", Material.QUARTZ, Set.of(ClassType.BEGGAR)),
+    TURTLE("turtle", Material.TURTLE_HELMET, Set.of()),
+    ARCANITE("arcanite", Material.QUARTZ, Set.of()),
     ELYTRA("elytra", Material.ELYTRA, Set.of(ClassType.DRACTHYR)),
-    UNKNOWN("unknown", Material.AIR, Set.of(ClassType.BEGGAR));
+    UNKNOWN("unknown", Material.AIR, Set.of());
 
     private final String			name;
     private final Material			material;

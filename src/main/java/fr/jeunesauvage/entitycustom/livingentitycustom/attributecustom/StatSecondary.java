@@ -1,17 +1,17 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat;
+package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeCategory;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.Stat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public enum StatSecondary implements StatType {
     // combat
-    PHYSICAL_DAMAGE("physical_damage", 0.05),           // + 0.05 increase physical damage
+    PHYSICAL_DAMAGE("physical_damage", 0.1),            // + 0.05 increase physical damage
     SPELL_DAMAGE("spell_damage", 0.05),                 // + 0.05 increase spell damage
     PHYSICAL_ARMOR("physical_armor", 0.02),             // + 0.02 reduce physical damage taken
     SPELL_ARMOR("spell_armor", 0.02),                   // + 0.02 reduce spell damage taken
-    CRITICAL_CHANCE("critical_chance", 0.001),          // + 0.1% chance to hit critical
+    CRITICAL_CHANCE("critical_chance", 0.0005),         // + 0.05% chance to hit critical
     DEFENSE("defense", 0.001),                          // + 0.1% chance to cancel critical taken
     DODGE("dodge", 0.001),                              // + 0.1% chance to dodge
     CAST_SPEED("cast_speed", 0.01),                     // + 1%   speed of casting

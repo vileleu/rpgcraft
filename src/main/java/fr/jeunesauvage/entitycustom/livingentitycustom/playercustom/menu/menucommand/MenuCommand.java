@@ -24,8 +24,8 @@ import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.PrintAttributeCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.skill.SkillType;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.SkillType;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolder;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.ParseAction;
@@ -33,10 +33,12 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.racecustom.RaceType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.team.TeamType;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
 import fr.jeunesauvage.itemcustom.PotionType;
+import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.equipable.ArmorMaterial;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.equipable.EquipableMaterial;
 import fr.jeunesauvage.itemcustom.equipable.WeaponMaterial;
+import fr.jeunesauvage.itemcustom.equipable.armor.Armor;
 import fr.jeunesauvage.itemcustom.food.Food;
 import fr.jeunesauvage.itemcustom.potion.Potion;
 import fr.jeunesauvage.itemcustom.spell.Spell;
@@ -175,6 +177,7 @@ public class MenuCommand extends MenuHolder {
             case "open_leather" -> openItems(ArmorMaterial.LEATHER, parseAction.getStart());
             case "open_mail" -> openItems(ArmorMaterial.MAIL, parseAction.getStart());
             case "open_plate" -> openItems(ArmorMaterial.PLATE, parseAction.getStart());
+            case "open_turtle" -> openItems(ArmorMaterial.TURTLE, parseAction.getStart());
             case "open_arcanite" -> openItems(ArmorMaterial.ARCANITE, parseAction.getStart());
             case "open_elytra" -> openItems(ArmorMaterial.ELYTRA, parseAction.getStart());
             // potions
@@ -420,18 +423,21 @@ public class MenuCommand extends MenuHolder {
         inventory.setItem(BACK_SLOT, createBack("open_spell"));
         List<Spell>  spells = getSpellList(classType);
         int         i = 0;
-        Spell       last = null;
+        Rarity      rarity = Rarity.POOR;
         for (Spell spell: spells) {
-            if (last != null && spell.getType() != last.getType()) i += (i % 9 != 0 ? 9 - i % 9 : 0);
+            if (rarity != spell.getRarity()) {
+                rarity = spell.getRarity();
+                i += (i % 9 != 0 ? 9 - i % 9 : 0);
+            }
             inventory.setItem(i++, createSpell(spell));
-            last = spell;
         }
     }
 
     private List<Spell> getSpellList(ClassType classType) {
         List<Spell> list = new ArrayList<>();
         for (Spell spell: RpgCraft.getItemCustomRegistry().getSpells().values()) {
-            if (!spell.getType().getClassTypes().contains(classType)) continue;
+            Set<ClassType>  classTypes = spell.getType().getClassTypes();
+            if (!classTypes.isEmpty() && !classTypes.contains(classType)) continue;
             list.add(spell);
         }
         list.sort(Comparator.comparing((Spell spell) -> spell.getRarity())
@@ -504,7 +510,8 @@ public class MenuCommand extends MenuHolder {
             tmp.add(equipable.getType().getEquipableMaterial());
         }
         List<EquipableMaterial> list = new ArrayList<>(tmp);
-        list.sort(Comparator.comparingInt(m -> (m instanceof WeaponMaterial) ? 0 : 1));
+        list.sort(Comparator.comparingInt((EquipableMaterial m) -> (m instanceof WeaponMaterial) ? 0 : 1)
+            .thenComparing(EquipableMaterial::getName));
         return list;
     }
 
@@ -524,7 +531,7 @@ public class MenuCommand extends MenuHolder {
         List<Equipable<?>>  equipables = getEquipablesList(equipableMaterial, start);
         int i = 0;
         for (Equipable<?> equipable: equipables) {
-            if (i == BACK_SLOT) break;
+            if (i >= BACK_SLOT) break;
             inventory.setItem(i++, createEquipable(equipable));
         }
     }
@@ -535,9 +542,10 @@ public class MenuCommand extends MenuHolder {
             if (equipable.getType().getEquipableMaterial() != equipableMaterial) continue;
             list.add(equipable);
         }
-        list.sort(Comparator.comparing((Equipable<?> equipable) -> equipable.getRarity())
-            .thenComparingInt(equipable -> equipable.getLevel())
-            .thenComparingInt((Equipable<?> equipable) -> equipable.getIdentifier().hashCode()));
+        list.sort(Comparator.comparingInt((Equipable<?> e) -> e.getLevel())
+            .thenComparing(Equipable::getRarity)
+            .thenComparing((Equipable<?> e) -> e instanceof Armor a && a.getSet() != null ? a.getSet() : "")
+            .thenComparing(Equipable::getIdentifier));
         if (list.size() > INVENTORY_SIZE - 1) list = new ArrayList<>(list.subList(start, Math.min(start + INVENTORY_SIZE - 1, list.size())));
         return list;
     }

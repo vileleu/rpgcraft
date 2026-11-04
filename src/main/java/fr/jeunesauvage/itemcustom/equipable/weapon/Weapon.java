@@ -1,13 +1,20 @@
 package fr.jeunesauvage.itemcustom.equipable.weapon;
 
+import java.util.Set;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Message;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.equipable.Equipable;
 import fr.jeunesauvage.itemcustom.itembuilder.EquipableStat;
@@ -42,7 +49,12 @@ public class Weapon extends Equipable<WeaponType> implements Usable {
 
 	@Override
 	public boolean use(PlayerCustom playerCustom, EquipmentSlot slot) {
-		if (name.contains("hamaxe") || name.contains("slapperaxe")
+		Set<ClassType>	classTypes = getType().getClassTypes();
+		if (playerCustom.isSneaking() && name.contains("power_ring"))
+			switchPowerRing(playerCustom, slot);
+		else if (!classTypes.isEmpty() && !classTypes.contains(playerCustom.getClassType()))
+			return true;
+		else if (name.contains("hamaxe") || name.contains("slapperaxe")
 			|| name.endsWith("hit_of_the_cauldron")
 			|| name.endsWith("sulfurizer")
 			|| name.endsWith("haemorrhaxe")
@@ -50,8 +62,8 @@ public class Weapon extends Equipable<WeaponType> implements Usable {
 			switchHamaxe(playerCustom, slot);
 		else if (name.equals("netherite_sword/claw_lightning"))
 			flap(playerCustom, slot);
-		else if (playerCustom.isSneaking() && name.contains("power_ring"))
-			switchPowerRing(playerCustom, slot);
+		else if (name.equals("netherite_sword/vaelith"))
+			riptide(playerCustom, slot);
 		else
 			return false;
 		return true;
@@ -104,5 +116,25 @@ public class Weapon extends Equipable<WeaponType> implements Usable {
 		if (weapon == null) return;
 		playerCustom.getInventory().setItem(slot, weapon.getItemClone());
 		playerCustom.addCooldown(weapon.getMaterial(), 1);
+	}
+
+	// riptide
+
+	private void riptide(PlayerCustom playerCustom, EquipmentSlot slot) {
+		Player		p = playerCustom.getPlayer();
+		Location	start = playerCustom.getEyeLocation();
+		Vector		direction = start.getDirection();
+		direction.setY(0.5f);
+		playerCustom.setVelocity(direction.multiply(2));
+		p.setRiptiding(true);
+		playerCustom.getWorld().playSound(start, Sound.ITEM_TRIDENT_RIPTIDE_3, 1.5F, 1.0F);
+		new BukkitRunnable() {
+		    @Override
+		    public void run() {
+				if (!playerCustom.isOnGround()) return;
+				p.setRiptiding(false);
+		    }
+		}.runTaskTimer(RpgCraft.instance(), 5L, 2L);
+		playerCustom.addCooldown(type.getMaterial(), 30);
 	}
 }

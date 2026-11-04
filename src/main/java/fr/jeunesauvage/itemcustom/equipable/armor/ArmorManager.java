@@ -42,7 +42,7 @@ public class ArmorManager implements Listener {
 		if (armor == null) return true;
 		Set<ClassType>	classTypes = armor.getType().getEquipableMaterial().getClassTypes();
 		ClassType		classPlayer = playerCustom.getClassType();
-		if (classTypes.contains(ClassType.BEGGAR) || classPlayer == ClassType.GOD) return true;
+		if (classTypes.isEmpty() || classPlayer == ClassType.GOD) return true;
 		return classTypes.contains(classPlayer);
 	}
 }

@@ -1,6 +1,4 @@
-package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat;
-
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.AttributeType;
+package fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom;
 
 public sealed interface StatType extends AttributeType permits StatPrimary, StatSecondary {
 	static StatType fromString(String name) {

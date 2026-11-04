@@ -15,7 +15,7 @@
             "intellect"
         ],
         "rarity": 2,
-        "level": 7,
+        "level": 9,
         "statsSecondary": [
             "cast_speed"
         ],
@@ -150,6 +150,40 @@
         ],
         "type": "staff"
     },
+    "bow/staff_lantern": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 3,
+        "level": 17,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_soul": {
+        "statsPrimary": [
+            "spirit",
+            "intellect"
+        ],
+        "rarity": 4,
+        "level": 39,
+        "statsSecondary": [
+            "physical_armor"
+        ],
+        "type": "staff"
+    },
+    "bow/staff_eyeoftheworld": {
+        "statsPrimary": [
+            "intellect"
+        ],
+        "rarity": 5,
+        "level": 60,
+        "statsSecondary": [
+            "cast_speed"
+        ],
+        "type": "staff"
+    },
     "crossbow/spellbook_blades_of_war": {
         "statsPrimary": [
             "strength",
@@ -210,5 +244,48 @@
         "level": 1,
         "statsSecondary": [],
         "type": "claw"
+    },
+    "netherite_sword/vaelith": {
+        "statsPrimary": [
+            "stamina",
+            "strength",
+            "agility",
+            "spirit",
+            "intellect"
+        ],
+        "rarity": 6,
+        "level": 60,
+        "statsSecondary": [],
+        "type": "sword"
+    },
+    "carved_pumpkin/shredder": {
+        "statsPrimary": [
+            "stamina",
+            "strength",
+            "agility",
+            "spirit",
+            "intellect"
+        ],
+        "rarity": 6,
+        "level": 60,
+        "statsSecondary": [
+            "spell_armor",
+            "physical_armor"
+        ],
+        "type": "arcanite"
+    },
+    "shield/adamantium_deadbody": {
+        "statsPrimary": [
+            "stamina",
+            "strength",
+            "spirit"
+        ],
+        "rarity": 6,
+        "level": 60,
+        "statsSecondary": [
+            "spell_armor",
+            "physical_armor"
+        ],
+        "type": "shield"
     }
 }

@@ -11,6 +11,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import fr.jeunesauvage.Data;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Lore;
+import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
 import fr.jeunesauvage.itemcustom.ItemCustomRegistry;
 import fr.jeunesauvage.itemcustom.Rarity;
@@ -27,11 +28,12 @@ public abstract class MenuHolderEquipable extends MenuHolder {
 
     protected MenuHolderEquipable(PlayerCustom launcher, int level, Rarity rarity) {
         super(launcher);
-        this.level = (level < 1 ? 1 : (level > Rarity.LEVEL_MAX ? Rarity.LEVEL_MAX : level));
+        this.level = (level < 1 ? 1 : (level > LivingEntityCustom.LEVEL_MAX ? LivingEntityCustom.LEVEL_MAX : level));
         this.rarity = rarity;
     }
 
     protected abstract void getEquipables();
+    protected abstract void open(EquipableMaterial m);
 
     protected boolean isInRangeLevel(int l) {
         return (l >= level - RANGE_LEVEL && l <= level + RANGE_LEVEL);
@@ -45,7 +47,7 @@ public abstract class MenuHolderEquipable extends MenuHolder {
     public void open() {
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("close"));
-        int     i = 9;
+        int     i = 0;
         for (EquipableMaterial equipableMaterial: equipables.keySet()) {
             if (i >= inventory.getSize()) break;
             inventory.setItem(i++, createEquipableTypeSlot(equipableMaterial, "open_" + equipableMaterial.getName()));

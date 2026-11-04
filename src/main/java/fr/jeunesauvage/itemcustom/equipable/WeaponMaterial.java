@@ -8,23 +8,23 @@ import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import net.kyori.adventure.text.Component;
 
 public enum WeaponMaterial implements EquipableMaterial {
-    HAND("hand", Material.AIR, Set.of(ClassType.BEGGAR)),
-    CLAW("claw", Material.NETHERITE_SWORD, Set.of(ClassType.DRACTHYR)),
-    SWORD("sword", Material.NETHERITE_SWORD, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.ROGUE, ClassType.WARRIOR)),
-    SPEAR("spear", Material.NETHERITE_SPEAR, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.WARRIOR)),
-    AXE("axe", Material.NETHERITE_AXE, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.ROGUE, ClassType.WARRIOR)),
-	PICKAXE("pickaxe", Material.NETHERITE_PICKAXE, Set.of(ClassType.BEGGAR)),
-	HOE("hoe", Material.NETHERITE_HOE, Set.of(ClassType.BEGGAR)),
-	SHOVEL("shovel", Material.NETHERITE_SHOVEL, Set.of(ClassType.BEGGAR)),
-	SHEARS("shears", Material.SHEARS, Set.of(ClassType.BEGGAR)),
-	TRIDENT("trident", Material.TRIDENT, Set.of(ClassType.BEGGAR)),
-    MACE("mace", Material.MACE, Set.of(ClassType.ROGUE, ClassType.WARRIOR)),
+    HAND("hand", Material.AIR, Set.of()),
+    CLAW("claw", Material.NETHERITE_SWORD, Set.of()),
+    SWORD("sword", Material.NETHERITE_SWORD, Set.of()),
+    SPEAR("spear", Material.NETHERITE_SPEAR, Set.of()),
+    AXE("axe", Material.NETHERITE_AXE, Set.of()),
+	PICKAXE("pickaxe", Material.NETHERITE_PICKAXE, Set.of()),
+	HOE("hoe", Material.NETHERITE_HOE, Set.of()),
+	SHOVEL("shovel", Material.NETHERITE_SHOVEL, Set.of()),
+	SHEARS("shears", Material.SHEARS, Set.of()),
+	TRIDENT("trident", Material.TRIDENT, Set.of()),
+    MACE("mace", Material.MACE, Set.of()),
 	BOW("bow", Material.BOW, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.ROGUE, ClassType.WARRIOR)),
 	CROSSBOW("crossbow", Material.CROSSBOW, Set.of(ClassType.DRACTHYR, ClassType.HUNTER, ClassType.ROGUE, ClassType.WARRIOR)),
-    STAFF("staff", Material.BOW, Set.of(ClassType.PRIEST, ClassType.PYROMANCER)),
-    SPELLBOOK("spellbook", Material.CROSSBOW, Set.of(ClassType.PRIEST, ClassType.PYROMANCER)),
+    STAFF("staff", Material.BOW, Set.of()),
+    SPELLBOOK("spellbook", Material.CROSSBOW, Set.of()),
     SHIELD("shield", Material.SHIELD, Set.of(ClassType.DRACTHYR, ClassType.WARRIOR)),
-	UNKNOWN("unknown", Material.AIR, Set.of(ClassType.BEGGAR));
+	UNKNOWN("unknown", Material.AIR, Set.of());
 
     private final String			name;
     private final Material			material;

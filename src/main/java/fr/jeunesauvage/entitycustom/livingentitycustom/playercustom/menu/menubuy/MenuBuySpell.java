@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,8 +21,10 @@ import fr.jeunesauvage.Pair;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.component.Lore;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
+import fr.jeunesauvage.entitycustom.livingentitycustom.classcustom.ClassType;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.Gold;
 import fr.jeunesauvage.entitycustom.livingentitycustom.playercustom.menu.MenuHolder;
+import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.spell.Spell;
 import fr.jeunesauvage.sound.SoundManager;
 import net.kyori.adventure.text.Component;
@@ -40,12 +43,13 @@ public class MenuBuySpell extends MenuHolder {
         Collection<Spell>          spells = RpgCraft.getItemCustomRegistry().getSpells().values();
         List<Pair<Spell, Gold>>    tmp = new ArrayList<>();
         for (Spell spell: spells) {
-            if (!spell.getType().getClassTypes().contains(launcher.getClassType())) continue;
+            Set<ClassType>  classTypes = spell.getType().getClassTypes();
+            if (!classTypes.isEmpty() && !classTypes.contains(launcher.getClassType())) continue;
             tmp.add(new Pair<Spell,Gold>(spell, getPrice(spell)));
         }
         tmp.sort(Comparator.comparing((Pair<Spell, Gold> pair) -> pair.getFirst().getRarity())
             .thenComparingInt(pair -> pair.getFirst().getLevel())
-            .thenComparingInt(pair -> pair.getFirst().getIdentifier().hashCode()));
+            .thenComparing(pair -> pair.getFirst().getIdentifier()));
         for (Pair<Spell, Gold> pair: tmp) {
             toSell.put(pair.getFirst(), pair.getSecond());
         }
@@ -57,13 +61,15 @@ public class MenuBuySpell extends MenuHolder {
         clearInventory();
         inventory.setItem(BACK_SLOT, createBack("close"));
         int     i = 0;
-        Spell  last = null;
+        Rarity      rarity = Rarity.POOR;
         for (Entry<Spell, Gold> e: toSell.entrySet()) {
-            if (i >= inventory.getSize()) break;
             Spell  spell = e.getKey();
-            if (last != null && spell.getType() != last.getType()) i++;
+            if (rarity != spell.getRarity()) {
+                rarity = spell.getRarity();
+                i += (i % 9 != 0 ? 9 - i % 9 : 0);
+            }
+            if (i >= BACK_SLOT) break;
             inventory.setItem(i++, createSpellSlot(spell, e.getValue(), "buy"));
-            last = spell;
         }
         launcher.openInventory(inventory);
     }
@@ -80,9 +86,7 @@ public class MenuBuySpell extends MenuHolder {
                 Spell spell = RpgCraft.getItemCustomRegistry().getSpell(clicked);
                 buy(spell);
             }
-            default -> {
-                close();
-            }
+            default -> close();
         }
     }
 

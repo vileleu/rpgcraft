@@ -27,7 +27,7 @@ import org.bukkit.util.Vector;
 import fr.jeunesauvage.RpgCraft;
 import fr.jeunesauvage.entitycustom.livingentitycustom.LivingEntityCustom;
 import fr.jeunesauvage.entitycustom.livingentitycustom.PlayerCustom;
-import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.stat.StatSecondary;
+import fr.jeunesauvage.entitycustom.livingentitycustom.attributecustom.StatSecondary;
 import fr.jeunesauvage.itemcustom.Rarity;
 import fr.jeunesauvage.itemcustom.WeaponType;
 import fr.jeunesauvage.itemcustom.equipable.weapon.Weapon;
@@ -151,8 +151,8 @@ public class Combat {
 			result.setCancelled(true);
 		}
 		UUID	uuidDamager = damager.getUUID();
-		// kneebreaker (-30% speed)
-		// duration = 2 seconds + rarity number
+		// kneebreaker (-40% speed)
+		// duration = 4 seconds + rarity number
 		if (combatType == CombatType.CLOSE && spellRegistry.hasKneeBreaker(uuidDamager)) {
 			int	duration = 4 + spellRegistry.removeKneeBreaker(uuidDamager);
 			// need damage and target != boss

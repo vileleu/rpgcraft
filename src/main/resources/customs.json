@@ -12,16 +12,26 @@
         "staff_northgate_guardian": 0,
         "staff_olwen": 0,
         "staff_sagrada_winged": 0,
-        "staff_unholy_wisdom": 0
+        "staff_unholy_wisdom": 0,
+        "staff_lantern": 0,
+        "staff_soul": 0,
+        "staff_eyeoftheworld": 0
     },
-    "CROSSBOW":{
+    "CARVED_PUMPKIN": {
+        "shredder": 1
+    },
+    "CROSSBOW": {
         "spellbook_blades_of_war": 0,
         "spellbook_hellow": 0,
         "spellbook_braised": 0,
         "spellbook_majestica": 0
     },
-    "NETHERITE_SWORD":{
+    "NETHERITE_SWORD": {
         "claw_fire": 0,
-        "claw_lightning": 0
+        "claw_lightning": 0,
+        "vaelith": 0
+    },
+    "SHIELD": {
+        "adamantium_deadbody": 0
     }
 }

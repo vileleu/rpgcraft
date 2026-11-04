@@ -6,6 +6,13 @@ public class Gold {
     private int ingots = 0;
     private int nuggets = 0;
 
+    public Gold() {}
+
+    public Gold(Gold gold) {
+        this.ingots = gold.ingots;
+        this.nuggets = gold.nuggets;
+    }
+
     public void reset() {
         ingots = 0;
         nuggets = 0;
